@@ -8,6 +8,7 @@
         "easycorp/easyadmin-bundle": "^2.0",
         "friendsofsymfony/ckeditor-bundle": "^2.0",
         "sensio/framework-extra-bundle": "^5.2",
+        "symfony/apache-pack": "^1.0",
         "symfony/asset": "4.2.*",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
@@ -82,7 +83,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": "true",
             "require": "4.2.*"
         },
          "public-dir": "public_html"
