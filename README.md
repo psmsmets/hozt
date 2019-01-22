@@ -15,7 +15,6 @@ A summary based on https://symfony.com/doc/current/deployment.html
 1. Install/update vendors
    * `export APP_ENV=prod`
    * `composer install --no-dev --optimize-autoloader`
-1. Clear symfony cache
+1. Clear and warmup symfony cache
    * `APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear`
-1. Clear symfony cache
    * `APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup`
