@@ -332,12 +332,14 @@ class PageController extends AbstractController
             // $entityManager->flush();
 
             $message = (new \Swift_Message('HoZT.be contactformulier'))
+                ->setFrom('webmaster@hozt.be')
                 ->setTo($data['question']->getEmail())
                 ->setReplyTo($data['email'])
                 ->setBody(
                     $this->renderView(
                         'emails/contactform.html.twig', $data
-                    )
+                    ),
+                    'text/html'
                 )
             ;
             if ($data['copy'])
