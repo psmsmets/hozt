@@ -1,0 +1,181 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Kalender{% endblock %}
+
+{% block main %}
+
+  <div class="p-3 bg-white mb-4 shadow-sm">
+
+    <h1 class="pt-2 text-red d-flex justify-content-between">Kalender</h1>
+    <p class="lead">Overzicht van het zwemjaar <span class="ml-3">
+      {% if page.calendar_period.start > date('2017-01-01') %} 
+      <a class="btn btn-outline-secondary" href="{{ path('calendar_list', { 'year': page.calendar_period.start|date_modify("-1 year")|date('Y') }) }}"><span aria-hidden="true">&laquo;</span></a>
+      {% else %}
+      <a class="btn btn-outline-secondary disabled" href="#" disabled><span aria-hidden="true">&laquo;</span></a>
+      {% endif %}
+      <button class="btn btn-secondary">{{page.calendar_period.start|date('Y')}}-{{page.calendar_period.end|date('y')}}</button>
+      <a class="btn btn-outline-secondary" href="{{ path('calendar_list', { 'year': page.calendar_period.start|date_modify("+1 year")|date('Y') }) }}"><span aria-hidden="true">&raquo;</span></a>
+    </span></p>
+
+    <p>
+      {% for category in page.calendar_categories %}
+        <a href="javascript:;" class="badge badge-primary cal-{{category.sequence}}" id="cal-{{category.sequence}}"><i class="far fa-eye"></i> {{category.title}}</a>
+      {% endfor %}
+        <a href="javascript:;" class="badge badge-secondary ml-2" id="toggle-past" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Toon/verberg voorbije events"><i class="far fa-eye"></i> voorbije events</a>
+    </p>
+
+    {% if page.calendar_events|length == 0 %}
+       <p><i class="fas fa-exclamation-circle"></i> Geen items gevonden.</p>
+    {% else %}
+
+      {% set this_year  = date('first day of january this year 23:59') %}
+      {% set this_month = date('first day of this month 00:00') %}
+      {% set prev_year  = date(page.calendar_events[0].calcEndTime)|date_modify('last day of december this year noon') %}
+      {% set prev_month = date(page.calendar_events[0].calcEndTime)|date_modify('last day of this month noon') %}
+
+      <h3 class="mt-4 pt-4 pl-2 border-top border-gray{% if prev_year<this_year %} past{% endif %}">{{prev_year|date('Y')}}</h3>
+      <h4 class="p-2 mb-2 mt-4 bg-light rounded{% if prev_month<this_month %} past{% endif %}">{{prev_month|localizeddate('none', 'none', null, "Europe/Paris", "MMMM")|capitalize}}</h4>
+
+      {% for event in page.calendar_events %}
+
+        {% set past  = date(event.calcEndTime) < date() %}
+        {% set year  = date(event.calcEndTime)|date_modify('last day of december this year noon') %}
+        {% set month = date(event.calcEndTime)|date_modify('last day of this month noon') %}
+      
+        {% if year>prev_year %}<h3 class="mt-4 pt-4 pl-2 border-top border-gray {% if year<this_year %} past{% endif %}">{{year|date('Y')}}</h3>{% endif %}
+        {% if month>prev_month %}<h4 class="p-2 mb-2 mt-4 bg-light rounded {% if month<this_month %} past{% endif %}">{{month|localizeddate('none', 'none', null, "Europe/Paris", "MMMM")|capitalize}}</h4>{% endif %}
+
+        <div class="media align-top mt-3 cal-{{event.category.sequence}}{% if past %} text-muted past{% endif %}">
+
+          <span class="badge badge-dark mr-3 cal cal-{{event.category.sequence}}">{% if past %}<s>{% endif %}{{event.startTime|date('d')}}{% if past %}</s>{% endif %}</span>
+
+          <div class="media-body pb-0 mb-0 lh-125">
+
+            <h5 class="pb-0 mb-1">{{event.title}}</h5>
+
+            <h6 class="d-flex justify-content-between mb-2">{{event.getFormattedPeriod}} <small class="d-none"><a href="#">Bekijk</a></small>
+            </h6>
+
+            <ul class="list-unstyled text-muted small mb-1 cal">
+              {% if event.location %}<li class="mb-1"><i class="fas fa-{% if event.competition is null %}map-marked-alt{% else %}swimming-pool{% endif %}"></i> {{event.location}}</li>{% endif %}
+              {% if event.competition is not null %}
+                {% if event.competition.teamCategories|length > 0 %}
+                  <li class="mb-1"><i class="fas fa-swimmer"></i>
+                    {% for category in event.competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}
+                  </li>
+                {% elseif event.competition.teams|length > 0%}
+                  <li class="mb-1"><i class="fas fa-swimmer"></i>
+                    {% for team in event.competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
+                  </li>
+                {% endif %}
+                {% if event.competition.restrictions %}
+                  <li class="mb-1 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
+                {% endif %}
+                {% if event.competition.warmupTime is not null %}
+                  <li class="mb-1"><i class="far fa-clock"></i> inzwemmen om {{event.competition.warmupTime|date('H:i')}}</li>
+                {% endif %}
+                {% if event.competition.preprogram is not null or event.competition.program is not null or event.competition.results is not null%}
+                  <li class="mb-1"><i class="fas fa-trophy"></i>
+                  {% if event.competition.preprogram is not null %}
+                    <a href="{{ vich_uploader_asset(event.competition, 'preprogramFile') }}" class="pr-2">Voorprogramma</a>
+                  {% endif %}
+                  {% if event.competition.program is not null %}
+                    <a href="{{ vich_uploader_asset(event.competition, 'programFile') }}" class="pr-2">Programma</a>
+                  {% endif %}
+                  {% if event.competition.results is not null %}
+                    <a href="{{ vich_uploader_asset(event.competition, 'resultsFile') }}" class="pr-2">Uitslag</a>
+                  {% endif %}
+                  </li>
+                {% endif %}
+              {% endif %}
+            </ul>
+
+          </div>
+
+        </div>
+
+        {% set prev_year = year %}
+        {% set prev_month = month %}
+
+      {% endfor %}
+    {% endif %}
+
+  </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+
+var pasthidden = true;
+$('.past').hide();
+
+$(document).ready(function(){
+
+  $('#toggle-past').click(function(e) {
+    if (pasthidden){
+      $('.past').show(400);
+      $('#toggle-past i').removeClass("fa-eye-slash");
+      $('#toggle-past i').addClass("fa-eye");
+      if ($('#cal-1').hasClass('hidden')){ $('.media.cal-1').hide(); }
+      if ($('#cal-2').hasClass('hidden')){ $('.media.cal-2').hide(); }
+      if ($('#cal-3').hasClass('hidden')){ $('.media.cal-3').hide(); }
+      pasthidden = false;
+    } else {
+      $('.past').hide(400);
+      $('#toggle-past i').removeClass("fa-eye");
+      $('#toggle-past i').addClass("fa-eye-slash");
+      pasthidden = true;
+    }
+  });
+
+  $('#cal-1').click(function(e) {
+    if ($(this).hasClass('hidden')) {
+      $('.media.cal-1').show(400);
+      if (pasthidden){ $('.past').hide(); }
+      $(this).removeClass("hidden");
+      $('#cal-1 i').removeClass("fa-eye-slash");
+      $('#cal-1 i').addClass("fa-eye");
+    } else {
+      $('.media.cal-1').hide(400);
+      $(this).addClass("hidden");
+      $('#cal-1 i').removeClass("fa-eye");
+      $('#cal-1 i').addClass("fa-eye-slash");
+    }
+  });
+
+  $('#cal-2').click(function(e) {
+    if ($(this).hasClass('hidden')) {
+      $('.media.cal-2').show(400);
+      if (pasthidden){ $('.past').hide(); }
+      $(this).removeClass("hidden");
+      $('#cal-2 i').removeClass("fa-eye-slash");
+      $('#cal-2 i').addClass("fa-eye");
+    } else {
+      $('.media.cal-2').hide(400);
+      $(this).addClass("hidden");
+      $('#cal-2 i').removeClass("fa-eye");
+      $('#cal-2 i').addClass("fa-eye-slash");
+    }
+  });
+
+  $('#cal-3').click(function(e) {
+    if ($(this).hasClass('hidden')) {
+      $('.media.cal-3').show(400);
+      if (pasthidden){ $('.past').hide(); }
+      $(this).removeClass("hidden");
+      $('#cal-3 i').removeClass("fa-eye-slash");
+      $('#cal-3 i').addClass("fa-eye");
+    } else {
+      $('.media.cal-3').hide(400);
+      $(this).addClass("hidden");
+      $('#cal-3 i').removeClass("fa-eye");
+      $('#cal-3 i').addClass("fa-eye-slash");
+    }
+  });
+
+});
+</script>
+{% endblock %}

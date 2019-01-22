@@ -1,0 +1,68 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Nieuws{% endblock %}
+
+{% block main %}
+
+  <h4 class="mt-3 mb-3"><i class="far fa-newspaper"></i> Nieuws{%if page.blog_category is not empty%}<span class="text-muted"> / {{page.blog_category.title}}</span>{%endif%}</h4>
+
+  {% for blog_post in page.blog_posts %}
+  <div class="p-3 bg-white mb-4">
+
+    <h2 class="text-red d-flex justify-content-between">{{ blog_post.title }}</h2>
+
+    {{ blog_post.body|raw }}
+
+    {% if blog_post.image is not empty %}
+        <p><img src="{{ vich_uploader_asset(blog_post, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
+    {% endif %}
+
+    <div class="small text-muted d-flex justify-content-between">
+      <span>
+        <span class="pr-2"><i class="far fa-newspaper"></i> <a class="text-muted" href="{{ path('blog_category', {'slug': blog_post.category.slug}) }}">{{ blog_post.category }}</a></span>
+        <span class="pr-2">{{ blog_post.createdAt|localizeddate('medium','none') }} <i class="far fa-clock"></i> {{ blog_post.createdAt|localizeddate('none','short') }}</span>
+        <span class="pr-2"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ blog_post.Author.firstName }}"></i></span>
+      </span>
+      <span class="pr-2"><a href="{{ path('blog_post', {'id': blog_post.id, 'slug': blog_post.slug}) }}" class="text-muted"><i class="fas fa-link"></i></a></span>
+    </div>
+
+  </div>
+
+  {% endfor %}
+
+  {% if page.pagination.last > 1 %}
+    {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+    <nav class="mt-5">
+      <ul class="pagination justify-content-center">
+        {%if page.pagination.isfirst%}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Vorige</a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="{{currentPath}}?pagina={{page.pagination.current-1}}" tabindex="-1">Vorige</a>
+          </li>
+        {% endif %}
+        {% for p in 1..page.pagination.last %}
+          {% if loop.index==page.pagination.current %}
+            <li class="page-item active" aria-current="page">
+              <a class="page-link" href="#" aria-disabled="true">{{p}} <span class="sr-only">(current)</span></a>
+            </li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="{{currentPath}}?pagina={{p}}">{{p}}</a></li>
+          {% endif %}
+        {% endfor %}
+        {%if page.pagination.islast%}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Volgende</a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="{{currentPath}}?pagina={{page.pagination.current+1}}" tabindex="-1">Volgende</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+
+{% endblock %}

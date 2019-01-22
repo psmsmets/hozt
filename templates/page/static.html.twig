@@ -1,0 +1,23 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}{% if page.static.titleShort is empty %}{{ page.static.title }}{% else %}{{ page.static.titleShort }}{% endif %}{% endblock %}
+
+{% block main %}
+
+  <div class="p-3 bg-white mb-4 shadow-sm">
+
+    <h1 class="pt-2 text-red d-flex justify-content-between">{{ page.static.title }}</h1>
+
+    {% if page.static.showUpdatedAt %}
+        <div class="small text-muted pb-3"><span class="modified pr-2">Laatst aangepast op {{ page.static.updatedAt|date('Y-m-d') }} <i class="far fa-clock"></i> {{ page.static.updatedAt|date('H:i') }}.</span></div>
+    {% endif %}
+
+    {% if page.static.image is not empty %}
+        <p><img src="{{ vich_uploader_asset(page.static, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
+    {% endif %}
+
+    {{ page.static.body|raw }}
+
+  </div>
+
+{% endblock %}

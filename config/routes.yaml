@@ -1,0 +1,105 @@
+# config/routes.yaml
+
+# security
+logout:
+    path: uitloggen 
+
+# calendar
+calendar:
+    path: /kalender
+    controller: App\Controller\PageController::calendar
+
+calendar_list:
+    path: /kalender/{year<\d+>}
+    controller: App\Controller\PageController::calendar_list
+
+calendar_event:
+    path: /kalender/event/{id<\d+>?1}
+    controller: App\Controller\PageController::calendar_event
+
+# training 
+training_categories:
+    path: /aanbod
+    controller: App\Controller\PageController::training_categories
+
+training_category:
+    path: /aanbod/{slug}
+    controller: App\Controller\PageController::training_category
+
+training_schedule_teams:
+    path: /trainingsuren
+    controller: App\Controller\PageController::training_schedule_teams
+
+training_schedule_days:
+    path: /trainingsuren/per-dag
+    controller: App\Controller\PageController::training_schedule_days
+
+training_coaches:
+    path: /trainers
+    controller: App\Controller\PageController::training_coaches
+
+# enroll
+enroll_list:
+    path: /inschrijvingen
+    controller: App\Controller\PageController::enroll_list
+
+#enroll_item:
+#    path: /inschrijvingen/{slug}
+#    controller: App\Controller\PageController::enroll_item
+
+#enroll_details:
+#    path: /inschrijvingen/{slug}/details
+#    controller: App\Controller\PageController::enroll_details
+
+#enroll_form:
+#    path: /inschrijvingen/{slug}/formulier
+#    controller: App\Controller\PageController::enroll_form
+
+# contact
+contact_form:
+    path: /contact
+    controller: App\Controller\PageController::contact_form
+
+contact_faq:
+    path: /faq
+    controller: App\Controller\PageController::contact_faq
+
+# general content
+blog:
+    path: /nieuws
+    controller: App\Controller\PageController::blog_category
+
+blog_post:
+    path: /nieuws/{id<\d+>?1}/{slug?}
+    controller: App\Controller\PageController::blog_post
+
+blog_category:
+    path: /nieuws/{slug}
+    controller: App\Controller\PageController::blog_category
+
+static_page:
+    path: /{slug}
+    controller: App\Controller\PageController::static_page
+
+# api
+training_today:
+    path: /api/training/vandaag
+    controller: App\Controller\ApiController::training_today
+
+training_tomorrow:
+    path: /api/training/morgen
+    controller: App\Controller\ApiController::training_tomorrow
+
+training_team_today:
+    path: /api/traint-{team_abbr}-vandaag
+    controller: App\Controller\ApiController::training_team_today
+
+training_team:
+    path: /api/training/{team_abbr}
+    controller: App\Controller\ApiController::training_team
+
+calendar_events:
+    path: /api/kalender/aanstaande/{count}
+    controller: App\Controller\ApiController::calender_events
+    requirements:
+        count: '\d+'

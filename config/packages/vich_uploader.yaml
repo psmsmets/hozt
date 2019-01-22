@@ -1,0 +1,36 @@
+# config/packages/vich_uploader.yaml
+vich_uploader:
+    db_driver: orm
+    mappings:
+        user_images:
+            uri_prefix:         '%app.path.user_images%'
+            upload_destination: '%kernel.project_dir%/public%app.path.user_images%'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        blogPost_images:
+            uri_prefix:         '%app.path.blogPost_images%'
+            upload_destination: '%kernel.project_dir%/public%app.path.blogPost_images%'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        staticPage_images:
+            uri_prefix:         '%app.path.staticPage_images%'
+            upload_destination: '%kernel.project_dir%/public%app.path.staticPage_images%'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        carousel_images:
+            uri_prefix:         '%app.path.carousel_images%'
+            upload_destination: '%kernel.project_dir%/public%app.path.carousel_images%'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        calendar_images:
+            uri_prefix:         '%app.path.calendar_images%'
+            upload_destination: '%kernel.project_dir%/public%app.path.calendar_images%'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        competition_preprograms:
+            uri_prefix:         '%app.path.competition_preprograms%'
+            upload_destination: '%kernel.project_dir%/public%app.path.competition_preprograms%'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        competition_programs:
+            uri_prefix:         '%app.path.competition_programs%'
+            upload_destination: '%kernel.project_dir%/public%app.path.competition_programs%'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
+        competition_results:
+            uri_prefix:         '%app.path.competition_results%'
+            upload_destination: '%kernel.project_dir%/public%app.path.competition_results%'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer

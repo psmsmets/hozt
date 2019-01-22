@@ -1,0 +1,44 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Trainingsuren{% endblock %}
+
+{% block main %}
+
+  <div class="p-3 bg-white mb-4 shadow-sm">
+
+    <h1 class="pt-2 text-red">Trainingsuren</h1>
+    <p class="lead mb-4">De HoZT-trainingsuren per groep <a href="{{ path('training_schedule_days') }}">of per dag</a></p>
+
+    {% for category in page.training_categories %}
+
+      <h3 class="mt-5 mb-4 pt-3 border-top">{{category.name}}</h3>
+
+      {% for team in category.teams %}
+
+      <div class="row mt-3">
+        <div class="col-12 col-md-6"><h5>{{team.name}}&nbsp;</h5></div>
+        <div class="col-12 col-md-6 text-md-right">
+            <span class="badge badge-pill badge-secondary">{{team.abbr}}</span>
+            {% for coach in team.coaches %}
+              <span class="badge badge-pill badge-info">{{coach.firstname}}</span>
+            {% endfor %}
+       </div>
+      </div>
+
+      <dl class="row">
+        {% set previous = false %}
+        {% for schedule in team.schedule %}
+          <dt class="col-sm-3 text-md-right">{% if previous == false or previous.day.name != schedule.day.name %}{{schedule.day.name}}{%endif%}</dt>
+          <dd class="col-sm-9">{{ schedule.time }} {% if schedule.comment is not empty %}<span class="badge badge-info ml-3">{{ schedule.comment }}</span>{% endif %}</dd>
+          {% set previous = schedule %}
+        {% endfor %}
+      </dl>
+
+      {% endfor %}
+
+    {% endfor %}
+
+  </div>
+
+{% endblock %}
+

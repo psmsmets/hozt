@@ -1,0 +1,74 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'nl'
+    app_locales: nl|en
+    timezone: 'Europe/Brussels'
+    app.path.user_images: /uploads/images/user
+    app.path.staticPage_images: /uploads/images/static_page
+    app.path.carousel_images: /uploads/images/carousel
+    app.path.calendar_images: /uploads/images/calendar
+    app.path.blogPost_images: /uploads/images/blog_post
+    app.path.competition_preprograms: /uploads/files/competition_preprograms
+    app.path.competition_programs: /uploads/files/competition_programs
+    app.path.competition_results: /uploads/files/competition_results
+
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+
+    app.logout.listener:
+        class: App\Listener\LogoutListener
+
+    app.utils.slug:
+        class: App\Utils\ControllerUtils
+
+fos_ck_editor:
+    default_config: standard
+    configs:
+        standard:
+            toolbar: 'standard_toolbar'
+            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css','/assets/css/hozt.css']
+            allowedContent: true
+            format_tags: 'p;h3;h4;h5;h6;pre;div'
+        minimal:
+            toolbar: 'minimal_toolbar'
+            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css','/assets/css/hozt.css']
+            allowedContent: true
+            #styleSet: 'default'
+            format_tags: 'p'
+            format_p: { element: 'p', attributes: { class: 'lead' } }
+    toolbars:
+        configs:
+            standard_toolbar: [['Save','Undo','Redo'],['Cut','Copy','Paste','PasteText','RemoveFormat'],['Image','Table','HorizontalRule','SpecialChar'],['Maximize', 'ShowBlocks'],['Source'],'/',['Format'],['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],['Link','Unlink','Anchor']]
+            minimal_toolbar: [['Save','Undo','Redo'],['Cut','Copy','Paste','PasteText','RemoveFormat'],['Maximize','ShowBlocks'],['Source'],'/',['Format'],['Bold','Italic','Underline','Strike'],['Blockquote'],['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],['Link','Unlink']]
+#    styles:
+#        default:
+#            - { name: 'Lead', element: 'p', attributes: { class: 'lead'} }
+#            - { name: 'Normal', element: 'p' }

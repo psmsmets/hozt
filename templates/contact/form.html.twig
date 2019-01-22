@@ -1,0 +1,40 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block main %}
+
+  <div class="p-3 bg-white mb-4 shadow-sm">
+
+    <h1 class="pt-2 mb-4 text-red">Contact</h1>
+
+    <p>Heb je iemand van HoZT nodig? Ons <a href="/bestuur" class="text-red">bestuur</a> helpt je graag verder.<br>
+Alles over de bereikbaarheid (adres, parking) van het zwembad vind je <a href="/zwembad" class="text-red">hier</a> terug.<br>
+<span style="display:none;">Wil je een gratis testmoment bijwonen? Schrijf je dan hier in.</span>
+Onze <a href="{{ path('contact_faq') }}" class="text-red">FAQ</a> al eens gelezen?</p>
+
+    <div class="row mt-5">
+      <div class="col col-12 col-md-10 col-lg-8">
+
+    {{ form_start(page.form) }}
+    {{ form_widget(page.form) }}
+
+      <div class="form-group row pt-3">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-hozt" id="submit" value="Send"><i class="fas fa-share"></i> Verzend</button>
+            <small id="submitHelp" class="form-text text-muted d-none">Gelieve de pagina <strong>niet</strong> te herladen tijdens het verzenden.</small>
+        </div>
+      </div>
+
+    {{ form_end(page.form) }}
+
+      </div>
+    </div>
+
+  </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

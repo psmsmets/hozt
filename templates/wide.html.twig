@@ -1,0 +1,25 @@
+{% extends 'layout.html.twig' %}
+
+{% block top %}
+
+<div class="banner banner-bg banner-sm d-flex align-items-center">
+  <div class="container text-center">
+
+    'modules::banner'
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block body %}
+
+<!-- Main -->
+<div class="col col-12">
+
+  {% block lead %}{% endblock %}
+  {% block main %}{% endblock %}
+
+</div>
+
+{% endblock %}

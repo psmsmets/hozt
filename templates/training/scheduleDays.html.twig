@@ -1,0 +1,36 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Trainingsuren{% endblock %}
+
+{% block main %}
+
+  <div class="p-3 bg-white mb-4 shadow-sm">
+
+    <h1 class="pt-2 text-red">Trainingsuren</h1>
+    <p class="lead mb-4">De HoZT-trainingsuren per dag <a href="{{ path('training_schedule_teams') }}">of per groep</a></p>
+
+    {% for day in page.training_days %}
+
+      <h3 class="mt-5 mb-4 pt-3 border-top">{{ day.name }}</h3>
+
+      <dl class="row">
+      {% for schedule in day.schedule %}
+
+        <dt class="col-sm-3 text-md-right">{{ schedule.time }}</dt>
+
+        <dd class="col-sm-9">
+        {% for team in schedule.teams %}
+          <span class="badge badge-secondary mr-2">{{ team.abbr }}</span>
+        {% endfor %}
+        {% if schedule.comment is not empty %}<span class="badge badge-info ml-3">{{ schedule.comment }}</span>{% endif %}
+        </dd>
+
+      {% endfor %}
+      </dl>
+
+    {% endfor %}
+
+  </div>
+
+{% endblock %}
+

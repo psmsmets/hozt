@@ -1,0 +1,126 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}{{ page.training_category.name }}{% endblock %}
+
+{% block main %}
+
+  <div class="p-3 bg-white mb-4 shadow-sm">
+
+    <h1 class="pt-2 text-red">{{ page.training_category.name }}</h1>
+    <p class="lead">{{ page.training_category.description }}
+<!--
+      <small>
+        <br>
+        <span class="badge badge-hozt">{{ page.training_category.times }} <i class="fas fa-times"></i></span>
+        <span class="badge badge-hozt mr-2">{{ page.training_category.duration }}</span>
+        <br class="d-md-none">
+        {% for day in page.training_category.days %}
+          <span class="badge badge-secondary">{{ day }}</span>
+        {% endfor %}
+      </small>
+-->
+    </p>
+
+    {{ page.training_category.body|raw }}
+
+    <ul class="nav nav-tabs" id="trainingCategory" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#teams" role="tab" aria-controls="teams" aria-selected="true">Groepen en trainers</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false">Trainingsuren</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#competition" role="tab" aria-controls="competition" aria-selected="false">Wedstrijden</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="trainingCategoryContent">
+
+      <div class="tab-pane fade show active mt-4" id="teams" role="tabpanel" aria-labelledby="teams-tab">
+      {% for team in page.training_category.teams %}
+        <dl class="row mb-md-0"> 
+          <dt class="col-12 col-sm-3 text-md-right"><h5><span class="badge badge-secondary mr-2">{{team.abbr}}</span></h5></dt>
+          <dd class="col-7 col-sm-7 pt-1">
+            <span class="ml-md-2">Trainer{% if team.coaches|length > 1%}s{%endif%}:</span>
+            {% for coach in team.coaches %}
+              <span class="badge badge-info">{{coach.firstname}}</span>
+            {% endfor %}
+          </dd>
+        </dl>
+      {% endfor %}
+      </div>
+
+      <div class="tab-pane fade mt-4" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
+      {% for day in page.training_days %}
+        <dl class="row mb-md-2"> 
+          {% for schedule in day.schedule %}
+            <dt class="col-12 col-sm-3 text-md-right mb-1">{% if loop.index0 == 0%}{{day}}{% endif %}</dt>
+            <dd class="col-5 col-sm-2 p-0 text-right mb-1">{{schedule.time}}</dd>
+            <dd class="col-7 col-sm-7 mb-1">
+              {% for team in schedule.teams %}<span class="badge badge-secondary ml-1 ml-md-2">{{team}}</span>{% endfor %}
+              {% if schedule.comment is not empty %}<span class="badge badge-info ml-2 ml-md-3">{{schedule.comment}}</span>{% endif %}
+          </dd>
+          {% endfor %}
+        </dl>
+      {% endfor %}
+      </div>
+
+      <div class="tab-pane fade mt-4" id="competition" role="tabpanel" aria-labelledby="competition-tab">
+      {% if page.competitions|length == 0 %}
+        <p>Er staan geen wedstrijden op de kalender.</p>
+      {% else %}
+        {% for competition in page.competitions %}
+        <div class="row mb-2">
+          <div class="col col-md-3 text-md-right"><h6 class="mb-2">{{competition.calendar.getFormattedPeriod}}</h6></div>
+          <div class="col col-md-9">
+            <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title}} 
+              {% if competition.state is not null%}
+                <small><span class="badge badge-{{competition.state.badge}}">{{competition.state}}</span></small>
+              {%else%}
+                <small><span class="badge badge-light">?</span></small>
+              {%endif%}
+            </h5>
+            <ul class="list-unstyled text-muted small mb-1 cal">
+              {% if competition.calendar.location %}
+                <li><i class="fas fa-swimming-pool"></i> {{competition.calendar.location}}</li>
+              {% endif %}
+              {% if competition.teamCategories|length > 0 %}
+                <li><i class="fas fa-swimmer"></i>
+                  {% for category in competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}
+                </li>
+              {% elseif competition.teams|length > 0%}
+                <li><i class="fas fa-swimmer"></i>
+                  {% for team in competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
+                </li>
+              {% endif %}
+              {% if competition.restrictions %}
+                <li class="text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
+              {% endif %}
+              {% if competition.warmupTime is not null %}
+                <li><i class="far fa-clock"></i> inzwemmen om {{competition.warmupTime|date('H:i')}}</li>
+              {% endif %}
+              {% if competition.preprogram is not null or competition.program is not null or competition.results is not null%}
+                <li><i class="fas fa-trophy"></i>
+                {% if competition.preprogram is not null %}
+                  <a href="{{ vich_uploader_asset(competition, 'preprogramFile') }}" class="pr-2">Voorprogramma</a>
+                {% endif %}
+                {% if competition.program is not null %}
+                  <a href="{{ vich_uploader_asset(competition, 'programFile') }}" class="pr-2">Programma</a>
+                {% endif %}
+                {% if competition.results is not null %}
+                  <a href="{{ vich_uploader_asset(competition, 'resultsFile') }}" class="pr-2">Uitslag</a>
+                {% endif %}
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+        {% endfor %}
+      {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+
+{% endblock %}

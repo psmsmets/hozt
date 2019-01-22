@@ -1,0 +1,311 @@
+/*
+ *
+ * HoZT.css
+ *
+ */
+.bg-red, .bg-hozt, .btn-hozt, .badge.cal-1, .badge-hozt, .page-item.active a.page-link {
+  background-color: #ED1C24;
+}
+
+.page-item.active a.page-link {
+  border-color: #ED1C24;
+}
+
+.bg-darkred, .btn-hozt:hover, .badge.cal-1:hover, a.badge-hozt:hover {
+  background-color: #C21C24;
+}
+
+.bg-red .nav-link, .btn-hozt, a.btn-hozt, .btn-hozt:hover, a.btn-hozt:hover, .badge-hozt, .page-item.active a.page-link  {
+  color: #fff;
+}
+
+.btn-outline-hozt, a.btn-outline-hozt {
+  color: #ED1C24;
+  background: none;
+  border-color: #ED1C24;
+}
+
+.btn-outline-hozt:hover {
+  color: rgba(0,0,0,.7);
+  background-color: #C21C24;
+  border-color: #C21C24;
+}
+
+.bg-red a.nav-link:hover {
+  color: rgba(0,0,0,.5);
+}
+
+a, .text-red, .text-hozt, a.text-hozt, a.text-red, a.page-link,
+.navbar-brand.text-red, .navbar-brand.text-red:hover {
+  color: #ed1c24;
+}
+
+a:hover, a.text-red:hover, a.page-link:hover {
+  color: #c21c24;
+}
+
+.nav-header {
+  margin-top: 72px;
+}
+
+.nav-scroller {
+  height: 1.75rem;
+  margin-top: 5px;
+}
+
+.nav-scroller .nav-link {
+  padding: .2rem 1rem;
+}
+
+.navbar-brand {
+  margin-top: .175rem;
+}
+
+.sponsor {
+  margin: 1rem 0;
+  border: none;
+  background-color: transparent;
+}
+
+footer .sponsor img {
+  object-position: center; /* Center the image within the element */
+  max-height: 90px;
+  padding: .5rem 0;
+}
+
+.sponsor-gold img {
+  max-height: 200px;
+/*  max-width: 300px;*/
+  object-position: center; /* Center the image within the element */
+}
+
+.sponsor-silver img {
+  max-height: 120px;
+/*  max-width: 240px;*/
+  object-position: center; /* Center the image within the element */
+}
+
+.sponsor-bronze img {
+  max-height: 80px;
+/*  max-width: 160px;*/
+  object-position: center; /* Center the image within the element */
+}
+
+
+h1, h2, h3, h4, h5, h6, 
+h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+.tyr :hover,
+.sponsor :hover{
+  opacity:5;
+  cursor:pointer;
+}
+
+.banner-bg {
+  background-image: url("/assets/img/bg/zwembad.jpg");
+  background-size: cover;
+  background-position: center; 
+  background-repeat: no-repeat;
+}
+
+.banner {
+  background-size: 100%;
+  /*margin-bottom: -2.75rem;*/
+}
+
+.banner-lg, .banner-lg .carousel-item {
+    height: 405px;
+}
+
+.banner-md, .banner-md .carousel-item {
+    height: 270px;
+}
+
+.banner-sm, .banner-sm .carousel-item {
+    height: 135px;
+}
+
+.carousel-indicators {
+  bottom: 1.75rem;
+}
+
+.carousel-caption {
+  bottom: 25%;
+}
+
+.banner .carousel-item img {
+  width: 100%;
+  max-width: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+}
+
+.carousel-caption h1, .carousel-caption h2, .carousel-caption h3, .carousel-caption h4, .carousel-caption h5, .carousel-caption h6 {
+  line-height: .85;
+}
+
+.map-responsive {
+    overflow:hidden;
+    padding-bottom:50%;
+    position:relative;
+    height:0;
+}
+
+.map-responsive iframe {
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+}
+
+.card.groups {
+  min-height: 12.5rem;
+}
+
+#toTop {
+  text-decoration: none;
+  position: fixed;
+  bottom: 1.85rem;
+  right: 0.85rem;
+  overflow: hidden;
+  border: none;
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+}
+
+/*
+ * Calendar
+*/
+.badge.cal {
+  width: 48px;
+  height: 48px;
+  font-weight: 300;
+  line-height: 1.2;
+  font-size: 1.65rem;
+  text-align: center;
+  padding: .5rem;
+}
+
+.badge.cal.cal-sm {
+  width: 28px;
+  height: 28px;
+  font-size: .85rem;
+  padding: .2rem;
+  line-height: .85;
+  margin-top: .15rem;
+}
+
+.badge.cal.cal-1 {
+  background-color: #ed1c24;
+}
+
+.badge.cal.cal-2 {
+  background-color: #007bff;
+}
+
+ul.cal i {
+  width: 1.25rem;
+}
+
+.badge.cal-2 {
+  background-color: #007bff;
+}
+a.badge.cal-2:hover {
+  background-color: #0062cc;
+}
+
+.badge.cal-3 {
+  background-color: #17a2b8;
+}
+a.badge.cal-3:hover {
+  background-color: #117a8b;
+}
+
+.badge.cal-4 {
+  background-color: #343a40;
+}
+a.badge.cal-4:hover {
+  background-color: #1d2124;
+}
+
+.badge.cal-5 {
+  background-color: #ffc107;
+}
+a.badge.cal-5:hover {
+  background-color: #d39e00;
+}
+
+/* make keyframes that tell the start state and the end state of our object */
+@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+.fade-in {
+  opacity:0;  /* make things invisible upon start */
+  -webkit-animation:fadeIn ease-in 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+  -moz-animation:fadeIn ease-in 1;
+  animation:fadeIn ease-in 1;
+
+  -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+  -moz-animation-fill-mode:forwards;
+  animation-fill-mode:forwards;
+
+  -webkit-animation-duration:1s;
+  -moz-animation-duration:1s;
+  animation-duration:1s;
+}
+
+.scroll-fade-in {
+  opacity:0;
+}
+
+
+:target {
+  display: block;
+  position: relative;
+  top: -72px; 
+  visibility: hidden;
+}
+
+@media (min-width: 992px) {
+
+.sponsor img {
+  filter: gray; /* IE6-9 */
+  -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+}
+
+.sponsor img:hover {
+  filter: none; /* IE6-9 */
+  -webkit-filter: grayscale(0); /* Google Chrome, Safari 6+ & Opera 15+ */ 
+}
+
+}
+
+/* Minimum aspect ratio */
+@media (max-aspect-ratio: 1/1) {
+
+  .banner .carousel-item img {
+    height: 100%;
+    width: auto;
+    max-width: none;
+  }
+
+  .banner-bg {
+    background-repeat: no-repeat;
+    background-size: auto;
+  }
+
+  .carousel-caption {
+    bottom: 1.75rem;
+  }
+
+}

@@ -1,0 +1,40 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Aanbod{% endblock %}
+
+{% block main %}
+
+  <div class="p-3 bg-white mb-4 shadow-sm">
+
+    <h1 class="pt-2 text-red">Aanbod</h1>
+    <p class="lead mb-4">De HoZT-zwemmers zijn ingedeeld in volgende groepen</p>
+
+    <div class="row">
+
+    {% for category in page.training_categories %}
+        <div class="col col-12 col-md-6 mb-4">
+            <div class="card groups border border-gray">
+                <div class="card-body d-flex align-items-center justify-content-center">
+                    <div class="text-center">
+                        <h4 class="card-title">{{ category.name }}</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ category.description }}</h6>
+                        <p class="card-text">
+                            <span class="badge badge-hozt">{{ category.times }} <i class="fas fa-times"></i></span>
+                            <span class="badge badge-hozt">{{ category.duration }}</span><br>
+                            {% for day in category.days %}
+                            <span class="badge badge-secondary">{{ day }}</span>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    </div>
+
+    <p class="mt-5"><i class="fas fa-info-circle"></i> Bekijk ook het overzicht van de trainingsuren <a href="{{ path('training_schedule_teams') }}">per groep</a> of <a href="{{ path('training_schedule_days') }}">per dag</a> en de <a href="{{ path('training_coaches') }}">trainers</a> met hun groepen.</p>
+
+  </div>
+
+{% endblock %}
