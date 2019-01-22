@@ -9,7 +9,7 @@ Run `git pull` to update the master branch clone to its latest version.
 A summary based on https://symfony.com/doc/current/deployment.html
 
 1. Configure your Environment variables
-   * Make sure you have the .env file present and configured properly (and no .env.local file present!!).
+   * Make sure you have the .env file present and configured properly (and if a .env.local file is present check its APP_ENV!).
 1. Generate composer dependencies for this (prod) environment
    * `composer require symfony/dotenv`
 1. Install/update vendors
