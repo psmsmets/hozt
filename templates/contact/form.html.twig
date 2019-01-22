@@ -16,7 +16,7 @@ Onze <a href="{{ path('contact_faq') }}" class="text-red">FAQ</a> al eens geleze
     <div class="row mt-5">
       <div class="col col-12 col-md-10 col-lg-8">
 
-    {{ form_start(page.form) }}
+    {{ form_start(page.form, {attr: {class: 'needs-validation'} }) }}
     {{ form_widget(page.form) }}
 
       <div class="form-group row pt-3">
@@ -37,4 +37,29 @@ Onze <a href="{{ path('contact_faq') }}" class="text-red">FAQ</a> al eens geleze
 {% endblock %}
 
 {% block javascripts %}
+<script>
+// Disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        $('#submit').prop('disabled', 'disabled');
+        $('#submit').html('<i class="fas fa-sync-alt"></i> Verwerken');
+        $('#submitHelp').removeClass( "d-none" );
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+          $('#submit').prop('disabled', false);
+          $('#submit').html('<i class="fas fa-share"></i> Verzend');
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
 {% endblock %}
