@@ -5,7 +5,7 @@
 {% block lead %}
 
   {% if page.sticky_blog_post %}
-  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
+  <div class="p-3 mb-4 bg-white shadow-sm">
 
     <h2 class="text-red d-flex justify-content-between">{{ page.sticky_blog_post.title }} <i class="fas fa-thumbtack" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Sticky blogpost"></i></h2>
 
@@ -31,10 +31,10 @@
 
 {% block main %}
 
-  <h4 class="m-2 ml-md-0">Laatste nieuwsberichten</h4>
+  <h4 class="m-3 ml-md-0">Laatste nieuwsberichten</h4>
 
   {% for blog_post in page.special_blog_posts %}
-  <div class="p-2 pb-3 p-md-3 mb-4 bg-white">
+  <div class="p-3 mb-4 bg-white">
 
     <h2 class="text-red d-flex justify-content-between">{{ blog_post.title }}</h2>
 
@@ -55,6 +55,6 @@
 
   </div>
   {% endfor %}
-  <p class="text-right mr-2 mr-md-0"><a href="/nieuws">Alle nieuwsberichten <i class="fas fa-angle-double-right"></i></a></p>
+  <p class="text-right mr-3 mr-md-0"><a href="/nieuws">Alle nieuwsberichten <i class="fas fa-angle-double-right"></i></a></p>
 
 {% endblock %}
