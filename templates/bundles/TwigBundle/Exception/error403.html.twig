@@ -1,32 +1,8 @@
 {# templates/bundles/TwigBundle/Exception/error403.html.twig #}
-{% extends '_main.html.twig' %}
+{% extends '_error.html.twig' %}
 
-{% block title %}Geen toegang{% endblock %}
-
-
-{% block stylesheets %}
-    {{ parent() }}
-    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet" />
-{% endblock %}
-
-
-{% block body %}
-
-  <div class="col-12 col-md-6 offset-md-3 text-center">
-
-    <img class="mb-4 d-md-block" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="100">
-
-    <h1 class="text-red pb-3">Oeps! Er gaat iets verkeerd</h1>
-
-    <h2>Serverfout "<strong>403</strong> Geen toegang"</h2>
-
-    <p style="font-size:7.5rem;" class="mb-0">&#x1f510;</p>
-
-    <p class="lead">
-        Je hebt geen toegang voor de opgevraagde pagina. <br>Controleer of je ingelogd bent
-        of <a href="{{ path('homepage') }}">ga naar de startpagina</a>.
-    </p>
-
-  </div>
-
+{% block error_message %}Geen toegang{% endblock %}
+{% block error_unicode %}&#x1f510; &#x1f622;{% endblock %}
+{% block error_handling %}
+    Je hebt geen toegang voor de opgevraagde pagina. Controleer of je ingelogd bent, vraag na of je toegang hebt of
 {% endblock %}

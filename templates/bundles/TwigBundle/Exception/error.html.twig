@@ -1,35 +1,9 @@
 {# templates/bundles/TwigBundle/Exception/error.html.twig #}
-{% extends '_main.html.twig' %}
+{% extends '_error.html.twig' %}
 
-{% block title %}{{status_code}} {{status_text}}{% endblock %}
-
-
-{% block stylesheets %}
-    {{ parent() }}
-    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet" />
-{% endblock %}
-
-
-{% block body %}
-
-  <div class="col-12 col-md-6 offset-md-3 text-center">
-
-    <img class="mb-4 d-md-block" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="100">
-
-    <h1 class="text-red pb-3">Oeps! Er gaat iets verkeerd</h1>
-
-    <h2>Serverfout "<strong>{{status_code}}</strong> {{status_text}}"</h2>
-
-    <p style="font-size:7.5rem;" class="mb-0">&#x1f525;</p>
-
-    <p class="lead">
-        Iets gaat er niet ok. Laat ons weten wat je aan het doen was toen deze fout optrad.
-        We zullen het zo snel mogelijk oplossen. Excuses voor het eventuele ongemak.
-    </p>
-    <p class="lead">
-        <a href="{{ path('homepage') }}">Ga naar de startpagina</a>
-    </p>
-
-  </div>
-
+{% block error_message %}{{status_text}}{% endblock %}
+{% block error_unicode %}&#x1f92f;{% endblock %}
+{% block error_handling %}
+   Er is iets niet ok. Laat ons weten wat je aan het doen was toen deze fout optrad
+   en we zullen het zo snel mogelijk oplossen. Excuses voor het eventuele ongemak.
 {% endblock %}
