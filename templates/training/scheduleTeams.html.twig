@@ -4,26 +4,18 @@
 
 {% block main %}
 
-  <div class="p-3 bg-white mb-4 shadow-sm">
+  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
 
     <h1 class="pt-2 text-red">Trainingsuren</h1>
     <p class="lead mb-4">De HoZT-trainingsuren per groep <a href="{{ path('training_schedule_days') }}">of per dag</a></p>
 
     {% for category in page.training_categories %}
 
-      <h3 class="mt-5 mb-4 pt-3 border-top">{{category.name}}</h3>
+      <h3 class="mt-4 mt-md-5 mb-4 pt-3 border-top">{{category.name}}</h3>
 
       {% for team in category.teams %}
 
-      <div class="row mt-3">
-        <div class="col-12 col-md-6"><h5>{{team.name}}&nbsp;</h5></div>
-        <div class="col-12 col-md-6 text-md-right">
-            <span class="badge badge-pill badge-secondary">{{team.abbr}}</span>
-            {% for coach in team.coaches %}
-              <span class="badge badge-pill badge-info">{{coach.firstname}}</span>
-            {% endfor %}
-       </div>
-      </div>
+      <h5><span class="badge badge-secondary pt-1 mr-2">{{team.abbr}}</span> {{team.name}}</h5>
 
       <dl class="row">
         {% set previous = false %}
