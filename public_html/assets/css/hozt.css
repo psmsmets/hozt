@@ -3,6 +3,60 @@
  * HoZT.css
  *
  */
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+body {
+  padding-top: 72px;
+}
+
+.nav-scroller {
+  position: relative;
+  z-index: 2;
+  height: 2.75rem;
+  overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  padding-bottom: 1rem;
+  margin-top: -1px;
+  overflow-x: auto;
+  color: rgba(255, 255, 255, .75);
+  text-align: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-underline .nav-link {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  font-size: .875rem;
+  color: #6c757d;
+}
+
+.nav-underline .nav-link:hover {
+  color: #007bff;
+}
+
+.nav-underline .active {
+  font-weight: 500;
+  color: #343a40;
+}
+
+.text-white-50 { color: rgba(255, 255, 255, .5); }
+
+.bg-purple { background-color: #6f42c1; }
+
+.lh-100 { line-height: 1; }
+.lh-125 { line-height: 1.25; }
+.lh-150 { line-height: 1.5; }
+
 .bg-red, .bg-hozt, .btn-hozt, .badge.cal-1, .badge-hozt, .page-item.active a.page-link {
   background-color: #ED1C24;
 }
@@ -276,23 +330,68 @@ a.badge.cal-5:hover {
   visibility: hidden;
 }
 
+/* 
+    RESPONSIVE CSS
+*/
+@media (max-width: 991.98px) {
+  body { padding-top: 60px; }
+  .navbar { height: 60px; }
+  .nav-scroller { margin-top: 0px; }
+  .nav-header { 
+    margin-top: 60px;
+    height: 100%;
+    padding-top: 1rem;
+  }
+  .offcanvas-collapse {
+    position: fixed;
+    top: 59px; /* Height of navbar */
+    bottom: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    padding-top: 1rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    overflow-y: auto;
+    visibility: hidden;
+    background-color: #343a40;
+    transition-timing-function: ease-in-out;
+    transition-duration: .3s;
+    transition-property: left, visibility;
+  }
+  .offcanvas-collapse.open {
+    left: 0;
+    visibility: visible;
+  }
+  .offcanvas-collapse .nav-item {
+    padding: .2rem 1rem;
+    font-size: 1.35rem;
+  }
+  .carousel-caption {
+    left:0;
+    right:0;
+  }
+  /* all 10% smaller */
+  h1,.h1 { font-size: 2.25rem; }
+  h2,.h2 { font-size: 1.8rem; }
+  h3,.h3 { font-size: 1.575rem; }
+  h4,.h4 { font-size: 1.35rem; }
+  h5,.h5 { font-size: 1.125rem; }
+}
+
 @media (min-width: 992px) {
-
-.sponsor img {
-  filter: gray; /* IE6-9 */
-  -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
-}
-
-.sponsor img:hover {
-  filter: none; /* IE6-9 */
-  -webkit-filter: grayscale(0); /* Google Chrome, Safari 6+ & Opera 15+ */ 
-}
-
+  .sponsor img {
+    filter: gray; /* IE6-9 */
+    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+  }
+  .sponsor img:hover {
+    filter: none; /* IE6-9 */
+    -webkit-filter: grayscale(0); /* Google Chrome, Safari 6+ & Opera 15+ */ 
+  }
 }
 
 /* Minimum aspect ratio */
 @media (max-aspect-ratio: 1/1) {
-
   .banner .carousel-item img {
     height: 100%;
     width: auto;
@@ -307,5 +406,4 @@ a.badge.cal-5:hover {
   .carousel-caption {
     bottom: 1.75rem;
   }
-
 }
