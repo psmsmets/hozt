@@ -19,4 +19,4 @@ A summary based on https://symfony.com/doc/current/deployment.html
    * `APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear`
    * `APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup`
 1. Fix changes in public_html bundles
-   * `cp public_html/assets/js/ckeditor_config.js public_html/bundles/fosckeditor/config.js'
+   * `cp public_html/assets/js/ckeditor_config.js public_html/bundles/fosckeditor/config.js`
