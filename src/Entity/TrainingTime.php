@@ -111,9 +111,9 @@ class TrainingTime
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new \DateTime("now");
 
         return $this;
     }
