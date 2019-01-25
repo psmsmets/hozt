@@ -48,7 +48,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=15, unique=true)
      */
-    private $mobile_phone;
+    private $mobilePhone;
 
     /**
      * @ORM\Column(type="boolean")
@@ -61,14 +61,14 @@ class User implements UserInterface
     private $verified;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $last_login_at;
+    private $lastLoginAt;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $is_active;
+    private $isActive;
 
     /**
      * @ORM\Column(type="datetime")
@@ -78,7 +78,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime")
      */
-    private $password_updatedAt;
+    private $passwordUpdatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="author")
@@ -88,6 +88,8 @@ class User implements UserInterface
     public function __construct()
     {
       $this->createdAt = new \DateTime("now");
+      $this->passwordUpdatedAt = $this->createdAt;
+      $this->roles = array('ROLE_USER');
       $this->blogPosts = new ArrayCollection();
     }
 
@@ -163,6 +165,7 @@ class User implements UserInterface
     public function getSalt()
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**
@@ -200,12 +203,12 @@ class User implements UserInterface
 
     public function getMobilePhone(): ?string
     {
-        return $this->mobile_phone;
+        return $this->mobilePhone;
     }
 
-    public function setMobilePhone(string $mobile_phone): self
+    public function setMobilePhone(string $mobilePhone): self
     {
-        $this->mobile_phone = $mobile_phone;
+        $this->mobilePhone = $mobilePhone;
 
         return $this;
     }
@@ -246,31 +249,31 @@ class User implements UserInterface
 
     public function getLastLoginAt(): ?\DateTimeInterface
     {
-        return $this->last_login_at;
+        return $this->lastLoginAt;
     }
 
     public function updateLastLoginAt(): self
     {
-        $this->last_login_at = new \DateTime("now");
+        $this->lastLoginAt = new \DateTime("now");
 
         return $this;
     }
 
     public function getIsActive(): ?bool
     {
-        return $this->is_active;
+        return $this->isActive;
     }
 
-    public function setIsActive(bool $is_active): self
+    public function setIsActive(bool $isActive): self
     {
-        $this->is_active = $is_active;
+        $this->isActive = $isActive;
 
         return $this;
     }
 
     public function isActive(): ?bool
     {
-        return $this->is_active ? true : false;
+        return $this->isActive ? true : false;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -280,12 +283,12 @@ class User implements UserInterface
 
     public function getPasswordUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->password_updatedAt;
+        return $this->passwordUpdatedAt;
     }
 
     public function setPasswordUpdatedAt(): self
     {
-        $this->password_updatedAt = new \DateTime("now");
+        $this->passwordUpdatedAt = new \DateTime("now");
 
         return $this;
     }
