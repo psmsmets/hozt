@@ -98,6 +98,14 @@ training_team:
     path: /api/training/{team_abbr}
     controller: App\Controller\ApiController::training_team
 
+competition_programs:
+    path: /api/wedstrijden/programmas
+    controller: App\Controller\ApiController::competition_programs
+
+competition_results:
+    path: /api/wedstrijden/uitslagen
+    controller: App\Controller\ApiController::competition_results
+
 calendar_events:
     path: /api/kalender/aanstaande/{count}
     controller: App\Controller\ApiController::calender_events

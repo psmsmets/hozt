@@ -189,4 +189,56 @@ class ApiController extends AbstractController
         return $this->json(array( 'result' => true, 'data' => $data ));
     }
 
+    /**
+     * @Route("/api/wedstrijden/programmas", name="competition_programs")
+     */
+    public function competition_programs()
+    {
+        $programs = $this->getDoctrine()
+            ->getRepository(Competition::class)
+            ->findUpcomingCompetitionPrograms(3)
+            ;
+
+        if (!$programs) {
+            return $this->json(array('result'=>false,'error'=>"Geen programma's gevonden."));
+        }
+        $data = array();
+        $base = $this->getParameter('app.path.competition_programs');
+        foreach ( $programs as $program ) {
+           $data[] = array(
+                   'title' => $program->getCalendar()->getTitle(),
+                   'date' => $program->getCalendar()->getStartTime()->format('Y-m-d'),
+                   'location' => $program->getCalendar()->getLocation(),
+                   'program' => $base.'/'.$program->getProgram(),
+               );
+        }
+        return $this->json(array( 'result' => true, 'data' => $data ));
+    }
+
+    /**
+     * @Route("/api/wedstrijden/uitslagen", name="competition_results")
+     */
+    public function competition_results()
+    {
+        $results = $this->getDoctrine()
+            ->getRepository(Competition::class)
+            ->findLatestCompetitionResults(3)
+            ;
+
+        if (!$results) {
+            return $this->json(array('result'=>false,'error'=>"Geen uitslagen gevonden."));
+        }
+        $data = array();
+        $base = $this->getParameter('app.path.competition_results');
+        foreach ( $results as $result ) {
+           $data[] = array(
+                   'title' => $result->getCalendar()->getTitle(),
+                   'date' => $result->getCalendar()->getStartTime()->format('Y-m-d'),
+                   'location' => $result->getCalendar()->getLocation(),
+                   'results' => $base.'/'.$result->getResults(),
+               );
+        }
+        return $this->json(array( 'result' => true, 'data' => $data ));
+    }
+
 }

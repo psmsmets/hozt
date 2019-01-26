@@ -75,9 +75,9 @@
           <div class="col-12 col-md-9">
             <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title}} 
               {% if competition.state is not null%}
-                <small><span class="badge badge-{{competition.state.badge}}">{{competition.state}}</span></small>
+                <small class="d-none"><span class="badge badge-{{competition.state.badge}}">{{competition.state}}</span></small>
               {%else%}
-                <small><span class="badge badge-light">?</span></small>
+                <small class="d-none"><span class="badge badge-light">?</span></small>
               {%endif%}
             </h5>
             <ul class="list-unstyled text-muted small mb-1 cal">
