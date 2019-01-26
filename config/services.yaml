@@ -8,13 +8,13 @@ parameters:
     app_locales: nl|en
     timezone: 'Europe/Brussels'
     app.path.user_images: /uploads/images/user
-    app.path.staticPage_images: /uploads/images/pagina
+    app.path.staticPage_images: /uploads/images/page
     app.path.carousel_images: /uploads/images/carousel
-    app.path.calendar_images: /uploads/images/kalender
-    app.path.blogPost_images: /uploads/images/nieuws
-    app.path.competition_preprograms: /uploads/files/competitie_voorprogrammas
-    app.path.competition_programs: /uploads/files/competitie_programmas
-    app.path.competition_results: /uploads/files/competitie_uitslagen
+    app.path.calendar_images: /uploads/images/calendar
+    app.path.blogPost_images: /uploads/images/blog
+    app.path.competition_preprograms: /uploads/files/competition/preprograms
+    app.path.competition_programs: /uploads/files/competition/programs
+    app.path.competition_results: /uploads/files/competition/results
 
 
 services:
