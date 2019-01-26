@@ -34,13 +34,49 @@ class CompetitionRepository extends ServiceEntityRepository
             ->addSelect('e')
             ->andWhere('e.enabled = :enabled')
             ->andWhere('e.archived = :archived')
-            ->andWhere('e.startTime >= :now')
+            ->andWhere('( e.endTime >= :today or (e.startTime >= :today and e.endTime is null) )')
             ->andWhere('(tc.id = :teamCategory or c.id = :teamCategory)')
             ->setParameter('enabled', true)
             ->setParameter('archived', false)
-            ->setParameter('now', date("Y-m-d").' 00:00')
+            ->setParameter('today', date("Y-m-d").' 23:59')
             ->setParameter('teamCategory', $teamCategory)
             ->orderBy('e.startTime', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findUpcomingCompetitionPrograms(int $limit = 5)
+    {
+        return $this->createQueryBuilder('n')
+            ->leftJoin('n.state','s')
+            ->innerJoin('n.calendar','e')
+            ->addSelect('s')
+            ->addSelect('e')
+            ->andWhere('e.enabled = :enabled')
+            ->andWhere('( e.endTime >= :today or (e.startTime >= :today and e.endTime is null) )')
+            ->andWhere('n.program is not null')
+            ->setParameter('enabled', true)
+            ->setParameter('today', date("Y-m-d").' 23:59')
+            ->orderBy('e.startTime', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findLatestCompetitionResults(int $limit = 5)
+    {
+        return $this->createQueryBuilder('n')
+            ->leftJoin('n.state','s')
+            ->innerJoin('n.calendar','e')
+            ->addSelect('s')
+            ->addSelect('e')
+            ->andWhere('e.enabled = :enabled')
+            ->andWhere('n.results is not null')
+            ->setParameter('enabled', true)
+            ->orderBy('e.startTime', 'DESC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult()
         ;

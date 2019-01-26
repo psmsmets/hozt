@@ -2,10 +2,11 @@
 
 $(document).ready(function(){
 
-    $('#api_load_module_training_today').html('<div class="p-3"><h5 class="pb-2 mb-0">Trainingsuren <span class="badge badge-hozt">vandaag</span></h5><ul class="list-unstyled" id="api_load_module_training_today_items"></ul></div>');
-
+    var module = "api_load_module_training_today";
     var hoztAPI  = "/api/training/vandaag";
-    var itemsId  = "#api_load_module_training_today_items"; 
+
+   $('#'+module).html("<div class=\"p-3\"><h5 class=\"pb-2 mb-0\">Trainingsuren <span class=\"badge badge-hozt\">vandaag</span></h5><div id=\""+module+"_items\"></div></div>");
+
 
     $.getJSON( hoztAPI, {
         tagmode: "any",
@@ -22,10 +23,10 @@ $(document).ready(function(){
                    t += "<span class=\"badge badge-info ml-1\">" + item.comment + "</span>";
                 }
                 t += "</div>";
-                $( t ).appendTo( itemsId );
+                $( t ).appendTo( "#"+module+"_items" );
             });
         } else {
-            $( '<p class="small ml-1">Er is vandaag geen training</p>' ).appendTo( itemsId );
+            $( '<p class="small ml-1">Er is vandaag geen training</p>' ).appendTo( "#"+module+"_items" );
         }
     });
 

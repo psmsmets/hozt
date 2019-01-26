@@ -104,6 +104,8 @@ Onze <a href="/faq" class="text-red">FAQ</a> al gelezen?</p>
 
 {% block side %}
   <div id="api_load_module_tyr"></div>
+  <div id="api_load_module_competition_programs"></div>
+  <div id="api_load_module_competition_results"></div>
   <div id="api_load_module_training_today"></div>
   <div id="api_load_module_training_tomorrow"></div>
   {% if currentPath starts with '/kalender' %}{% else %}<div id="api_load_module_calendar_upcoming"></div>{% endif %}
@@ -195,4 +197,6 @@ Onze <a href="/faq" class="text-red">FAQ</a> al gelezen?</p>
   <script src="{{ asset('assets/js/api_load_module_training_today.js') }}"></script>
   <script src="{{ asset('assets/js/api_load_module_training_tomorrow.js') }}"></script>
   <script src="{{ asset('assets/js/api_load_module_calendar_upcoming.js') }}"></script>
+  <script src="{{ asset('assets/js/api_load_module_competiton_programs.js') }}"></script>
+  <script src="{{ asset('assets/js/api_load_module_competiton_results.js') }}"></script>
 {% endblock %}
