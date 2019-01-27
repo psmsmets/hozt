@@ -27,8 +27,8 @@ easy_admin:
                - { entity: 'TrainingTeam', label: 'Groepen', icon: 'users' }
                - { entity: 'TrainingTeamCategory', label: 'Categorie', icon: 'bookmark' }
                - { entity: 'TrainingSchedule', label: 'Uurrooster', icon: 'table' }
-               - { entity: 'TrainingTime', label: 'Tijdstippen', icon: 'clock' }
-               - { entity: 'TrainingDay', label: 'Dag', icon: 'calendar' }
+               - { entity: 'TrainingTime', label: 'Tijdstippen' }
+               - { entity: 'TrainingDay', label: 'Dag' }
            - label: 'Kalender'
              icon: 'calendar'
              children:
@@ -79,7 +79,7 @@ easy_admin:
                     - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'titleShort', label: 'Verkorte titel' }
-                    - { property: 'slug', label: 'Slug' }
+                    #- { property: 'slug', label: 'Slug' }
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } } 
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Gepubliceerd' }
@@ -91,7 +91,6 @@ easy_admin:
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.carousel_images%' }
                     - { property: 'keywords', label: 'Keywords' }
-                    - { property: 'createdAt', label: 'Gemaakt op' }
                     - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'publishUntil', label: 'Publiceer tot' }
                     - { property: 'access', label: 'Toegang' }
@@ -112,14 +111,15 @@ easy_admin:
             form:
                 fields:
                     - { property: 'title', label: 'Titel' }
-                    - { property: 'slug', label: 'Slug' }
+                    #- { property: 'slug', label: 'Slug' }
                     - { property: 'description', label: 'Korte omschrijving' }
                     - { property: 'enabled', label: 'Gepubliceerd' }
+            edit:
+                fields:
+                    - { property: 'slug', label: 'Slug' }
         StaticPage:
             class: App\Entity\StaticPage
             label: 'Pagina'
-            edit:
-                actions: ['-delete']
             list:
                 fields:
                     - { property: 'id', label: 'Id' }
@@ -145,6 +145,10 @@ easy_admin:
                     - { property: 'keywords', label: 'Keywords' }
                     - { property: 'showUpdatedAt', label: 'Toon laatst aangepast' }
                     - { property: 'access', label: 'Toegang' }
+            edit:
+                actions: ['-delete']
+                fields:
+                    - '-slug'
         CarouselSlide:
             class: App\Entity\CarouselSlide
             label: 'Carousel'
@@ -356,10 +360,13 @@ easy_admin:
             form:
                 fields:
                     - { property: 'title', label: 'Titel' }
-                    - { property: 'slug', label: 'Slug' }
+                    #- { property: 'slug', label: 'Slug' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'enabled', label: 'Actief' }
+            edit:
+                fields:
+                    - { property: 'slug', label: 'Slug' }
         CalendarEvent:
             class: App\Entity\CalendarEvent
             label: 'Kalender :: events'
