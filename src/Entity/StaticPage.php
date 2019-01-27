@@ -16,6 +16,7 @@ class StaticPage
      * Parameters
      */
     const SHOW_UPDATED_AT = false;
+    const ENABLED = true;
 
     /**
      * @ORM\Id()
@@ -99,7 +100,7 @@ class StaticPage
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->enabled = StaticPage::enabled;
+        $this->enabled = StaticPage::ENABLED;
         $this->showUpdatedAt = StaticPage::SHOW_UPDATED_AT;
         $this->resetViews();
     }

@@ -46,8 +46,9 @@ services:
     app.logout.listener:
         class: App\Listener\LogoutListener
 
-    app.utils.slug:
-        class: App\Utils\ControllerUtils
+ #   cocur_slugify:
+#        lowercase: true
+#        separator: '_'
 
 fos_ck_editor:
     default_config: standard

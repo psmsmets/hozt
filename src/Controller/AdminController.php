@@ -8,14 +8,30 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
 
 use App\Entity\User;
+use App\Entity\BlogPost;
 use App\Entity\TrainingTeam;
 
 class AdminController extends BaseAdminController
 {
-    // Customizes the instantiation of entities only for the 'User' entity
+
+    private $slugger;
+
+    public function __construct(\Cocur\Slugify\SlugifyInterface $slugify)
+    {
+        $this->slugger = $slugify;
+    }
+
+    // Customizes the instantiation of specific entities
     public function createNewUserEntity()
     {
         return new User(array('ROLE_USER'));
+    }
+
+    public function createNewBlogPostEntity()
+    {
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $post = new BlogPost();
+        return $post->setAuthor($user);
     }
 
     // General create 
@@ -29,15 +45,29 @@ class AdminController extends BaseAdminController
     public function updateEntity($entity)
     {
         if (method_exists($entity, 'setUpdatedAt')) {
-            $entity->setUpdatedAt(new \DateTime());
+            $entity->setUpdatedAt();
+        }
+        if (method_exists($entity, 'setSpecial')) {
+            $this->updateSlug($entity,true);
+        } else {
+            $this->checkSlug($entity,true);
         }
         parent::persistEntity($entity);
     }
 
-    private function updateSlug($entity)
+    private function checkSlug($entity)
+    {
+        if (method_exists($entity, 'setSlug') ) {
+            $entity->setSlug($this->slugger->slugify($entity->getSlug()));
+        }
+    }
+
+    private function updateSlug($entity, bool $force = false)
     {
         if (method_exists($entity, 'setSlug') and method_exists($entity, 'getTitle')) {
-            $entity->setSlug($this->slugger->slugify($entity->getTitle()));
+            if (is_null($entity->getSlug()) or $force) {
+                $entity->setSlug($this->slugger->slugify($entity->getTitle()));
+            }
         }
     }
 

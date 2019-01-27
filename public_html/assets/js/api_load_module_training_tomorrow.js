@@ -26,7 +26,7 @@ $(document).ready(function(){
                 $( t ).appendTo( "#"+module+"_items" );
             });
         } else {
-            $( '<p class="small ml-1">Er is morgen geen training</p>' ).appendTo( "#"+module+"_items" );
+            $( "<div class=\"small ml-3\">Er is morgen geen training</div>" ).appendTo( "#"+module+"_items" );
         }
     });
 
