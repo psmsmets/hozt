@@ -106,6 +106,12 @@ class Competition
      */
     private $state;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionPool", inversedBy="competitions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $pool;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -337,6 +343,18 @@ class Competition
     public function setState(?CompetitionState $state): self
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getPool(): ?CompetitionPool
+    {
+        return $this->pool;
+    }
+
+    public function setPool(?CompetitionPool $pool): self
+    {
+        $this->pool = $pool;
 
         return $this;
     }
