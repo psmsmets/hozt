@@ -50,7 +50,7 @@ class CompetitionState
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime("today");
+        $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->competitions = new ArrayCollection();
     }

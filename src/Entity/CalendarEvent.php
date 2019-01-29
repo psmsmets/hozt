@@ -108,9 +108,9 @@ class CalendarEvent
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime("today noon");
+        $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->startTime = $this->createdAt;
+        $this->startTime = new \DateTime("today noon"); 
         $this->endTime = null;
         $this->allDay = false;
         $this->enabled = true;
@@ -120,13 +120,28 @@ class CalendarEvent
 
     public function __toString(): ?string
     {
-        return $this->title . " (" . $this->startTime->format('Y-m-d') . ")";
+        return $this->startTime->format('Y-m-d') . " (" . $this->title . ")";
     }
 
     public function getId(): ?int
     {
         return $this->id;
     }
+
+/*
+https://github.com/ramsey/uuid-doctrine/issues/13
+    public function setUuid(string $uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
+    }
+*/
 
     public function getTitle(): ?string
     {
@@ -376,4 +391,5 @@ class CalendarEvent
 
         return $this;
     }
+
 }

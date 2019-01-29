@@ -9,17 +9,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminContr
 
 use App\Entity\User;
 use App\Entity\BlogPost;
-use App\Entity\TrainingTeam;
+use App\Entity\CalendarCategory;
+use App\Entity\ContactFaq;
+use App\Entity\ContactForm;
+use App\Entity\SponsorCategory;
+use App\Entity\TrainingCoach;
+use App\Entity\TrainingTeamCategory;
 
 class AdminController extends BaseAdminController
 {
-
-    private $slugger;
-
-    public function __construct(\Cocur\Slugify\SlugifyInterface $slugify)
-    {
-        $this->slugger = $slugify;
-    }
 
     // Customizes the instantiation of specific entities
     public function createNewUserEntity()
@@ -34,11 +32,70 @@ class AdminController extends BaseAdminController
         return $post->setAuthor($user);
     }
 
-    // General create 
-    public function persistEntity($entity)
+    public function createNewCalendarCategoryEntity()
     {
-        $this->updateSlug($entity);
-        parent::persistEntity($entity);
+        $sequence = (int) $this->getDoctrine()
+            ->getRepository(CalendarCategory::class)
+            ->createQueryBuilder('c')
+            ->select('MAX(c.sequence) as sequence')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return new CalendarCategory($sequence+1);
+    }
+
+    public function createNewContactFaqEntity()
+    {
+        $sequence = (int) $this->getDoctrine()
+            ->getRepository(ContactFaq::class)
+            ->createQueryBuilder('c')
+            ->select('MAX(c.sequence) as sequence')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return new ContactFaq($sequence+1);
+    }
+
+    public function createNewContactFormEntity()
+    {
+        $sequence = (int) $this->getDoctrine()
+            ->getRepository(ContactForm::class)
+            ->createQueryBuilder('c')
+            ->select('MAX(c.sequence) as sequence')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return new ContactForm($sequence+1);
+    }
+
+    public function createNewSponsorCategoryEntity()
+    {
+        $sequence = (int) $this->getDoctrine()
+            ->getRepository(SponsorCategory::class)
+            ->createQueryBuilder('c')
+            ->select('MAX(c.sequence) as sequence')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return new SponsorCategory($sequence+1);
+    }
+
+    public function createNewTrainingCoachEntity()
+    {
+        $sequence = (int) $this->getDoctrine()
+            ->getRepository(TrainingCoach::class)
+            ->createQueryBuilder('c')
+            ->select('MAX(c.sequence) as sequence')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return new TrainingCoach($sequence+1);
+    }
+
+    public function createNewTrainingTeamCategoryEntity()
+    {
+        $sequence = (int) $this->getDoctrine()
+            ->getRepository(TrainingTeamCategory::class)
+            ->createQueryBuilder('c')
+            ->select('MAX(c.sequence) as sequence')
+            ->getQuery()
+            ->getSingleScalarResult();
+        return new TrainingTeamCategory($sequence+1);
     }
 
     // General update
@@ -47,28 +104,7 @@ class AdminController extends BaseAdminController
         if (method_exists($entity, 'setUpdatedAt')) {
             $entity->setUpdatedAt();
         }
-        if (method_exists($entity, 'setSpecial')) {
-            $this->updateSlug($entity,true);
-        } else {
-            $this->checkSlug($entity,true);
-        }
         parent::persistEntity($entity);
-    }
-
-    private function checkSlug($entity)
-    {
-        if (method_exists($entity, 'setSlug') ) {
-            $entity->setSlug($this->slugger->slugify($entity->getSlug()));
-        }
-    }
-
-    private function updateSlug($entity, bool $force = false)
-    {
-        if (method_exists($entity, 'setSlug') and method_exists($entity, 'getTitle')) {
-            if (is_null($entity->getSlug()) or $force) {
-                $entity->setSlug($this->slugger->slugify($entity->getTitle()));
-            }
-        }
     }
 
 /*

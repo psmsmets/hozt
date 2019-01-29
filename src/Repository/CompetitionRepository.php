@@ -50,9 +50,8 @@ class CompetitionRepository extends ServiceEntityRepository
     public function findUpcomingCompetitionPrograms(int $limit = 5)
     {
         return $this->createQueryBuilder('n')
-            ->leftJoin('n.state','s')
             ->innerJoin('n.calendar','e')
-            ->addSelect('s')
+            ->addSelect('n')
             ->addSelect('e')
             ->andWhere('e.enabled = :enabled')
             ->andWhere('( e.endTime >= :today_end or (e.startTime >= :today_start and e.endTime is null) )')
@@ -67,12 +66,31 @@ class CompetitionRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findCompetitionResultsByTeamCategory(int $teamCategory)
+    {
+        return $this->createQueryBuilder('n')
+            ->innerJoin('n.calendar','e')
+            ->leftJoin('n.teams','t')
+            ->leftJoin('t.category','tc')
+            ->leftJoin('n.teamCategories','c')
+            ->addSelect('n')
+            ->addSelect('e')
+            ->andWhere('e.enabled = :enabled')
+            ->andWhere('n.results is not null')
+            ->andWhere('(tc.id = :teamCategory or c.id = :teamCategory)')
+            ->setParameter('enabled', true)
+            ->setParameter('teamCategory', $teamCategory)
+            ->orderBy('e.startTime', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findLatestCompetitionResults(int $limit = 5)
     {
         return $this->createQueryBuilder('n')
-            ->leftJoin('n.state','s')
             ->innerJoin('n.calendar','e')
-            ->addSelect('s')
+            ->addSelect('n')
             ->addSelect('e')
             ->andWhere('e.enabled = :enabled')
             ->andWhere('n.results is not null')

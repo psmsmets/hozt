@@ -46,10 +46,12 @@ class ContactForm
      */
     private $sequence;
 
-    public function __construct()
+    public function __construct(int $sequence = 0)
     {
         $this->createdAt = new \DateTime("now");
+        $this->updatedAt = $this->createdAt;
         $this->enabled = true;
+        $this->sequence = $sequence;
     }
 
     public function __toString(): string

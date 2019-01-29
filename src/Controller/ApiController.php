@@ -165,11 +165,11 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/kalender/aanstaande/{count}", name="calender_events")
      */
-    public function calender_events(int $count=7)
+    public function calender_events(int $limit=7)
     {
         $events = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
-            ->findUpcomingCalendarEvents($count)
+            ->findUpcomingCalendarEvents($limit)
             ;
         if (!$events) {
             return $this->json(array( 'result' => true, 'data' => [] ));
@@ -192,11 +192,11 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/wedstrijden/programmas", name="competition_programs")
      */
-    public function competition_programs()
+    public function competition_programs(int $limit=3)
     {
         $programs = $this->getDoctrine()
             ->getRepository(Competition::class)
-            ->findUpcomingCompetitionPrograms(3)
+            ->findUpcomingCompetitionPrograms($limit)
             ;
 
         if (!$programs) {
@@ -218,11 +218,11 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/wedstrijden/uitslagen", name="competition_results")
      */
-    public function competition_results()
+    public function competition_results(int $limit=3)
     {
         $results = $this->getDoctrine()
             ->getRepository(Competition::class)
-            ->findLatestCompetitionResults(3)
+            ->findLatestCompetitionResults($limit)
             ;
 
         if (!$results) {
