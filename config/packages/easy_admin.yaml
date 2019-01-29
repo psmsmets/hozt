@@ -426,7 +426,7 @@ easy_admin:
                     #- { property: 'officials', label: 'Officials' }
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'restrictions', label: 'Limieten' }
-                    - { property: 'multiDay', label: 'Meerdaags' }
+                    - { property: 'multiDay', label: 'Overnachting' }
                     - { property: 'pool', label: 'Zwembad type' }
                     - { property: 'state', label: 'Status' }
                     - { property: 'preprogramFile', type: 'vich_file', label: 'Voorprogramma', base_path: '%app.path.competition_preprograms%' }
