@@ -3,7 +3,7 @@
 $(document).ready(function(){
 
     var module = "api_load_module_competition_results";
-    var hoztAPI  = "/api/wedstrijden/uitslagen";
+    var hoztAPI  = "/api/wedstrijden/uitslagen/5";
 
     $('#'+module).html("<div class=\"p-3\"><h5 class=\"pb-2 mb-0\">Uitslagen</h5><div id=\""+module+"_items\"></div></div>"); 
 

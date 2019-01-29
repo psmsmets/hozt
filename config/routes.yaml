@@ -99,15 +99,13 @@ training_team:
     controller: App\Controller\ApiController::training_team
 
 competition_programs:
-    path: /api/wedstrijden/programmas
+    path: /api/wedstrijden/programmas/{limit<\d+>?3}
     controller: App\Controller\ApiController::competition_programs
 
 competition_results:
-    path: /api/wedstrijden/uitslagen
+    path: /api/wedstrijden/uitslagen/{limit<\d+>?5}
     controller: App\Controller\ApiController::competition_results
 
 calendar_events:
-    path: /api/kalender/aanstaande/{count}
+    path: /api/kalender/aanstaande/{limit<\d+>?7}
     controller: App\Controller\ApiController::calender_events
-    requirements:
-        count: '\d+'

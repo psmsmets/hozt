@@ -25,13 +25,16 @@
 
     <ul class="nav nav-tabs" id="trainingCategory" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#teams" role="tab" aria-controls="teams" aria-selected="true">Groepen en trainers</a>
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#teams" role="tab" aria-controls="teams" aria-selected="true"><i class="fas fa-info-circle"></i><span class="d-none d-md-inline"> Groepen en trainers</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false">Trainingsuren</a>
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false"><i class="fas fa-clock"></i><span class="d-none d-md-inline"> Trainingsuren</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#competition" role="tab" aria-controls="competition" aria-selected="false">Wedstrijden</a>
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#competition" role="tab" aria-controls="competition" aria-selected="false"><i class="fas fa-clipboard-list"></i><span class="d-none d-md-inline"> Wedstrijden</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#results" role="tab" aria-controls="results" aria-selected="false"><i class="fas fa-trophy"></i><span class="d-none d-md-inline"> Uitslagen</span></a>
       </li>
     </ul>
     <div class="tab-content" id="trainingCategoryContent">
@@ -50,7 +53,7 @@
       {% endfor %}
       </div>
 
-      <div class="tab-pane fade mt-4" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
+      <div class="tab-pane show fade mt-4" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
       {% for day in page.training_days %}
         <dl class="row mb-md-2"> 
           {% for schedule in day.schedule %}
@@ -99,16 +102,13 @@
               {% if competition.warmupTime is not null %}
                 <li><i class="far fa-clock"></i> inzwemmen om {{competition.warmupTime|date('H:i')}}</li>
               {% endif %}
-              {% if competition.preprogram is not null or competition.program is not null or competition.results is not null%}
+              {% if competition.preprogram is not null or competition.program is not null %}
                 <li><i class="fas fa-trophy"></i>
                 {% if competition.preprogram is not null %}
                   <a href="{{ vich_uploader_asset(competition, 'preprogramFile') }}" class="pr-2">Voorprogramma</a>
                 {% endif %}
                 {% if competition.program is not null %}
                   <a href="{{ vich_uploader_asset(competition, 'programFile') }}" class="pr-2">Programma</a>
-                {% endif %}
-                {% if competition.results is not null %}
-                  <a href="{{ vich_uploader_asset(competition, 'resultsFile') }}" class="pr-2">Uitslag</a>
                 {% endif %}
                 </li>
               {% endif %}
@@ -118,6 +118,28 @@
         {% endfor %}
       {% endif %}
       </div>
+
+      <div class="tab-pane fade mt-4" id="results" role="tabpanel" aria-labelledby="results-tab">
+      {% if page.results|length == 0 %}
+        <p>Geen wedstrijduitslagen gevonden.</p>
+      {% else %}
+        {% for item in page.results %}
+        <div class="row mb-4 mt-4 mb-md-2 mt-md-2">
+          <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{item.calendar.getFormattedPeriod}}</h6></div>
+          <div class="col-12 col-md-9">
+            <h5 class="pb-0 mb-1">{{item.calendar.title}}</h5>
+            <ul class="list-unstyled text-muted small mb-1 cal">
+              {% if item.calendar.location %}
+                <li><i class="fas fa-swimming-pool"></i> {{item.calendar.location}}</li>
+              {% endif %}
+              <li><i class="fas fa-trophy"></i> <a href="{{ vich_uploader_asset(item, 'resultsFile') }}" class="pr-2">Uitslag</a></li>
+            </ul>
+          </div>
+        </div>
+        {% endfor %}
+      {% endif %}
+      </div>
+
 
     </div>
 

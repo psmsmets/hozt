@@ -33,4 +33,12 @@ class ContactFaqRepository extends ServiceEntityRepository
             ;
     }
 
+    public function getLastSequence(): ?int
+    {
+        return $this->createQueryBuilder('c')
+            ->select('MAX(c.sequence) as sequence')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 }

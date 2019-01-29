@@ -18,7 +18,7 @@ $(document).ready(function(){
                 $( t ).appendTo( "#"+module+"_items" );
             });
         } else {
-            $( "<div class=\"small ml-3\">Geen aanstaande wedstrijd programma's gevonden</div>" ).appendTo( "#"+module+"_items" );
+            $( "<div class=\"small ml-3\">Geen programma's van aanstaande wedstrijden gevonden</div>" ).appendTo( "#"+module+"_items" );
         }
     });
 

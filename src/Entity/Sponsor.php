@@ -7,10 +7,10 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CarouselSlideRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\SponsorRepository")
  * @Vich\Uploadable
  */
-class CarouselSlide
+class Sponsor
 {
     /**
      * @ORM\Id()
@@ -22,22 +22,12 @@ class CarouselSlide
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private $name;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $showTitle;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $publishAt;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $publishUntil;
+    private $enabled;
 
     /**
      * @ORM\Column(type="datetime")
@@ -50,9 +40,14 @@ class CarouselSlide
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="date")
      */
-    private $enabled;
+    private $publishAt;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $publishUntil;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -60,27 +55,27 @@ class CarouselSlide
     private $image;
 
     /**
-     * @Vich\UploadableField(mapping="carousel_images", fileNameProperty="image")
+     * @Vich\UploadableField(mapping="sponsor_images", fileNameProperty="image")
      * @var File
      */
     private $imageFile;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\SponsorCategory", inversedBy="sponsors")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $body;
+    private $category;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->publishAt = $this->createdAt;
         $this->enabled = true;
     }
 
     public function __toString(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -88,26 +83,50 @@ class CarouselSlide
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
+        return $this->name;
     }
 
-    public function setTitle(string $title): self
+    public function setName(string $name): self
     {
-        $this->title = $title;
+        $this->name = $name;
 
         return $this;
     }
 
-    public function getShowTitle(): ?bool
+    public function getEnabled(): ?bool
     {
-        return $this->showTitle;
+        return $this->enabled;
     }
 
-    public function setShowTitle(bool $showTitle): self
+    public function setEnabled(bool $enabled): self
     {
-        $this->showTitle = $showTitle;
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -132,47 +151,6 @@ class CarouselSlide
     public function setPublishUntil(?\DateTimeInterface $publishUntil): self
     {
         $this->publishUntil = $publishUntil;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(): self
-    {
-        $this->updatedAt = new \DateTime("now");
-
-        return $this;
-    }
-
-    public function getEnabled(): ?bool
-    {
-        return $this->enabled;
-    }
-
-    public function setEnabled(bool $enabled): self
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    public function getBody(): ?string
-    {
-        return $this->body;
-    }
-
-    public function setBody(?string $body): self
-    {
-        $this->body = $body;
 
         return $this;
     }
@@ -206,4 +184,15 @@ class CarouselSlide
         return $this->imageFile;
     }
 
+    public function getCategory(): ?SponsorCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?SponsorCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
 }

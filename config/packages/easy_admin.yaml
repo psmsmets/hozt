@@ -248,8 +248,6 @@ easy_admin:
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'enabled', label: 'Actief' }
             edit:
-                fields:
-                    - sequence
                 actions: ['-delete']
         TrainingTime:
             class: App\Entity\TrainingTime

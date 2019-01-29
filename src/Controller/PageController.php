@@ -239,6 +239,10 @@ class PageController extends AbstractController
             ->getRepository(Competition::class)
             ->findUpcomingCompetitionEventsByTeamCategory($category->getId())
         );
+        $this->addToTemplateData( 'results', $this->getDoctrine()
+            ->getRepository(Competition::class)
+            ->findCompetitionResultsByTeamCategory($category->getId())
+        );
 
         return $this->render('training/category.html.twig', $this->template_data );
     }
