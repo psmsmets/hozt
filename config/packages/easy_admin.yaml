@@ -386,7 +386,7 @@ easy_admin:
                     - { property: 'title', label: 'Titel' }
                     - { property: 'startTime', label: 'Van' }
                     - { property: 'endTime', label: 'Tot' }
-                    - { property: 'allDay', label: 'Hele dag' }
+                    - { property: 'allDay', label: 'Hele dag', help: 'Of bij onbekend (start)uur' }
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'minimal' } }
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Gepubliceerd' }

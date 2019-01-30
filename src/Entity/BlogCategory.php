@@ -54,6 +54,11 @@ class BlogCategory
     private $enabled;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $defaultCategory;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="category")
      */
     private $posts;
@@ -63,6 +68,7 @@ class BlogCategory
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
+        $this->defaultCategory = false;
         $this->blogPosts = new ArrayCollection();
         $this->posts = new ArrayCollection();
     }
@@ -150,6 +156,18 @@ class BlogCategory
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getDefaultCategory(): ?bool
+    {
+        return $this->defaultCategory;
+    }
+
+    public function setDefaultCategory(bool $defaultCategory): self
+    {
+        $this->defaultCategory = $defaultCategory;
 
         return $this;
     }

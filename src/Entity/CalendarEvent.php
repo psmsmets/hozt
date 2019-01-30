@@ -111,11 +111,11 @@ class CalendarEvent
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->startTime = new \DateTime("today noon"); 
-        $this->endTime = null;
-        $this->allDay = false;
+        $this->endTime = new \DateTime("today noon");
+        $this->allDay = true;
         $this->enabled = true;
         $this->archived = false;
-        $this->isCompetition = false;
+        $this->isCompetition = true;
     }
 
     public function __toString(): ?string
