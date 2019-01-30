@@ -58,6 +58,11 @@ class BlogCategory
      */
     private $posts;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $defaultCategory;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -181,6 +186,18 @@ class BlogCategory
                 $post->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDefaultCategory(): ?bool
+    {
+        return $this->defaultCategory;
+    }
+
+    public function setDefaultCategory(bool $defaultCategory): self
+    {
+        $this->defaultCategory = $defaultCategory;
 
         return $this;
     }

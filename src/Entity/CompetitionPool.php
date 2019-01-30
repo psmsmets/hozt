@@ -48,6 +48,11 @@ class CompetitionPool
      */
     private $competitions;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $defaultPool;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -146,6 +151,18 @@ class CompetitionPool
                 $competition->setPool(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDefaultPool(): ?bool
+    {
+        return $this->defaultPool;
+    }
+
+    public function setDefaultPool(bool $defaultPool): self
+    {
+        $this->defaultPool = $defaultPool;
 
         return $this;
     }

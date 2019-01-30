@@ -58,6 +58,11 @@ class CalendarCategory
      */
     private $enabled;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $defaultCategory;
+
     public function __construct(int $sequence = 0)
     {
         $this->createdAt = new \DateTime("now");
@@ -188,6 +193,18 @@ class CalendarCategory
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getDefaultCategory(): ?bool
+    {
+        return $this->defaultCategory;
+    }
+
+    public function setDefaultCategory(bool $defaultCategory): self
+    {
+        $this->defaultCategory = $defaultCategory;
 
         return $this;
     }
