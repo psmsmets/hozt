@@ -12,7 +12,6 @@ use App\Entity\BlogPost;
 use App\Entity\CalendarCategory;
 use App\Entity\ContactFaq;
 use App\Entity\ContactForm;
-use App\Entity\CompetitionPool;
 use App\Entity\SponsorCategory;
 use App\Entity\TrainingCoach;
 use App\Entity\TrainingTeamCategory;
@@ -53,17 +52,6 @@ class AdminController extends BaseAdminController
             ->getQuery()
             ->getSingleScalarResult();
         return new ContactFaq($sequence+1);
-    }
-
-    public function createNewCompetitionPoolEntity()
-    {
-        $sequence = (int) $this->getDoctrine()
-            ->getRepository(CompetitionPool::class)
-            ->createQueryBuilder('c')
-            ->select('MAX(c.sequence) as sequence')
-            ->getQuery()
-            ->getSingleScalarResult();
-        return new CompetitionPool($sequence+1);
     }
 
     public function createNewContactFormEntity()
