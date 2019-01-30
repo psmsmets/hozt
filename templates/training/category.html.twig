@@ -87,9 +87,7 @@
               {%endif%}
             </h5>
             <ul class="list-unstyled text-muted small mb-1 cal">
-              {% if competition.calendar.location %}
-                <li><i class="fas fa-swimming-pool"></i> {{competition.calendar.location}}</li>
-              {% endif %}
+              <li><i class="fas fa-swimming-pool"></i> {{competition.pool}}{% if competition.calendar.location %}, {{competition.calendar.location}}{% endif %}</li>
               {% if competition.teamCategories|length > 0 %}
                 <li><i class="fas fa-swimmer"></i>
                   {% for category in competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}
@@ -132,10 +130,8 @@
           <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{item.calendar.getFormattedPeriod}}</h6></div>
           <div class="col-12 col-md-9">
             <h5 class="pb-0 mb-1">{{item.calendar.title}}</h5>
-            <ul class="list-unstyled text-muted small mb-1 cal">
-              {% if item.calendar.location %}
-                <li><i class="fas fa-swimming-pool"></i> {{item.calendar.location}}</li>
-              {% endif %}
+            <ul class="list-unstyled text-muted small mb-1 cal"> 
+                <li><i class="fas fa-swimming-pool"></i> {{item.pool}}{% if item.calendar.location %}, {{item.calendar.location}}{% endif %}</li>
               <li><i class="fas fa-trophy"></i> <a href="{{ vich_uploader_asset(item, 'resultsFile') }}" class="pr-2">Uitslag</a></li>
             </ul>
           </div>

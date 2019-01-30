@@ -64,8 +64,10 @@
             </h6>
 
             <ul class="list-unstyled text-muted small mb-1 cal">
-              {% if event.location %}<li class="mb-1"><i class="fas fa-{% if event.competition is null %}map-marked-alt{% else %}swimming-pool{% endif %}"></i> {{event.location}}</li>{% endif %}
-              {% if event.competition is not null %}
+              {% if event.competition is null %}
+                {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location}}</li>{% endif %}
+              {% else %}
+                <li><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}{% if event.location %}, {{event.location}}{% endif %}</li>
                 {% if event.competition.teamCategories|length > 0 %}
                   <li class="mb-1"><i class="fas fa-swimmer"></i>
                     {% for category in event.competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}

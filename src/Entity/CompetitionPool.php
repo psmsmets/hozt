@@ -44,21 +44,15 @@ class CompetitionPool
     private $description;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $sequence;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Competition", mappedBy="pool")
      */
     private $competitions;
 
-    public function __construct(int $sequence = 0)
+    public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
-        $this->sequence = $sequence;
         $this->competitions = new ArrayCollection();
     }
 
@@ -121,18 +115,6 @@ class CompetitionPool
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getSequence(): ?int
-    {
-        return $this->sequence;
-    }
-
-    public function setSequence(int $sequence): self
-    {
-        $this->sequence = $sequence;
 
         return $this;
     }

@@ -427,7 +427,7 @@ easy_admin:
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'restrictions', label: 'Limieten' }
                     - { property: 'multiDay', label: 'Overnachting' }
-                    - { property: 'pool', label: 'Zwembad type' }
+                    - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'state', label: 'Status' }
                     - { property: 'preprogramFile', type: 'vich_file', label: 'Voorprogramma', base_path: '%app.path.competition_preprograms%' }
                     - { property: 'programFile', type: 'vich_file', label: 'Programma', base_path: '%app.path.competition_programs%' }
@@ -441,14 +441,12 @@ easy_admin:
                     - { property: 'enabled', label: 'Gepubliceerd', type: 'boolean' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'description', label: 'Omschrijving' }
-                    - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
-                sort: ['sequence', 'ASC']
+                sort: ['title', 'ASC']
             form:
                 fields:
                     - { property: 'title', label: 'Titel' }
                     - { property: 'description', label: 'Omschrijving' }
-                    - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'enabled', label: 'Actief' }
         CompetitionState:
             class: App\Entity\CompetitionState
