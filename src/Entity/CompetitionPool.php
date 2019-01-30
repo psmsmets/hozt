@@ -39,6 +39,11 @@ class CompetitionPool
     private $enabled;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $defaultPool;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $description;
@@ -48,16 +53,13 @@ class CompetitionPool
      */
     private $competitions;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $defaultPool;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
+        $this->defaultPool = false;
         $this->competitions = new ArrayCollection();
     }
 
@@ -124,6 +126,18 @@ class CompetitionPool
         return $this;
     }
 
+    public function getDefaultPool(): ?bool
+    {
+        return $this->defaultPool;
+    }
+
+    public function setDefaultPool(bool $defaultPool): self
+    {
+        $this->defaultPool = $defaultPool;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Competition[]
      */
@@ -151,18 +165,6 @@ class CompetitionPool
                 $competition->setPool(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getDefaultPool(): ?bool
-    {
-        return $this->defaultPool;
-    }
-
-    public function setDefaultPool(bool $defaultPool): self
-    {
-        $this->defaultPool = $defaultPool;
 
         return $this;
     }

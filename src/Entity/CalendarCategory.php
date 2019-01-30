@@ -44,11 +44,6 @@ class CalendarCategory
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CalendarEvent", mappedBy="category")
-     */
-    private $events;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $sequence;
@@ -63,11 +58,17 @@ class CalendarCategory
      */
     private $defaultCategory;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CalendarEvent", mappedBy="category")
+     */
+    private $events;
+
     public function __construct(int $sequence = 0)
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
+        $this->defaultCategory = false;
         $this->sequence = $sequence;
         $this->events = new ArrayCollection();
     }
@@ -142,37 +143,6 @@ class CalendarCategory
         return $this;
     }
 
-    /**
-     * @return Collection|CalendarEvent[]
-     */
-    public function getEvents(): Collection
-    {
-        return $this->events;
-    }
-
-    public function addEvent(CalendarEvent $event): self
-    {
-        if (!$this->events->contains($event)) {
-            $this->events[] = $event;
-            $event->setCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvent(CalendarEvent $event): self
-    {
-        if ($this->events->contains($event)) {
-            $this->events->removeElement($event);
-            // set the owning side to null (unless already changed)
-            if ($event->getCategory() === $this) {
-                $event->setCategory(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getSequence(): ?int
     {
         return $this->sequence;
@@ -208,4 +178,36 @@ class CalendarCategory
 
         return $this;
     }
+
+    /**
+     * @return Collection|CalendarEvent[]
+     */
+    public function getEvents(): Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(CalendarEvent $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+            $event->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEvent(CalendarEvent $event): self
+    {
+        if ($this->events->contains($event)) {
+            $this->events->removeElement($event);
+            // set the owning side to null (unless already changed)
+            if ($event->getCategory() === $this) {
+                $event->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

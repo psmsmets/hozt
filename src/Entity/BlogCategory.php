@@ -54,20 +54,21 @@ class BlogCategory
     private $enabled;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="category")
-     */
-    private $posts;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $defaultCategory;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="category")
+     */
+    private $posts;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
+        $this->defaultCategory = false;
         $this->blogPosts = new ArrayCollection();
         $this->posts = new ArrayCollection();
     }
@@ -159,6 +160,18 @@ class BlogCategory
         return $this;
     }
 
+    public function getDefaultCategory(): ?bool
+    {
+        return $this->defaultCategory;
+    }
+
+    public function setDefaultCategory(bool $defaultCategory): self
+    {
+        $this->defaultCategory = $defaultCategory;
+
+        return $this;
+    }
+
     /**
      * @return Collection|BlogPost[]
      */
@@ -186,18 +199,6 @@ class BlogCategory
                 $post->setCategory(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getDefaultCategory(): ?bool
-    {
-        return $this->defaultCategory;
-    }
-
-    public function setDefaultCategory(bool $defaultCategory): self
-    {
-        $this->defaultCategory = $defaultCategory;
 
         return $this;
     }
