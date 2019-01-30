@@ -112,7 +112,7 @@ class CalendarEvent
         $this->updatedAt = $this->createdAt;
         $this->startTime = new \DateTime("today noon"); 
         $this->endTime = null;
-        $this->allDay = false;
+        $this->allDay = true;
         $this->enabled = true;
         $this->archived = false;
         $this->isCompetition = false;
