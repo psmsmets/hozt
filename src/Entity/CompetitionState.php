@@ -48,11 +48,6 @@ class CompetitionState
      */
     private $competitions;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $defaultState;
-
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -157,18 +152,6 @@ class CompetitionState
                 $competition->setState(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getDefaultState(): ?bool
-    {
-        return $this->defaultState;
-    }
-
-    public function setDefaultState(bool $defaultState): self
-    {
-        $this->defaultState = $defaultState;
 
         return $this;
     }

@@ -17,9 +17,6 @@ class BlogPost
      */
     const NUMBER_OF_ITEMS_HOMEPAGE = 3;
     const NUMBER_OF_ITEMS = 10;
-    const ENABLED = true;
-    const SPECIAL = true;
-    const STICKY = false;
 
     /**
      * @ORM\Id()
@@ -56,7 +53,7 @@ class BlogPost
     /**
      * @ORM\Column(type="boolean")
      */
-    private $sticky;
+    private $pinned;
 
     /**
      * @ORM\Column(type="boolean")
@@ -136,9 +133,9 @@ class BlogPost
         $this->createdAt = new \DateTime("now");
         $this->publishAt = $this->createdAt;
         $this->updatedAt = $this->createdAt;
-        $this->enabled = BlogPost::ENABLED;
-        $this->special = BlogPost::SPECIAL;
-        $this->sticky = BlogPost::STICKY;
+        $this->enabled = true;
+        $this->special = true;
+        $this->pinned = false;
         $this->resetViews();
     }
 
@@ -212,14 +209,14 @@ class BlogPost
         return $this;
     }
 
-    public function getSticky(): ?bool
+    public function getPinned(): ?bool
     {
-        return $this->sticky;
+        return $this->pinned;
     }
 
-    public function setSticky(bool $sticky): self
+    public function setPinned(bool $pinned): self
     {
-        $this->sticky = $sticky;
+        $this->pinned = $pinned;
 
         return $this;
     }

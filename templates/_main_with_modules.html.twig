@@ -50,24 +50,24 @@ Onze <a href="/faq" class="text-red">FAQ</a> al gelezen?</p>
   </button>
 
   <div class="navbar-collapse offcanvas-collapse bg-white" id="navbarOffcanvas">
-    <ul class="navbar-nav mr-auto"><!-- container d-flex flex-column flex-md-row justify-content-between -->
+    <ul class="navbar-nav mr-auto text-center text-lg-left mb-4 mb-lg-0"><!-- container d-flex flex-column flex-md-row justify-content-between -->
       <li class="nav-item {% if currentPath == "/" %}active{% endif%}">
         <a class="nav-link" href="/"><i class="fas fa-swimming-pool"></i> Home<span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item {% if currentPath starts with '/kalender' %}active{% endif%}">
-        <a class="nav-link" href="/kalender"><i class="far fa-calendar-alt d-md-none"></i> Kalender</a>
+        <a class="nav-link" href="/kalender"><i class="far fa-calendar-alt d-lg-none"></i> Kalender</a>
       </li>
 <!--      <li class="nav-item <?echo $page->isActive('news');?>">
         <a class="nav-link" href="#"><i class="fas fa-newspaper d-md-none"></i> Nieuws</a>
       </li> -->
       <li class="nav-item {% if currentPath == "/aanbod" %}active{% endif%}">
-        <a class="nav-link" href="/aanbod"><i class="fas fa-swimmer d-md-none"></i> Aanbod</a>
+        <a class="nav-link" href="/aanbod"><i class="fas fa-swimmer d-lg-none"></i> Aanbod</a>
       </li>
       <li class="nav-item {% if currentPath == "/lid-worden" %}active{% endif%}">
-        <a class="nav-link" href="/lid-worden"><i class="fas fa-hand-point-right d-md-none"></i> Lid worden</a>
+        <a class="nav-link" href="/lid-worden"><i class="fas fa-hand-point-right d-lg-none"></i> Lid worden</a>
       </li>
-      <li class="nav-item {% if currentPath starts with '/inschrijvingen' %}active{% endif%}">
-        <a class="nav-link btn btn-outline-secondary" href="/inschrijvingen"><i class="fas fa-check d-md-none"></i> Inschrijvingen</a>
+      <li class="nav-item {% if currentPath starts with '/inschrijvingen' %}active{% endif%} mt-4 mt-lg-0">
+        <a class="nav-link btn btn-outline-secondary" href="/inschrijvingen"><i class="fas fa-check d-lg-none"></i> Inschrijvingen</a>
       </li>
     </ul>
     <ul class="navbar-nav flex-row ml-md-auto d-md-flex">

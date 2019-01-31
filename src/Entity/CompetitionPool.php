@@ -39,11 +39,6 @@ class CompetitionPool
     private $enabled;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $defaultPool;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $description;
@@ -59,7 +54,6 @@ class CompetitionPool
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
-        $this->defaultPool = false;
         $this->competitions = new ArrayCollection();
     }
 
@@ -122,18 +116,6 @@ class CompetitionPool
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getDefaultPool(): ?bool
-    {
-        return $this->defaultPool;
-    }
-
-    public function setDefaultPool(bool $defaultPool): self
-    {
-        $this->defaultPool = $defaultPool;
 
         return $this;
     }

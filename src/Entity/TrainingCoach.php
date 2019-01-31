@@ -72,12 +72,11 @@ class TrainingCoach
      */
     private $imageFile;
 
-    public function __construct(int $sequence = 0)
+    public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
-        $this->sequence = $sequence;
         $this->teams = new ArrayCollection();
     }
 

@@ -72,7 +72,7 @@ easy_admin:
                     - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.blogPost_images%' }
                     - { property: 'category', label: 'Categorie' }
                     - { property: 'special', label: 'Voorpagina' }
-                    - { property: 'sticky', label: 'Sticky' }
+                    - { property: 'pinned', label: 'Vastgepind' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['createdAt', 'DESC']
             form:
@@ -85,7 +85,7 @@ easy_admin:
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Gepubliceerd' }
                     - { property: 'special', label: 'Voorpagina' }
-                    - { property: 'sticky', label: 'Sticky' }
+                    - { property: 'pinned', label: 'Vastgepind' }
                     - { property: 'archived', label: 'Gearchiveerd' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'author', label: 'Auteur' }
@@ -390,7 +390,7 @@ easy_admin:
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'minimal' } }
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Gepubliceerd' }
-                    - { property: 'archived', label: 'Gearchiveerd' }
+                    #- { property: 'archived', label: 'Gearchiveerd' }
                     - { property: 'isCompetition', label: 'Zwemwedstrijd' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'description', label: 'Omschrijving' }

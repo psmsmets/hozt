@@ -373,6 +373,10 @@ a.badge.cal-5:hover {
   h3,.h3 { font-size: 1.575rem; }
   h4,.h4 { font-size: 1.35rem; }
   h5,.h5 { font-size: 1.125rem; }
+
+  #navbarOffcanvas .nav-link i {
+     padding-right: .5rem;
+  }
 }
 
 @media (min-width: 992px) {

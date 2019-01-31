@@ -7,6 +7,12 @@ parameters:
     locale: 'nl'
     app_locales: nl|en
     timezone: 'Europe/Brussels'
+    app.defaults.blogPost.items_home: 3
+    app.defaults.blogPost.items_page: 10
+    app.defaults.blogCategory.id: 1
+    app.defaults.calendarCategory.id: 3
+    app.defaults.competitionPool.id: 1
+    app.defaults.sponsorCategory.id: 1
     app.path.user_images: /uploads/images/user
     app.path.staticPage_images: /uploads/images/page
     app.path.carousel_images: /uploads/images/carousel

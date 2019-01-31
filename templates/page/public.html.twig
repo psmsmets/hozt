@@ -4,24 +4,24 @@
 
 {% block lead %}
 
-  {% if page.sticky_blog_post %}
+  {% if page.pinned_blog_post %}
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <h2 class="text-red d-flex justify-content-between">{{ page.sticky_blog_post.title }} <i class="fas fa-thumbtack" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Sticky blogpost"></i></h2>
+    <h2 class="text-red d-flex justify-content-between">{{ page.pinned_blog_post.title }} <i class="fas fa-thumbtack"></i></h2>
 
-    {{ page.sticky_blog_post.body|raw }}
+    {{ page.pinned_blog_post.body|raw }}
 
-    {% if page.sticky_blog_post.image is not empty %}
-        <p><img src="{{ vich_uploader_asset(page.sticky_blog_post, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
+    {% if page.pinned_blog_post.image is not empty %}
+        <p><img src="{{ vich_uploader_asset(page.pinned_blog_post, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
     {% endif %}
 
     <div class="small text-muted d-flex justify-content-between">
       <span>
-        <span class="pr-2"><i class="far fa-newspaper"></i> <a class="text-muted" href="{{ path('blog_category', {'slug': page.sticky_blog_post.category.slug}) }}">{{ page.sticky_blog_post.category }}</a></span>
-        <span class="pr-2">{{ page.sticky_blog_post.createdAt|localizeddate('medium','none') }} <i class="far fa-clock"></i> {{ page.sticky_blog_post.createdAt|localizeddate('none','short') }}</span>
-        <span class="pr-2"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ page.sticky_blog_post.Author.firstName }}"></i></span>
+        <span class="pr-2"><i class="far fa-newspaper"></i> <a class="text-muted" href="{{ path('blog_category', {'slug': page.pinned_blog_post.category.slug}) }}">{{ page.pinned_blog_post.category }}</a></span>
+        <span class="pr-2">{{ page.pinned_blog_post.createdAt|localizeddate('medium','none') }} <i class="far fa-clock"></i> {{ page.pinned_blog_post.createdAt|localizeddate('none','short') }}</span>
+        <span class="pr-2"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ page.pinned_blog_post.Author.firstName }}"></i></span>
       </span>
-      <span class="pr-2"><a href="{{ path('blog_post', {'id': page.sticky_blog_post.id, 'slug': page.sticky_blog_post.slug}) }}" class="text-muted"><i class="fas fa-link"></i></a></span>
+      <span class="pr-2"><a href="{{ path('blog_post', {'id': page.pinned_blog_post.id, 'slug': page.pinned_blog_post.slug}) }}" class="text-muted"><i class="fas fa-link"></i></a></span>
     </div>
 
   </div>
