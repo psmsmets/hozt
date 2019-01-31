@@ -89,11 +89,10 @@ class TrainingTeamCategory
      */
     private $body;
 
-    public function __construct(int $sequence = 0)
+    public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->enabled = true;
-        $this->sequence = $sequence;
         $this->teams = new ArrayCollection();
         $this->competitions = new ArrayCollection();
     }

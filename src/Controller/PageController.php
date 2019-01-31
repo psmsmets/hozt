@@ -59,9 +59,9 @@ class PageController extends AbstractController
                 ->findCarouselSlides()
             );
 
-        $this->addToTemplateData( 'sticky_blog_post', $this->getDoctrine()
+        $this->addToTemplateData( 'pinned_blog_post', $this->getDoctrine()
                 ->getRepository(BlogPost::class)
-                ->findSpecialStickyBlogPost()
+                ->findSpecialPinnedBlogPost()
             );
 
         $this->addToTemplateData( 'special_blog_posts', $this->getDoctrine()

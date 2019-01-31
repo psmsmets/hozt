@@ -23,7 +23,6 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-//            'easy_admin.post_new' => array('setSequence'),
             'easy_admin.pre_persist' => array('setSlug'),
             'easy_admin.pre_update' => array('setSlug'),
         );

@@ -26,12 +26,12 @@ class BlogPostRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.enabled = :enabled')
-            ->andWhere('p.sticky = :sticky')
+            ->andWhere('p.pinned = :pinned')
             ->andWhere('p.special = :special')
             ->andWhere('p.publishAt <= :now')
             ->andWhere('(p.publishUntil > :now or p.publishUntil is null)')
             ->setParameter('enabled', true)
-            ->setParameter('sticky', false)
+            ->setParameter('pinned', false)
             ->setParameter('special', true)
             ->setParameter('now', date("Y-m-d H:i"))
             ->orderBy('p.publishAt', 'DESC')
@@ -116,18 +116,18 @@ class BlogPostRepository extends ServiceEntityRepository
     {
         return (int) ceil( $this->countBlogPosts($category) / BlogPost::NUMBER_OF_ITEMS );
     }
-    public function findSpecialStickyBlogPost()
+    public function findSpecialPinnedBlogPost()
     {
         return $this->createQueryBuilder('p')
             ->innerJoin('p.category','c')
             ->andWhere('c.enabled = :enabled')
             ->andWhere('p.enabled = :enabled')
-            ->andWhere('p.sticky = :sticky')
+            ->andWhere('p.pinned = :pinned')
             ->andWhere('p.special = :special')
             ->andWhere('p.publishAt <= :now')
             ->andWhere('(p.publishUntil > :now or p.publishUntil is null)')
             ->setParameter('enabled', true)
-            ->setParameter('sticky', true)
+            ->setParameter('pinned', true)
             ->setParameter('special', true)
             ->setParameter('now', date("Y-m-d H:i"))
             ->orderBy('p.publishAt', 'DESC')

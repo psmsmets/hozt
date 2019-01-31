@@ -54,22 +54,15 @@ class CalendarCategory
     private $enabled;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $defaultCategory;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\CalendarEvent", mappedBy="category")
      */
     private $events;
 
-    public function __construct(int $sequence = 0)
+    public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
-        $this->defaultCategory = false;
-        $this->sequence = $sequence;
         $this->events = new ArrayCollection();
     }
 
@@ -163,18 +156,6 @@ class CalendarCategory
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    public function getDefaultCategory(): ?bool
-    {
-        return $this->defaultCategory;
-    }
-
-    public function setDefaultCategory(bool $defaultCategory): self
-    {
-        $this->defaultCategory = $defaultCategory;
 
         return $this;
     }
