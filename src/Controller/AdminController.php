@@ -31,13 +31,16 @@ class AdminController extends BaseAdminController
 
     public function createNewBlogPostEntity()
     {
-        $cat = $this->getDoctrine()
-            ->getRepository(BlogCategory::class)
-            ->findOneBy(
-              ['enabled'=>true,'id'=>$this->getParameter('app.defaults.blogCategory.id')]
-            );
         $post = new BlogPost();
-        return $post->setCategory($cat);
+        $post->setCategory(
+            $this->getDoctrine()
+                ->getRepository(BlogCategory::class)
+                ->findOneBy(
+                  ['enabled'=>true,'id'=>$this->getParameter('app.defaults.blogCategory.id')]
+                )
+            );
+        $post->setAuthor( $this->container->get('security.token_storage')->getToken()->getUser() );
+        return $post;
     }
 
     public function createNewCalendarCategoryEntity()
