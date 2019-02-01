@@ -80,6 +80,9 @@
                 {% if event.competition.restrictions %}
                   <li class="mb-1 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
                 {% endif %}
+                {% if event.competition.multiDay %}
+                  <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
+                {% endif %}
                 {% if event.competition.warmupTime is not null %}
                   <li class="mb-1"><i class="far fa-clock"></i> inzwemmen om {{event.competition.warmupTime|date('H:i')}}</li>
                 {% endif %}

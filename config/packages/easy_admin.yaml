@@ -90,7 +90,8 @@ easy_admin:
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'author', label: 'Auteur' }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
-                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.carousel_images%' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.blogPost_images%' }
+                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.blogPost_documents%' }
                     - { property: 'keywords', label: 'Keywords' }
                     - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'publishUntil', label: 'Publiceer tot' }
