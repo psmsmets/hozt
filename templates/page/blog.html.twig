@@ -13,6 +13,10 @@
 
     {{ blog_post.body|raw }}
 
+    {% if blog_post.document is not empty %}
+      <p class="text-center text-md-left"><a href="{{ vich_uploader_asset(blog_post, 'documentFile') }}" class="btn btn-sm btn-hozt"><i class="far fa-file-pdf"></i> bijlage</a></p>
+    {% endif %}
+
     {% if blog_post.image is not empty %}
         <p><img src="{{ vich_uploader_asset(blog_post, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
     {% endif %}

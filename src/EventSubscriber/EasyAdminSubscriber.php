@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use App\Entity\BlogPost;
+use App\Entity\BlogCategory;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
@@ -31,7 +32,6 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public function setSlug(GenericEvent $event)
     {
         $entity = $event->getSubject();
-
         $force = $entity instanceof BlogPost;
 
         if (method_exists($entity, 'setSlug') and method_exists($entity, 'getTitle')) {

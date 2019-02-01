@@ -17,6 +17,7 @@ parameters:
     app.path.staticPage_images: /uploads/images/page
     app.path.carousel_images: /uploads/images/carousel
     app.path.calendar_images: /uploads/images/calendar
+    app.path.blogPost_documents: /uploads/files/blog
     app.path.blogPost_images: /uploads/images/blog
     app.path.competition_preprograms: /uploads/files/competition/preprograms
     app.path.competition_programs: /uploads/files/competition/programs
@@ -54,6 +55,17 @@ services:
 
     app.logout.listener:
         class: App\Listener\LogoutListener
+
+    app.blogPost.listener:
+        class: App\Listener\BlogPostListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
+            -
+                name: doctrine.orm.entity_listener
+                event: preUpdate
+                entity: App\Entity\BlogPost
+                entity_manager: custom
+
 
  #   cocur_slugify:
 #        lowercase: true
