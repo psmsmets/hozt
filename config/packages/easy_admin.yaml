@@ -74,7 +74,7 @@ easy_admin:
                     - { property: 'special', label: 'Voorpagina' }
                     - { property: 'pinned', label: 'Vastgepind' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
-                sort: ['createdAt', 'DESC']
+                sort: ['publishAt', 'DESC']
             form:
                 fields:
                     - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
