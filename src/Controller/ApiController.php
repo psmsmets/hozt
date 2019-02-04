@@ -178,11 +178,11 @@ class ApiController extends AbstractController
         $data = array();
         foreach ( $events as $event ) {
            $data[] = array(
-                   'title' => $event->getTitle(),
+                   'title' => ucfirst($event->getTitle()),
                    'day' => $event->getStartTime()->format('d'),
                    'month' => strftime("%b", $event->getStartTime()->getTimestamp()),
                    'formattedPeriod' => $event->getFormattedPeriod(),
-                   'location' => $event->getLocation(),
+                   'location' => ucfirst($event->getLocation()),
                    'class' => 'cal-'.strval($event->getCategory()->getSequence()),
                );
         }

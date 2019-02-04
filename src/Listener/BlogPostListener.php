@@ -18,6 +18,5 @@ class BlogPostListener
     
     public function preUpdate()
     {
-      
     }
 }

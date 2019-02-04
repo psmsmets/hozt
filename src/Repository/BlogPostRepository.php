@@ -150,4 +150,15 @@ class BlogPostRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+    public function findPinnedBlogPosts(int $current=null)
+    {
+        $posts = $this->createQueryBuilder('p')
+            ->andWhere('p.pinned = :pinned')
+            ->setParameter('pinned', true);
+        if (!is_null($current)) {
+            $posts->andWhere('p.id != :id')
+            ->setParameter('id', $current);
+        }
+        return $posts->getQuery()->getResult();
+    }
 }
