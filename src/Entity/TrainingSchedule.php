@@ -55,7 +55,7 @@ class TrainingSchedule
     private $day;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrainingTime")
+     * @ORM\ManyToOne(targetEntity="App\Entity\TrainingTime", inversedBy="schedule")
      * @ORM\JoinColumn(nullable=false)
      */
     private $time;

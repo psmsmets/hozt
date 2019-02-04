@@ -81,7 +81,7 @@ class TrainingTeam
         $this->enabled = true;
         $this->coaches = new ArrayCollection();
         $this->competitions = new ArrayCollection();
-        /*$this->schedule = new ArrayCollection();*/
+        $this->schedule = new ArrayCollection();
     }
 
     public function __toString(): ?string
