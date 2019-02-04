@@ -250,7 +250,7 @@ easy_admin:
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
-                    - { property: 'enabled', label: 'Gepubliceerd' }
+                    - { property: 'enabled', label: 'Actief' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.user_images%' }
         TrainingTeam:
             class: App\Entity\TrainingTeam

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,11 +43,17 @@ class TrainingTime
      */
     private $updatedAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TrainingSchedule", mappedBy="time")
+     */
+    private $schedule;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
+        $this->schedule = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -116,5 +124,13 @@ class TrainingTime
         $this->updatedAt = new \DateTime("now");
 
         return $this;
+    }
+
+    /**
+     * @return Collection|TrainingSchedule[]
+     */
+    public function getSchedule(): Collection
+    {
+        return $this->schedule;
     }
 }

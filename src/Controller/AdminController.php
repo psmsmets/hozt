@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\EntityManagerInterface;
+//use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 
@@ -23,13 +23,6 @@ use App\Entity\TrainingTeamCategory;
 
 class AdminController extends EasyAdminController
 {
-
-    private $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
 
     // Customizes the instantiation of specific entities
     public function createNewUserEntity()
@@ -175,7 +168,7 @@ class AdminController extends EasyAdminController
         foreach ($posts as $post) {
             $post->setPinned(false);
         }
-        $this->entityManager->flush();
+        $this->em->flush();
     }
 
     public function updateBlogPostEntity($entity)
@@ -184,8 +177,117 @@ class AdminController extends EasyAdminController
         if ($entity->getPinned()) {
             if (!$entity->getSpecial()) {
                 $entity->setPinned(false);
+                $this->addFlash('error', 'Fout: Pinnend blog post moet op voorpagina staan.');
             } else {
-                $this->unpinBlogPosts();
+                $this->unpinBlogPosts($entity->getId());
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateBlogCategoryEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getPosts())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Blog categorie heeft gerelateerde posts. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateCalendarCategoryEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getEvents())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Kalender categorie heeft gerelateerde events. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateCompetitionPoolEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getCompetitions())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Zwembad type heeft gerelateerde wedstrijden. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateTrainingCoachEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getTeams())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Training coach heeft gerelateerde data. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateTrainingScheduleEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getTeams())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Training schedule heeft gerelateerde groepen. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateTrainingTeamEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getSchedule())>0 or count($entity->getCoaches())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Training group heeft gerelateerde data. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateTrainingTeamCategoryEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getTeams())>0 or count($entity->getCompetitions())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Training categorie heeft gerelateerde data. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateTrainingTimeEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getSchedule())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Training tijdstip heeft gerelateerde data. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateSponsorCategoryEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getSponsors())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Sponsor categorie heeft gerelateerde data. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
