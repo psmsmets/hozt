@@ -16,9 +16,9 @@
 
        <div class="row justify-content-around text-center pt-2 pt-md-3">
        {% for sponsor in category.sponsors %}
-         <div class="{{category.class}}" {% if sponsor.url is not empty %}onclick="window.open('{{sponsor.url}}','_blank');"{% endif %} style="opacity: 1;">
+         <div class="{{category.class}}" {% if sponsor.url is not empty %}onclick="window.open('{{sponsor.url}}','_blank');"{% endif %}>
           {% if sponsor.image is not empty %}
-            <img src="{{ vich_uploader_asset(sponsor, 'imageFile') }}" class="mx-auto img-fluid" alt="{{sponsor.name}}">
+            <img src="{{ vich_uploader_asset(sponsor, 'imageFile') }}" class="mx-auto img-fluid" alt="{{sponsor.name}}" />
           {% endif %}
           {{sponsor.caption}}
          </div>
