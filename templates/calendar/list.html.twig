@@ -58,16 +58,16 @@
 
           <div class="media-body pb-0 mb-0 lh-125">
 
-            <h5 class="pb-0 mb-1">{{event.title}}</h5>
+            <h5 class="pb-0 mb-1">{{event.title|capitalize}}</h5>
 
-            <h6 class="d-flex justify-content-between mb-2">{{event.getFormattedPeriod}} <small class="d-none"><a href="#">Bekijk</a></small>
+            <h6 class="d-flex justify-content-between mb-2">{{event.getFormattedPeriod|lower}} <small class="d-none"><a href="#">Bekijk</a></small>
             </h6>
 
             <ul class="list-unstyled text-muted small mb-1 cal">
               {% if event.competition is null %}
-                {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location}}</li>{% endif %}
+                {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|capitalize}}</li>{% endif %}
               {% else %}
-                <li class="mb-1"><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}{% if event.location %}, {{event.location}}{% endif %}</li>
+                <li class="mb-1"><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}{% if event.location %}, {{event.location|capitalize}}{% endif %}</li>
                 {% if event.competition.teamCategories|length > 0 %}
                   <li class="mb-1"><i class="fas fa-swimmer"></i>
                     {% for category in event.competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}

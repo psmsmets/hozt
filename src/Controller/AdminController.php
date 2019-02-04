@@ -4,8 +4,9 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 
 use App\Entity\User;
 use App\Entity\BlogPost;
@@ -20,8 +21,15 @@ use App\Entity\SponsorCategory;
 use App\Entity\TrainingCoach;
 use App\Entity\TrainingTeamCategory;
 
-class AdminController extends BaseAdminController
+class AdminController extends EasyAdminController
 {
+
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
     // Customizes the instantiation of specific entities
     public function createNewUserEntity()
@@ -141,6 +149,46 @@ class AdminController extends BaseAdminController
             ;
         $new = new TrainingTeamCategory();
         return $new->setSequence($seq+1);
+    }
+
+    // special persist
+    public function persistBlogPostEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if ($entity->getPinned()) {
+            if (!$entity->getSpecial()) {
+                $entity->setPinned(false);
+            } else {
+                $this->unpinBlogPosts();
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    // special update
+    private function unpinBlogPosts(int $current=null)
+    {
+        $posts = $this->getDoctrine()->getRepository(BlogPost::class)->findPinnedBlogPosts($current);
+        if (empty($posts)) {
+            return;
+        }
+        foreach ($posts as $post) {
+            $post->setPinned(false);
+        }
+        $this->entityManager->flush();
+    }
+
+    public function updateBlogPostEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if ($entity->getPinned()) {
+            if (!$entity->getSpecial()) {
+                $entity->setPinned(false);
+            } else {
+                $this->unpinBlogPosts();
+            }
+        }
+        parent::persistEntity($entity);
     }
 
     // General update
