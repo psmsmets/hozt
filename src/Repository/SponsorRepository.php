@@ -22,29 +22,22 @@ class SponsorRepository extends ServiceEntityRepository
     // /**
     //  * @return Sponsor[] Returns an array of Sponsor objects
     //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllActiveCoreSponsors()
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->innerJoin('s.category','c')
+            ->addSelect('s')
+            ->addSelect('c')
+            ->andWhere('c.enabled = :enabled')
+            ->andWhere('c.core = :enabled')
+            ->andWhere('s.enabled = :enabled')
+            ->andWhere('( s.publishAt <= :today and (s.publishUntil >= :today or s.publishUntil is null) )')
+            ->setParameter('enabled', true)
+            ->setParameter('today', date("Y-m-d"))
+            ->orderBy('c.sequence, s.name', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Sponsor
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

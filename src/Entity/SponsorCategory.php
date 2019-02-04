@@ -53,6 +53,16 @@ class SponsorCategory
      */
     private $sponsors;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $core;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $class;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -100,21 +110,14 @@ class SponsorCategory
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new \DateTime("now");
 
         return $this;
     }
@@ -170,6 +173,30 @@ class SponsorCategory
                 $sponsor->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCore(): ?bool
+    {
+        return $this->core;
+    }
+
+    public function setCore(bool $core): self
+    {
+        $this->core = $core;
+
+        return $this;
+    }
+
+    public function getClass(): ?string
+    {
+        return $this->class;
+    }
+
+    public function setClass(?string $class): self
+    {
+        $this->class = $class;
 
         return $this;
     }

@@ -66,10 +66,21 @@ class Sponsor
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $url;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $caption;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
+        $this->publishAt = new \DateTime("first day of January this year +1 years");
         $this->enabled = true;
     }
 
@@ -112,21 +123,14 @@ class Sponsor
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new \DateTime("now");
 
         return $this;
     }
@@ -192,6 +196,30 @@ class Sponsor
     public function setCategory(?SponsorCategory $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getCaption(): ?string
+    {
+        return $this->caption;
+    }
+
+    public function setCaption(?string $caption): self
+    {
+        $this->caption = $caption;
 
         return $this;
     }

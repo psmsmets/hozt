@@ -114,25 +114,15 @@ Onze <a href="/faq" class="text-red">FAQ</a> al gelezen?</p>
 {% block footer %}
 <footer class="container mb-3 mt-3">
 
-  <div class="row justify-content-around text-center pt-2 pt-md-3"> 
-    <div class="sponsor col col-4 col-md-3 col-lg-2" onclick="window.open('https://veja.be','_blank');">
-      <img class="mx-auto img-fluid" src="{{ asset('assets/img/sponsors/veja.png') }}" alt="Veja">
-    </div>
-    <div class="sponsor col col-4 col-md-3 col-lg-2" onclick="window.open('http://jorytamadventure.be','_blank');">
-      <img class="mx-auto img-fluid" src="{{ asset('assets/img/sponsors/jorytam.jpg') }}" alt="Jorytam">
-    </div>
-    <div class="sponsor col col-4 col-md-3 col-lg-2" onclick="window.open('http://www.a-tec.be','_blank');">
-      <img class="mx-auto img-fluid" src="{{ asset('assets/img/sponsors/atec.jpg') }}" alt="Atec">
-    </div>
-    <div class="sponsor col col-4 col-md-3 col-lg-2" onclick="window.open('http://www.sgmbvba.be','_blank');">
-      <img class="mx-auto img-fluid" src="{{ asset('assets/img/sponsors/sgm.jpg') }}" alt="SGM">
-    </div>
-    <div class="sponsor col col-4 col-md-3 col-lg-2" onclick="window.open('http://inith-consultancy.com','_blank');">
-      <img class="mx-auto img-fluid" src="{{ asset('assets/img/sponsors/inith.png') }}" alt="Inith">
-    </div>
-    <div class="sponsor col col-4 col-md-3 col-lg-2">
-      <img class="mx-auto img-fluid" src="{{ asset('assets/img/sponsors/belfius.png') }}" alt="Belfius"> Bank Hoogstraten
-    </div>
+  <div class="row justify-content-around text-center pt-2 pt-md-3">
+    {% for sponsor in base.sponsors %} 
+      <div class="sponsor col col-4 col-md-3 col-lg-2" {% if sponsor.url is not empty %}onclick="window.open('{{sponsor.url}}','_blank');"{%endif%}>
+        {% if sponsor.image is not empty %}
+          <img src="{{ vich_uploader_asset(sponsor, 'imageFile') }}" class="mx-auto img-fluid" alt="{{sponsor.name}}">
+        {% endif %}
+        {{sponsor.caption}}
+      </div>
+    {% endfor %}
   </div><!-- close div row -->
 
   <div class="row pt-2 pt-md-3">
