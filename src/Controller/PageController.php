@@ -22,6 +22,8 @@ use App\Entity\CalendarCategory;
 use App\Entity\CalendarEvent;
 use App\Entity\Competition;
 use App\Entity\CompetitionState;
+use App\Entity\Sponsor;
+use App\Entity\SponsorCategory;
 
 use App\Form\ContactFormType;
 
@@ -32,19 +34,25 @@ class PageController extends AbstractController
     private function initTemplateData()
     {
         $this->template_data = [];
-        $this->addToTemplateData( 'training_team_categories', $this->get_training_team_categories(), 'base' );
+        $this->addToTemplateData( 
+            'training_team_categories', 
+            $this->getDoctrine()
+                ->getRepository(TrainingTeamCategory::class)
+                ->findAllEnabled(), 
+            'base'
+            );
+        $this->addToTemplateData( 
+            'sponsors', 
+            $this->getDoctrine()
+                ->getRepository(Sponsor::class)
+                ->findAllActiveCoreSponsors(), 
+            'base'
+            );
     }
 
     private function addToTemplateData(string $key, $data, string $cat = 'page')
     {
         $this->template_data[$cat][$key] = $data;
-    }
-
-    private function get_training_team_categories()
-    {
-        return $this->getDoctrine()
-            ->getRepository(TrainingTeamCategory::class)
-            ->findAllEnabled();
     }
 
     /**
@@ -365,6 +373,21 @@ class PageController extends AbstractController
         $this->addToTemplateData( 'form', $form->createView() );
 
         return $this->render('contact/form.html.twig', $this->template_data );
+    }
+
+    /**
+     * @Route("/sponsors", name="sponsors")
+     */
+    public function sponsors()
+    {
+        $this->initTemplateData();
+        $this->addToTemplateData('sponsor_categories',
+            $this->getDoctrine()
+                ->getRepository(SponsorCategory::class)
+                ->findAllActiveSponsors()
+        );
+
+        return $this->render('contact/sponsors.html.twig', $this->template_data );
     }
 
     /**

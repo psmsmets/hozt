@@ -1,6 +1,6 @@
 {% extends 'default.html.twig' %}
 
-{% block title %}Nieuws{%if page.blog_category is not empty%}<span class="text-muted"> / {{page.blog_category.title}}{%endif%}{% endblock %}
+{% block title %}Nieuws{%if page.blog_category is not empty%} / {{page.blog_category.title}}{%endif%}{% endblock %}
 
 {% block main %}
 

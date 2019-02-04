@@ -64,6 +64,10 @@ contact_faq:
     path: /faq
     controller: App\Controller\PageController::contact_faq
 
+sponsors:
+    path: /sponsors
+    controller: App\Controller\PageController::sponsors
+
 # general content
 blog:
     path: /nieuws
