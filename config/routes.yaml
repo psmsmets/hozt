@@ -86,30 +86,30 @@ static_page:
     controller: App\Controller\PageController::static_page
 
 # api
-training_today:
+api_training_today:
     path: /api/training/vandaag
     controller: App\Controller\ApiController::training_today
 
-training_tomorrow:
+api_training_tomorrow:
     path: /api/training/morgen
     controller: App\Controller\ApiController::training_tomorrow
 
-training_team_today:
+api_training_team_today:
     path: /api/traint-{team_abbr}-vandaag
     controller: App\Controller\ApiController::training_team_today
 
-training_team:
+api_training_team:
     path: /api/training/{team_abbr}
     controller: App\Controller\ApiController::training_team
 
-competition_programs:
+api_competition_programs:
     path: /api/wedstrijden/programmas/{limit<\d+>?3}
     controller: App\Controller\ApiController::competition_programs
 
-competition_results:
+api_competition_results:
     path: /api/wedstrijden/uitslagen/{limit<\d+>?5}
     controller: App\Controller\ApiController::competition_results
 
-calendar_events:
+api_calendar_events:
     path: /api/kalender/aanstaande/{limit<\d+>?7}
     controller: App\Controller\ApiController::calender_events
