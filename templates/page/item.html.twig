@@ -46,6 +46,9 @@
         <span class="pr-2"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ item.Author.firstName }}"></i></span>
       </span>
       <span class="pr-2">
+        {% if item.event is not empty %}
+          <a href="{{ path('calendar_event', {'id': item.event.id}) }}" class="text-muted mr-2"><i class="far fa-calendar-alt"></i></a>
+        {% endif %}
         <a href="{{ path('blog_post', {'id': item.id, 'slug': item.slug}) }}" class="text-muted"><i class="fas fa-link"></i></a>
       </span>
     </div>
