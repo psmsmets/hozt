@@ -149,11 +149,7 @@ class AdminController extends EasyAdminController
     {
         $entity->setUpdatedAt();
         if ($entity->getPinned()) {
-            if (!$entity->getSpecial()) {
-                $entity->setPinned(false);
-            } else {
-                $this->unpinBlogPosts();
-            }
+            $this->unpinBlogPosts();
         }
         parent::persistEntity($entity);
     }
@@ -175,12 +171,7 @@ class AdminController extends EasyAdminController
     {
         $entity->setUpdatedAt();
         if ($entity->getPinned()) {
-            if (!$entity->getSpecial()) {
-                $entity->setPinned(false);
-                $this->addFlash('error', 'Fout: Pinnend blog post moet op voorpagina staan.');
-            } else {
-                $this->unpinBlogPosts($entity->getId());
-            }
+            $this->unpinBlogPosts($entity->getId());
         }
         parent::persistEntity($entity);
     }
