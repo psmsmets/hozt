@@ -2,11 +2,13 @@
 
 {% block top %}
   <div id="HoZTCarousel" class="carousel slide banner banner-bg banner-lg fade-in" data-ride="carousel">
-    <ol class="carousel-indicators">
-    {% for slide in page.carousel %}
-      <li data-target="#HoZTCarousel" data-slide-to="{{ loop.index0 }}" class="{% if loop.index0 == 0%}active{% endif%}"></li>
-    {% endfor %}
-    </ol>
+    {% if page.carousel|length > 1 %}
+      <ol class="carousel-indicators">
+      {% for slide in page.carousel %}
+        <li data-target="#HoZTCarousel" data-slide-to="{{ loop.index0 }}" class="{% if loop.index0 == 0%}active{% endif%}"></li>
+      {% endfor %}
+      </ol>
+    {% endif %}
     <div class="carousel-inner">
     {% for slide in page.carousel %}
       <div class="carousel-item {% if loop.index0 == 0%}active{% endif%}">
