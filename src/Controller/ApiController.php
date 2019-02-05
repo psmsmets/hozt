@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /*
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -184,6 +185,8 @@ class ApiController extends AbstractController
                    'formattedPeriod' => $event->getFormattedPeriod(),
                    'location' => ucfirst($event->getLocation()),
                    'class' => 'cal-'.strval($event->getCategory()->getSequence()),
+                   'id' => $event->getId(),
+                   'url' => $this->get('router')->generate('calendar_event', array('id' => $event->getId())),
                );
         }
         return $this->json(array( 'result' => true, 'data' => $data ));
