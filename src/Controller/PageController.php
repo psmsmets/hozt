@@ -301,7 +301,7 @@ class PageController extends AbstractController
     /**
      * @Route("/kalender/event/{id}", name="calendar_event")
      */
-    public function calendar_event($id)
+    public function calendar_event(int $id)
     {
         $event = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)

@@ -14,7 +14,7 @@ calendar_list:
     controller: App\Controller\PageController::calendar_list
 
 calendar_event:
-    path: /kalender/event/{id<\d+>?1}
+    path: /kalender/event/{id<\d+>}
     controller: App\Controller\PageController::calendar_event
 
 # training 

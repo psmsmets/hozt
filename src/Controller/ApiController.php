@@ -22,7 +22,7 @@ use App\Entity\CompetitionState;
 class ApiController extends AbstractController
 {
     /**
-     * @Route("/api/traint-{team_abbr}-vandaag", name="training_team_today")
+     * @Route("/api/traint-{team_abbr}-vandaag", name="api_training_team_today")
      */
     public function training_team_today(string $team_abbr)
     {
@@ -67,7 +67,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/training/vandaag", name="training_today")
+     * @Route("/api/training/vandaag", name="api_training_today")
      */
     public function training_today()
     {
@@ -96,7 +96,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/training/morgen", name="training_tomorrow")
+     * @Route("/api/training/morgen", name="api_training_tomorrow")
      */
     public function training_tomorrow()
     {
@@ -125,7 +125,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/training/{team_abbr}", name="training_team")
+     * @Route("/api/training/{team_abbr}", name="api_training_team")
      */
     public function training_team($team_abbr)
     {
@@ -164,7 +164,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/kalender/aanstaande/{count}", name="calender_events")
+     * @Route("/api/kalender/aanstaande/{count}", name="api_calender_events")
      */
     public function calender_events(int $limit=7)
     {
@@ -193,7 +193,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/wedstrijden/programmas", name="competition_programs")
+     * @Route("/api/wedstrijden/programmas", name="api_competition_programs")
      */
     public function competition_programs(int $limit=3)
     {
@@ -219,7 +219,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/wedstrijden/uitslagen", name="competition_results")
+     * @Route("/api/wedstrijden/uitslagen", name="api_competition_results")
      */
     public function competition_results(int $limit=3)
     {
