@@ -254,6 +254,16 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
   padding: .5rem;
 }
 
+.badge.cal.cal-md {
+  width: 48px;
+  height: 48px;
+  font-weight: 300;
+  line-height: .8;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: .3rem;
+}
+
 .badge.cal.cal-sm {
   width: 28px;
   height: 28px;

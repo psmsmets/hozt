@@ -1,0 +1,74 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}{{page.event.title|capitalize}}{% endblock %}
+
+{% set past  = date(page.event.calcEndTime) < date() %}
+
+{% block main %}
+
+  <h4 class="m-3 ml-md-0"><i class="far fa-calendar-alt"></i> Kalender <span class="text-muted"> / {{page.event.category}}</span></h4>
+
+  <div class="p-3 mb-4 bg-white shadow-sm">
+
+    <div class="media align-top mt-3 cal-{{page.event.category.sequence}}">
+
+      <span class="badge badge-dark mr-3 cal cal-md cal-{{page.event.category.sequence}}">{{page.event.startTime|date('d')}}<br>{{page.event.startTime|localizeddate('none', 'none', null, null, 'LLL')|trim('.')}}</span>
+
+      <div class="media-body pb-0 mb-0 lh-125">
+
+        <h5 class="pb-0 mb-1">{{page.event.title|capitalize}}</h5>
+
+        <h6 class="d-flex justify-content-between mb-2">{{page.event.getFormattedPeriod|lower}}</h6>
+
+        <ul class="list-unstyled text-muted small mb-1 cal">
+          {% if page.event.competition is null %}
+            {% if page.event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{page.event.location|capitalize}}</li>{% endif %}
+          {% else %}
+            <li class="mb-1"><i class="fas fa-swimming-pool"></i> {{page.event.competition.pool}}{% if page.event.location %}, {{page.event.location|capitalize}}{% endif %}</li>
+            {% if page.event.competition.teamCategories|length > 0 %}
+              <li class="mb-1"><i class="fas fa-swimmer"></i>
+                {% for category in page.event.competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}
+              </li>
+            {% elseif page.event.competition.teams|length > 0%}
+              <li class="mb-1"><i class="fas fa-swimmer"></i>
+                {% for team in page.event.competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
+              </li>
+            {% endif %}
+            {% if page.event.competition.restrictions %}
+              <li class="mb-1 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
+            {% endif %}
+            {% if page.event.competition.multiDay %}
+              <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
+            {% endif %}
+            {% if page.event.competition.warmupTime is not null %}
+              <li class="mb-1"><i class="far fa-clock"></i> inzwemmen om {{page.event.competition.warmupTime|date('H:i')}}</li>
+            {% endif %}
+            {% if page.event.competition.preprogram is not null or page.event.competition.program is not null or page.event.competition.results is not null%}
+              <li class="mb-1"><i class="fas fa-trophy"></i>
+              {% if page.event.competition.preprogram is not null %}
+                <a href="{{ vich_uploader_asset(page.event.competition, 'preprogramFile') }}" class="pr-2">Voorprogramma</a>
+              {% endif %}
+              {% if page.event.competition.program is not null %}
+                <a href="{{ vich_uploader_asset(page.event.competition, 'programFile') }}" class="pr-2">Programma</a>
+              {% endif %}
+              {% if page.event.competition.results is not null %}
+                <a href="{{ vich_uploader_asset(page.event.competition, 'resultsFile') }}" class="pr-2">Uitslag</a>
+              {% endif %}
+              </li>
+            {% endif %}
+          {% endif %}
+        </ul>
+
+      </div>
+
+    </div>
+
+    {{ page.event.body|raw }}
+
+    {% if page.event.image is not empty %}
+        <p><img src="{{ vich_uploader_asset(page.event, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
+    {% endif %}
+
+  </div>
+
+{% endblock %}

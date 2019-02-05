@@ -299,12 +299,19 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/kalender/{yyyy}-{yy}/{id}", name="calendar_event")
+     * @Route("/kalender/event/{id}", name="calendar_event")
      */
-    public function calendar_event()
+    public function calendar_event($id)
     {
+        $event = $this->getDoctrine()
+            ->getRepository(CalendarEvent::class)
+            ->findOneBy(['id'=>$id,'enabled'=>'true'])
+            ;
+        if (!$event) {
+            throw $this->createNotFoundException();
+        }
         $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::calendar_event');
+        $this->addToTemplateData( 'event', $event);
 
         return $this->render('calendar/event.html.twig', $this->template_data );
     }

@@ -15,7 +15,7 @@ $(document).ready(function(){
         if ( calendar.result ){
             $.each( calendar.data, function( i, item ) {
                 var t = '';
-                t += '<div class="media pt-2 text-muted">';
+                t += "<div class=\"media pt-2 text-muted\" style=\"cursor: pointer;\" onclick=\"window.location='" + item.url + "';\">";
                 t += '  <span class="badge badge-dark mr-2 cal cal-sm '+ item.class +'">'+ item.day +'<br>'+ item.month +'</span>';
                 t += '  <div class="media-body pb-2 mb-0 small lh-125 border-bottom border-gray">';
                 t += '    <div class="d-flex justify-content-between align-items-center w-100">';
