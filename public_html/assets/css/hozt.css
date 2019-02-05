@@ -111,6 +111,13 @@ a:hover, a.text-red:hover, a.page-link:hover {
   padding: .2rem 1rem;
 }
 
+.nav-scroller-fixed-top {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1020;
+}
+
 .navbar-brand {
   margin-top: .175rem;
 }
