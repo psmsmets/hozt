@@ -6,7 +6,7 @@
 
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <h1 class="pt-2 text-red d-flex justify-content-between">{{ page.static.title }}</h1>
+    <h1 class="text-red">{{ page.static.title }}</h1>
 
     {% if page.static.showUpdatedAt %}
         <div class="small text-muted pb-3"><span class="modified pr-2">Laatst aangepast op {{ page.static.updatedAt|date('Y-m-d') }} <i class="far fa-clock"></i> {{ page.static.updatedAt|date('H:i') }}.</span></div>
