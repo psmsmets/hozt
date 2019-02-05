@@ -42,7 +42,7 @@
     <div class="small text-muted d-flex justify-content-between">
       <span>
         <span class="pr-2"><i class="far fa-newspaper"></i> <a class="text-muted" href="{{ path('blog_category', {'slug': item.category.slug}) }}">{{ item.category }}</a></span>
-        <span class="pr-2">{{ item.createdAt|localizeddate('medium','none') }} <i class="far fa-clock"></i> {{ item.createdAt|localizeddate('none','short') }}</span>
+        <span class="pr-2">{{ item.publishAt|localizeddate('medium','none')|replace({'.':''}) }} <i class="far fa-clock"></i> {{ item.createdAt|localizeddate('none','short') }}</span>
         <span class="pr-2"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ item.Author.firstName }}"></i></span>
       </span>
       <span class="pr-2">
