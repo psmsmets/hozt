@@ -188,6 +188,18 @@ class AdminController extends EasyAdminController
         parent::persistEntity($entity);
     }
 
+    public function updateCalendarEventEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getPosts())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: Kalender event heeft gerelateerde posts. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
     public function updateCalendarCategoryEntity($entity)
     {
         $entity->setUpdatedAt();
