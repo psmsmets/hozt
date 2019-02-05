@@ -1,0 +1,53 @@
+
+
+  <div class="p-3 mb-4 bg-white shadow-sm">
+
+    <h2 class="text-red">{{ item.title }}</h2>
+
+    {{ item.body|raw }}
+
+    {% if item.document is not empty or item.event is not empty %}
+      <p class="text-center text-md-left pt-2">
+
+        {% if item.document is not empty %}
+          <a href="{{ vich_uploader_asset(item, 'documentFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+        {% endif %}
+
+        {% if item.event is not empty %}
+
+          {% if item.publishAt < item.event.startTime|date_modify('midnight') %}
+
+            {% if item.event.competition.program is not null %}
+              <a href="{{ vich_uploader_asset(item.event.competition, 'programFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> programma</a>
+            {% elseif item.event.competition.preprogram is not null %}
+              <a href="{{ vich_uploader_asset(item.event.competition, 'preprogramFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> voorprogramma</a>
+            {% endif %}
+
+          {% else %}
+
+            {% if item.event.competition.results is not null %}
+              <a href="{{ vich_uploader_asset(item.event.competition, 'resultsFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> uitslag</a>
+            {% endif %}
+
+          {% endif %}
+
+        {% endif %}
+      </p>
+    {% endif %}
+
+    {% if item.image is not empty %}
+        <p><img src="{{ vich_uploader_asset(item, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
+    {% endif %}
+
+    <div class="small text-muted d-flex justify-content-between">
+      <span>
+        <span class="pr-2"><i class="far fa-newspaper"></i> <a class="text-muted" href="{{ path('blog_category', {'slug': item.category.slug}) }}">{{ item.category }}</a></span>
+        <span class="pr-2">{{ item.createdAt|localizeddate('medium','none') }} <i class="far fa-clock"></i> {{ item.createdAt|localizeddate('none','short') }}</span>
+        <span class="pr-2"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ item.Author.firstName }}"></i></span>
+      </span>
+      <span class="pr-2">
+        <a href="{{ path('blog_post', {'id': item.id, 'slug': item.slug}) }}" class="text-muted"><i class="fas fa-link"></i></a>
+      </span>
+    </div>
+
+  </div>

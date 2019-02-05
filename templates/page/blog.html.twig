@@ -7,30 +7,8 @@
   <h4 class="m-3 ml-md-0"><i class="far fa-newspaper"></i> Nieuws{%if page.blog_category is not empty%}<span class="text-muted"> / {{page.blog_category.title}}</span>{%endif%}</h4>
 
   {% for blog_post in page.blog_posts %}
-  <div class="p-3 mb-4 bg-white">
 
-    <h2 class="text-red">{{ blog_post.title }}</h2>
-
-    {{ blog_post.body|raw }}
-
-    {% if blog_post.document is not empty %}
-      <p class="text-center text-md-left"><a href="{{ vich_uploader_asset(blog_post, 'documentFile') }}" class="btn btn-sm btn-hozt"><i class="far fa-file-pdf"></i> bijlage</a></p>
-    {% endif %}
-
-    {% if blog_post.image is not empty %}
-        <p><img src="{{ vich_uploader_asset(blog_post, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
-    {% endif %}
-
-    <div class="small text-muted d-flex justify-content-between">
-      <span>
-        <span class="pr-2"><i class="far fa-newspaper"></i> <a class="text-muted" href="{{ path('blog_category', {'slug': blog_post.category.slug}) }}">{{ blog_post.category }}</a></span>
-        <span class="pr-2">{{ blog_post.createdAt|localizeddate('medium','none') }} <i class="far fa-clock"></i> {{ blog_post.createdAt|localizeddate('none','short') }}</span>
-        <span class="pr-2"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ blog_post.Author.firstName }}"></i></span>
-      </span>
-      <span class="pr-2"><a href="{{ path('blog_post', {'id': blog_post.id, 'slug': blog_post.slug}) }}" class="text-muted"><i class="fas fa-link"></i></a></span>
-    </div>
-
-  </div>
+    {% include 'page/item.html.twig' with {'item': blog_post } %}
 
   {% endfor %}
 

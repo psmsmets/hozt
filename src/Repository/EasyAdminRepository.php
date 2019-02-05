@@ -19,6 +19,13 @@ class EasyAdminRepository
             ->setParameter('enabled', true)
         ;
     }
+    public function getEnabledCalendarEvents(EntityRepository $er) {
+        return $er->createQueryBuilder('c')
+            ->where('c.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ->orderBy('c.startTime', 'ASC')
+        ;
+    }
     public function getUnassociatedCalendarEvents(EntityRepository $er) {
         return $er->createQueryBuilder('e')
             ->leftJoin('e.competition', 'c')
