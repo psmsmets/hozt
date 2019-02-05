@@ -140,6 +140,11 @@ class BlogPost
      */
     private $author;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CalendarEvent", inversedBy="posts")
+     */
+    private $event;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -431,6 +436,18 @@ class BlogPost
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getEvent(): ?CalendarEvent
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?CalendarEvent $event): self
+    {
+        $this->event = $event;
 
         return $this;
     }

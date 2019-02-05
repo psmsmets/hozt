@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -106,6 +108,11 @@ class CalendarEvent
      */
     private $competition;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="event")
+     */
+    private $posts;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -116,6 +123,7 @@ class CalendarEvent
         $this->enabled = true;
         $this->archived = false;
         $this->isCompetition = true;
+        $this->posts = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -387,6 +395,37 @@ https://github.com/ramsey/uuid-doctrine/issues/13
         // set the owning side of the relation if necessary
         if ($this !== $competition->getCalendar()) {
             $competition->setCalendar($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BlogPost[]
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(BlogPost $post): self
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts[] = $post;
+            $post->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(BlogPost $post): self
+    {
+        if ($this->posts->contains($post)) {
+            $this->posts->removeElement($post);
+            // set the owning side to null (unless already changed)
+            if ($post->getEvent() === $this) {
+                $post->setEvent(null);
+            }
         }
 
         return $this;
