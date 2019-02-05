@@ -305,13 +305,13 @@ class PageController extends AbstractController
     {
         $event = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
-            ->findOneBy(['id'=>$id,'enabled'=>'true'])
+            ->findOneBy(['id'=>$id])
             ;
         if (!$event) {
             throw $this->createNotFoundException();
         }
         $this->initTemplateData();
-        $this->addToTemplateData( 'event', $event);
+        $this->addToTemplateData( 'calendar_event', $event);
 
         return $this->render('calendar/event.html.twig', $this->template_data );
     }
