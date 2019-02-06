@@ -67,13 +67,13 @@
         <div class="row mb-4 mt-4 mb-md-2 mt-md-2">
           <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{competition.calendar.getFormattedPeriod}}</h6></div>
           <div class="col-12 col-md-9">
-            <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title}} 
-              {% if competition.state is not null%}
-                <small class="d-none"><span class="badge badge-{{competition.state.badge}}">{{competition.state}}</span></small>
-              {%else%}
-                <small class="d-none"><span class="badge badge-light">?</span></small>
-              {%endif%}
-            </h5>
+
+            {% if competition.calendar.cancelled %}
+              <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title|title}}<small><span class="badge badge-danger">Geannuleerd</span></small></h5>
+            {% else %}
+              <h5 class="pb-0 mb-1">{{competition.calendar.title|title}}</h5>
+            {% endif %}
+
             <ul class="list-unstyled text-muted small mb-1 cal">
               <li><i class="fas fa-swimming-pool"></i> {{competition.pool}}{% if competition.calendar.location %}, {{competition.calendar.location}}{% endif %}</li>
               {% if competition.teamCategories|length > 0 %}
@@ -90,9 +90,6 @@
               {% endif %}
               {% if competition.restrictions %}
                 <li class="text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
-              {% endif %}
-              {% if competition.warmupTime is not null %}
-                <li><i class="far fa-clock"></i> inzwemmen om {{competition.warmupTime|date('H:i')}}</li>
               {% endif %}
               {% if competition.preprogram is not null or competition.program is not null %}
                 <li><i class="fas fa-trophy"></i>
