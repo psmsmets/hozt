@@ -299,13 +299,13 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/kalender/event/{id}", name="calendar_event")
+     * @Route("/kalender/{uuid}", name="calendar_event")
      */
-    public function calendar_event(int $id)
+    public function calendar_event (string $uuid)
     {
         $event = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
-            ->findOneBy(['id'=>$id])
+            ->findOneBy(['uuid'=>$uuid])
             ;
         if (!$event) {
             throw $this->createNotFoundException();
