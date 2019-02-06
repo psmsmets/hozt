@@ -1,5 +1,7 @@
 {% extends '_main.html.twig' %}
 
+{% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+
 {% block nav %}
   {% include 'modules/navheader.html.twig' %}
   {% include 'modules/navbar.html.twig' %}
