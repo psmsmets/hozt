@@ -253,6 +253,14 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
 /*
  * Calendar
 */
+.cal-cancelled {
+  text-decoration: line-through;
+}
+
+.media.cal {
+  cursor: pointer;
+}
+
 .badge.cal {
   width: 48px;
   height: 48px;
