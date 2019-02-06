@@ -25,13 +25,11 @@ class CompetitionRepository extends ServiceEntityRepository
     public function findUpcomingCompetitionEventsByTeamCategory(int $teamCategory)
     {
         return $this->createQueryBuilder('n')
-            ->leftJoin('n.state','s')
             ->innerJoin('n.calendar','e')
             ->innerJoin('n.pool','p')
             ->leftJoin('n.teams','t')
             ->leftJoin('t.category','tc')
             ->leftJoin('n.teamCategories','c')
-            ->addSelect('s')
             ->addSelect('e')
             ->addSelect('p')
             ->andWhere('e.enabled = :enabled')
