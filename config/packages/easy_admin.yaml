@@ -16,15 +16,6 @@ easy_admin:
                - { entity: 'BlogCategory', label: 'Categorieën', icon: 'bookmark' }
            - { entity: 'StaticPage', label: "Statische pagina's", icon: 'briefcase' }
            - { entity: 'CarouselSlide', label: 'Carousel', icon: 'star' }
-           - label: "Varia"
-           - { entity: 'ContactForm', label: 'Contact', icon: 'comment' }
-           - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle' }
-           - label: 'Sponsors'
-             icon: 'life-ring'
-             children:
-               - { entity: 'Sponsor', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
-               - { entity: 'Sponsor', label: 'Lijst', icon: 'list' }
-               - { entity: 'SponsorCategory', label: 'Categorieën', icon: 'bookmark' }
            - label: "Training & Wedstrijden"
            - label: 'Trainingen'
              icon: 'tasks'
@@ -46,7 +37,16 @@ easy_admin:
              children:
                - { entity: 'Competition', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'Competition', label: 'Lijst', icon: 'list' }
-               - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'water' }
+               - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'bookmark' }
+           - label: "Varia"
+           - { entity: 'ContactForm', label: 'Contact', icon: 'comment' }
+           - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle' }
+           - label: 'Sponsors'
+             icon: 'life-ring'
+             children:
+               - { entity: 'Sponsor', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
+               - { entity: 'Sponsor', label: 'Lijst', icon: 'list' }
+               - { entity: 'SponsorCategory', label: 'Categorieën', icon: 'bookmark' }
            - label: "Toegang"
            - label: 'Gebruikers'
              icon: 'user'
@@ -393,10 +393,10 @@ easy_admin:
                 sort: ['id', 'ASC']
             form:
                 fields:
-                    - { property: 'question', label: 'Vraag' }
+                    - { property: 'question', label: 'Vraag', css_class: 'w-100' }
                     - { property: 'answer', label: 'Antwoord', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'minimal' } } 
-                    - { property: 'enabled', label: 'Gepubliceerd' }
                     - { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'enabled', label: 'Gepubliceerd' }
         CalendarCategory:
             class: App\Entity\CalendarCategory
             label: 'Kalender :: categorie'
@@ -443,6 +443,7 @@ easy_admin:
                     - { property: 'endTime', label: 'Tot' }
                     - { property: 'allDay', label: 'Hele dag', help: 'Of bij onbekend (start)uur' }
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
+                    - { property: 'cancelled', label: 'Geannuleerd' }
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Gepubliceerd' }
                     #- { property: 'archived', label: 'Gearchiveerd' }
