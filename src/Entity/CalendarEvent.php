@@ -22,6 +22,11 @@ class CalendarEvent
     private $id;
 
     /**
+     * @ORM\Column(type="string", length=60, unique=true)
+     */
+    private $uuid;
+
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -120,6 +125,7 @@ class CalendarEvent
 
     public function __construct()
     {
+        $this->uuid = bin2hex(random_bytes(8));
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->startTime = new \DateTime("today noon"); 
@@ -142,20 +148,10 @@ class CalendarEvent
         return $this->id;
     }
 
-/*
-https://github.com/ramsey/uuid-doctrine/issues/13
-    public function setUuid(string $uuid): self
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
-
     public function getUuid(): ?string
     {
         return $this->uuid;
     }
-*/
 
     public function getTitle(): ?string
     {
