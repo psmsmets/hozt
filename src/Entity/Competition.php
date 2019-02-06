@@ -64,11 +64,6 @@ class Competition
     private $restrictions;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $warmupTime;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $preprogram;
@@ -100,11 +95,6 @@ class Competition
      * @var File
      */
     private $resultsFile;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionState", inversedBy="competitions")
-     */
-    private $state;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionPool", inversedBy="competitions")
@@ -236,18 +226,6 @@ class Competition
         return $this;
     }
 
-    public function getWarmupTime(): ?\DateTimeInterface
-    {
-        return $this->warmupTime;
-    }
-
-    public function setWarmupTime(?\DateTimeInterface $warmupTime): self
-    {
-        $this->warmupTime = $warmupTime;
-
-        return $this;
-    }
-
     public function getPreprogram(): ?string
     {
         return $this->preprogram;
@@ -333,18 +311,6 @@ class Competition
     public function getResultsFile()
     {
         return $this->resultsFile;
-    }
-
-    public function getState(): ?CompetitionState
-    {
-        return $this->state;
-    }
-
-    public function setState(?CompetitionState $state): self
-    {
-        $this->state = $state;
-
-        return $this;
     }
 
     public function getPool(): ?CompetitionPool

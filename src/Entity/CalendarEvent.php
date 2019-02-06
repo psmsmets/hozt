@@ -39,6 +39,11 @@ class CalendarEvent
     /**
      * @ORM\Column(type="boolean")
      */
+    private $cancelled;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
     private $isCompetition;
 
     /**
@@ -122,6 +127,7 @@ class CalendarEvent
         $this->allDay = true;
         $this->enabled = true;
         $this->archived = false;
+        $this->cancelled = false;
         $this->isCompetition = true;
         $this->posts = new ArrayCollection();
     }
@@ -187,6 +193,18 @@ https://github.com/ramsey/uuid-doctrine/issues/13
         return $this;
     }
 
+    public function getCancelled(): ?bool
+    {
+        return $this->cancelled;
+    }
+
+    public function setCancelled(bool $cancelled): self
+    {
+        $this->cancelled = $cancelled;
+
+        return $this;
+    }
+
     public function getIsCompetition(): ?bool
     {
         return $this->isCompetition;
@@ -211,6 +229,20 @@ https://github.com/ramsey/uuid-doctrine/issues/13
         return $this;
     }
 
+    public function trueStartTime(): \DateTimeInterface
+    {
+        if ($this->allDay) {
+
+            $begin = clone $this->startTime;
+            return $begin->setTime(0, 0, 0);
+
+        } else {
+
+            return $this->startTime;
+
+        }
+    }
+
     public function getEndTime(): ?\DateTimeInterface
     {
         return $this->endTime;
@@ -223,13 +255,26 @@ https://github.com/ramsey/uuid-doctrine/issues/13
         return $this;
     }
 
-    public function calcEndTime(): \DateTimeInterface
+    public function trueEndTime(): \DateTimeInterface
     {
-        if (is_null($this->endTime)) {
-            $begin = clone $this->startTime;
-            return $begin->setTime(23, 59, 59);
-        } else {
+        if (!is_null($this->endTime) and !$this->allDay ) {
+
             return $this->endTime;
+
+        } else {
+
+            if (is_null($this->endTime)) {
+
+                $end = clone $this->startTime;
+
+            } else {
+
+                $end = clone $this->endTime;
+
+            }
+
+            return $this->allDay ? $end->setTime(23, 59, 59) : $end;
+
         }
     }
 
@@ -241,21 +286,29 @@ https://github.com/ramsey/uuid-doctrine/issues/13
     public function getFormattedPeriod(): ?string
     {
         $fmt = "%A %e %B %Y";
+
         if (is_null($this->endTime)) {
+
             return strftime($this->allDay ? $fmt : $fmt.' vanaf %H:%M', $this->startTime->getTimestamp());
+
         } else {
+
             if ($this->isSameDay()) {
+
                 return strftime($fmt.' van %H:%M', $this->startTime->getTimestamp()).strftime(' tot %H:%M', $this->endTime->getTimestamp());
+
             } else {
+
                 $fmt = $this->allDay ? $fmt : $fmt . ' %H:%M';
                 return strftime($fmt, $this->startTime->getTimestamp()).strftime(' tot '.$fmt, $this->endTime->getTimestamp());
+
             }
         }
     }
 
     public function getFormattedMonth(): ?string
     {
-        return strftime('%B', $this->calcEndTime()->getTimestamp());
+        return strftime('%B', $this->trueEndTime()->getTimestamp());
     }
 
     public function getAllDay(): ?bool

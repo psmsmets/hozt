@@ -37,22 +37,22 @@
 
       {% set this_year  = date('first day of january this year 23:59') %}
       {% set this_month = date('first day of this month 00:00') %}
-      {% set prev_year  = date(page.calendar_events[0].calcEndTime)|date_modify('last day of december this year noon') %}
-      {% set prev_month = date(page.calendar_events[0].calcEndTime)|date_modify('last day of this month noon') %}
+      {% set prev_year  = date(page.calendar_events[0].trueEndTime)|date_modify('last day of december this year noon') %}
+      {% set prev_month = date(page.calendar_events[0].trueEndTime)|date_modify('last day of this month noon') %}
 
       <h3 class="mt-4 pt-4 pl-2 border-top border-gray{% if prev_year<this_year %} past{% endif %}">{{prev_year|date('Y')}}</h3>
       <h4 class="p-2 mb-2 mt-4 bg-light rounded{% if prev_month<this_month %} past{% endif %}">{{prev_month|localizeddate('none', 'none', null, "Europe/Paris", "MMMM")|capitalize}}</h4>
 
       {% for event in page.calendar_events %}
 
-        {% set past  = date(event.calcEndTime) < date() %}
-        {% set year  = date(event.calcEndTime)|date_modify('last day of december this year noon') %}
-        {% set month = date(event.calcEndTime)|date_modify('last day of this month noon') %}
+        {% set past  = date(event.trueEndTime) < date() %}
+        {% set year  = date(event.trueEndTime)|date_modify('last day of december this year noon') %}
+        {% set month = date(event.trueEndTime)|date_modify('last day of this month noon') %}
       
         {% if year>prev_year %}<h3 class="mt-4 pt-4 pl-2 border-top border-gray {% if year<this_year %} past{% endif %}">{{year|date('Y')}}</h3>{% endif %}
         {% if month>prev_month %}<h4 class="p-2 mb-2 mt-4 bg-light rounded {% if month<this_month %} past{% endif %}">{{month|localizeddate('none', 'none', null, "Europe/Paris", "MMMM")|capitalize}}</h4>{% endif %}
 
-        <div class="media align-top mt-3 cal-{{event.category.sequence}}{% if past %} text-muted past{% endif %}">
+        <div class="media align-top mt-3 cal-{{event.category.sequence}}{% if past %} text-muted past{% endif %}" onclick="window.location='{{ path('calendar_event', {'id': event.id}) }}';" style="cursor: pointer;">
 
           <span class="badge badge-dark mr-3 cal cal-{{event.category.sequence}}">{% if past %}<s>{% endif %}{{event.startTime|date('d')}}{% if past %}</s>{% endif %}</span>
 
@@ -60,8 +60,7 @@
 
             <h5 class="pb-0 mb-1">{{event.title|capitalize}}</h5>
 
-            <h6 class="d-flex justify-content-between mb-2">{{event.getFormattedPeriod|lower}} <small class="d-none"><a href="#">Bekijk</a></small>
-            </h6>
+            <h6 class="mb-2">{{event.getFormattedPeriod|lower}}</h6>
 
             <ul class="list-unstyled text-muted small mb-1 cal">
               {% if event.competition is null %}
@@ -82,9 +81,6 @@
                 {% endif %}
                 {% if event.competition.multiDay %}
                   <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
-                {% endif %}
-                {% if event.competition.warmupTime is not null %}
-                  <li class="mb-1"><i class="far fa-clock"></i> inzwemmen om {{event.competition.warmupTime|date('H:i')}}</li>
                 {% endif %}
                 {% if event.competition.preprogram is not null or event.competition.program is not null or event.competition.results is not null%}
                   <li class="mb-1"><i class="fas fa-trophy"></i>

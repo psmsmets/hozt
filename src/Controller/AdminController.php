@@ -154,6 +154,16 @@ class AdminController extends EasyAdminController
         parent::persistEntity($entity);
     }
 
+    public function persistCalendarEventEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        $entity->setStartTime($entity->trueStartTime());
+        if (!is_null($entity->getEndTime())) {
+            $entity->setEndTime($entity->trueEndTime());
+        }
+        parent::persistEntity($entity);
+    }
+
     // special update
     private function unpinBlogPosts(int $current=null)
     {
@@ -191,6 +201,10 @@ class AdminController extends EasyAdminController
     public function updateCalendarEventEntity($entity)
     {
         $entity->setUpdatedAt();
+        $entity->setStartTime($entity->trueStartTime());
+        if (!is_null($entity->getEndTime())) {
+            $entity->setEndTime($entity->trueEndTime());
+        }
         if (!$entity->getEnabled()) {
             if (count($entity->getPosts())>0) {
                 $entity->setEnabled(true);
