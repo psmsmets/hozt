@@ -47,7 +47,6 @@ easy_admin:
                - { entity: 'Competition', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'Competition', label: 'Lijst', icon: 'list' }
                - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'water' }
-               - { entity: 'CompetitionState', label: 'Status', icon: 'bookmark' }
            - label: "Toegang"
            - label: 'Gebruikers'
              icon: 'user'
@@ -433,6 +432,7 @@ easy_admin:
                     - { property: 'endTime', label: 'Tot' }
                     - { property: 'allDay', label: 'Hele dag', type: 'boolean' }
                     - { property: 'category', label: 'Categorie' }
+                    - { property: 'cancelled', label: 'Geannuleerd', type: 'boolean' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['startTime', 'DESC']
             form:
@@ -465,8 +465,6 @@ easy_admin:
                     - { property: 'calendar.enabled', label: 'Gepubliceerd', type: 'boolean' }
                     - { property: 'calendar', label: 'Kalender event' }
                     - { property: 'calendar.location', label: 'Locatie' }
-                    - { property: 'state', label: 'Status' }
-                    #- { property: 'warmupTime', label: 'Inzwemmen' }
                     - { property: 'pool', label: 'Zwembad' }
                     - { property: 'restrictions', label: 'Limieten', type: 'boolean' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
@@ -479,7 +477,6 @@ easy_admin:
                     - { property: 'calendar', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnassociatedCalendarEvents'] } }
                     - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'teamCategories', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
-                    - { property: 'warmupTime', label: 'Inzwemmen' }
                     #- { property: 'delegate', label: 'Afgevaardigde' }
                     #- { property: 'coaches', label: 'Trainers' }
                     #- { property: 'officials', label: 'Officials' }
@@ -487,7 +484,6 @@ easy_admin:
                     - { property: 'restrictions', label: 'Limieten' }
                     - { property: 'multiDay', label: 'Overnachting' }
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
-                    - { property: 'state', label: 'Status' }
                     - { property: 'preprogramFile', type: 'vich_file', label: 'Voorprogramma', base_path: '%app.path.competition_preprograms%' }
                     - { property: 'programFile', type: 'vich_file', label: 'Programma', base_path: '%app.path.competition_programs%' }
                     - { property: 'resultsFile', type: 'vich_file', label: 'Uitslag', base_path: '%app.path.competition_results%' }
@@ -507,22 +503,6 @@ easy_admin:
                     - { property: 'title', label: 'Titel' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'enabled', label: 'Actief' }
-        CompetitionState:
-            class: App\Entity\CompetitionState
-            label: 'Zwemwedstrijd status'
-            list:
-                fields:
-                    - { property: 'id', label: 'Id' }
-                    - { property: 'name', label: 'Status' }
-                    - { property: 'description', label: 'Omschrijving' }
-                    - { property: 'badge', label: 'Bootstrap badge suffix' }
-                    - { property: 'updatedAt', label: 'Laatst aangepast' }
-                sort: ['id', 'ASC']
-            form:
-                fields:
-                    - { property: 'name', label: 'Status' }
-                    - { property: 'description', label: 'Omschrijving' }
-                    - { property: 'badge', label: 'Bootstrap badge suffix' }
         User:
             class: App\Entity\User
             label: 'Gebruikers'
