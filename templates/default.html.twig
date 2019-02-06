@@ -1,9 +1,36 @@
-{% extends '_main_with_modules.html.twig' %}
+{% extends '_main.html.twig' %}
+
+{% block nav %}
+  {% include 'modules/navheader.html.twig' %}
+  {% include 'modules/navbar.html.twig' %}
+  {% include 'modules/navscroller.html.twig' %}
+{% endblock %}
 
 {% block top %}
+  <div class="banner banner-bg banner-sm d-none d-md-block"></div>
+{% endblock %}
 
-<div class="banner banner-bg banner-sm d-none d-md-block">
-  <!--<div class="container text-center"></div>-->
-</div>
+{% block side %}
+  <div id="api_load_module_tyr"></div>
+  <div id="api_load_module_competition_programs"></div>
+  <div id="api_load_module_competition_results"></div>
+  <div id="api_load_module_training_today"></div>
+  <div id="api_load_module_training_tomorrow"></div>
+  {% if currentPath starts with '/kalender' %}{% else %}<div id="api_load_module_calendar_upcoming"></div>{% endif %}
+{% endblock %}
 
+{% block footer %}
+  {% include 'modules/footer.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script src="{{ asset('assets/js/countUp.js') }}"></script>
+  <script src="{{ asset('assets/js/hozt.js') }}"></script>
+  <script src="{{ asset('assets/js/api_load_module_tyr.js') }}"></script>
+  <script src="{{ asset('assets/js/api_load_module_training_today.js') }}"></script>
+  <script src="{{ asset('assets/js/api_load_module_training_tomorrow.js') }}"></script>
+  <script src="{{ asset('assets/js/api_load_module_calendar_upcoming.js') }}"></script>
+  <script src="{{ asset('assets/js/api_load_module_competiton_programs.js') }}"></script>
+  <script src="{{ asset('assets/js/api_load_module_competiton_results.js') }}"></script>
 {% endblock %}

@@ -19,10 +19,15 @@ class EasyAdminRepository
             ->setParameter('enabled', true)
         ;
     }
-    public function getEnabledCalendarEvents(EntityRepository $er) {
+    public function getFilteredCalendarEvents(EntityRepository $er) {
+        $today = new \DateTime("today midnight");
         return $er->createQueryBuilder('c')
-            ->where('c.enabled = :enabled')
+            ->andwhere('c.enabled = :enabled')
+            ->andwhere('c.archived = :archived')
+            ->andwhere('c.startTime >= :startTime')
             ->setParameter('enabled', true)
+            ->setParameter('archived', false)
+            ->setParameter('startTime', $today->modify('-35 days')->format('Y-m-d'))
             ->orderBy('c.startTime', 'ASC')
         ;
     }

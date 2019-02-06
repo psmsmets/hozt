@@ -70,6 +70,16 @@ class CarouselSlide
      */
     private $body;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $url;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CalendarEvent")
+     */
+    private $event;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -204,6 +214,30 @@ class CarouselSlide
     public function getImageFile()
     {
         return $this->imageFile;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getEvent(): ?CalendarEvent
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?CalendarEvent $event): self
+    {
+        $this->event = $event;
+
+        return $this;
     }
 
 }

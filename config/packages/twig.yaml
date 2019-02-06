@@ -5,4 +5,6 @@ twig:
     globals:
         locale: '%locale%'
         timezone: '%timezone%'
-    form_themes: ['bootstrap_4_layout.html.twig']
+    form_themes:
+        - 'bootstrap_4_layout.html.twig'
+        - '@FOSCKEditor/Form/ckeditor_widget.html.twig'

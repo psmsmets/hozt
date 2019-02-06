@@ -1,0 +1,71 @@
+<footer class="container mb-3 mt-3">
+
+  <div class="row justify-content-around text-center pt-2 pt-md-3">
+    {% for sponsor in base.sponsors %} 
+      <div class="sponsor col col-4 col-md-3 col-lg-2" {% if sponsor.url is not empty %}onclick="window.open('{{sponsor.url}}','_blank');"{%endif%}>
+        {% if sponsor.image is not empty %}
+          <img src="{{ vich_uploader_asset(sponsor, 'imageFile') }}" class="mx-auto img-fluid" alt="{{sponsor.name}}">
+        {% endif %}
+        {{sponsor.caption}}
+      </div>
+    {% endfor %}
+  </div><!-- close div row -->
+
+  <div class="row pt-2 pt-md-3">
+    <div class="col-12 col-md">
+      <img class="mb-2" src="{{ asset('assets/img/logo/Hozt_sm.png') }}" alt="" height="40">
+      <address class="text-muted">
+        <span class="text-hozt">Hoogstratens Zwem Team vzw</span><br>
+        <small>
+          Achtelsestraat 76A, 2320 Hoogstraten<br>
+          <abbr title="Bankrekening">B:</abbr> BE88 0689 0449 7341<br>
+          <abbr title="Ondernemingsnummer">O:</abbr> BE0644.916.871
+        </small>
+      </address>
+    </div>
+    <div class="col-12 col-md">
+      <h5>Aanbod</h5>
+      <ul class="list-unstyled text-small">
+      {% for category in base.training_team_categories %}
+        <li><a class="text-muted" href="/aanbod/{{ category.slug }}">{{ category.name }}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+    <div class="col-12 col-md">
+      <h5>Praktisch</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="/lid-worden">Lid worden</a></li>
+        <li><a class="text-muted" href="/trainingsuren">Trainingsuren</a></li>
+        <li><a class="text-muted" href="/kalender">Kalender</a></li>
+        <li><a class="text-muted" href="/clubkledij">Clubkledij</a></li>
+        <li><a class="text-muted" href="/nieuws">Nieuwsberichten</a></li>
+<!--    <li><a class="text-muted" href="#">Clubrecords</a></li> -->
+        <li><a class="text-muted" href="/inschrijvingen">Inschrijvingen</a></li>
+      </ul>
+    </div>
+    <div class="col-12 col-md">
+      <h5>Algemeen</h5>
+      <ul class="list-unstyled text-small">
+        <li><a class="text-muted" href="/trainers">Trainers</a></li>
+        <li><a class="text-muted" href="/bestuur">Bestuur</a></li>
+        <li><a class="text-muted" href="/vacatures">Vacatures</a></li>
+        <li><a class="text-muted" href="/zwembad">Zwembad</a></li>
+        <li><a class="text-muted" href="/sponsors">Sponsors</a></li>
+        <li><a class="text-muted" href="/gedragsregels">Gedragsregels</a></li>
+        <li><a class="text-muted" href="/faq">Veelgestelde vragen</a></li>
+        <li><a class="text-muted" href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<div class="mt-3 bg-red">
+  <div class="nav-scroller container">
+    <nav class="nav nav-underline">
+      <a class="nav-link" href="#" onclick="return false;"><i class="fas fa-copyright"></i> 2016-{{ "now"|date("Y") }}</a>
+      <a class="nav-link" href="/huishoudelijk-reglement">Huishoudelijk Reglement</a>
+      <a class="nav-link" href="/privacy">Privacy</a>
+      <a class="nav-link" href="https://www.steps4it.be" style="color: rgba(0,0,0,.5);"><i class="fas fa-code"></i> STEPS4it</a>
+    </nav>
+  </div>
+</div>
