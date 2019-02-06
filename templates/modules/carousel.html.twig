@@ -30,7 +30,7 @@
 
               {% if slide.event is not empty %}
 
-                <a href="{{ path('calendar_event', {'id': slide.event.id}) }}" class="{{btn1}} mr-2"><i class="far fa-calendar-alt"></i></a>
+                <a href="{{ path('calendar_event', {'uuid': slide.event.uuid}) }}" class="{{btn1}} mr-2"><i class="far fa-calendar-alt"></i></a>
 
                 {% if slide.publishAt < slide.event.startTime|date_modify('midnight') %}
 
