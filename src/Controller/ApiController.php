@@ -185,6 +185,7 @@ class ApiController extends AbstractController
                    'formattedPeriod' => $event->getFormattedPeriod(),
                    'location' => ucfirst($event->getLocation()),
                    'class' => 'cal-'.strval($event->getCategory()->getSequence()),
+                   'cancelled' => $event->getCancelled(),
                    'id' => $event->getId(),
                    'url' => $this->get('router')->generate('calendar_event', array('id' => $event->getId())),
                );
