@@ -1,0 +1,9 @@
+<!-- NAV-SCROLLER
+================================================== -->
+<div class="nav-scroller bg-red shadow-sm" id="nav-categories">
+  <nav class="nav nav-underline container">
+  {% for category in base.training_team_categories %}
+    <a class="nav-link" href="/aanbod/{{ category.slug }}">{{ category.name }}</a>
+  {% endfor %}
+  </nav>
+</div>

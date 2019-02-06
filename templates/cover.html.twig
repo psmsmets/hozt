@@ -1,40 +1,14 @@
-{% extends '_main_with_modules.html.twig' %}
+{% extends 'default.html.twig' %}
 
 {% block top %}
-  <div id="HoZTCarousel" class="carousel slide banner banner-bg banner-lg fade-in" data-ride="carousel">
-    {% if page.carousel|length > 1 %}
-      <ol class="carousel-indicators">
-      {% for slide in page.carousel %}
-        <li data-target="#HoZTCarousel" data-slide-to="{{ loop.index0 }}" class="{% if loop.index0 == 0%}active{% endif%}"></li>
-      {% endfor %}
-      </ol>
-    {% endif %}
-    <div class="carousel-inner">
-    {% for slide in page.carousel %}
-      <div class="carousel-item {% if loop.index0 == 0%}active{% endif%}">
-        {% if slide.image is not empty%}<img src="{{ vich_uploader_asset(slide, 'imageFile') }}">{% endif %}
-        <div class="container">
-          <div class="carousel-caption">
-            <h1>{{ slide.title }}</h1>
-            {{ slide.body|raw }}
-          </div>
-        </div>
-      </div><!-- carousel item -->
-    {% endfor %}
-    </div><!-- carousel inner -->
-  </div>
-{% endblock %}
-
-{% block side %}
-  {{ parent() }}
-  <div id="api_load_module_competition_results"></div>
+  {% include 'modules/carousel.html.twig' with {'carousel': page.carousel } %}
 {% endblock %}
 
 {% block javascripts %}
   {{ parent() }}
   <script src="{{ asset('assets/js/jquery.bcSwipe.min.js') }}"></script>
-<script>
-  $('.carousel').carousel({ interval: 7500 });
-  $('.carousel').bcSwipe({ threshold: 50 });
-</script>
+  <script>
+    $('.carousel').carousel({ interval: 8500 });
+    $('.carousel').bcSwipe({ threshold: 60 });
+  </script>
 {% endblock %}

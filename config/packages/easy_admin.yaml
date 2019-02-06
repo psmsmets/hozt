@@ -94,7 +94,7 @@ easy_admin:
                     - { property: 'archived', label: 'Gearchiveerd' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'author', label: 'Auteur', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
-                    - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledCalendarEvents'] } }
+                    - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getFilteredCalendarEvents'] } }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.blogPost_images%' }
                     - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.blogPost_documents%' }
@@ -165,7 +165,7 @@ easy_admin:
                     - { property: 'id', label: 'id' }
                     - { property: 'enabled', label: 'Gepubliceerd' }
                     - { property: 'title', label: 'Titel' }
-                    - { property: 'showTitle', label: 'Toon titel', type: 'boolean' }
+                    - { property: 'showTitle', label: 'Toon titel' }
                     - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.carousel_images%' }
                     - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'publishUntil', label: 'Publiceer tot' }
@@ -181,6 +181,8 @@ easy_admin:
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.carousel_images%' }
                     - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'publishUntil', label: 'Publiceer tot' }
+                    - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getFilteredCalendarEvents'] } }
+                    - { property: 'url', label: 'Externe url' }
         Sponsor:
             class: App\Entity\Sponsor
             label: 'Sponsor'
@@ -422,6 +424,7 @@ easy_admin:
             class: App\Entity\CalendarEvent
             label: 'Kalender :: events'
             list:
+                #dql_filter: "( entity.endTime is null and entity.startTime > 2019-01-01 ) OR entity.endTime > 2019-01-01"
                 fields:
                     - { property: 'id', label: 'Id' }
                     - { property: 'enabled', label: 'Gepubliceerd', type: 'boolean' }
@@ -439,7 +442,7 @@ easy_admin:
                     - { property: 'startTime', label: 'Van' }
                     - { property: 'endTime', label: 'Tot' }
                     - { property: 'allDay', label: 'Hele dag', help: 'Of bij onbekend (start)uur' }
-                    - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'minimal' } }
+                    - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Gepubliceerd' }
                     #- { property: 'archived', label: 'Gearchiveerd' }
@@ -449,6 +452,10 @@ easy_admin:
                     - { property: 'location', label: 'Locatie' }
                     - { property: 'url', label: 'Website' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.calendar_images%' }
+            search:
+                # using an empty value to not apply any condition when searching
+                # elements (this prevents inheriting the 'dql_filter' value defined in 'list')
+                dql_filter: ''
         Competition:
             class: App\Entity\Competition
             label: 'Zwemwedstrijden'

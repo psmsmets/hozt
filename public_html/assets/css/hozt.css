@@ -79,10 +79,15 @@ body {
   border-color: #ED1C24;
 }
 
+.btn-white, a.btn-white {
+  background: #FFF;
+  border-color: #FFF;
+}
+
 .btn-outline-hozt:hover {
   color: #FFF;
-  background-color: #C21C24;
-  border-color: #C21C24;
+  background-color: #ED1C24;
+  border-color: #ED1C24;
 }
 
 .bg-red a.nav-link:hover {
@@ -193,6 +198,10 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
 
 .carousel-caption {
   bottom: 20%;
+}
+
+.carousel-caption .btn {
+  min-width: 35px;
 }
 
 .banner .carousel-item img {

@@ -1,0 +1,60 @@
+<!-- CAROUSEL
+================================================== -->
+<div id="HoZTCarousel" class="carousel slide banner banner-bg banner-lg fade-in" data-ride="carousel">
+  {% if carousel|length > 1 %}
+    <ol class="carousel-indicators d-none d-md-flex">
+    {% for slide in carousel %}
+      <li data-target="#HoZTCarousel" data-slide-to="{{ loop.index0 }}" class="{% if loop.index0 == 0%}active{% endif%}"></li>
+    {% endfor %}
+    </ol>
+  {% endif %}
+  <div class="carousel-inner">
+  {% for slide in carousel %}
+    <div class="carousel-item {% if loop.index0 == 0%}active{% endif%}">
+      {% if slide.image is not empty%}<img src="{{ vich_uploader_asset(slide, 'imageFile') }}">{% endif %}
+      <div class="container">
+        <div class="carousel-caption lead">
+
+          {% if slide.showTitle %}<h1>{{ slide.title }}</h1>{% endif %}
+          {{ slide.body|raw }}
+
+          {% if slide.url is not empty or slide.event is not empty %}
+            <p class="text-center">
+
+              {% set btn1 = 'btn btn-dark' %}
+              {% set btn2 = 'btn btn-hozt' %}
+
+              {% if slide.url is not empty %}
+                <a href="{{ slide.url }}" class="{{btn}} btn-outline-dark btn-white mr-2"><i class="fas fa-info"></i></a>
+              {% endif %}
+
+              {% if slide.event is not empty %}
+
+                <a href="{{ path('calendar_event', {'id': slide.event.id}) }}" class="{{btn1}} mr-2"><i class="far fa-calendar-alt"></i></a>
+
+                {% if slide.publishAt < slide.event.startTime|date_modify('midnight') %}
+
+                  {% if slide.event.competition.program is not null %}
+                    <a href="{{ vich_uploader_asset(slide.event.competition, 'programFile') }}" class="{{btn2}} mr-2"><i class="fas fa-file-pdf"></i> programma</a>
+                  {% elseif slide.event.competition.preprogram is not null %}
+                    <a href="{{ vich_uploader_asset(slide.event.competition, 'preprogramFile') }}" class="{{btn2}} mr-2"><i class="fas fa-file-pdf"></i> voorprogramma</a>
+                  {% endif %}
+
+                {% else %}
+
+                  {% if slide.event.competition.results is not null %}
+                    <a href="{{ vich_uploader_asset(slide.event.competition, 'resultsFile') }}" class="{{btn2}} mr-2"><i class="fas fa-file-pdf"></i> uitslag</a>
+                  {% endif %}
+
+                {% endif %}
+
+              {% endif %}
+            </p>
+          {% endif %}
+
+        </div>
+      </div>
+    </div><!-- carousel item -->
+  {% endfor %}
+  </div><!-- carousel inner -->
+</div>
