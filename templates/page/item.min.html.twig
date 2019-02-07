@@ -1,0 +1,28 @@
+
+  <div class="p-3 mb-4 bg-white shadow-sm">
+
+    <h4 class="text-red d-flex justify-content-between">{{ item.title|title }}</h4>
+
+    {{ item.body|raw }}
+
+    {% if item.document is not empty %}
+      <p class="text-center text-md-left">
+        <a href="{{ vich_uploader_asset(item, 'documentFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+      </p>
+    {% endif %}
+
+    {% if item.image is not empty %}
+        <p><img src="{{ vich_uploader_asset(item, 'imageFile') }}" class="img-fluid rounded scroll-fade-in"></p>
+    {% endif %}
+
+    <div class="small text-muted d-flex justify-content-between">
+      <span>
+        <span class="pr-2"><i class="far fa-newspaper"></i> <a class="text-muted text-decoration-none" href="{{ path('blog_category', {'slug': item.category.slug}) }}">{{ item.category }}</a></span>
+        <span class="pr-2">{{ item.publishAt|localizeddate('medium','none')|replace({'.':''}) }} <i class="far fa-clock"></i> {{ item.createdAt|localizeddate('none','short') }}</span>
+        <span class="pr-2"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ item.Author.firstName }}"></i></span>
+      </span>
+      <span class="pr-2">
+      </span>
+    </div>
+
+  </div>
