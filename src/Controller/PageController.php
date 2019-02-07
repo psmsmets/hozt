@@ -308,7 +308,8 @@ class PageController extends AbstractController
             ->findOneBy(['uuid'=>$uuid])
             ;
         if (!$event) {
-            throw $this->createNotFoundException();
+            //throw $this->createNotFoundException();
+            return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
         }
         $this->initTemplateData();
         $this->addToTemplateData( 'calendar_event', $event);
