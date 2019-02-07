@@ -12,7 +12,7 @@
 
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <div class="media align-top mt-3 cal-{{event.category.sequence}}">
+    <div class="media align-top cal-{{event.category.sequence}}">
 
       <span class="badge badge-dark mr-3 cal cal-md cal-{{event.category.sequence}}">{{event.startTime|date('d')}}<br>{{event.startTime|localizeddate('none', 'none', null, null, 'LLL')|trim('.')}}</span>
 
@@ -26,7 +26,7 @@
 
         <h6 class="d-flex justify-content-between mb-2">{{event.getFormattedPeriod|lower}}</h6>
 
-        <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} mb-2 small cal">
+        <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} small cal mb-0">
           {% if event.competition is null %}
             {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|capitalize}}</li>{% endif %}
           {% else %}
@@ -66,8 +66,14 @@
           <div class="mt-3 mt-md-4">{{ event.body|raw }}</div>
         {% endif %}
 
+        {% if event.document is not empty %}
+          <p class="text-center text-md-left">
+            <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+          </p>
+        {% endif %}
+
         {% if event.image is not empty %}
-          <p><img src="{{ vich_uploader_asset(event, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
+          <p class="mt-3"><img src="{{ vich_uploader_asset(event, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
         {% endif %}
 
       </div>
@@ -78,7 +84,7 @@
 
   {% if event.posts is not empty %}
 
-    <h5 class="m-3 ml-md-0 mt-4 pt-4 mt-md-5 pt-md-5"><i class="far fa-newspaper"></i> Gerelateerde nieuwsberichten</h5>
+    <h5 class="m-3 ml-md-0"><i class="far fa-newspaper"></i> Gerelateerde nieuwsberichten</h5>
     {% for item in event.posts| sortbyfield('publishAt')|reverse %}
       {% include 'page/item.min.html.twig' with {'item': item } %}
     {% endfor %}

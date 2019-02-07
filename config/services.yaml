@@ -20,6 +20,7 @@ parameters:
     app.defaults.sponsorCategory.id: 1
     app.path.blogPost_documents: /uploads/files/blog
     app.path.blogPost_images: /uploads/images/blog
+    app.path.calendar_documents: /uploads/files/calendar
     app.path.calendar_images: /uploads/images/calendar
     app.path.carousel_images: /uploads/images/carousel
     app.path.competition_preprograms: /uploads/files/competition/preprograms

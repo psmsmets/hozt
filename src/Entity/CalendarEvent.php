@@ -88,6 +88,17 @@ class CalendarEvent
     private $imageFile;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $document;
+
+    /**
+     * @Vich\UploadableField(mapping="blogPost_documents", fileNameProperty="document")
+     * @var File
+     */
+    private $documentFile;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $body;
@@ -370,6 +381,35 @@ class CalendarEvent
     public function getImageFile()
     {
         return $this->imageFile;
+    }
+
+    public function getDocument(): ?string
+    {
+        return $this->document;
+    }
+
+    public function setDocument(?string $document): self
+    {
+        $this->document = $document;
+
+        return $this;
+    }
+
+    public function setDocumentFile(File $document = null)
+    {
+        $this->documentFile = $document;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($document) {
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getDocumentFile()
+    {
+        return $this->documentFile;
     }
 
     public function getBody(): ?string
