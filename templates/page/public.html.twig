@@ -5,7 +5,7 @@
 {% block lead %}
 
   {% if page.pinned_blog_post %}
-    {% include 'page/item.html.twig' with {'item': page.pinned_blog_post } %}
+    {% include 'page/item.html.twig' with {'item': page.pinned_blog_post, 'pinned': true } %}
   {% endif %}
 
 {% endblock %}
