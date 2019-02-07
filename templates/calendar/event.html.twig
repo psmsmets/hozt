@@ -62,16 +62,31 @@
           {% endif %}
         </ul>
 
+        {% if event.body is not empty %}
+          <div class="mt-3 mt-md-4">{{ event.body|raw }}</div>
+        {% endif %}
+
+        {% if event.image is not empty %}
+          <p><img src="{{ vich_uploader_asset(event, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
+        {% endif %}
+
       </div>
 
     </div>
 
-    {{ event.body|raw }}
-
-    {% if event.image is not empty %}
-        <p><img src="{{ vich_uploader_asset(event, 'imageFile') }}" class="img-fluid rounded fade-in"></p>
-    {% endif %}
-
   </div>
+
+  {% if event.posts is not empty %}
+    <div class="p-3 mb-4 mt-3 mt-md-4 text-muted">
+      <div class="media align-top mt-3">
+        <h6 class="pl-md-5 ml-3"><i class="far fa-newspaper"></i> Gerelateerde nieuwsberichten</h6>
+        <ul class="list-unstyled small">
+        {% for item in event.posts %}
+          <li class="ml-2 ml-md-4 mb-2 mb-md-1"><a href="{{ path('blog_post', {'id': item.id, 'slug': item.slug}) }}" class="text-muted">{{item.title|title}}</a></li>
+        {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
 
 {% endblock %}
