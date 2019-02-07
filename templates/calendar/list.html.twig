@@ -89,13 +89,13 @@
                 {% if event.competition.preprogram is not null or event.competition.program is not null or event.competition.results is not null%}
                   <li class="mb-1"><i class="fas fa-trophy"></i>
                   {% if event.competition.preprogram is not null %}
-                    <a href="{{ vich_uploader_asset(event.competition, 'preprogramFile') }}" class="pr-2">Voorprogramma</a>
+                    <a href="{{ vich_uploader_asset(event.competition, 'preprogramFile') }}" class="pr-2 {% if not event.cancelled %}text-muted{% endif %}">Voorprogramma</a>
                   {% endif %}
                   {% if event.competition.program is not null %}
-                    <a href="{{ vich_uploader_asset(event.competition, 'programFile') }}" class="pr-2">Programma</a>
+                    <a href="{{ vich_uploader_asset(event.competition, 'programFile') }}" class="pr-2 {% if not event.cancelled %}text-muted{% endif %}">Programma</a>
                   {% endif %}
                   {% if event.competition.results is not null %}
-                    <a href="{{ vich_uploader_asset(event.competition, 'resultsFile') }}" class="pr-2">Uitslag</a>
+                    <a href="{{ vich_uploader_asset(event.competition, 'resultsFile') }}" class="pr-2 {% if not event.cancelled %}text-muted{% endif %}">Uitslag</a>
                   {% endif %}
                   </li>
                 {% endif %}
