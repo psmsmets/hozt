@@ -19,6 +19,9 @@ use App\Entity\ContactFaq;
 use App\Entity\ContactForm;
 use App\Entity\SponsorCategory;
 use App\Entity\TrainingCoach;
+use App\Entity\TrainingSchedule;
+use App\Entity\TrainingScheduleException;
+use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
 
 class AdminController extends EasyAdminController
@@ -118,6 +121,19 @@ class AdminController extends EasyAdminController
         return $new->setSequence($seq+1);
     }
 
+    public function createNewTrainingScheduleExceptionEntity()
+    {
+        $teams = $this->getDoctrine()
+            ->getRepository(TrainingTeam::class)
+            ->getEnabled()
+            ;
+        $new = new TrainingScheduleException();
+        foreach( $teams as $team ){
+            $new->addTeam($team);
+        }
+        return $new;
+    }
+
     public function createNewTrainingCoachEntity()
     {
         $seq = (int) $this->getDoctrine()
@@ -160,6 +176,16 @@ class AdminController extends EasyAdminController
         $entity->setStartTime($entity->trueStartTime());
         if (!is_null($entity->getEndTime())) {
             $entity->setEndTime($entity->trueEndTime());
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function persistTrainingScheduleEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if ($entity->getPersistent() and is_null($entity->getEndDate())) {
+            $entity->setPersistent(false);
+            $this->addFlash('error', 'Fout: Uitzondering enkel toegestaan met einddatum.');
         }
         parent::persistEntity($entity);
     }
@@ -258,6 +284,10 @@ class AdminController extends EasyAdminController
                 $entity->setEnabled(true);
                 $this->addFlash('error', 'Fout: Training schedule heeft gerelateerde groepen. Deactiveren niet toegestaan.');
             }
+        }
+        if ($entity->getPersistent() and is_null($entity->getEndDate())) {
+            $entity->setPersistent(false);
+            $this->addFlash('error', 'Fout: Uitzondering enkel toegestaan met einddatum.');
         }
         parent::persistEntity($entity);
     }

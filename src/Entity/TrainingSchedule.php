@@ -70,13 +70,25 @@ class TrainingSchedule
      */
     private $dressingRoom;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\TrainingScheduleException", mappedBy="schedule")
+     */
+    private $exceptions;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $persistent;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->startDate = $this->createdAt;
         $this->enabled = true;
+        $this->persistent = false;
         $this->teams = new ArrayCollection();
+        $this->exceptions = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -212,6 +224,46 @@ class TrainingSchedule
     public function setDressingRoom(?int $dressingRoom): self
     {
         $this->dressingRoom = $dressingRoom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TrainingScheduleException[]
+     */
+    public function getExceptions(): Collection
+    {
+        return $this->exceptions;
+    }
+
+    public function addException(TrainingScheduleException $exception): self
+    {
+        if (!$this->exceptions->contains($exception)) {
+            $this->exceptions[] = $exception;
+            $exception->addSchedule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeException(TrainingScheduleException $exception): self
+    {
+        if ($this->exceptions->contains($exception)) {
+            $this->exceptions->removeElement($exception);
+            $exception->removeSchedule($this);
+        }
+
+        return $this;
+    }
+
+    public function getPersistent(): ?bool
+    {
+        return $this->persistent;
+    }
+
+    public function setPersistent(bool $persistent): self
+    {
+        $this->persistent = $persistent;
 
         return $this;
     }

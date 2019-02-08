@@ -31,13 +31,10 @@ class CalendarEventRepository extends ServiceEntityRepository
             ->addSelect('c')
             ->addSelect('t')
             ->addSelect('n')
-            ->andWhere('c.enabled = :enabled')
             ->andWhere('e.enabled = :enabled')
-            ->andWhere('e.archived = :archived')
             ->andWhere('e.startTime >= :startTime')
             ->andWhere('(e.endTime < :endTime or (e.endTime is null and e.startTime < :endTime))')
             ->setParameter('enabled', true)
-            ->setParameter('archived', false)
             ->setParameter('startTime', $start_time)
             ->setParameter('endTime', $end_time)
             ->orderBy('e.startTime', 'ASC')
@@ -61,6 +58,26 @@ class CalendarEventRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    public function findCalendarEvent(string $uuid)
+    {
+        return $this->createQueryBuilder('e')
+            ->innerJoin('e.category','c')
+            ->leftJoin('e.competition','n')
+            ->leftJoin('n.teams','t')
+            ->addSelect('e')
+            ->addSelect('c')
+            ->addSelect('t')
+            ->addSelect('n')
+            ->andWhere('e.enabled = :enabled')
+            ->andWhere('e.uuid = :uuid')
+            ->setParameter('enabled', true)
+            ->setParameter('uuid', $uuid)
+            ->orderBy('e.startTime', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
     }
 

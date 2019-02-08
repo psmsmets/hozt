@@ -24,6 +24,7 @@ easy_admin:
                - { entity: 'TrainingTeam', label: 'Groepen', icon: 'users' }
                - { entity: 'TrainingTeamCategory', label: 'Categorie', icon: 'bookmark' }
                - { entity: 'TrainingSchedule', label: 'Uurrooster', icon: 'table' }
+               - { entity: 'TrainingScheduleException', label: 'Uitzondering', icon: 'times-circle' }
                - { entity: 'TrainingTime', label: 'Tijdstippen' }
                - { entity: 'TrainingDay', label: 'Dag' }
            - label: 'Kalender'
@@ -341,7 +342,7 @@ easy_admin:
             label: 'Trainingen :: uurrooster'
             list:
                 fields:
-                    - { property: 'id', label: 'Id' }
+                    #- { property: 'id', label: 'Id' }
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'teams', label: 'Groepen' }
                     - { property: 'day', label: 'Dag' }
@@ -349,8 +350,9 @@ easy_admin:
                     - { property: 'comment', label: 'Opmerking' }
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot' }
-                    - { property: 'updatedAt', label: 'Aangepast' }
-                sort: ['id', 'ASC']
+                    - { property: 'persistent', label: 'Uitzondering', type: 'boolean' }
+                    #- { property: 'updatedAt', label: 'Aangepast' }
+                sort: ['day', 'ASC']
             form:
                 fields:
                     - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
@@ -360,8 +362,29 @@ easy_admin:
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot' }
                     - { property: 'enabled', label: 'Actief' }
+                    - { property: 'persistent', label: 'Uitzondering' }
             search:
-                fields: ['teams.abbr']
+                fields: ['teams.abbr','day.name','time.startTime','time.endTime']
+        TrainingScheduleException:
+            class: App\Entity\TrainingScheduleException
+            label: 'Trainingen :: uurrooster uitzonderingen'
+            list:
+                fields:
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'startDate', label: 'Vanaf' }
+                    - { property: 'endDate', label: 'Tot' }
+                    - { property: 'teams', label: 'Groepen' }
+                    - { property: 'schedule', label: 'Dag' }
+                    - { property: 'comment', label: 'Opmerking' }
+                sort: ['startDate', 'ASC']
+            form:
+                fields:
+                    - { property: 'startDate', label: 'Vanaf' }
+                    - { property: 'endDate', label: 'Tot', test: true }
+                    - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'schedule', label: 'Uurrooster', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'comment', label: 'Opmerking' }
+                    - { property: 'enabled', label: 'Actief' }
         ContactForm:
             class: App\Entity\ContactForm
             label: 'Contactformulier'

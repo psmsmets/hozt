@@ -91,12 +91,12 @@
               {% if competition.restrictions %}
                 <li class="text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
               {% endif %}
-              {% if competition.preprogram is not null or competition.program is not null %}
+              {% if competition.preprogram is not empty or competition.program is not empty %}
                 <li><i class="fas fa-trophy"></i>
-                {% if competition.preprogram is not null %}
+                {% if competition.preprogram is not empty %}
                   <a href="{{ vich_uploader_asset(competition, 'preprogramFile') }}" class="pr-2">Voorprogramma</a>
                 {% endif %}
-                {% if competition.program is not null %}
+                {% if competition.program is not empty %}
                   <a href="{{ vich_uploader_asset(competition, 'programFile') }}" class="pr-2">Programma</a>
                 {% endif %}
                 </li>
