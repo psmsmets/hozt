@@ -74,6 +74,11 @@ class TrainingTeam
      */
     private $competitions;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\TrainingScheduleException", mappedBy="teams")
+     */
+    private $exceptions;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -82,6 +87,7 @@ class TrainingTeam
         $this->coaches = new ArrayCollection();
         $this->competitions = new ArrayCollection();
         $this->schedule = new ArrayCollection();
+        $this->exceptions = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -255,6 +261,34 @@ class TrainingTeam
         if ($this->competitions->contains($competition)) {
             $this->competitions->removeElement($competition);
             $competition->removeTeam($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TrainingScheduleException[]
+     */
+    public function getExceptions(): Collection
+    {
+        return $this->exceptions;
+    }
+
+    public function addException(TrainingScheduleException $exception): self
+    {
+        if (!$this->exceptions->contains($exception)) {
+            $this->exceptions[] = $exception;
+            $exception->addTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeException(TrainingScheduleException $exception): self
+    {
+        if ($this->exceptions->contains($exception)) {
+            $this->exceptions->removeElement($exception);
+            $exception->removeTeam($this);
         }
 
         return $this;

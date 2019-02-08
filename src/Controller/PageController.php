@@ -305,14 +305,18 @@ class PageController extends AbstractController
     {
         $event = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
-            ->findOneBy(['uuid'=>$uuid])
+            ->findCalendarEvent($uuid)
             ;
         if (!$event) {
-            //throw $this->createNotFoundException();
-            return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
+            throw $this->createNotFoundException();
+            //return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
         }
         $this->initTemplateData();
         $this->addToTemplateData( 'calendar_event', $event);
+        $this->addToTemplateData( 'calendar_posts', $this->getDoctrine()
+            ->getRepository(BlogPost::class)
+            ->findCalenderEventBlogPosts($uuid)
+        );
 
         return $this->render('calendar/event.html.twig', $this->template_data );
     }

@@ -193,4 +193,25 @@ class BlogPostRepository extends ServiceEntityRepository
         }
         return $posts->getQuery()->getResult();
     }
+    public function findCalenderEventBlogPosts(string $uuid)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.category','c')
+            ->leftJoin('p.event','e')
+            ->addSelect('p')
+            ->addSelect('c')
+            ->addSelect('e')
+            ->andWhere('e.uuid = :uuid')
+            ->andWhere('p.enabled = :enabled')
+            ->andWhere('p.publishAt <= :now')
+            ->andWhere('(p.publishUntil > :now or p.publishUntil is null)')
+            ->setParameter('uuid', $uuid)
+            ->setParameter('enabled', true)
+            ->setParameter('now', date("Y-m-d H:i"))
+            ->orderBy('p.publishAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 }
