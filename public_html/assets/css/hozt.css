@@ -257,11 +257,11 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
   text-decoration: line-through;
 }
 
-.media.cal {
+.cal {
   cursor: pointer;
 }
 
-.media.cal:hover {
+.cal:hover {
   background-color: #f8f9fa;
 }
 

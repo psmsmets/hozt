@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TrainingScheduleExceptionRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\TrainingExceptionRepository")
  */
-class TrainingScheduleException
+class TrainingException
 {
     /**
      * @ORM\Id()
@@ -190,4 +190,5 @@ class TrainingScheduleException
 
         return $this;
     }
+
 }

@@ -20,7 +20,7 @@ use App\Entity\ContactForm;
 use App\Entity\SponsorCategory;
 use App\Entity\TrainingCoach;
 use App\Entity\TrainingSchedule;
-use App\Entity\TrainingScheduleException;
+use App\Entity\TrainingException;
 use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
 
@@ -121,13 +121,13 @@ class AdminController extends EasyAdminController
         return $new->setSequence($seq+1);
     }
 
-    public function createNewTrainingScheduleExceptionEntity()
+    public function createNewTrainingExceptionEntity()
     {
         $teams = $this->getDoctrine()
             ->getRepository(TrainingTeam::class)
             ->getEnabled()
             ;
-        $new = new TrainingScheduleException();
+        $new = new TrainingException();
         foreach( $teams as $team ){
             $new->addTeam($team);
         }
