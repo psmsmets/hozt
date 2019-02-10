@@ -87,11 +87,12 @@
           <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{competition.calendar.getFormattedPeriod}}</h6></div>
           <div class="col-12 col-md-9 cal" onclick="window.location='{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}';">
 
-            {% if competition.calendar.cancelled %}
-              <h5 class="pb-0 mb-1 d-flex justify-content-between"><s>{{competition.calendar.title|title}}</s><small><span class="badge badge-danger">Geannuleerd</span></small></h5>
-            {% else %}
-              <h5 class="pb-0 mb-1">{{competition.calendar.title|title}}</h5>
-            {% endif %}
+            <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title|title}}
+              <small>
+                {% if competition.calendar.body is not empty %}<span class="badge badge-info"><i class="fas fa-info-circle"></i></span>{% endif %}
+                {% if competition.calendar.cancelled %}<span class="badge badge-danger ml-1"><i class="fas fa-times-circle d-md-none"></i><span class="d-none d-md-inline">Geannuleerd</span></span>{% endif %}
+              </small>
+            </h5>
 
             <ul class="list-unstyled text-muted small mb-1 cal">
               <li><i class="fas fa-swimming-pool"></i> {{competition.pool}}{% if competition.calendar.location %}, {{competition.calendar.location}}{% endif %}</li>
