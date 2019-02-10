@@ -58,11 +58,12 @@
 
           <div class="media-body pb-0 mb-0 lh-125">
 
-            {% if event.cancelled %}
-              <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|title}}<small><span class="badge badge-danger">Geannuleerd</span></small></h5>
-            {% else %}
-              <h5 class="pb-0 mb-1">{{event.title|title}}</h5>
-            {% endif %}
+            <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|title}}
+              <small>
+                {% if event.body is not empty %}<span class="badge badge-info"><i class="fas fa-info-circle"></i></span>{% endif %}
+                {% if event.cancelled %}<span class="badge badge-danger ml-1"><i class="fas fa-times-circle d-md-none"></i><span class="d-none d-md-inline">Geannuleerd</span></span>{% endif %}
+              </small>
+            </h5>
 
             <h6 class="mb-2">{{event.getFormattedPeriod|lower}}</h6>
 
