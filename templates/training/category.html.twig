@@ -40,23 +40,42 @@
           </dd>
         </dl>
       {% endfor %}
-      </div>
+      </div><!-- end tab info -->
 
       <div class="tab-pane fade mt-4" id="trainingsuren" role="tabpanel" aria-labelledby="trainingsuren-tab">
-      <h4 class="d-md-none pb-2">Trainingsuren</h4>
-      {% for day in page.training_days %}
-        <dl class="row mb-md-2"> 
-          {% for schedule in day.schedule %}
-            <dt class="col-12 col-sm-3 text-md-right mb-1">{% if loop.index0 == 0%}{{day}}{% endif %}</dt>
-            <dd class="col-5 col-sm-2 p-0 text-right mb-1">{{schedule.time}}</dd>
-            <dd class="col-7 col-sm-7 mb-1">
-              {% for team in schedule.teams %}<span class="badge badge-secondary ml-1 ml-md-2">{{team}}</span>{% endfor %}
-              {% if schedule.comment is not empty %}<span class="badge badge-info ml-2 ml-md-3">{{schedule.comment}}</span>{% endif %}
-          </dd>
+{% set enabled=false %}
+        {% if page.training_team_exceptions is not empty and enabled %}
+        <div class="alert alert-danger mb-4">
+          <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> Er is géén training</h5>
+          <ul class="list-unstyled"> 
+          {% for ex in page.training_team_exceptions %}
+              <li>
+                Voor {% for team in ex.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+                {% if ex.startDate == ex.endDate %}
+                  op {{ex.startDate|localizeddate('full','none')}}
+                {% else %}
+                  van {{ex.startDate|localizeddate('full','none')}} tot {{ex.endDate|localizeddate('full','none')}}
+                {% endif %}
+                {% if ex.comment is not empty %}<span class="badge badge-info ml-2"><i class="fas fa-info-circle"></i> {{ex.comment}}</span>{% endif %}
+              </li>
           {% endfor %}
-        </dl>
-      {% endfor %}
-      </div>
+          </ul>
+        </div>
+        {% endif %}
+        <h4 class="d-md-none pb-2">Trainingsuren</h4>
+        {% for day in page.training_days %}
+          <dl class="row mb-md-2"> 
+            {% for schedule in day.schedule %}
+              <dt class="col-12 col-sm-3 text-md-right mb-1">{% if loop.index0 == 0%}{{day}}{% endif %}</dt>
+              <dd class="col-5 col-sm-2 p-0 text-right mb-1">{{schedule.time}}</dd>
+              <dd class="col-7 col-sm-7 mb-1">
+                {% for team in schedule.teams %}<span class="badge badge-secondary ml-1 ml-md-2">{{team}}</span>{% endfor %}
+                {% if schedule.comment is not empty %}<span class="badge badge-info ml-2 ml-md-3"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
+            </dd>
+            {% endfor %}
+          </dl>
+        {% endfor %}
+      </div><!-- end tab trainingsuren -->
 
       <div class="tab-pane fade mt-4" id="wedstrijden" role="tabpanel" aria-labelledby="wedstrijden-tab">
       <h4 class="d-md-none pb-0">Wedstrijden</h4>
@@ -64,12 +83,12 @@
         <p>Er staan geen wedstrijden op de kalender.</p>
       {% else %}
         {% for competition in page.competitions %}
-        <div class="row mb-4 mt-4 mb-md-2 mt-md-2">
+        <div class="row mb-4 mt-4 mb-md-3 mt-md-3 {% if competition.calendar.cancelled %}text-muted{% endif %}">
           <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{competition.calendar.getFormattedPeriod}}</h6></div>
-          <div class="col-12 col-md-9">
+          <div class="col-12 col-md-9 cal" onclick="window.location='{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}';">
 
             {% if competition.calendar.cancelled %}
-              <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title|title}}<small><span class="badge badge-danger">Geannuleerd</span></small></h5>
+              <h5 class="pb-0 mb-1 d-flex justify-content-between"><s>{{competition.calendar.title|title}}</s><small><span class="badge badge-danger">Geannuleerd</span></small></h5>
             {% else %}
               <h5 class="pb-0 mb-1">{{competition.calendar.title|title}}</h5>
             {% endif %}
@@ -114,9 +133,9 @@
         <p>Geen wedstrijduitslagen gevonden.</p>
       {% else %}
         {% for item in page.results %}
-        <div class="row mb-4 mt-4 mb-md-2 mt-md-2">
+        <div class="row mb-4 mt-4 mb-md-3 mt-md-3">
           <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{item.calendar.getFormattedPeriod}}</h6></div>
-          <div class="col-12 col-md-9">
+          <div class="col-12 col-md-9 cal" onclick="window.location='{{ path('calendar_event', {'uuid': item.calendar.uuid}) }}';">
             <h5 class="pb-0 mb-1">{{item.calendar.title}}</h5>
             <ul class="list-unstyled text-muted small mb-1 cal"> 
                 <li><i class="fas fa-swimming-pool"></i> {{item.pool}}{% if item.calendar.location %}, {{item.calendar.location}}{% endif %}</li>

@@ -24,7 +24,7 @@ easy_admin:
                - { entity: 'TrainingTeam', label: 'Groepen', icon: 'users' }
                - { entity: 'TrainingTeamCategory', label: 'Categorie', icon: 'bookmark' }
                - { entity: 'TrainingSchedule', label: 'Uurrooster', icon: 'table' }
-               - { entity: 'TrainingScheduleException', label: 'Uitzondering', icon: 'times-circle' }
+               - { entity: 'TrainingException', label: 'Uitzondering', icon: 'times-circle' }
                - { entity: 'TrainingTime', label: 'Tijdstippen' }
                - { entity: 'TrainingDay', label: 'Dag' }
            - label: 'Kalender'
@@ -365,8 +365,8 @@ easy_admin:
                     - { property: 'persistent', label: 'Uitzondering' }
             search:
                 fields: ['teams.abbr','day.name','time.startTime','time.endTime']
-        TrainingScheduleException:
-            class: App\Entity\TrainingScheduleException
+        TrainingException:
+            class: App\Entity\TrainingException
             label: 'Trainingen :: uurrooster uitzonderingen'
             list:
                 fields:
@@ -374,7 +374,7 @@ easy_admin:
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot' }
                     - { property: 'teams', label: 'Groepen' }
-                    - { property: 'schedule', label: 'Dag' }
+                    - { property: 'schedule', label: 'Uurrooster' }
                     - { property: 'comment', label: 'Opmerking' }
                 sort: ['startDate', 'ASC']
             form:
@@ -382,7 +382,7 @@ easy_admin:
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot', test: true }
                     - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
-                    - { property: 'schedule', label: 'Uurrooster', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'schedule', label: 'Uurrooster', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getTrainingSchedule'] } }
                     - { property: 'comment', label: 'Opmerking' }
                     - { property: 'enabled', label: 'Actief' }
         ContactForm:

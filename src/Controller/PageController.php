@@ -16,6 +16,7 @@ use App\Entity\TrainingTime;
 use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
 use App\Entity\TrainingSchedule;
+use App\Entity\TrainingException;
 use App\Entity\ContactFaq;
 use App\Entity\ContactForm;
 use App\Entity\CalendarCategory;
@@ -242,6 +243,10 @@ class PageController extends AbstractController
         $this->addToTemplateData( 'training_days', $this->getDoctrine()
             ->getRepository(TrainingDay::class)
             ->findAllByTeamCategoryJoinedToSchedule($category->getId())
+        );
+        $this->addToTemplateData( 'training_team_exceptions', $this->getDoctrine()
+            ->getRepository(TrainingException::class)
+            ->findAllByTeamCategory($category->getId())
         );
         $this->addToTemplateData( 'competitions', $this->getDoctrine()
             ->getRepository(Competition::class)
