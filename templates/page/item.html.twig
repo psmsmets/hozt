@@ -2,7 +2,7 @@
 
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <h2 class="text-red d-flex justify-content-between">{{ item.title|title }} {% if pinned is defined %}<i class="fas fa-thumbtack"></i>{% endif %}</h2>
+    <h2 class="text-red d-flex justify-content-between">{{ item.title|ucfirst }} {% if pinned is defined %}<i class="fas fa-thumbtack"></i>{% endif %}</h2>
 
     {{ item.body|raw }}
 

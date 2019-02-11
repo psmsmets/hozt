@@ -21,16 +21,16 @@
         {% if event.cancelled %}
           <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|title}}<small><span class="badge badge-danger">Geannuleerd</span></small></h5>
         {% else %}
-          <h5 class="pb-0 mb-1">{{event.title|title}}</h5>
+          <h5 class="pb-0 mb-1">{{event.title|ucfirst}}</h5>
         {% endif %}
 
         <h6 class="d-flex justify-content-between mb-2">{{event.getFormattedPeriod|lower}}</h6>
 
         <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} small cal">
           {% if event.competition is empty %}
-            {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|capitalize}}</li>{% endif %}
+            {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|ucwords}}</li>{% endif %}
           {% else %}
-            <li class="mb-1"><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}{% if event.location %}, {{event.location|capitalize}}{% endif %}</li>
+            <li class="mb-1"><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}{% if event.location %}, {{event.location|ucwords}}{% endif %}</li>
             {% if event.competition.teamCategories|length > 0 %}
               <li class="mb-1"><i class="fas fa-swimmer"></i>
                 {% for category in event.competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}

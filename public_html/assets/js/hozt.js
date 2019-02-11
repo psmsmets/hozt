@@ -72,6 +72,8 @@ $(document).ready(function(){
     var bannerHeight0 = $('.banner').height() + $('#nav-categories').height();
     var bannerPosY0 = parseInt(bannerPos0[1]);
     var bannerPosY;
+    var bannerImgTop0 = 50;
+    var bannerImgTop;
  
     /* Every time the window is scrolled ... */
     $(window).scroll( function(){
@@ -103,6 +105,10 @@ $(document).ready(function(){
             $('.banner').each(function() {
                 bannerPosY = bannerPosY0 + ((bannerHeight0-scrollPos)/bannerHeight0-1)*50 * bannerVelocity;
                 $(this).css('backgroundPosition',bannerPos0[0] + ' ' + bannerPosY.toFixed(2) + '%'); 
+            }); 
+            $('.carousel-item').each(function() {
+                bannerImgTop = bannerImgTop0 - 2 * ((bannerHeight0-scrollPos)/bannerHeight0-1)*50 * bannerVelocity;
+                $(this).children('img').css('top', bannerImgTop.toFixed(2) + '%'); 
             }); 
         }
  
