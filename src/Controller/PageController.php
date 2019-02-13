@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
+# entities
 use App\Entity\StaticPage;
 use App\Entity\BlogPost;
 use App\Entity\BlogCategory;
@@ -25,8 +26,11 @@ use App\Entity\Competition;
 use App\Entity\CompetitionState;
 use App\Entity\Sponsor;
 use App\Entity\SponsorCategory;
+use App\Entity\Clubfeest;
 
+# forms
 use App\Form\ContactFormType;
+use App\Form\ClubfeestType;
 
 class PageController extends AbstractController
 {
@@ -327,6 +331,21 @@ class PageController extends AbstractController
     }
 
     /**
+     * @Route("/sponsors", name="sponsors")
+     */
+    public function sponsors()
+    {
+        $this->initTemplateData();
+        $this->addToTemplateData('sponsor_categories',
+            $this->getDoctrine()
+                ->getRepository(SponsorCategory::class)
+                ->findAllActiveSponsors()
+        );
+
+        return $this->render('contact/sponsors.html.twig', $this->template_data );
+    }
+
+    /**
      * @Route("/contact/faq", name="contact_faq")
      */
     public function contact_faq()
@@ -377,8 +396,7 @@ class PageController extends AbstractController
             }
             $result = $mailer->send($message);
 
-            if ($result)
-            { 
+            if ($result) { 
                 $this->addFlash('success', 'Bericht verzonden! Dankjewel om ons te contacteren.');
             } else {
                 $this->addFlash('error', 'Sorry, er ging iets verkeerd. Controleer of alle velden correct ingevuld zijn en probeer later opnieuw.');
@@ -393,18 +411,60 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/sponsors", name="sponsors")
+     * @Route("/clubfeest", name="enroll_clubfeest")
      */
-    public function sponsors()
+    public function enroll_clubfeest(Request $request, \Swift_Mailer $mailer)
     {
-        $this->initTemplateData();
-        $this->addToTemplateData('sponsor_categories',
-            $this->getDoctrine()
-                ->getRepository(SponsorCategory::class)
-                ->findAllActiveSponsors()
-        );
+        $closure = new \DateTime('2019/03/01 12:00');
+        $event = $this->getDoctrine()
+            ->getRepository(CalendarEvent::class)
+            ->findCalendarEvent('2f4827db819cc670')
+            ;
 
-        return $this->render('contact/sponsors.html.twig', $this->template_data );
+        $form = $this->createForm(ClubfeestType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $enroll = new Clubfeest();
+            $enroll->setAdults($data['adults']);
+            $enroll->setChildren($data['children']);
+            $enroll->setName($data['name']);
+            $enroll->setEmail($data['email']);
+            $enroll->setMessage($data['message']);
+
+            $entityManager = $this->getDoctrine()->getManager();   
+            $entityManager->persist($enroll);
+            $entityManager->flush();
+
+            $message = (new \Swift_Message())
+                ->setSubject('Inschrijving HoZT '.$event->getTitle().' '.ucfirst($event->getFormattedPeriod()))
+                ->setFrom('webmaster@hozt.be')
+                ->setTo($data['email'])
+                ->setBody(
+                    $this->renderView(
+                        'emails/clubfeest.html.twig', [ 'enroll' => $enroll, 'event' => $event ]
+                    ),
+                    'text/html'
+                )
+            ;
+            $result = $mailer->send($message);
+
+            if ($result) { 
+                $this->addFlash('success', 'Ingeschreven! We verwachten je '.$event->getFormattedPeriod().'.');
+            } else {
+                $this->addFlash('error', 'Sorry, er ging iets verkeerd. Controleer of alle velden correct ingevuld zijn en probeer later opnieuw.');
+            }
+            return $this->redirectToRoute('enroll_clubfeest');
+        }
+
+        $this->initTemplateData();
+        $this->addToTemplateData( 'form', $form->createView() );
+        $this->addToTemplateData( 'form_closure', $closure );
+        $this->addToTemplateData( 'calendar_event', $event );
+
+        return $this->render('enroll/clubfeest.html.twig', $this->template_data );
     }
 
     /**

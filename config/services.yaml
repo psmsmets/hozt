@@ -78,9 +78,13 @@ services:
                 entity_manager: custom
 
 
- #   cocur_slugify:
-#        lowercase: true
-#        separator: '_'
+cocur_slugify:
+    lowercase: true
+    separator: '-'
+
+ambta_doctrine_encrypt:
+    secret_directory_path: '%kernel.project_dir%'   # Default value
+    encryptor_class: Defuse # Halite
 
 fos_ck_editor:
     default_config: standard

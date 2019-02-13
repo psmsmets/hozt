@@ -68,6 +68,10 @@ sponsors:
     path: /sponsors
     controller: App\Controller\PageController::sponsors
 
+enroll_clubfeest:
+    path: /clubfeest
+    controller: App\Controller\PageController:enroll_clubfeest
+
 # general content
 blog:
     path: /nieuws
