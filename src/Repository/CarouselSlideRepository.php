@@ -30,7 +30,7 @@ class CarouselSlideRepository extends ServiceEntityRepository
             ->andWhere('(c.publishUntil > :now or c.publishUntil is null)')
             ->setParameter('enabled', true)
             ->setParameter('now', date("Y-m-d H:i"))
-            ->orderBy('c.id', 'ASC')
+            ->orderBy('c.publishAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
