@@ -14,7 +14,7 @@ $(document).ready(function(){
     .done(function( files ) {
         if ( files.result ){
             $.each( files.data, function( i, item ) {
-                var t = "<div class=\"ml-3 small\"><a class=\"text-dark\" href=\"" + item.program + "\">"+ item.title + " (" + item.date + ")</a></div>";
+                var t = "<div class=\"ml-3 small\"><a class=\"text-dark\" href=\"" + item.program + "\"><span class=\"text-muted mr-2\">" + item.datestr +"</span>"+ item.title + "</a></div>";
                 $( t ).appendTo( "#"+module+"_items" );
             });
         } else {

@@ -416,6 +416,7 @@ class PageController extends AbstractController
     public function enroll_clubfeest(Request $request, \Swift_Mailer $mailer)
     {
         $closure = new \DateTime('2019/03/01 12:00');
+        $now = new \DateTime('now');
         $event = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
             ->findCalendarEvent('2f4827db819cc670')
@@ -424,7 +425,7 @@ class PageController extends AbstractController
         $form = $this->createForm(ClubfeestType::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $now <= $closure) {
             $data = $form->getData();
 
             $enroll = new Clubfeest();
