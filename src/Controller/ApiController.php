@@ -212,6 +212,7 @@ class ApiController extends AbstractController
            $data[] = array(
                    'title' => $program->getCalendar()->getTitle(),
                    'date' => $program->getCalendar()->getStartTime()->format('Y-m-d'),
+                   'datestr' =>  strftime("%e %b", $program->getCalendar()->getStartTime()->getTimestamp()),
                    'location' => $program->getCalendar()->getLocation(),
                    'program' => $base.'/'.$program->getProgram(),
                );
@@ -238,6 +239,7 @@ class ApiController extends AbstractController
            $data[] = array(
                    'title' => $result->getCalendar()->getTitle(),
                    'date' => $result->getCalendar()->getStartTime()->format('Y-m-d'),
+                   'datestr' =>  strftime("%e %b", $result->getCalendar()->getStartTime()->getTimestamp()),
                    'location' => $result->getCalendar()->getLocation(),
                    'results' => $base.'/'.$result->getResults(),
                );
