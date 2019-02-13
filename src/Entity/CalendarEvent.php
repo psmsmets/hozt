@@ -22,7 +22,7 @@ class CalendarEvent
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=60, unique=true)
+     * @ORM\Column(type="string", length=128, unique=true)
      */
     private $uuid;
 
@@ -465,7 +465,7 @@ class CalendarEvent
         return $this->url;
     }
 
-    public function setUrl(string $url): self
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
 

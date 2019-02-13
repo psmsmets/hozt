@@ -1,0 +1,21 @@
+{# templates/emails/clubfeest.html.twig #}
+
+{% include 'emails/_style.html.twig' %}
+
+<p><strong>HoZT {{event.title|ucfirst}}</strong></p>
+
+<p>Hallo {{enroll.name}},</p>
+
+<p>We hebben je inschrijving voor het HoZT {{event.title}} goed ontvangen.</p>
+
+<p>Aantal -12 jaar: <b>{{enroll.children}}</b><br>Aantal 12 jaar en ouder: <b>{{enroll.adults}}</b></p>
+
+{% if enroll.message is not empty %}
+<p><b>Je bericht:</b><br>{{enroll.message}}</p>
+{% endif %}
+
+<p>We verwachten je {{event.getFormattedPeriod()}} in {{event.location}}.</p>
+
+<p>Alle info over het {{event.title|ucfirst}} kan je terug vinden op <a href="https://www.hozt.be{{ path('calendar_event', {'uuid': event.uuid}) }}">HoZT.be{{ path('calendar_event', {'uuid': event.uuid}) }}</a></p>
+
+<p class="small text-muted">** Dit is een automatisch bericht van <a href="https://www.hozt.be{{ path('enroll_clubfeest') }}">HoZT.be{{ path('enroll_clubfeest') }}</a> **</p>
