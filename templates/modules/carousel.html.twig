@@ -2,7 +2,8 @@
 ================================================== -->
 <div id="HoZTCarousel" class="carousel slide banner banner-bg banner-lg fade-in" data-ride="carousel">
   {% if carousel|length > 1 %}
-    <ol class="carousel-indicators d-none d-md-flex">
+    <!--<ol class="carousel-indicators d-none d-md-flex">-->
+    <ol class="carousel-indicators">
     {% for slide in carousel %}
       <li data-target="#HoZTCarousel" data-slide-to="{{ loop.index0 }}" class="{% if loop.index0 == 0%}active{% endif%}"></li>
     {% endfor %}
