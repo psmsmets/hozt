@@ -54,10 +54,16 @@ class Clubfeest
      */
     private $message;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $emailSent;
+
     public function __construct()
     {
         $this->uuid = bin2hex(random_bytes(16));
         $this->subscribedAt = new \DateTime("now");
+        $this->emailSent = false;
     }
 
     public function getId(): ?int
@@ -131,6 +137,18 @@ class Clubfeest
     public function setMessage(?string $message): self
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getEmailSent(): ?bool
+    {
+        return $this->emailSent;
+    }
+
+    public function setEmailSent(bool $emailSent): self
+    {
+        $this->emailSent = $emailSent;
 
         return $this;
     }

@@ -428,16 +428,17 @@ class PageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() && $now <= $closure) {
             $data = $form->getData();
 
+            if ( $data['adults'] == 0 and $data['children'] == 0 ) {
+                $this->addFlash('warning', 'Bijna gelukt, maar je moet toch minstens iemand inschrijven.');
+                return $this->redirectToRoute('enroll_clubfeest');
+            }
+
             $enroll = new Clubfeest();
             $enroll->setAdults($data['adults']);
             $enroll->setChildren($data['children']);
             $enroll->setName($data['name']);
             $enroll->setEmail($data['email']);
             $enroll->setMessage($data['message']);
-
-            $entityManager = $this->getDoctrine()->getManager();   
-            $entityManager->persist($enroll);
-            $entityManager->flush();
 
             $message = (new \Swift_Message())
                 ->setSubject('Inschrijving HoZT '.$event->getTitle().' '.ucfirst($event->getFormattedPeriod()))
@@ -450,13 +451,21 @@ class PageController extends AbstractController
                     'text/html'
                 )
             ;
-            $result = $mailer->send($message);
+            $sent = $mailer->send($message);
+            $enroll->setEmailSent($sent);
 
-            if ($result) { 
-                $this->addFlash('success', 'Ingeschreven! We verwachten je '.$event->getFormattedPeriod().'.');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($enroll);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Ingeschreven! We verwachten je '.$event->getFormattedPeriod().'.');
+
+            if ($sent) { 
+                $this->addFlash('success', 'Een bevestigingsmail is verzonden naar het opgegeven e-mail adres.');
             } else {
-                $this->addFlash('error', 'Sorry, er ging iets verkeerd. Controleer of alle velden correct ingevuld zijn en probeer later opnieuw.');
+                $this->addFlash('warning', 'Het is helaas niet gelukt de bevestigingsmail te verzenden.');
             }
+
             return $this->redirectToRoute('enroll_clubfeest');
         }
 
