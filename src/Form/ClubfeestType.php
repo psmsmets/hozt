@@ -21,12 +21,12 @@ class ClubfeestType extends AbstractType
     {
         $builder
             ->add('children', IntegerType::class, array(
-                'label'    => 'aantal -12 jaar',
+                'label'    => 'Aantal -12 jaar',
                 'attr' => ['value'=>'0','min'=>0,'max'=>10],
                 'required' => true,
                 ))
             ->add('adults', IntegerType::class, array(
-                'label'    => 'aantal 12 jaar en ouder',
+                'label'    => 'Aantal 12 jaar en ouder',
                 'attr' => ['value'=>'0','min'=>0,'max'=>10],
                 'required' => true,
                 ))
