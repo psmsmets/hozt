@@ -80,6 +80,11 @@ class CarouselSlide
      */
     private $event;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $overlay;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -236,6 +241,18 @@ class CarouselSlide
     public function setEvent(?CalendarEvent $event): self
     {
         $this->event = $event;
+
+        return $this;
+    }
+
+    public function getOverlay(): ?bool
+    {
+        return $this->overlay;
+    }
+
+    public function setOverlay(bool $overlay): self
+    {
+        $this->overlay = $overlay;
 
         return $this;
     }
