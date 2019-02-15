@@ -13,8 +13,8 @@
   {% for slide in carousel %}
     <div class="carousel-item {% if loop.index0 == 0%}active{% endif%}">
       {% if slide.image is not empty%}<img src="{{ vich_uploader_asset(slide, 'imageFile') }}">{% endif %}
-      <div class="container">
-        <div class="carousel-caption lead" {% if slide.overlay %}style="background-color: rgba(52, 58, 64, 0.4);"{% endif %}>
+      <div class="container {% if slide.overlay %}overlay{% endif %}">
+        <div class="carousel-caption lead">
 
           {% if slide.showTitle %}<h1>{{ slide.title }}</h1>{% endif %}
           {{ slide.body|raw }}
