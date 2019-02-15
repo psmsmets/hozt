@@ -192,6 +192,18 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
   /*margin-bottom: -2.75rem;*/
 }
 
+.overlay:before{
+  position: absolute;
+  content:" ";
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  display: block;
+  z-index:0;
+  background-color: rgba(52, 58, 64, 0.4);
+}
+
 .banner-lg, .banner-lg .carousel-item {
     height: 405px;
 }
@@ -459,6 +471,6 @@ a.badge.cal-5:hover {
   }
 
   .carousel-caption {
-    bottom: 1.75rem;
+    bottom: 15%;
   }
 }
