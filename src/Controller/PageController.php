@@ -478,7 +478,32 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/inschrijvingen", name="enroll_list")
+     * @Route("/clubfeest/inschrijvingen", name="enrolled_clubfeest")
+     */
+    public function enrolled_clubfeest()
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+
+        $closure = new \DateTime('2019/03/01 12:00');
+        $event = $this->getDoctrine()
+            ->getRepository(CalendarEvent::class)
+            ->findCalendarEvent('2f4827db819cc670')
+            ;
+
+        $this->initTemplateData();
+        $this->addToTemplateData( 'enrolled',
+            $this->getDoctrine()
+                ->getRepository(Clubfeest::class)
+                ->findAll()
+        );
+        $this->addToTemplateData( 'form_closure', $closure );
+        $this->addToTemplateData( 'calendar_event', $event );
+
+        return $this->render('enroll/enrolled.html.twig', $this->template_data );
+    }
+
+    /**
+     * @Route("/inschrijven", name="enroll_list")
      */
     public function enroll_list()
     {

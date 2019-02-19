@@ -43,6 +43,14 @@ enroll_list:
     path: /inschrijvingen
     controller: App\Controller\PageController::enroll_list
 
+enroll_clubfeest:
+    path: /clubfeest
+    controller: App\Controller\PageController:enroll_clubfeest
+
+enrolled_clubfeest:
+    path: /clubfeest/ingeschreven
+    controller: App\Controller\PageController:enrolled_clubfeest
+
 #enroll_item:
 #    path: /inschrijvingen/{slug}
 #    controller: App\Controller\PageController::enroll_item
@@ -67,10 +75,6 @@ contact_faq:
 sponsors:
     path: /sponsors
     controller: App\Controller\PageController::sponsors
-
-enroll_clubfeest:
-    path: /clubfeest
-    controller: App\Controller\PageController:enroll_clubfeest
 
 # general content
 blog:
