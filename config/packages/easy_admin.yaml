@@ -178,7 +178,7 @@ easy_admin:
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'showTitle', label: 'Toon titel' }
-                    - { property: 'overlay', label: 'Semi-transparante zwarte achtergrond' }
+                    - { property: 'overlay', label: 'Achtergrond donkerder maken' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.carousel_images%' }
                     - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'publishUntil', label: 'Publiceer tot' }

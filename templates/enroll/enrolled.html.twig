@@ -1,0 +1,58 @@
+{% extends 'default.html.twig' %}
+
+
+{% set event = page.calendar_event %}
+
+{% block title %}{{event.title|ucfirst}}{% endblock %}
+
+{% block main %}
+
+  <div class="p-3 mb-4 bg-white shadow-sm">
+
+    <h1 class="text-red mb-4">{{event.title|ucfirst}}</h1>
+
+    <p class="mt-2">Inschrijven kan tot {{ page.form_closure|localizeddate('long','short') }}.</p>
+
+    {% set volw=0 %}
+    {% set kind=0 %}
+
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Naam</th>
+            <th scope="col">#volw</th>
+            <th scope="col">#kind</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in page.enrolled %}
+          <tr>
+            <th scope="row">{{e.id}}</th>
+            <td>{{e.name}}<br><small class="text-muted">{{e.subscribedAt|localizeddate('short','short')}} {% if e.message is not empty %}<i class="fas fa-comment ml-2"></i> {{e.message}}{% endif %}</small></td>
+            <td>{{e.adults}}</td>
+            <td>{{e.children}}</td>
+            {% set volw = volw + e.adults %}
+            {% set kind = kind + e.children %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% set total = volw + kind  %}
+
+   <h3>Overzicht</h3>
+   <dl class="row">
+     <dt class="col-sm-3 text-md-right"># ingeschreven</dt>
+     <dd class="col-sm-9"><b>{{total}}</b></dd>
+     <dt class="col-sm-3 text-md-right"># 12 jaar en ouder</dt>
+     <dd class="col-sm-9">{{volw}}</dd>
+     <dt class="col-sm-3 text-md-right"># -12 jaar</dt>
+     <dd class="col-sm-9">{{kind}}</dd>
+   </dl>
+
+  </div>
+
+
+{% endblock %}

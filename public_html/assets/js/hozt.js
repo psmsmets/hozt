@@ -18,7 +18,7 @@ function toClipboard(id){
 // Hide Header on on scroll down
 var didScroll;
 var lastScrollTop = 0;
-var delta = 5;
+var delta = 10;
 var navbarHeight = $('#nav-categories').outerHeight();
 
 $(window).scroll(function(event){
