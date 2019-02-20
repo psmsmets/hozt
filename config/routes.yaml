@@ -40,7 +40,7 @@ training_coaches:
 
 # enroll
 enroll_list:
-    path: /inschrijvingen
+    path: /inschrijven
     controller: App\Controller\PageController::enroll_list
 
 enroll_clubfeest:
