@@ -39,8 +39,8 @@ easy_admin:
                - { entity: 'Competition', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'Competition', label: 'Lijst', icon: 'list' }
                - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'bookmark' }
-               - { entity: 'CompetitionDoc', label: 'Bijlagen', icon: 'file' }
-               - { entity: 'CompetitionDocCat', label: 'Bijlage categorie', icon: 'folder-open' }
+               - { entity: 'CompetitionDocument', label: 'Bijlagen', icon: 'file' }
+               - { entity: 'CompetitionDocumentCategory', label: 'Bijlage categorie', icon: 'folder-open' }
            - label: "Varia"
            - { entity: 'ContactForm', label: 'Contact', icon: 'comment' }
            - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle' }
@@ -534,7 +534,7 @@ easy_admin:
                     - { property: 'title', label: 'Titel' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'enabled', label: 'Actief' }
-        CompetitionDoc:
+        CompetitionDocument:
             class: App\Entity\CompetitionDocument
             label: 'Zwemwedstrijd bijlage'
             list:
@@ -552,7 +552,7 @@ easy_admin:
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
                     - { property: 'competition', label: 'Wedstrijd', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnarchivedCompetitionEvents'] } }
-        CompetitionDocCat:
+        CompetitionDocumentCategory:
             class: App\Entity\CompetitionDocumentCategory
             label: 'Zwemwedstrijd bijlage categorie'
             list:
