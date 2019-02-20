@@ -458,7 +458,7 @@ a.badge.cal-5:hover {
 }
 
 /* Minimum aspect ratio */
-@media (max-aspect-ratio: 1/1) {
+@media (max-aspect-ratio: 4/3) {
   .banner .carousel-item img {
     height: 100%;
     width: auto;

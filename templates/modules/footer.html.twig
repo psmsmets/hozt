@@ -32,7 +32,7 @@
       <h5>Aanbod</h5>
       <ul class="list-unstyled text-small">
       {% for category in base.training_team_categories %}
-        <li><a class="text-muted" href="/aanbod/{{ category.slug }}">{{ category.name }}</a></li>
+        <li><a class="text-muted" href="{{ path('training_category', {'slug': category.slug}) }}">{{ category.name }}</a></li>
       {% endfor %}
       </ul>
     </div>
@@ -40,25 +40,25 @@
       <h5>Praktisch</h5>
       <ul class="list-unstyled text-small">
         <li><a class="text-muted" href="/lid-worden">Lid worden</a></li>
-        <li><a class="text-muted" href="/trainingsuren">Trainingsuren</a></li>
-        <li><a class="text-muted" href="/kalender">Kalender</a></li>
+        <li><a class="text-muted" href="{{ path('training_schedule_teams') }}">Trainingsuren</a></li>
+        <li><a class="text-muted" href="{{ path('calendar') }}">Kalender</a></li>
         <li><a class="text-muted" href="/clubkledij">Clubkledij</a></li>
-        <li><a class="text-muted" href="/nieuws">Nieuwsberichten</a></li>
+        <li><a class="text-muted" href="{{ path('blog') }}">Nieuwsberichten</a></li>
 <!--    <li><a class="text-muted" href="#">Clubrecords</a></li> -->
-        <li><a class="text-muted" href="/inschrijvingen">Inschrijvingen</a></li>
+        <li><a class="text-muted" href="{{ path('enroll_list') }}">Inschrijven</a></li>
       </ul>
     </div>
     <div class="col-12 col-md">
       <h5>Algemeen</h5>
       <ul class="list-unstyled text-small">
-        <li><a class="text-muted" href="/trainers">Trainers</a></li>
+        <li><a class="text-muted" href="{{ path('training_coaches') }}">Trainers</a></li>
         <li><a class="text-muted" href="/bestuur">Bestuur</a></li>
         <li><a class="text-muted" href="/vacatures">Vacatures</a></li>
         <li><a class="text-muted" href="/zwembad">Zwembad</a></li>
-        <li><a class="text-muted" href="/sponsors">Sponsors</a></li>
+        <li><a class="text-muted" href="{{ path('sponsors') }}">Sponsors</a></li>
         <li><a class="text-muted" href="/gedragsregels">Gedragsregels</a></li>
-        <li><a class="text-muted" href="/faq">Veelgestelde vragen</a></li>
-        <li><a class="text-muted" href="/contact">Contact</a></li>
+        <li><a class="text-muted" href="{{ path('contact_faq') }}">Veelgestelde vragen</a></li>
+        <li><a class="text-muted" href="{{ path('contact_form') }}">Contact</a></li>
       </ul>
     </div>
   </div>
