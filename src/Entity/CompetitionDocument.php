@@ -100,7 +100,7 @@ class CompetitionDocument
         return $this->document;
     }
 
-    public function setDocument(string $document): self
+    public function setDocument(?string $document): self
     {
         $this->document = $document;
 
@@ -122,6 +122,18 @@ class CompetitionDocument
     public function getDocumentFile()
     {
         return $this->documentFile;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
     }
 
     public function getDescription(): ?string
@@ -159,17 +171,4 @@ class CompetitionDocument
 
         return $this;
     }
-
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    public function setUrl(?string $url): self
-    {
-        $this->url = $url;
-
-        return $this;
-    }
-
 }
