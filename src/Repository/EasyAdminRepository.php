@@ -13,16 +13,29 @@ class EasyAdminRepository
             ->setParameter('enabled', true)
         ;
     }
+    public static function getEnabledOrderBySequence(EntityRepository $er) {
+        return $er->createQueryBuilder('c')
+            ->where('c.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ->orderBy('c.sequence', 'ASC')
+        ;
+    }
     public static function getFilteredCalendarEvents(EntityRepository $er) {
         $today = new \DateTime("today midnight");
         return $er->createQueryBuilder('c')
-            ->andwhere('c.enabled = :enabled')
             ->andwhere('c.archived = :archived')
             ->andwhere('c.startTime >= :startTime')
-            ->setParameter('enabled', true)
             ->setParameter('archived', false)
             ->setParameter('startTime', $today->modify('-35 days')->format('Y-m-d'))
             ->orderBy('c.startTime', 'ASC')
+        ;
+    }
+    public static function getUnarchivedCompetitionEvents(EntityRepository $er) {
+        return $er->createQueryBuilder('c')
+            ->innerJoin('c.calendar','e')
+            ->andwhere('e.archived = :archived')
+            ->setParameter('archived', false)
+            ->orderBy('e.startTime', 'ASC')
         ;
     }
     public static function getUnassociatedCalendarEvents(EntityRepository $er) {
