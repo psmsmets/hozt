@@ -1,8 +1,8 @@
 # config/routes.yaml
 
 # security
-logout:
-    path: uitloggen 
+#logout:
+#    path: uitloggen 
 
 # calendar
 calendar:
