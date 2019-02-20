@@ -22,6 +22,10 @@ vich_uploader:
             uri_prefix:         '%app.path.carousel_images%'
             upload_destination: '%kernel.project_dir%/public_html%app.path.carousel_images%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
+        competition_documents:
+            uri_prefix:         '%app.path.competition_documents%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.competition_documents%'
+            namer: Vich\UploaderBundle\Naming\UniqidNamer
         competition_preprograms:
             uri_prefix:         '%app.path.competition_preprograms%'
             upload_destination: '%kernel.project_dir%/public_html%app.path.competition_preprograms%'
