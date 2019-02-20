@@ -95,7 +95,7 @@ $(document).ready(function(){
         } else {
             console.error(demo.error);
         } 
-        var demo = new CountUp('count-zwemmers', 0, 114, 0, 3.5, options);
+        var demo = new CountUp('count-zwemmers', 0, 124, 0, 3.5, options);
         if (!demo.error){
             demo.start();
         } else {
