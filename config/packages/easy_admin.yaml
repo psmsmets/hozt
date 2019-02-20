@@ -39,7 +39,7 @@ easy_admin:
                - { entity: 'Competition', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'Competition', label: 'Lijst', icon: 'list' }
                - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'bookmark' }
-               - { entity: 'CompetitionDoc', label: 'Bijlage', icon: 'file' }
+               - { entity: 'CompetitionDoc', label: 'Bijlagen', icon: 'file' }
                - { entity: 'CompetitionDocCat', label: 'Bijlage categorie', icon: 'folder-open' }
            - label: "Varia"
            - { entity: 'ContactForm', label: 'Contact', icon: 'comment' }
@@ -474,7 +474,7 @@ easy_admin:
                     - { property: 'enabled', label: 'Actief' }
                     #- { property: 'archived', label: 'Gearchiveerd' }
                     - { property: 'isCompetition', label: 'Zwemwedstrijd' }
-                    - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'location', label: 'Locatie' }
                     - { property: 'url', label: 'Website' }
@@ -541,7 +541,8 @@ easy_admin:
                 fields:
                     - { property: 'id', label: 'Id' }
                     - { property: 'wedstrijd', label: 'Wedstrijd' }
-                    - { property: 'documentFile', type: 'vich_file', label: 'Document', base_path: '%app.path.competition_documents%' }
+                    - { property: 'document', type: 'file', label: 'Document', base_path: '%app.path.competition_documents%' }
+                    - { property: 'category', label: 'Categorie' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['id', 'ASC']
@@ -549,22 +550,25 @@ easy_admin:
                 fields:
                     - { property: 'documentFile', type: 'vich_file', label: 'Document', base_path: '%app.path.competition_documents%' }
                     - { property: 'description', label: 'Omschrijving' }
-                    - { property: 'category', label: 'Categorie' }
-                    - { property: 'competition', label: 'Wedstrijd' }
+                    - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
+                    - { property: 'competition', label: 'Wedstrijd', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnarchivedCompetitionEvents'] } }
         CompetitionDocCat:
             class: App\Entity\CompetitionDocumentCategory
             label: 'Zwemwedstrijd bijlage categorie'
             list:
                 fields:
-                    - { property: 'id', label: 'Id' }
+                    - { property: 'sequence', label: 'Nr' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'slug', label: 'Slug' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
-                sort: ['id', 'ASC']
+                sort: ['sequence', 'ASC']
             form:
                 fields:
                     - { property: 'title', label: 'Titel' }
                     - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'enabled', label: 'Actief' }
         User:
             class: App\Entity\User
             label: 'Gebruikers'

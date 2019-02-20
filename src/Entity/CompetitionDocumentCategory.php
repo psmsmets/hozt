@@ -44,6 +44,16 @@ class CompetitionDocumentCategory
     private $description;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $sequence;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\CompetitionDocument", mappedBy="category")
      */
     private $documents;
@@ -52,6 +62,7 @@ class CompetitionDocumentCategory
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
+        $this->enabled = true;
         $this->documents = new ArrayCollection();
     }
 
@@ -114,6 +125,30 @@ class CompetitionDocumentCategory
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getSequence(): ?int
+    {
+        return $this->sequence;
+    }
+
+    public function setSequence(int $sequence): self
+    {
+        $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }

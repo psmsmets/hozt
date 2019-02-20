@@ -15,6 +15,8 @@ use App\Entity\CalendarEvent;
 use App\Entity\CalendarCategory;
 use App\Entity\Competition;
 use App\Entity\CompetitionPool;
+use App\Entity\CompetitionDocument;
+use App\Entity\CompetitionDocumentCategory;
 use App\Entity\ContactFaq;
 use App\Entity\ContactForm;
 use App\Entity\SponsorCategory;
@@ -80,6 +82,19 @@ class AdminController extends EasyAdminController
             );
         $new = new Competition();
         return $new->setPool($pool);
+    }
+
+    public function createNewCompetitionDocumentCategoryEntity()
+    {
+        $seq = (int) $this->getDoctrine()
+            ->getRepository(CompetitionDocumentCategory::class)
+            ->createQueryBuilder('c')
+            ->select('MAX(c.sequence) as sequence')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+        $cat = new CompetitionDocumentCategory();
+        return $cat->setSequence($seq+1);
     }
 
     public function createNewContactFaqEntity()
@@ -259,6 +274,18 @@ class AdminController extends EasyAdminController
             if (count($entity->getCompetitions())>0) {
                 $entity->setEnabled(true);
                 $this->addFlash('error', 'Fout: Zwembad type heeft gerelateerde wedstrijden. Deactiveren niet toegestaan.');
+            }
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateCompetitionDocumentCategoryEntity($entity)
+    {
+        $entity->setUpdatedAt();
+        if (!$entity->getEnabled()) {
+            if (count($entity->getDocuments())>0) {
+                $entity->setEnabled(true);
+                $this->addFlash('error', 'Fout: wedstrijd bijlage categorie type heeft gerelateerde documenten. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
