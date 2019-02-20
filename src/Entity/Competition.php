@@ -102,6 +102,11 @@ class Competition
      */
     private $pool;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionDocument", mappedBy="competition")
+     */
+    private $documents;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -109,11 +114,12 @@ class Competition
         $this->multiDay = Competition::MULTI_DAY;
         $this->teams = new ArrayCollection();
         $this->teamCategories = new ArrayCollection();
+        $this->documents = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return $this->id;
+        return strval($this->calendar);
     }
 
     public function getId(): ?int
@@ -321,6 +327,37 @@ class Competition
     public function setPool(?CompetitionPool $pool): self
     {
         $this->pool = $pool;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompetitionDocument[]
+     */
+    public function getDocuments(): Collection
+    {
+        return $this->documents;
+    }
+
+    public function addDocument(CompetitionDocument $document): self
+    {
+        if (!$this->documents->contains($document)) {
+            $this->documents[] = $document;
+            $document->setCompetition($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(CompetitionDocument $document): self
+    {
+        if ($this->documents->contains($document)) {
+            $this->documents->removeElement($document);
+            // set the owning side to null (unless already changed)
+            if ($document->getCompetition() === $this) {
+                $document->setCompetition(null);
+            }
+        }
 
         return $this;
     }

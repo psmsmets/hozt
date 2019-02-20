@@ -130,11 +130,6 @@ class BlogPost
     private $documentFile;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $views;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="blogPosts")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -153,7 +148,6 @@ class BlogPost
         $this->enabled = true;
         $this->special = true;
         $this->pinned = false;
-        $this->resetViews();
     }
 
     public function __toString(): ?string
@@ -407,25 +401,6 @@ class BlogPost
     public function getDocumentFile()
     {
         return $this->documentFile;
-    }
-
-    public function getViews(): ?int
-    {
-        return $this->views;
-    }
-
-    public function resetViews(): self
-    {
-        $this->views = 0;
-
-        return $this;
-    }
-
-    public function addView(): self
-    {
-        $this->views = $this->views+1;
-
-        return $this;
     }
 
     public function getAuthor(): ?User

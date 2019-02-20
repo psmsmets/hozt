@@ -39,6 +39,8 @@ easy_admin:
                - { entity: 'Competition', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'Competition', label: 'Lijst', icon: 'list' }
                - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'bookmark' }
+               - { entity: 'CompetitionDoc', label: 'Bijlage', icon: 'file' }
+               - { entity: 'CompetitionDocCat', label: 'Bijlage categorie', icon: 'folder-open' }
            - label: "Varia"
            - { entity: 'ContactForm', label: 'Contact', icon: 'comment' }
            - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle' }
@@ -532,6 +534,37 @@ easy_admin:
                     - { property: 'title', label: 'Titel' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'enabled', label: 'Actief' }
+        CompetitionDoc:
+            class: App\Entity\CompetitionDocument
+            label: 'Zwemwedstrijd bijlage'
+            list:
+                fields:
+                    - { property: 'id', label: 'Id' }
+                    - { property: 'wedstrijd', label: 'Wedstrijd' }
+                    - { property: 'documentFile', type: 'vich_file', label: 'Document', base_path: '%app.path.competition_documents%' }
+                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['id', 'ASC']
+            form:
+                fields:
+                    - { property: 'documentFile', type: 'vich_file', label: 'Document', base_path: '%app.path.competition_documents%' }
+                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'category', label: 'Categorie' }
+                    - { property: 'competition', label: 'Wedstrijd' }
+        CompetitionDocCat:
+            class: App\Entity\CompetitionDocumentCategory
+            label: 'Zwemwedstrijd bijlage categorie'
+            list:
+                fields:
+                    - { property: 'id', label: 'Id' }
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'slug', label: 'Slug' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['id', 'ASC']
+            form:
+                fields:
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'description', label: 'Omschrijving' }
         User:
             class: App\Entity\User
             label: 'Gebruikers'
