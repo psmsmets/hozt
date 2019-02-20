@@ -65,7 +65,7 @@ class CompetitionDocument
 
     public function __toString(): ?string
     {
-        return $this->name;
+        return $this->competition . " - " . $this->category;
     }
 
     public function getId(): ?int

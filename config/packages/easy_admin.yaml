@@ -540,18 +540,20 @@ easy_admin:
             list:
                 fields:
                     - { property: 'id', label: 'Id' }
-                    - { property: 'wedstrijd', label: 'Wedstrijd' }
-                    - { property: 'document', type: 'file', label: 'Document', base_path: '%app.path.competition_documents%' }
+                    - { property: 'competition', label: 'Wedstrijd' }
                     - { property: 'category', label: 'Categorie' }
+                    - { property: 'document', type: 'file', label: 'Document', base_path: '%app.path.competition_documents%' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
-                sort: ['id', 'ASC']
+                sort: ['competition', 'ASC']
             form:
                 fields:
+                    - { property: 'competition', label: 'Wedstrijd', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnarchivedCompetitionEvents'] } }
+                    - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
                     - { property: 'documentFile', type: 'vich_file', label: 'Document', base_path: '%app.path.competition_documents%' }
                     - { property: 'description', label: 'Omschrijving' }
-                    - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
-                    - { property: 'competition', label: 'Wedstrijd', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnarchivedCompetitionEvents'] } }
+            search:
+                fields: ['competition','category']
         CompetitionDocumentCategory:
             class: App\Entity\CompetitionDocumentCategory
             label: 'Zwemwedstrijd bijlage categorie'
