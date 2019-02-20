@@ -43,6 +43,11 @@ class CompetitionDocument
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $url;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
     private $description;
 
     /**
@@ -65,7 +70,7 @@ class CompetitionDocument
 
     public function __toString(): ?string
     {
-        return $this->name;
+        return $this->competition . " - " . $this->category;
     }
 
     public function getId(): ?int
@@ -151,6 +156,18 @@ class CompetitionDocument
     public function setCompetition(?Competition $competition): self
     {
         $this->competition = $competition;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): self
+    {
+        $this->url = $url;
 
         return $this;
     }
