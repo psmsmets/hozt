@@ -513,9 +513,6 @@ easy_admin:
                     - { property: 'restrictions', label: 'Limieten' }
                     - { property: 'multiDay', label: 'Overnachting' }
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
-                    - { property: 'preprogramFile', type: 'vich_file', label: 'Voorprogramma', base_path: '%app.path.competition_preprograms%' }
-                    - { property: 'programFile', type: 'vich_file', label: 'Programma', base_path: '%app.path.competition_programs%' }
-                    - { property: 'resultsFile', type: 'vich_file', label: 'Uitslag', base_path: '%app.path.competition_results%' }
             search:
                 fields: ['calendar','calendar.startTime','calendar.endTime','calendar.location','teams.name','teamCategories.name']
         CompetitionPool:

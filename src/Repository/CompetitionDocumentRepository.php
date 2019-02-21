@@ -19,32 +19,52 @@ class CompetitionDocumentRepository extends ServiceEntityRepository
         parent::__construct($registry, CompetitionDocument::class);
     }
 
-    // /**
-    //  * @return CompetitionDocument[] Returns an array of CompetitionDocument objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findLatestCompetitionDocuments(string $slug, int $limit = 5)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('d')
+            ->innerJoin('d.category','c')
+            ->innerJoin('d.competition','o')
+            ->innerJoin('o.calendar','e')
+            ->addSelect('d')
+            ->addSelect('c')
+            ->addSelect('o')
+            ->addSelect('e')
+            ->andWhere('e.enabled = :enabled')
+            ->andWhere('e.archived = :archived')
+            ->andWhere('c.slug = :slug')
+            ->setParameter('enabled', true)
+            ->setParameter('archived', false)
+            ->setParameter('slug', $slug)
+            ->orderBy('e.startTime', 'DESC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?CompetitionDocument
+    public function findUpcomingCompetitionDocuments(string $slug, int $limit = 5)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('d')
+            ->innerJoin('d.category','c')
+            ->innerJoin('d.competition','o')
+            ->innerJoin('o.calendar','e')
+            ->addSelect('d')
+            ->addSelect('c')
+            ->addSelect('o')
+            ->addSelect('e')
+            ->andWhere('e.enabled = :enabled')
+            ->andWhere('e.archived = :archived')
+            ->andWhere('( e.endTime >= :today_start or (e.startTime >= :today_end and e.endTime is null) )')
+            ->andWhere('c.slug = :slug')
+            ->setParameter('enabled', true)
+            ->setParameter('archived', false)
+            ->setParameter('today_start', date("Y-m-d").' 00:00')
+            ->setParameter('today_end', date("Y-m-d").' 23:59')
+            ->setParameter('slug', $slug)
+            ->orderBy('e.startTime', 'ASC')
+            ->setMaxResults($limit)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }

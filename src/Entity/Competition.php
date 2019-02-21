@@ -15,12 +15,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class Competition
 {
     /**
-     * Parameters
-     */
-    const MULTI_DAY = false;
-    const SHOW_UPDATED_AT = false;
-
-    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -111,7 +105,7 @@ class Competition
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->multiDay = Competition::MULTI_DAY;
+        $this->multiDay = false;
         $this->teams = new ArrayCollection();
         $this->teamCategories = new ArrayCollection();
         $this->documents = new ArrayCollection();
@@ -360,6 +354,35 @@ class Competition
         }
 
         return $this;
+    }
+
+    public function documentsContainSequence(int $sequence): bool 
+    {
+        foreach ($this->documents as $doc) {
+            if ($doc->getCategory()->getSequence() == $sequence) return true;
+        }
+    }
+
+    public function documentsContainSlug(string $slug): bool 
+    {
+        foreach ($this->documents as $doc) {
+            if ($doc->getCategory()->getSlug() == $slug) return true;
+        }
+        return false;
+    }
+
+    public function getDocumentsBySequence(int $sequence): Collection
+    {
+        return $this->getDocuments()->filter(function(CompetitionDocument $document) use($sequence) {
+            return $document->getCategory()->getSequence() == $sequence;
+        });
+    }
+
+    public function getDocumentsBySlug(string $slug): Collection
+    {
+        return $this->getDocuments()->filter(function(CompetitionDocument $document) use($slug) {
+            return $document->getCategory()->getSlug() == $slug;
+        });
     }
 
 }

@@ -88,17 +88,11 @@
                 {% if event.competition.multiDay %}
                   <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
                 {% endif %}
-                {% if event.competition.preprogram is not null or event.competition.program is not null or event.competition.results is not null%}
+                {% if event.competition.documents is not null %}
                   <li class="mb-1"><i class="fas fa-trophy"></i>
-                  {% if event.competition.preprogram is not null %}
-                    <a href="{{ vich_uploader_asset(event.competition, 'preprogramFile') }}" class="pr-2 {% if not event.cancelled %}text-muted{% endif %}">Voorprogramma</a>
-                  {% endif %}
-                  {% if event.competition.program is not null %}
-                    <a href="{{ vich_uploader_asset(event.competition, 'programFile') }}" class="pr-2 {% if not event.cancelled %}text-muted{% endif %}">Programma</a>
-                  {% endif %}
-                  {% if event.competition.results is not null %}
-                    <a href="{{ vich_uploader_asset(event.competition, 'resultsFile') }}" class="pr-2 {% if not event.cancelled %}text-muted{% endif %}">Uitslag</a>
-                  {% endif %}
+                    {% for doc in event.competition.documents %}
+                      <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="pr-2">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                    {% endfor %}
                   </li>
                 {% endif %}
               {% endif %}

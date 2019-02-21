@@ -17,7 +17,8 @@ use App\Entity\TrainingSchedule;
 use App\Entity\CalendarEvent;
 use App\Entity\CalendarCategory;
 use App\Entity\Competition;
-use App\Entity\CompetitionState;
+use App\Entity\CompetitionDocument;
+use App\Entity\CompetitionDocumentCategory;
 
 class ApiController extends AbstractController
 {
@@ -194,57 +195,69 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/wedstrijden/programmas", name="api_competition_programs")
+     * @Route("/api/documenten/wedstrijden/aanstaande/{slug}/{limit}", name="api_documents_competition_upcoming")
      */
-    public function competition_programs(int $limit=3)
+    public function documents_competition_upcoming(string $slug, int $limit=5)
     {
-        $programs = $this->getDoctrine()
-            ->getRepository(Competition::class)
-            ->findUpcomingCompetitionPrograms($limit)
+        $docs = $this->getDoctrine()
+            ->getRepository(CompetitionDocument::class)
+            ->findUpcomingCompetitionDocuments($slug,$limit)
             ;
 
-        if (!$programs) {
-            return $this->json(array('result'=>false,'error'=>"Geen programma's gevonden."));
+        if (!$docs) {
+            return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
         }
         $data = array();
-        $base = $this->getParameter('app.path.competition_programs');
-        foreach ( $programs as $program ) {
+        $base = $this->getParameter('app.path.competition_documents');
+        foreach ( $docs as $doc ) {
+           $event = $doc->getCompetition()->getCalendar();
            $data[] = array(
-                   'title' => $program->getCalendar()->getTitle(),
-                   'date' => $program->getCalendar()->getStartTime()->format('Y-m-d'),
-                   'datestr' =>  strftime("%e %b", $program->getCalendar()->getStartTime()->getTimestamp()),
-                   'location' => $program->getCalendar()->getLocation(),
-                   'program' => $base.'/'.$program->getProgram(),
+                   'title' => (is_null($doc->getDescription())) ? $event->getTitle() : $event->getTitle() . " - " . $doc->getDescription(),
+                   'date' => $event->getStartTime()->format('Y-m-d'),
+                   'datestr' =>  strftime("%e %b", $event->getStartTime()->getTimestamp()),
+                   'location' => $event->getLocation(),
+                   'doc' => (is_null($doc->getDocument())) ? $doc->getUrl() : $base.'/'.$doc->getDocument(),
                );
         }
-        return $this->json(array( 'result' => true, 'data' => $data ));
+        return $this->json(array( 
+                'result' => true, 
+                'category' => $doc->getCategory()->getTitle(), 
+                'type' => 'upcoming', 
+                'data' => $data,
+            ));
     }
 
     /**
-     * @Route("/api/wedstrijden/uitslagen", name="api_competition_results")
+     * @Route("/api/documenten/wedstrijden/laatste/{slug}/{limit}", name="api_documents_competition_latest")
      */
-    public function competition_results(int $limit=3)
+    public function documents_competition_latest(string $slug, int $limit=5)
     {
-        $results = $this->getDoctrine()
-            ->getRepository(Competition::class)
-            ->findLatestCompetitionResults($limit)
+        $docs = $this->getDoctrine()
+            ->getRepository(CompetitionDocument::class)
+            ->findLatestCompetitionDocuments($slug,$limit)
             ;
 
-        if (!$results) {
-            return $this->json(array('result'=>false,'error'=>"Geen uitslagen gevonden."));
+        if (!$docs) {
+            return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
         }
         $data = array();
-        $base = $this->getParameter('app.path.competition_results');
-        foreach ( $results as $result ) {
+        $base = $this->getParameter('app.path.competition_documents');
+        foreach ( $docs as $doc ) {
+           $event = $doc->getCompetition()->getCalendar();
            $data[] = array(
-                   'title' => $result->getCalendar()->getTitle(),
-                   'date' => $result->getCalendar()->getStartTime()->format('Y-m-d'),
-                   'datestr' =>  strftime("%e %b", $result->getCalendar()->getStartTime()->getTimestamp()),
-                   'location' => $result->getCalendar()->getLocation(),
-                   'results' => $base.'/'.$result->getResults(),
+                   'title' => (is_null($doc->getDescription())) ? $event->getTitle() : $event->getTitle() . " - " . $doc->getDescription(),
+                   'date' => $event->getStartTime()->format('Y-m-d'),
+                   'datestr' =>  strftime("%e %b", $event->getStartTime()->getTimestamp()),
+                   'location' => $event->getLocation(),
+                   'doc' => (is_null($doc->getDocument())) ? $doc->getUrl() : $base.'/'.$doc->getDocument(),
                );
         }
-        return $this->json(array( 'result' => true, 'data' => $data ));
+        return $this->json(array( 
+                'result' => true, 
+                'category' => $doc->getCategory()->getTitle(), 
+                'type' => 'latest', 
+                'data' => $data,
+            ));
     }
 
 }

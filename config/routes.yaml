@@ -110,13 +110,13 @@ api_training_team:
     path: /api/training/{team_abbr}
     controller: App\Controller\ApiController::training_team
 
-api_competition_programs:
-    path: /api/wedstrijden/programmas/{limit<\d+>?3}
-    controller: App\Controller\ApiController::competition_programs
+api_documents_competition_upcoming:
+    path: /api/documenten/wedstrijden/aanstaande/{slug}/{limit<\d+>?3}
+    controller: App\Controller\ApiController::documents_competition_upcoming
 
-api_competition_results:
-    path: /api/wedstrijden/uitslagen/{limit<\d+>?5}
-    controller: App\Controller\ApiController::competition_results
+api_documents_competition_latest:
+    path: /api/documenten/wedstrijden/laatste/{slug}/{limit<\d+>?3}
+    controller: App\Controller\ApiController::documents_competition_latest
 
 api_calendar_events:
     path: /api/kalender/aanstaande/{limit<\d+>?7}

@@ -33,19 +33,33 @@
 
                 <a href="{{ path('calendar_event', {'uuid': slide.event.uuid}) }}" class="{{btn1}} mr-2"><i class="far fa-calendar-alt"></i></a>
 
+                {% set comp = slide.event.competition %}
+
                 {% if slide.publishAt < slide.event.startTime|date_modify('midnight') %}
 
-                  {% if slide.event.competition.program is not null %}
-                    <a href="{{ vich_uploader_asset(slide.event.competition, 'programFile') }}" class="{{btn2}} mr-2"><i class="fas fa-file-pdf"></i> programma</a>
-                  {% elseif slide.event.competition.preprogram is not null %}
-                    <a href="{{ vich_uploader_asset(slide.event.competition, 'preprogramFile') }}" class="{{btn2}} mr-2"><i class="fas fa-file-pdf"></i> voorprogramma</a>
+                  {% for doc in comp.documentsBySlug('info') %}
+                    <a class="btn btn-hozt btn-sm" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                  {% endfor %}
+
+                  {% if comp.documentsContainSlug('programma') %}
+
+                    {% for doc in comp.documentsBySlug('programma') %}
+                      <a class="btn btn-hozt" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                    {% endfor %}
+
+                  {% else %}
+
+                    {% for doc in comp.documentsBySlug('voorprogramma') %}
+                      <a class="btn btn-hozt" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                    {% endfor %}
+
                   {% endif %}
 
                 {% else %}
 
-                  {% if slide.event.competition.results is not null %}
-                    <a href="{{ vich_uploader_asset(slide.event.competition, 'resultsFile') }}" class="{{btn2}} mr-2"><i class="fas fa-file-pdf"></i> uitslag</a>
-                  {% endif %}
+                  {% for doc in comp.documentsBySlug('uitslag') %}
+                    <a class="btn btn-hozt" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                  {% endfor %}
 
                 {% endif %}
 
