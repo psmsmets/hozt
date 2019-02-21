@@ -38,19 +38,19 @@
                 {% if slide.publishAt < slide.event.startTime|date_modify('midnight') %}
 
                   {% for doc in comp.documentsBySlug('info') %}
-                    <a class="btn btn-hozt btn-sm" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                    <a class="btn btn-hozt btn-sm" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
                   {% endfor %}
 
                   {% if comp.documentsContainSlug('programma') %}
 
                     {% for doc in comp.documentsBySlug('programma') %}
-                      <a class="btn btn-hozt" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                      <a class="btn btn-hozt" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
                     {% endfor %}
 
                   {% else %}
 
                     {% for doc in comp.documentsBySlug('voorprogramma') %}
-                      <a class="btn btn-hozt" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                      <a class="btn btn-hozt" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
                     {% endfor %}
 
                   {% endif %}
@@ -58,7 +58,7 @@
                 {% else %}
 
                   {% for doc in comp.documentsBySlug('uitslag') %}
-                    <a class="btn btn-hozt" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                    <a class="btn btn-hozt" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
                   {% endfor %}
 
                 {% endif %}

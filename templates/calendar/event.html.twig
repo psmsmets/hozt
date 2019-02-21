@@ -67,7 +67,7 @@
               {% endif %}
               {% if event.competition.documents is not empty %}
                 {% for doc in event.competition.documents %}
-                  <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> {{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                  <a href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> {{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
                 {% endfor %}
               {% endif %}
             </p>
