@@ -236,11 +236,14 @@ class PageController extends AbstractController
     {
         $category = $this->getDoctrine()
             ->getRepository(TrainingTeamCategory::class)
-            ->findOneBySlugJoinedToTeamsCoaches($slug)
+//            ->findOneBySlugJoinedToTeamsCoaches($slug)
+            ->findOneBySlug($slug)
             ;
         if (!$category) {
             throw $this->createNotFoundException();
         }
+
+//dd($category);
 
         $this->initTemplateData();
         $this->addToTemplateData( 'training_category', $category );

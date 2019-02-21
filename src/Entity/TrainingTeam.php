@@ -79,6 +79,21 @@ class TrainingTeam
      */
     private $exceptions;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $goal;
+
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
+    private $age;
+
+    /**
+     * @ORM\Column(type="json_array")
+     */
+    private $requirements = [];
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -180,6 +195,13 @@ class TrainingTeam
     public function getCategory(): ?TrainingTeamCategory
     {
         return $this->category;
+    }
+
+    public function setCategory(TrainingTeamCategory $category): self
+    {
+        $this->category = $category;
+
+        return $this;
     }
 
     /**
@@ -290,6 +312,42 @@ class TrainingTeam
             $this->exceptions->removeElement($exception);
             $exception->removeTeam($this);
         }
+
+        return $this;
+    }
+
+    public function getGoal(): ?string
+    {
+        return $this->goal;
+    }
+
+    public function setGoal(string $goal): self
+    {
+        $this->goal = $goal;
+
+        return $this;
+    }
+
+    public function getAge(): ?string
+    {
+        return $this->age;
+    }
+
+    public function setAge(string $age): self
+    {
+        $this->age = $age;
+
+        return $this;
+    }
+
+    public function getRequirements(): ?array
+    {
+        return $this->requirements;
+    }
+
+    public function setRequirements(array $requirements): self
+    {
+        $this->requirements = $requirements;
 
         return $this;
     }

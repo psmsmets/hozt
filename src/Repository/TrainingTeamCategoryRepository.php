@@ -37,6 +37,24 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findOneBySlug($slug)
+    {
+        return $this->createQueryBuilder('category')
+            ->innerJoin('category.teams', 'teams')
+            ->leftJoin('teams.coaches', 'coaches')
+            ->addSelect('category')
+            ->addSelect('teams')
+            ->addSelect('coaches')
+            ->andWhere('category.slug = :slug')
+            ->andWhere('category.enabled = :enabled')
+            ->andWhere('coaches.enabled = :enabled')
+            ->setParameter('slug', $slug)
+            ->setParameter('enabled', true)
+            ->orderBy('category.sequence, teams.abbr', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findOneBySlugJoinedToTeamsCoaches($slug)
     {
         return $this->createQueryBuilder('c')
