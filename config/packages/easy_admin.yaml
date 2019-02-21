@@ -73,7 +73,7 @@ easy_admin:
             list:
                 fields:
                     - { property: 'id', label: 'Id' }
-                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.blogPost_images%' }
                     - { property: 'category', label: 'Categorie' }
