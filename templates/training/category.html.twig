@@ -28,14 +28,21 @@
       <div class="tab-pane fade mt-4 active show" id="info" role="tabpanel" aria-labelledby="info-tab">
       <h4 class="d-md-none pb-2">Groepen en trainers</h4>
       {% for team in page.training_category.teams %}
-        <h5><span class="badge badge-secondary pt-1 mr-2">{{team.abbr}}</span> {{team.name}}</h5>
-        <dl class="row mb-md-0"> 
-          <dt class="col-12 col-sm-3 text-md-right">Trainer{% if team.coaches|length > 1%}s{%endif%}</dt>
+        <dl class="row mb-md-1"> 
+          <dt class="col-12 col-sm-3 d-none d-sm-block text-right">
+            <h5><span class="badge badge-secondary pt-1">{{team.abbr}}</span></h5>
+          </dt>
+          <dd class="col-12 col-sm-9">
+            <h5><span class="badge badge-secondary pt-1 mr-2 d-sm-none">{{team.abbr}}</span> {{team.name}}</h5>
+          </dd>
+          {% if team.coaches|length > 0 %}
+          <dt class="col-12 col-sm-3 text-md-right">Trainer{% if team.coaches|length > 1 %}s{%endif%}</dt>
           <dd class="col-12 col-sm-9">
             {% for coach in team.coaches %}
               <span class="badge badge-info">{{coach.firstname}}</span>
             {% endfor %}
           </dd>
+          {% endif %}
           <dt class="col-12 col-sm-3 text-md-right">Doelstellingen</dt>
           <dd class="col-12 col-sm-9">{{team.goal|ucfirst}}</dd>
           <dt class="col-12 col-sm-3 text-md-right">Leeftijd</dt>
