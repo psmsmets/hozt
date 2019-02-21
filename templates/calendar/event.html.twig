@@ -44,7 +44,7 @@
               <li class="mb-1 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
             {% endif %}
             {% if event.competition.multiDay %}
-              <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
+              <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> met overnachting</li>
             {% endif %}
           {% endif %}
         </ul>
@@ -67,7 +67,7 @@
               {% endif %}
               {% if event.competition.documents is not empty %}
                 {% for doc in event.competition.documents %}
-                  <a href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> {{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                  <a href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}" class="btn btn-sm btn-outline-hozt mr-2 mb-2"><i class="fas fa-file-pdf"></i> {{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
                 {% endfor %}
               {% endif %}
             </p>

@@ -243,8 +243,6 @@ class PageController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-//dd($category);
-
         $this->initTemplateData();
         $this->addToTemplateData( 'training_category', $category );
         $this->addToTemplateData( 'training_days', $this->getDoctrine()
