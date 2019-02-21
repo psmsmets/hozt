@@ -26,18 +26,6 @@ vich_uploader:
             uri_prefix:         '%app.path.competition_documents%'
             upload_destination: '%kernel.project_dir%/public_html%app.path.competition_documents%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
-        competition_preprograms:
-            uri_prefix:         '%app.path.competition_preprograms%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.competition_preprograms%'
-            namer: Vich\UploaderBundle\Naming\UniqidNamer
-        competition_programs:
-            uri_prefix:         '%app.path.competition_programs%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.competition_programs%'
-            namer: Vich\UploaderBundle\Naming\UniqidNamer
-        competition_results:
-            uri_prefix:         '%app.path.competition_results%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.competition_results%'
-            namer: Vich\UploaderBundle\Naming\UniqidNamer
         sponsor_images:
             uri_prefix:         '%app.path.sponsor_images%'
             upload_destination: '%kernel.project_dir%/public_html%app.path.sponsor_images%'

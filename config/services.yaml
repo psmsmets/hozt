@@ -24,9 +24,6 @@ parameters:
     app.path.calendar_images: /uploads/images/calendar
     app.path.carousel_images: /uploads/images/carousel
     app.path.competition_documents: /uploads/files/competition
-    app.path.competition_preprograms: /uploads/files/competition/preprograms
-    app.path.competition_programs: /uploads/files/competition/programs
-    app.path.competition_results: /uploads/files/competition/results
     app.path.sponsor_images: /uploads/images/sponsor
     app.path.staticPage_images: /uploads/images/page
     app.path.user_images: /uploads/images/user

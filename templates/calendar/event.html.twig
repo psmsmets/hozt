@@ -60,19 +60,15 @@
             </p>
           {% endif %}
         {% else %}
-          {% if event.document is not empty or event.competition.preprogram is not empty or event.competition.program is not empty or event.competition.results is not empty %}
+          {% if event.document is not empty or event.competition.documents is not empty %}
             <p class="text-center text-md-left">
               {% if event.document is not empty %}
                 <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
               {% endif %}
-              {% if event.competition.preprogram is not empty %}
-                <a href="{{ vich_uploader_asset(event.competition, 'preprogramFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> Voorprogramma</a>
-              {% endif %}
-              {% if event.competition.program is not empty %}
-                <a href="{{ vich_uploader_asset(event.competition, 'programFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> Programma</a>
-              {% endif %}
-              {% if event.competition.results is not empty %}
-                <a href="{{ vich_uploader_asset(event.competition, 'resultsFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> Uitslag</a>
+              {% if event.competition.documents is not empty %}
+                {% for doc in event.competition.documents %}
+                  <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> {{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                {% endfor %}
               {% endif %}
             </p>
           {% endif %}

@@ -15,19 +15,33 @@
 
         {% if item.event is not empty %}
 
+          {% set comp = item.event.competition %}
+
           {% if item.publishAt < item.event.startTime|date_modify('midnight') %}
 
-            {% if item.event.competition.program is not null %}
-              <a href="{{ vich_uploader_asset(item.event.competition, 'programFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> programma</a>
-            {% elseif item.event.competition.preprogram is not null %}
-              <a href="{{ vich_uploader_asset(item.event.competition, 'preprogramFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> voorprogramma</a>
+            {% for doc in comp.documentsBySlug('info') %}
+              <a class="btn btn-hozt btn-sm" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+            {% endfor %}
+
+            {% if comp.documentsContainSlug('programma') %}
+
+              {% for doc in comp.documentsBySlug('programma') %}
+                <a class="btn btn-hozt btn-sm" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+              {% endfor %}
+
+            {% else %}
+
+              {% for doc in comp.documentsBySlug('voorprogramma') %}
+                <a class="btn btn-hozt btn-sm" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+              {% endfor %}
+
             {% endif %}
 
           {% else %}
 
-            {% if item.event.competition.results is not null %}
-              <a href="{{ vich_uploader_asset(item.event.competition, 'resultsFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> uitslag</a>
-            {% endif %}
+            {% for doc in comp.documentsBySlug('uitslag') %}
+              <a class="btn btn-hozt btn-sm" href="{{vich_uploader_asset(doc,'documentFile')}}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+            {% endfor %}
 
           {% endif %}
 

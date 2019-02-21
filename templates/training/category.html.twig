@@ -113,14 +113,11 @@
               {% if competition.restrictions %}
                 <li class="text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
               {% endif %}
-              {% if competition.preprogram is not empty or competition.program is not empty %}
+              {% if competition.documents is not empty %}
                 <li><i class="fas fa-trophy"></i>
-                {% if competition.preprogram is not empty %}
-                  <a href="{{ vich_uploader_asset(competition, 'preprogramFile') }}" class="pr-2">Voorprogramma</a>
-                {% endif %}
-                {% if competition.program is not empty %}
-                  <a href="{{ vich_uploader_asset(competition, 'programFile') }}" class="pr-2">Programma</a>
-                {% endif %}
+                  {% for doc in competition.documents %}
+                    <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="pr-2">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                  {% endfor %}
                 </li>
               {% endif %}
             </ul>
@@ -142,7 +139,11 @@
             <h5 class="pb-0 mb-1">{{item.calendar.title}}</h5>
             <ul class="list-unstyled text-muted small mb-1 cal"> 
                 <li><i class="fas fa-swimming-pool"></i> {{item.pool}}{% if item.calendar.location %}, {{item.calendar.location}}{% endif %}</li>
-              <li><i class="fas fa-trophy"></i> <a href="{{ vich_uploader_asset(item, 'resultsFile') }}" class="pr-2">Uitslag</a></li>
+              <li><i class="fas fa-trophy"></i> 
+                {% for doc in item.documents %}
+                  <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="pr-2">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                {% endfor %} 
+              </li>
             </ul>
           </div>
         </div>
