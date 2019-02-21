@@ -22,15 +22,17 @@ class TrainingCoachRepository extends ServiceEntityRepository
     // /**
     //  * @return TrainingCoach[] Returns an array of TrainingCoach objects
     //  */
-    public function findAllJoinedToTeams()
+    public function findAllJoinedToTeams(bool $head=true)
     {
-        return $this->createQueryBuilder('c')
-            ->innerJoin('c.teams', 't')
-            ->addSelect('t')
-            ->andWhere('c.enabled = :enabled')
-            ->andWhere('t.enabled = :enabled')
+        return $this->createQueryBuilder('coach')
+            ->innerJoin('coach.teams', 'teams')
+            ->addSelect('teams')
+            ->andWhere('coach.enabled = :enabled')
+            ->andWhere('teams.enabled = :enabled')
+            ->andWhere('coach.head = :head')
             ->setParameter('enabled', true)
-            ->orderBy('c.sequence', 'ASC')
+            ->setParameter('head', $head)
+            ->orderBy('coach.firstname', 'ASC')
             ->getQuery()
             ->getResult();
     }

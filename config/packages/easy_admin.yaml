@@ -236,15 +236,15 @@ easy_admin:
             label: 'Trainingen :: coach'
             list:
                 fields:
-                    #- { property: 'id', label: 'id' }
-                    - { property: 'sequence', label: 'Nr' }
+                    - { property: 'id', label: 'id' }
+                    #- { property: 'sequence', label: 'Nr' }
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'name', label: 'Naam' }
-                    - { property: 'function', label: 'Functie' }
                     - { property: 'teams', label: 'Groepen' }
+                    - { property: 'head', label: 'Hoofdtrainer', type: 'boolean' }
                     - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.user_images%' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
-                sort: ['sequence', 'ASC']
+                sort: ['firstname', 'ASC']
             edit:
                 actions: ['-delete']
             form:
@@ -252,12 +252,14 @@ easy_admin:
                     - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
-                    - { property: 'function', label: 'Functie' }
-                    - { property: 'sequence', label: 'Volgorde' }
+                    #- { property: 'sequence', label: 'Volgorde' }
                     - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Actief' }
+                    - { property: 'head', label: 'Hoofdtrainer' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.user_images%' }
+            search:
+                fields: ['teams.abbr','teams.name']
         TrainingTeam:
             class: App\Entity\TrainingTeam
             label: 'Trainingen :: groep'
@@ -521,7 +523,7 @@ easy_admin:
                     - { property: 'multiDay', label: 'Overnachting' }
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
             search:
-                fields: ['calendar','calendar.startTime','calendar.endTime','calendar.location','teams.name','teamCategories.name']
+                fields: ['calendar.title','calendar.startTime','calendar.endTime','calendar.location','teams.name','teamCategories.name','teams.abbr','teamCategories.abbr']
         CompetitionPool:
             class: App\Entity\CompetitionPool
             label: 'Zwemwedstrijd bad'
@@ -559,7 +561,7 @@ easy_admin:
                     - { property: 'url', label: 'Externe url', help: 'In plaats van een document up te loaden kan je een extern document linken. Wel de volledige url geven. En een bijlage heeft voorrang op een externe link.' }
                     - { property: 'description', label: 'Bijschrift', help: 'Extra omschrijving bij meerdere documenten van dezelfde categorie, bv. {categorie} za voormiddag' }
             search:
-                fields: ['competition','category']
+                fields: ['category.title','competition.teamCategories.name','competition.teamCategories.abbr','competition.teams.name','competition.teams.abbr','competition.calendar.location','competition.calendar.startTime','competition.calendar.endTime','competition.calendar.title']
         CompetitionDocumentCategory:
             class: App\Entity\CompetitionDocumentCategory
             label: 'Zwemwedstrijd bijlage categorie'

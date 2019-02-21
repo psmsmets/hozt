@@ -207,9 +207,13 @@ class PageController extends AbstractController
     public function training_coaches()
     {
         $this->initTemplateData();
+        $this->addToTemplateData( 'head_coaches', $this->getDoctrine()
+                ->getRepository(TrainingCoach::class)
+                ->findAllJoinedToTeams($head=true)
+            );
         $this->addToTemplateData( 'coaches', $this->getDoctrine()
                 ->getRepository(TrainingCoach::class)
-                ->findAllJoinedToTeams()
+                ->findAllJoinedToTeams($head=false)
             );
 
         return $this->render('training/coaches.html.twig', $this->template_data );
