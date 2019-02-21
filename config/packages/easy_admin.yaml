@@ -297,14 +297,17 @@ easy_admin:
                 sort: ['sequence', 'ASC']
             form:
                 fields:
+                    - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
                     - { property: 'name', label: 'Naam' }
-                    - { property: 'abbr', label: 'Afkorting' }
                     - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } } 
+                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'abbr', label: 'Afkorting' }
                     - { property: 'duration', label: 'Duurtijd' }
                     - { property: 'times', label: 'Per week' }
                     - { property: 'days', label: 'Trainingsdagen' }
-                    - { property: 'sequence', label: 'Volgorde' }
-                    - { property: 'enabled', label: 'Actief' }
             edit:
                 actions: ['-delete']
         TrainingTime:
