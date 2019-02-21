@@ -84,11 +84,6 @@ class TrainingTeamCategory
      */
     private $competitions;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $body;
-
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -264,18 +259,6 @@ class TrainingTeamCategory
             $this->competitions->removeElement($competition);
             $competition->removeTeamCategory($this);
         }
-
-        return $this;
-    }
-
-    public function getBody(): ?string
-    {
-        return $this->body;
-    }
-
-    public function setBody(?string $body): self
-    {
-        $this->body = $body;
 
         return $this;
     }

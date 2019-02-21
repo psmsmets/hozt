@@ -122,7 +122,7 @@ easy_admin:
                 fields:
                     - { property: 'title', label: 'Titel' }
                     #- { property: 'slug', label: 'Slug' }
-                    - { property: 'description', label: 'Korte omschrijving' }
+                    - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
                     - { property: 'enabled', label: 'Actief' }
             edit:
                 fields:
@@ -275,12 +275,17 @@ easy_admin:
                 actions: ['-delete']
             form:
                 fields:
+                    - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
                     - { property: 'name', label: 'Naam' }
+                    - { property: 'coaches', label: 'Coaches' }
+                    - { property: 'goal', label: 'Doelstelling', type: 'textarea' }
+                    - { property: 'age', label: 'Leeftijd' }
+                    - { property: 'requirements', label: 'Toelatingsvoorwaarden' }
+                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
+                    - { property: 'enabled', label: 'Actief' }
                     - { property: 'abbr', label: 'Afkorting' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
-                    - { property: 'description', label: 'Omschrijving' }
-                    - { property: 'coaches', label: 'Coaches' }
-                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
         TrainingTeamCategory:
             class: App\Entity\TrainingTeamCategory
             label: 'Trainingen :: categorie'
@@ -299,15 +304,14 @@ easy_admin:
                 fields:
                     - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
                     - { property: 'name', label: 'Naam' }
-                    - { property: 'description', label: 'Omschrijving' }
-                    - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } } 
-                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
-                    - { property: 'enabled', label: 'Actief' }
-                    - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'abbr', label: 'Afkorting' }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'duration', label: 'Duurtijd' }
                     - { property: 'times', label: 'Per week' }
                     - { property: 'days', label: 'Trainingsdagen' }
+                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'sequence', label: 'Volgorde' }
             edit:
                 actions: ['-delete']
         TrainingTime:
@@ -442,7 +446,7 @@ easy_admin:
                 fields:
                     - { property: 'title', label: 'Titel' }
                     #- { property: 'slug', label: 'Slug' }
-                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'enabled', label: 'Actief' }
             edit:
@@ -478,7 +482,7 @@ easy_admin:
                     #- { property: 'archived', label: 'Gearchiveerd' }
                     - { property: 'isCompetition', label: 'Zwemwedstrijd' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
-                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'location', label: 'Locatie' }
                     - { property: 'url', label: 'Website' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.calendar_images%' }
@@ -532,7 +536,7 @@ easy_admin:
             form:
                 fields:
                     - { property: 'title', label: 'Titel' }
-                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'enabled', label: 'Actief' }
         CompetitionDocument:
             class: App\Entity\CompetitionDocument
@@ -553,7 +557,7 @@ easy_admin:
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
                     - { property: 'documentFile', type: 'vich_file', label: 'Document', base_path: '%app.path.competition_documents%' }
                     - { property: 'url', label: 'Externe url', help: 'In plaats van een document up te loaden kan je een extern document linken. Wel de volledige url geven. En een bijlage heeft voorrang op een externe link.' }
-                    - { property: 'description', label: 'Omschrijving', help: 'Extra omschrijving bij meerdere documenten van dezelfde categorie, bv. za voormiddag' }
+                    - { property: 'description', label: 'Bijschrift', help: 'Extra omschrijving bij meerdere documenten van dezelfde categorie, bv. {categorie} za voormiddag' }
             search:
                 fields: ['competition','category']
         CompetitionDocumentCategory:
@@ -570,7 +574,7 @@ easy_admin:
             form:
                 fields:
                     - { property: 'title', label: 'Titel' }
-                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'enabled', label: 'Actief' }
         User:

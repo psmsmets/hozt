@@ -28,19 +28,30 @@
       <div class="tab-pane fade mt-4 active show" id="info" role="tabpanel" aria-labelledby="info-tab">
       <h4 class="d-md-none pb-2">Groepen en trainers</h4>
       {% for team in page.training_category.teams %}
+        <h5><span class="badge badge-secondary pt-1 mr-2">{{team.abbr}}</span> {{team.name}}</h5>
         <dl class="row mb-md-0"> 
-          <dt class="col-12 col-sm-3 text-md-right"><h5><span class="badge badge-secondary mr-2">{{team.abbr}}</span><span class="d-md-none">{{team.name}}</span></h5></dt>
-          <dd class="col-12 col-sm-7 pt-1">
-            <span class="ml-md-2">Trainer{% if team.coaches|length > 1%}s{%endif%}:</span>
+          <dt class="col-12 col-sm-3 text-md-right">Trainer{% if team.coaches|length > 1%}s{%endif%}</dt>
+          <dd class="col-12 col-sm-9">
             {% for coach in team.coaches %}
               <span class="badge badge-info">{{coach.firstname}}</span>
             {% endfor %}
           </dd>
+          <dt class="col-12 col-sm-3 text-md-right">Doelstellingen</dt>
+          <dd class="col-12 col-sm-9">{{team.goal|ucfirst}}</dd>
+          <dt class="col-12 col-sm-3 text-md-right">Leeftijd</dt>
+          <dd class="col-12 col-sm-9">{{team.age}}</dd>
+          <dt class="col-12 col-sm-3 text-md-right">Toelatingsvoorwaarden</dt>
+          <dd class="col-12 col-sm-9">
+            <ul class="list-unstyled">
+            {% for req in team.requirements %}
+              <li class="mb-md-1">{{req|ucfirst}}</li>
+            {% endfor %}
+            </ul>
+          </dd>
         </dl>
       {% endfor %}
-      {% if page.training_category.body is not empty %}
-        <div class="mt-2 mt-md-3">{{ page.training_category.body|raw }}</div>
-      {% endif %}
+
+      <p><small><i>C/R/SS/D kunnen zwemmen volgens de strenge technische criteria van HoZT</i></small></p>
 
       </div><!-- end tab info -->
 
