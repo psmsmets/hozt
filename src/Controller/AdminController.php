@@ -149,19 +149,6 @@ class AdminController extends EasyAdminController
         return $new;
     }
 
-    public function createNewTrainingCoachEntity()
-    {
-        $seq = (int) $this->getDoctrine()
-            ->getRepository(TrainingCoach::class)
-            ->createQueryBuilder('c')
-            ->select('MAX(c.sequence) as sequence')
-            ->getQuery()
-            ->getSingleScalarResult()
-            ;
-        $new = new TrainingCoach();
-        return $new->setSequence($seq+1);
-    }
-
     public function createNewTrainingTeamCategoryEntity()
     {
         $seq = (int) $this->getDoctrine()

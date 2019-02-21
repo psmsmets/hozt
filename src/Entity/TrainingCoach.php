@@ -22,26 +22,6 @@ class TrainingCoach
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $firstname;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $lastname;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $function;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $sequence;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $enabled;
@@ -57,9 +37,14 @@ class TrainingCoach
     private $updatedAt;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\TrainingTeam", inversedBy="coaches")
+     * @ORM\Column(type="string", length=255)
      */
-    private $teams;
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -71,6 +56,16 @@ class TrainingCoach
      * @var File
      */
     private $imageFile;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $head;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\TrainingTeam", inversedBy="coaches")
+     */
+    private $teams;
 
     public function __construct()
     {
@@ -85,10 +80,38 @@ class TrainingCoach
         return $this->getName();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(): self
+    {
+        $this->updatedAt = new \DateTime("now");
+
+        return $this;
     }
 
     public function getFirstname(): ?string
@@ -120,63 +143,43 @@ class TrainingCoach
         return $this->firstname . " " . $this->lastname;
     }
 
-    public function getFunction(): ?string
+    public function getImage(): ?string
     {
-        return $this->function;
+        return $this->image;
     }
 
-    public function setFunction(string $function): self
+    public function setImage(?string $image): self
     {
-        $this->function = $function;
+        $this->image = $image;
 
         return $this;
     }
 
-    public function getSequence(): ?int
+    public function setImageFile(File $image = null)
     {
-        return $this->sequence;
+        $this->imageFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            $this->updatedAt = new \DateTime('now');
+        }
     }
 
-    public function setSequence(int $sequence): self
+    public function getImageFile()
     {
-        $this->sequence = $sequence;
-
-        return $this;
+        return $this->imageFile;
     }
 
-    public function getEnabled(): ?bool
+    public function getHead(): ?bool
     {
-        return $this->enabled;
+        return $this->head;
     }
 
-    public function setEnabled(bool $enabled): self
+    public function setHead(bool $head): self
     {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-/*
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-*/
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(): self
-    {
-        $this->updatedAt = new \DateTime("now");
+        $this->head = $head;
 
         return $this;
     }
@@ -205,35 +208,6 @@ class TrainingCoach
         }
 
         return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function setImageFile(File $image = null)
-    {
-        $this->imageFile = $image;
-
-        // VERY IMPORTANT:
-        // It is required that at least one field changes if you are using Doctrine,
-        // otherwise the event listeners won't be called and the file is lost
-        if ($image) {
-            $this->updatedAt = new \DateTime('now');
-        }
-    }
-
-    public function getImageFile()
-    {
-        return $this->imageFile;
     }
 
 }
