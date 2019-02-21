@@ -5,12 +5,9 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CompetitionRepository")
- * @Vich\Uploadable
  */
 class Competition
 {
@@ -56,39 +53,6 @@ class Competition
      * @ORM\Column(type="boolean")
      */
     private $restrictions;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $preprogram;
-
-    /**
-     * @Vich\UploadableField(mapping="competition_preprograms", fileNameProperty="preprogram")
-     * @var File
-     */
-    private $preprogramFile;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $program;
-
-    /**
-     * @Vich\UploadableField(mapping="competition_programs", fileNameProperty="program")
-     * @var File
-     */
-    private $programFile;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $results;
-
-    /**
-     * @Vich\UploadableField(mapping="competition_results", fileNameProperty="results")
-     * @var File
-     */
-    private $resultsFile;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionPool", inversedBy="competitions")
@@ -224,93 +188,6 @@ class Competition
         $this->restrictions = $restrictions;
 
         return $this;
-    }
-
-    public function getPreprogram(): ?string
-    {
-        return $this->preprogram;
-    }
-
-    public function setPreprogram(?string $preprogram): self
-    {
-        $this->preprogram = $preprogram;
-
-        return $this;
-    }
-
-    public function setPreprogramFile(File $file = null)
-    {
-        $this->preprogramFile = $file;
-
-        // VERY IMPORTANT:
-        // It is required that at least one field changes if you are using Doctrine,
-        // otherwise the event listeners won't be called and the file is lost
-        if ($file) {
-            $this->updatedAt = new \DateTime('now');
-        }
-    }
-
-    public function getPreprogramFile()
-    {
-        return $this->preprogramFile;
-    }
-
-    public function getProgram(): ?string
-    {
-        return $this->program;
-    }
-
-    public function setProgram(?string $program): self
-    {
-        $this->program = $program;
-
-        return $this;
-    }
-
-    public function setProgramFile(File $file = null)
-    {
-        $this->programFile = $file;
-
-        // VERY IMPORTANT:
-        // It is required that at least one field changes if you are using Doctrine,
-        // otherwise the event listeners won't be called and the file is lost
-        if ($file) {
-            $this->updatedAt = new \DateTime('now');
-        }
-    }
-
-    public function getProgramFile()
-    {
-        return $this->programFile;
-    }
-
-    public function getResults(): ?string
-    {
-        return $this->results;
-    }
-
-    public function setResults(?string $results): self
-    {
-        $this->results = $results;
-
-        return $this;
-    }
-
-    public function setResultsFile(File $file = null)
-    {
-        $this->resultsFile = $file;
-
-        // VERY IMPORTANT:
-        // It is required that at least one field changes if you are using Doctrine,
-        // otherwise the event listeners won't be called and the file is lost
-        if ($file) {
-            $this->updatedAt = new \DateTime('now');
-        }
-    }
-
-    public function getResultsFile()
-    {
-        return $this->resultsFile;
     }
 
     public function getPool(): ?CompetitionPool

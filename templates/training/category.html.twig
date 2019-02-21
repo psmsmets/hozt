@@ -114,7 +114,7 @@
                 <li class="text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
               {% endif %}
               {% if competition.documents is not empty %}
-                <li><i class="fas fa-trophy"></i>
+                <li><i class="fas fa-paperclip"></i>
                   {% for doc in competition.documents %}
                     <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="pr-2">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
                   {% endfor %}

@@ -88,10 +88,10 @@
                 {% if event.competition.multiDay %}
                   <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
                 {% endif %}
-                {% if event.competition.documents is not null %}
-                  <li class="mb-1"><i class="fas fa-trophy"></i>
+                {% if event.competition.documents|length > 0 %}
+                  <li class="mb-1"><i class="fas fa-paperclip"></i>
                     {% for doc in event.competition.documents %}
-                      <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="pr-2">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                      <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="pr-2 text-muted">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
                     {% endfor %}
                   </li>
                 {% endif %}
