@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\TrainingTeamCategory;
 use App\Entity\TrainingException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -22,24 +23,25 @@ class TrainingExceptionRepository extends ServiceEntityRepository
     // /**
     //  * @return TrainingException[] Returns an array of TrainingDay objects
     //  */
-    public function findAllByTeamCategory(int $id, int $days=28)
+    public function findAllByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28)
     {
         $today = new \DateTime('today');
-        return $this->createQueryBuilder('e')
-            ->innerJoin('e.teams', 't')
-            ->innerJoin('t.category', 'c')
-            ->addSelect('e')
-            ->andWhere('e.enabled = :enabled')
-            ->andWhere('t.enabled = :enabled')
-            ->andWhere('c.enabled = :enabled')
-            ->andWhere('c.id = :id')
-            ->andWhere('e.startDate < :start')
-            ->andWhere('e.endDate >= :now')
+        return $this->createQueryBuilder('exception')
+            ->leftJoin('exception.teams', 'exception_teams')
+            ->leftJoin('exception_teams.category', 'exception_teams_category')
+            ->leftJoin('exception.schedule', 'schedule')
+            ->leftJoin('schedule.teams', 'schedule_teams')
+            ->leftJoin('schedule_teams.category', 'schedule_teams_category')
+            ->addSelect('exception')
+            ->andWhere('exception.enabled = :enabled')
+            ->andWhere('( exception_teams_category.id = :id or schedule_teams_category = :id)')
+            ->andWhere('exception.startDate < :start')
+            ->andWhere('exception.endDate >= :now')
             ->setParameter('enabled', true)
-            ->setParameter('id', $id)
+            ->setParameter('id', $teamCategory->getId())
             ->setParameter('now', $today->format('Y-m-d'))
             ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
-            ->orderBy('e.startDate, e.endDate', 'ASC')
+            ->orderBy('exception.startDate, exception.endDate', 'ASC')
             ->getQuery()
             ->getResult()
         ;     

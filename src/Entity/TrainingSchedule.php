@@ -268,4 +268,14 @@ class TrainingSchedule
         return $this;
     }
 
+
+    public function isActive(\DateTime $start, \DateTime $end, array $days): bool
+    {
+        return (
+                $this->getStartDate() <= $start and
+                ( $this->getEndDate() >= $end or is_null($this->getEndDate()) ) and
+                in_array( $this->getDay()->getId(), $days )
+             );
+    }
+
 }

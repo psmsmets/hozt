@@ -14,12 +14,13 @@
 
 <!--<footer class="bg-dark pb-4 pt-4 text-light">-->
 <!--<footer class="pb-3">-->
-<footer class="bg-dark pb-4 pt-4 text-light font-weight-light">
+<footer class="bg-gold pb-4 pt-4 text-light font-weight-light">
 <div class="container">
+  <h4 class="text-hozt"># We are red and gold</h4>
   <div class="row pt-2 pt-md-3">
     <div class="col-12 col-md">
       <img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="40">
-      <address class="text-muted">
+      <address class="text-light">
         <span class="text-hozt">Hoogstratens Zwem Team vzw</span><br>
         <small>
           Achtelsestraat 76A, 2320 Hoogstraten<br>
@@ -29,36 +30,36 @@
       </address>
     </div>
     <div class="col-12 col-md">
-      <h5>Aanbod</h5>
-      <ul class="list-unstyled text-small">
+      <h5><b>A</b>anbod</h5>
+      <ul class="list-unstyled">
       {% for category in base.training_team_categories %}
-        <li><a class="text-muted" href="{{ path('training_category', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+        <li><a class="text-light text-decoration-none" href="{{ path('training_category', {'slug': category.slug}) }}">{{ category.name }}</a></li>
       {% endfor %}
       </ul>
     </div>
     <div class="col-12 col-md">
-      <h5>Praktisch</h5>
-      <ul class="list-unstyled text-small">
-        <li><a class="text-muted" href="/lid-worden">Lid worden</a></li>
-        <li><a class="text-muted" href="{{ path('training_schedule_teams') }}">Trainingsuren</a></li>
-        <li><a class="text-muted" href="{{ path('calendar') }}">Kalender</a></li>
-        <li><a class="text-muted" href="/clubkledij">Clubkledij</a></li>
-        <li><a class="text-muted" href="{{ path('blog') }}">Nieuwsberichten</a></li>
-<!--    <li><a class="text-muted" href="#">Clubrecords</a></li> -->
-        <li><a class="text-muted" href="{{ path('enroll_list') }}">Inschrijven</a></li>
+      <h5><b>P</b>raktisch</h5>
+      <ul class="list-unstyled">
+        <li><a class="text-light text-decoration-none" href="/lid-worden">Lid worden</a></li>
+        <li><a class="text-light text-decoration-none" href="{{ path('training_schedule_teams') }}">Trainingsuren</a></li>
+        <li><a class="text-light text-decoration-none" href="{{ path('calendar') }}">Kalender</a></li>
+        <li><a class="text-light text-decoration-none" href="/clubkledij">Clubkledij</a></li>
+        <li><a class="text-light text-decoration-none" href="{{ path('blog') }}">Nieuwsberichten</a></li>
+<!--    <li><a class="text-light text-decoration-none" href="#">Clubrecords</a></li> -->
+        <li><a class="text-light text-decoration-none" href="{{ path('enroll_list') }}">Inschrijven</a></li>
       </ul>
     </div>
     <div class="col-12 col-md">
-      <h5>Algemeen</h5>
-      <ul class="list-unstyled text-small">
-        <li><a class="text-muted" href="{{ path('training_coaches') }}">Trainers</a></li>
-        <li><a class="text-muted" href="/bestuur">Bestuur</a></li>
-        <li><a class="text-muted" href="/vacatures">Vacatures</a></li>
-        <li><a class="text-muted" href="/zwembad">Zwembad</a></li>
-        <li><a class="text-muted" href="{{ path('sponsors') }}">Sponsors</a></li>
-        <li><a class="text-muted" href="/gedragsregels">Gedragsregels</a></li>
-        <li><a class="text-muted" href="{{ path('contact_faq') }}">Veelgestelde vragen</a></li>
-        <li><a class="text-muted" href="{{ path('contact_form') }}">Contact</a></li>
+      <h5><b>A</b>lgemeen</h5>
+      <ul class="list-unstyled">
+        <li><a class="text-light text-decoration-none" href="{{ path('training_coaches') }}">Trainers</a></li>
+        <li><a class="text-light text-decoration-none" href="/bestuur">Bestuur</a></li>
+        <li><a class="text-light text-decoration-none" href="/vacatures">Vacatures</a></li>
+        <li><a class="text-light text-decoration-none" href="/zwembad">Zwembad</a></li>
+        <li><a class="text-light text-decoration-none" href="{{ path('sponsors') }}">Sponsors</a></li>
+        <li><a class="text-light text-decoration-none" href="/gedragsregels">Gedragsregels</a></li>
+        <li><a class="text-light text-decoration-none" href="{{ path('contact_faq') }}">Veelgestelde vragen</a></li>
+        <li><a class="text-light text-decoration-none" href="{{ path('contact_form') }}">Contact</a></li>
       </ul>
     </div>
   </div>

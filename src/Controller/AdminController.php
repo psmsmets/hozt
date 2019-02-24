@@ -187,9 +187,14 @@ class AdminController extends EasyAdminController
         $entity->setUpdatedAt();
         if ($entity->getPersistent() and is_null($entity->getEndDate())) {
             $entity->setPersistent(false);
-            $this->addFlash('error', 'Fout: Uitzondering enkel toegestaan met einddatum.');
+            $this->addFlash('danger', 'Fout: Uitzondering enkel toegestaan met einddatum.');
         }
         parent::persistEntity($entity);
+    }
+
+    public function persistTrainingExceptionEntity($entity)
+    {
+        $this->checkTrainingExceptionEntity($entity);
     }
 
     // special update
@@ -220,7 +225,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getPosts())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Blog categorie heeft gerelateerde posts. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Blog categorie heeft gerelateerde posts. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -236,7 +241,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getPosts())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Kalender event heeft gerelateerde posts. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Kalender event heeft gerelateerde posts. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -248,7 +253,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getEvents())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Kalender categorie heeft gerelateerde events. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Kalender categorie heeft gerelateerde events. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -260,7 +265,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getCompetitions())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Zwembad type heeft gerelateerde wedstrijden. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Zwembad type heeft gerelateerde wedstrijden. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -272,7 +277,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getDocuments())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: wedstrijd bijlage categorie type heeft gerelateerde documenten. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: wedstrijd bijlage categorie type heeft gerelateerde documenten. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -284,7 +289,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getTeams())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Training coach heeft gerelateerde data. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Training coach heeft gerelateerde data. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -296,12 +301,76 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getTeams())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Training schedule heeft gerelateerde groepen. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Training schedule heeft gerelateerde groepen. Deactiveren niet toegestaan.');
             }
         }
         if ($entity->getPersistent() and is_null($entity->getEndDate())) {
             $entity->setPersistent(false);
-            $this->addFlash('error', 'Fout: Uitzondering enkel toegestaan met einddatum.');
+            $this->addFlash('danger', 'Fout: Uitzondering enkel toegestaan met einddatum.');
+        }
+        parent::persistEntity($entity);
+    }
+
+    public function updateTrainingExceptionEntity($entity)
+    {
+        $this->checkTrainingExceptionEntity($entity);
+    }
+
+    public function checkTrainingExceptionEntity($entity)
+    {
+        if ($entity->getStartDate() > $entity->getEndDate()) {
+            $this->addFlash('danger', 'Fout: startdatum > einddatum.');
+            return;
+        }
+
+        $start = $entity->getStartDate();
+        $end = $entity->calcEndDate();
+        $period = $entity->getPeriod();
+        $days = $entity->getDays();
+
+        /* teams and schedule */
+        if ( count($entity->getSchedule())>0 and count($entity->getTeams())>0 ) {
+
+            $teams = $entity->getTeams();
+
+            /* check if schedule is valid in period and for the given team */
+            foreach ($entity->getSchedule() as $schedule) {
+                $scheduleTeams = $schedule->getTeams();
+                $check = 0;
+                foreach ($teams as $team) {
+                    if ($scheduleTeams->contains($team)) $check++;
+                }
+                if ( ! $schedule->isActive($start,$end,$days) or $check == 0 ) {
+                    $this->addFlash('warning', "Uurrooster \"$schedule\" valt niet in de periode voor de opgegeven groepen!");
+                    $entity->removeSchedule($schedule);
+                }
+            }
+
+        } else {
+
+            /* check if schedule is valid in period */
+            foreach ($entity->getSchedule() as $schedule) {
+                if ( ! $schedule->isActive($start,$end,$days) ) {
+                    $this->addFlash('warning', "Uurrooster \"$schedule\" valt niet in de periode!");
+                    $entity->removeSchedule($schedule);
+                }
+            }
+
+            /* check if team is valid in period */
+            foreach ($entity->getTeams() as $team) {
+                $check = 0;
+                foreach ($team->getSchedule() as $schedule) {
+                    if ($schedule->isActive($start,$end,$days)) $check++;
+                }
+                if ( $check == 0 ) {
+                    $this->addFlash('warning', "Groep \"$team\" zwemt niet in de periode!");
+                    $entity->removeTeam($team);
+                }
+            }
+        }
+        if (count($entity->getTeams()) == 0 and count($entity->getSchedule()) == 0) {
+            $this->addFlash('danger', "Fout: geen groepen en/of uurroosters gegeven!");
+            return;
         }
         parent::persistEntity($entity);
     }
@@ -312,7 +381,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getSchedule())>0 or count($entity->getCoaches())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Training group heeft gerelateerde data. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Training group heeft gerelateerde data. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -324,7 +393,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getTeams())>0 or count($entity->getCompetitions())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Training categorie heeft gerelateerde data. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Training categorie heeft gerelateerde data. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -336,7 +405,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getSchedule())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Training tijdstip heeft gerelateerde data. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Training tijdstip heeft gerelateerde data. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -348,7 +417,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getSponsors())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('error', 'Fout: Sponsor categorie heeft gerelateerde data. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Sponsor categorie heeft gerelateerde data. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);

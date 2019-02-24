@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\TrainingTeamCategory;
 use App\Entity\Competition;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -22,7 +23,7 @@ class CompetitionRepository extends ServiceEntityRepository
     // /**
     //  * @return Competition[] Returns an array of Competition objects
     //  */
-    public function findUpcomingCompetitionEventsByTeamCategory(int $teamCategory)
+    public function findUpcomingCompetitionEventsByTeamCategory(TrainingTeamCategory $teamCategory)
     {
         return $this->createQueryBuilder('competition')
             ->innerJoin('competition.calendar','event')
@@ -43,14 +44,14 @@ class CompetitionRepository extends ServiceEntityRepository
             ->setParameter('enabled', true)
             ->setParameter('today_start', date("Y-m-d").' 00:00')
             ->setParameter('today_end', date("Y-m-d").' 23:59')
-            ->setParameter('teamCategory', $teamCategory)
+            ->setParameter('teamCategory', $teamCategory->getId())
             ->orderBy('event.startTime', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
 
-    public function findCompetitionResultsByTeamCategory(int $teamCategory, string $slug = 'uitslag')
+    public function findCompetitionResultsByTeamCategory(TrainingTeamCategory $teamCategory, string $slug = 'uitslag')
     {
         return $this->createQueryBuilder('competition')
             ->innerJoin('competition.calendar','event')
@@ -71,7 +72,7 @@ class CompetitionRepository extends ServiceEntityRepository
             ->andWhere('(teamCats.id = :teamCategory or teamsCat.id = :teamCategory)')
             ->setParameter('enabled', true)
             ->setParameter('archived', false)
-            ->setParameter('teamCategory', $teamCategory)
+            ->setParameter('teamCategory', $teamCategory->getId())
             ->setParameter('slug', $slug)
             ->orderBy('event.startTime', 'DESC')
             ->getQuery()
