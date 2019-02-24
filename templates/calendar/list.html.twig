@@ -63,6 +63,7 @@
               <small>
                 {% if event.body is not empty %}<span class="text-secondary"><i class="fas fa-info-circle"></i></span>{% endif %}
                 {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
+                {% if event.createdAt > date()|date_modify("-7 days") %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
               </small>
             </h5>
 
@@ -82,18 +83,20 @@
                     {% for team in event.competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
                   </li>
                 {% endif %}
-                {% if event.competition.restrictions %}
-                  <li class="mb-1 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
-                {% endif %}
-                {% if event.competition.multiDay %}
-                  <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
-                {% endif %}
-                {% if event.competition.documents|length > 0 %}
-                  <li class="mb-1"><i class="fas fa-paperclip"></i>
-                    {% for doc in event.competition.documents %}
-                      <a href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}" class="pr-2 text-muted">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
-                    {% endfor %}
-                  </li>
+                {% if not event.cancelled %}
+                  {% if event.competition.restrictions %}
+                    <li class="mb-1 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
+                  {% endif %}
+                  {% if event.competition.multiDay %}
+                    <li class="mb-1"><i class="fas fa-info-circle"></i> overnachting</li>
+                  {% endif %}
+                  {% if event.competition.documents|length > 0 %}
+                    <li class="mb-1"><i class="fas fa-paperclip"></i>
+                      {% for doc in event.competition.documents %}
+                        <a href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}" class="pr-2 text-muted">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                      {% endfor %}
+                    </li>
+                  {% endif %}
                 {% endif %}
               {% endif %}
             </ul>

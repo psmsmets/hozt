@@ -43,14 +43,11 @@ function hasScrolled() {
     // This is necessary so you never see what is "behind" the navbar.
     if (st > lastScrollTop && st > navbarHeight){
         // Scroll Down
-        $('#nav-categories').animate({'opacity':'0'},200,function(){ 
-            $(this).removeClass('nav-down').addClass('nav-up');
-        });
+        $('#nav-categories').animate({'top':'-40px'},250);
     } else {
         // Scroll Up
         if(st + $(window).height() < $(document).height()) {
-            $('#nav-categories').removeClass('nav-up').addClass('nav-down');
-            $('#nav-categories').animate({'opacity':'1'},200);
+            $('#nav-categories').animate({'top':'0'},250);
         }
     }
     

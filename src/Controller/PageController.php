@@ -240,7 +240,6 @@ class PageController extends AbstractController
     {
         $category = $this->getDoctrine()
             ->getRepository(TrainingTeamCategory::class)
-//            ->findOneBySlugJoinedToTeamsCoaches($slug)
             ->findOneBySlug($slug)
             ;
         if (!$category) {
@@ -255,15 +254,15 @@ class PageController extends AbstractController
         );
         $this->addToTemplateData( 'training_team_exceptions', $this->getDoctrine()
             ->getRepository(TrainingException::class)
-            ->findAllByTeamCategory($category->getId())
+            ->findAllByTeamCategory($category)
         );
         $this->addToTemplateData( 'competitions', $this->getDoctrine()
             ->getRepository(Competition::class)
-            ->findUpcomingCompetitionEventsByTeamCategory($category->getId())
+            ->findUpcomingCompetitionEventsByTeamCategory($category)
         );
         $this->addToTemplateData( 'results', $this->getDoctrine()
             ->getRepository(Competition::class)
-            ->findCompetitionResultsByTeamCategory($category->getId())
+            ->findCompetitionResultsByTeamCategory($category)
         );
 
         return $this->render('training/category.html.twig', $this->template_data );

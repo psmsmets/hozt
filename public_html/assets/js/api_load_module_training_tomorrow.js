@@ -20,7 +20,7 @@ $(document).ready(function(){
                     t += "<span class=\"badge badge-hozt ml-1\">" + team.abbr + "</span>";
                 });
                 if ( item.comment ){
-                   t += "<span class=\"badge badge-info ml-1\">" + item.comment + "</span>";
+                   t += "<span class=\"badge badge-gold ml-1\">" + item.comment + "</span>";
                 }
                 t += "</div>";
                 $( t ).appendTo( "#"+module+"_items" );

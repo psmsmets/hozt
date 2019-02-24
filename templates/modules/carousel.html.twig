@@ -12,11 +12,15 @@
   <div class="carousel-inner">
   {% for slide in carousel %}
     <div class="carousel-item {% if loop.index0 == 0%}active{% endif%}">
-      {% if slide.image is not empty%}<img src="{{ vich_uploader_asset(slide, 'imageFile') }}">{% endif %}
+
+      {% if slide.image is not empty%}
+        <img src="{{ vich_uploader_asset(slide, 'imageFile') }}">
+      {% endif %}
+
       <div class="container {% if slide.overlay %}overlay{% endif %}">
         <div class="carousel-caption lead">
 
-          {% if slide.showTitle %}<h1>{{ slide.title }}</h1>{% endif %}
+          {% if slide.showTitle %}<h1>{{ slide.title|ucfirst }}</h1>{% endif %}
           {{ slide.body|raw }}
 
           {% if slide.url is not empty or slide.event is not empty %}

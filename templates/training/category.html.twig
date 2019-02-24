@@ -39,7 +39,7 @@
           <dt class="col-12 col-sm-3 text-md-right">Trainer{% if team.coaches|length > 1 %}s{%endif%}</dt>
           <dd class="col-12 col-sm-9">
             {% for coach in team.coaches %}
-              <span class="badge badge-info">{{coach.firstname}}</span>
+              <span class="badge badge-gold">{{coach.firstname}}</span>
             {% endfor %}
           </dd>
           {% endif %}
@@ -63,20 +63,34 @@
       </div><!-- end tab info -->
 
       <div class="tab-pane fade mt-4" id="trainingsuren" role="tabpanel" aria-labelledby="trainingsuren-tab">
+
 {% set enabled=false %}
+
         {% if page.training_team_exceptions is not empty and enabled %}
         <div class="alert alert-danger mb-4">
-          <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> Er is géén training</h5>
+          <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Eén of meerdere trainingen gaan niet door!</h5>
           <ul class="list-unstyled"> 
           {% for ex in page.training_team_exceptions %}
-              <li>
-                Voor {% for team in ex.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+              <li class="mb-2">
                 {% if ex.startDate == ex.endDate %}
-                  op {{ex.startDate|localizeddate('full','none')}}
+                  <strong>Op {{ex.startDate|localizeddate('full','none')}}</strong>
                 {% else %}
-                  van {{ex.startDate|localizeddate('full','none')}} tot {{ex.endDate|localizeddate('full','none')}}
+                  <strong>Tijdens de periode van {{ex.startDate|localizeddate('long','none')}} tot {{ex.endDate|localizeddate('long','none')}}</strong>
+                {% endif %}
+                {% if ex.teams|length > 0 %}
+                  {% for team in ex.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+                {% else %}
+                  {% for team in page.training_category.teams %}{% if team.enabled %}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
                 {% endif %}
                 {% if ex.comment is not empty %}<span class="badge badge-info ml-2"><i class="fas fa-info-circle"></i> {{ex.comment}}</span>{% endif %}
+                {% if ex.schedule|length > 0 %}
+                  <ul>
+                  {% for schedule in ex.schedule %}<li>specifiek op {{schedule.day|lower}} van {{schedule.time}}</li>{% endfor %}
+                    <li class="list-unstyled"><small><i>Opgelet: Eventuele andere trainingen gaan gewoon door.</i></small></li>
+                  </ul>
+                {% else %}
+                  {% if ex.startDate != ex.endDate %}<strong>voor alle trainingen</strong>{% endif %}
+                {% endif %}
               </li>
           {% endfor %}
           </ul>
@@ -110,7 +124,8 @@
             <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title|ucfirst}}
               <small>
                 {% if competition.calendar.body is not empty %}<span class="text-secondary"><i class="fas fa-info-circle"></i></span>{% endif %}
-                {% if competition.calendar.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
+                {% if competition.calendar.cancelled %}<span class="badge badge-hozt ml-1">Geannuleerd</span>{% endif %}
+                {% if competition.calendar.createdAt > date()|date_modify("-7 days") %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
               </small>
             </h5>
 

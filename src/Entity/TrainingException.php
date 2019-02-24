@@ -191,4 +191,36 @@ class TrainingException
         return $this;
     }
 
+    public function calcEndDate(): \DateTime
+    {
+        $end = clone $this->getEndDate();
+
+        return $end->setTime(23,59,59);
+    }
+
+    public function getInterval(): \DateInterval
+    {
+        return \DateInterval::createFromDateString('1 day');
+    }
+
+    public function getPeriod(): \DatePeriod
+    {
+        return new \DatePeriod($this->getStartDate(), $this->getInterval(), $this->calcEndDate());
+    }
+
+    public function getDays(): array
+    {
+        $days = array();
+
+        foreach ($this->getPeriod() as $dt) {
+
+            $day_id = intval($dt->format('w'));
+            if ( $day_id == 0 ) $day_id = 7;
+            $days[] = $day_id;
+
+        }
+
+        return array_unique($days);
+    }
+
 }
