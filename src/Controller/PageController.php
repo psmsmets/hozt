@@ -482,7 +482,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/clubfeest/inschrijvingen", name="enrolled_clubfeest")
+     * @Route("/clubfeest/ingeschreven", name="enrolled_clubfeest")
      */
     public function enrolled_clubfeest()
     {
@@ -518,7 +518,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/inschrijvingen/{slug}", name="enroll_item")
+     * @Route("/inschrijven/{slug}", name="enroll_item")
      */
     public function enroll_item()
     {
@@ -529,7 +529,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/inschrijvingen/{slug}/details", name="enroll_details")
+     * @Route("/inschrijven/{slug}/details", name="enroll_details")
      */
     public function enroll_details()
     {
@@ -540,7 +540,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/inschrijvingen/{slug}/formulier", name="enroll_form")
+     * @Route("/inschrijven/{slug}/formulier", name="enroll_form")
      */
     public function enroll_form()
     {
