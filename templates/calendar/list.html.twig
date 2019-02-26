@@ -71,8 +71,9 @@
                   <span class="badge badge-danger ml-1">Geannuleerd</span>
                 {% else %}
                   {% if event.body is not empty %}<span class="text-secondary d-inline-block align-bottom"><i class="fas fa-info-circle"></i></span>{% endif %}
-                  {% if event.createdAt > page.lastvisit|date_modify("-21 days") and not lastvisit %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
-                  {% if lastvisit and lastvisit < event.updatedAt %}<span class="badge badge-info ml-1">Update</span>{% endif %}
+                  {% if event.createdAt > page.lastvisit|date_modify("-14 days") and not lastvisit %}<span class="badge badge-gold ml-1">Nieuw</span>
+                  {% elseif (lastvisit and lastvisit < event.updatedAt) or (not lastvisit and  event.updatedAt > page.lastvisit|date_modify("-7 days"))%}<span class="badge badge-info ml-1">Update</span>
+                  {% endif %}
                 {% endif %}
               </small>
             </h5>
