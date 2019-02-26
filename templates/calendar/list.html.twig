@@ -46,6 +46,7 @@
 
       {% for event in page.calendar_events %}
 
+        {% set cookie = 'calendar_event_'~event.uuid %}
         {% set past  = date(event.trueEndTime) < date() %}
         {% set year  = date(event.trueEndTime)|date_modify('last day of december this year noon') %}
         {% set month = date(event.trueEndTime)|date_modify('last day of this month noon') %}
@@ -61,9 +62,9 @@
 
             <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|ucfirst}}
               <small>
-                {% if event.body is not empty %}<span class="text-secondary"><i class="fas fa-info-circle"></i></span>{% endif %}
+                {% if event.body is not empty %}<span class="text-secondary d-inline-block align-bottom"><i class="fas fa-info-circle"></i></span>{% endif %}
                 {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
-                {% if event.createdAt > date()|date_modify("-7 days") %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
+                {% if event.createdAt > page.lastvisit|date_modify("-21 days") and cookie not in app.request.cookies|keys %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
               </small>
             </h5>
 

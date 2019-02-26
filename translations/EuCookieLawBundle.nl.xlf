@@ -11,11 +11,11 @@
       </trans-unit>
       <trans-unit id="nLQ._F." resname="cookie.message">
         <source>cookie.message</source>
-        <target>Deze website maakt gebruik van functionele en statistische cookies. Deze cookies zijn nodig om de website goed te laten werken en brengen, volledig anoniem, jouw gebruik in kaart voor analyse en onderzoek voor het verbeteren van de website.</target>
+        <target>Deze website maakt gebruik van functionele en statistische cookies. Deze cookies zijn nodig om de website goed te laten werken en brengen, volledig anoniem, jouw gebruik in kaart voor het verbeteren van de website.</target>
       </trans-unit>
       <trans-unit id="prjKeTl" resname="cookie.message.accept">
         <source>cookie.message.accept</source>
-        <target>Aanvaarden</target>
+        <target>Doorgaan</target>
       </trans-unit>
       <trans-unit id="SJOq3UN" resname="cookie.title">
         <source>cookie.title</source>

@@ -1,5 +1,6 @@
 {% extends 'default.html.twig' %}
 
+{% set cookie = 'calendar_event_'~page.calendar_event.uuid %}
 {% set event = page.calendar_event %}
 {% set past  = date(event.trueEndTime) < date() %}
 
@@ -18,11 +19,12 @@
 
       <div class="media-body lh-125">
 
-        {% if event.cancelled %}
-          <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|title}}<small><span class="badge badge-danger">Geannuleerd</span></small></h5>
-        {% else %}
-          <h5 class="pb-0 mb-1">{{event.title|ucfirst}}</h5>
-        {% endif %}
+        <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|ucfirst}}
+          <small>
+            {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
+            {% if cookie not in app.request.cookies|keys %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
+          </small>
+        </h5>
 
         <h6 class="d-flex justify-content-between mb-2">{{event.getFormattedPeriod|lower}}</h6>
 
