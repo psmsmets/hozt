@@ -1,0 +1,47 @@
+{% block eu_cookie_message %}
+
+<div class="modal fade" id="cookie-law-modal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard=false>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title text-hozt" id="exampleModalLabel">{{ 'cookie.title'|trans({}, 'EuCookieLawBundle') }}</h4>
+      </div>
+      <div class="modal-body">
+        <p>{{ 'cookie.message'|trans({}, 'EuCookieLawBundle') }}</p>
+        <p>{{ 'cookie.readmore'|trans({'%link_start%' : '<a href="/privacy">', '%link_end%' : '</a>'}, 'EuCookieLawBundle') | raw }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-hozt" data-dismiss="modal" id="cookie-law-close-button"><i class="fas fa-cookie-bite"></i> {{ 'cookie.message.accept'|trans({}, 'EuCookieLawBundle') }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block eu_cookie_message_js %}
+    <script type="text/javascript">
+        $('#cookie-law-modal').modal('show')
+        var cookieBar = document.getElementById('cookie-law-modal'),
+            button = document.getElementById('cookie-law-close-button');
+
+        function hideCookieBar() {
+            cookieBar.style.display = 'none';
+            $('#cookie-law-modal').modal('hide')
+        }
+
+        function setCookieAccepted() {
+            expiry = new Date();
+            expiry.setTime(expiry.getTime()+({{ cookieExpiryTime }} * 1000 * 60 * 60 * 24));
+            document.cookie = "cookie_law_accepted=1; expires=" + expiry.toGMTString();
+        }
+
+        button.onclick = function() {
+            hideCookieBar();
+            setCookieAccepted();
+
+            return false;
+        }
+    </script>
+{% endblock %}

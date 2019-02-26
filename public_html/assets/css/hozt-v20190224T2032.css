@@ -72,7 +72,8 @@ a.text-decoration-none:hover { text-decoration: none; }
 }
 
 .bg-gold, .btn-gold, .badge-gold {
-  background-color: #d4af37; 
+  background: -webkit-linear-gradient(top, #FAD766 0%, #DF9F28 100%);
+  background: linear-gradient(top, #FAD766, #DF9F28);
 }
 
 .page-item.active a.page-link, .btn-outline-hozt:hover {
@@ -325,6 +326,8 @@ ul.cal i {
 .badge.cal-2, .badge.cal.cal-2 {
   /*background-color: #007bff;*/
   background-color: #d4af37;
+  background: -webkit-linear-gradient(top, #FAD766 0%, #DF9F28 100%);
+  background: linear-gradient(top, #FAD766, #DF9F28);
 }
 a.badge.cal-2:hover {
   /*background-color: #0062cc;*/

@@ -84,6 +84,10 @@ ambta_doctrine_encrypt:
     secret_directory_path: '%kernel.project_dir%'   # Default value
     encryptor_class: Defuse # Halite
 
+eu_cookie_law:
+    response_injection: true # default true
+    template: modules/cookie_modal.html.twig # twig template name, default: EuCookieLawBundle::cookie_law_bar.html.twig
+
 fos_ck_editor:
     default_config: standard
     configs:
