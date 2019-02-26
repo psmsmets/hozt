@@ -135,7 +135,7 @@
                   {% if competition.calendar.cancelled %}
                     <span class="badge badge-danger ml-1">Geannuleerd</span>
                   {% else %}
-                    {% if competition.calendar.body is not empty %}<span class="text-secondary d-inline-block align-bottom"><i class="fas fa-info-circle"></i></span>{% endif %}
+                    {% if competition.calendar.body is not empty %}<span class="badge badge-light">&nbsp;<i class="fas fa-info"></i>&nbsp;</span>{% endif %}
                     {% if competition.calendar.createdAt > page.lastvisit|date_modify("-14 days") and not lastvisit %}<span class="badge badge-gold ml-1">Nieuw</span>
                     {% elseif (lastvisit and lastvisit < competition.calendar.updatedAt) or (not lastvisit and  competition.calendar.updatedAt > page.lastvisit|date_modify("-7 days"))%}<span class="badge badge-info ml-1">Update</span>
                     {% endif %}
