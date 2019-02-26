@@ -120,6 +120,11 @@
         {% for competition in page.competitions %}
 
           {% set cookie = 'calendar_event_'~competition.calendar.uuid %}
+          {% if app.request.cookies.has(cookie) %}
+            {% set lastvisit = app.request.cookies.get(cookie)|epoch %}
+          {% else %}
+            {% set lastvisit = false %}
+          {% endif %}
 
           <div class="row mb-4 mt-4 mb-md-3 mt-md-3 {% if competition.calendar.cancelled %}text-muted{% endif %}">
             <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{competition.calendar.getFormattedPeriod}}</h6></div>
@@ -127,9 +132,13 @@
 
               <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title|ucfirst}}
                 <small>
-                  {% if competition.calendar.body is not empty %}<span class="text-secondary d-inline-block align-bottom"><i class="fas fa-info-circle"></i></span>{% endif %}
-                  {% if competition.calendar.cancelled %}<span class="badge badge-hozt ml-1">Geannuleerd</span>{% endif %}
-                  {% if competition.calendar.createdAt > page.lastvisit|date_modify("-21 days") and cookie not in app.request.cookies|keys %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
+                  {% if competition.calendar.cancelled %}
+                    <span class="badge badge-danger ml-1">Geannuleerd</span>
+                  {% else %}
+                    {% if competition.calendar.body is not empty %}<span class="text-secondary d-inline-block align-bottom"><i class="fas fa-info-circle"></i></span>{% endif %}
+                    {% if competition.calendar.createdAt > page.lastvisit|date_modify("-21 days") and not lastvisit %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
+                    {% if lastvisit and lastvisit < competition.calendar.updatedAt %}<span class="badge badge-info ml-1">Update</span>{% endif %}
+                  {% endif %}
                 </small>
               </h5>
 

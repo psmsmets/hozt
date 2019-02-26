@@ -63,12 +63,13 @@ class PageController extends AbstractController
         $this->template_data[$cat][$key] = $data;
     }
 
-    private function pageReturnCookie(string $cookie, Request $request)
+    private function pageReturnCookie(string $cookie, Request $request): ?\DateTime
     {
         $lastvisit = null;
 
         if ($request->cookies->has($cookie)) {
-            $lastvisit = $request->cookies->get($cookie);
+            $lastvisit = new\DateTime;
+            $lastvisit->setTimestamp($request->cookies->get($cookie));
         }
 
         $now = time();
@@ -80,7 +81,7 @@ class PageController extends AbstractController
         return $lastvisit;
     }
 
-    private function pageVisitedCookie(string $cookie, Request $request)
+    private function pageVisitedCookie(string $cookie, Request $request): bool
     {
         $visited = $request->cookies->has($cookie);
 
