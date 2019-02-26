@@ -11,6 +11,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFilter('price', [$this, 'formatPrice']),
+            new TwigFilter('epoch', [$this, 'fromTimestamp']),
             new TwigFilter('ucfirst', 'ucfirst'),
             new TwigFilter('lcfirst', 'lcfirst'),
             new TwigFilter('ucwords', 'ucwords'),
@@ -23,5 +24,11 @@ class AppExtension extends AbstractExtension
         $price = '$'.$price;
 
         return $price;
+    }
+
+    public function fromTimestamp(int $timestamp): \DateTime
+    {
+        $time = new \DateTime;
+        return $time->setTimestamp($timestamp);
     }
 }
