@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Cookie;
 
 # entities
 use App\Entity\StaticPage;
@@ -58,6 +61,36 @@ class PageController extends AbstractController
     private function addToTemplateData(string $key, $data, string $cat = 'page')
     {
         $this->template_data[$cat][$key] = $data;
+    }
+
+    private function pageReturnCookie(string $cookie, Request $request)
+    {
+        $lastvisit = null;
+
+        if ($request->cookies->has($cookie)) {
+            $lastvisit = $request->cookies->get($cookie);
+        }
+
+        $now = time();
+
+        $response = new Response();
+        $response->headers->setCookie(new Cookie($cookie, $now, (5 * 365 * 24 * 60 * 60) + $now ));
+        $response->send();
+
+        return $lastvisit;
+    }
+
+    private function pageVisitedCookie(string $cookie, Request $request)
+    {
+        $visited = $request->cookies->has($cookie);
+
+        if (!$visited) {
+            $response = new Response();
+            $response->headers->setCookie(new Cookie($cookie, 1, (5 * 365 * 24 * 60 * 60) + $now ));
+            $response->send();
+        }
+
+        return $visited;
     }
 
     /**
@@ -288,7 +321,7 @@ class PageController extends AbstractController
     /**
      * @Route("/kalender/{year}", name="calendar_list")
      */
-    public function calendar_list(int $year = null )
+    public function calendar_list(int $year = null, Request $request)
     {
         if (is_null($year) or $year < 2016 or $year > 2050 ) {
             return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
@@ -298,6 +331,9 @@ class PageController extends AbstractController
         $end   = date('Y-m-d H:i', strtotime(strval($year).'-09-01 +1 year'));
 
         $this->initTemplateData();
+        $this->addToTemplateData( 'lastvisit',
+            $this->pageReturnCookie('calendar_list', $request)
+        );
         $this->addToTemplateData( 'calendar_categories', $this->getDoctrine()
             ->getRepository(CalendarCategory::class)
             ->findAllEnabled()
@@ -314,7 +350,7 @@ class PageController extends AbstractController
     /**
      * @Route("/kalender/{uuid}", name="calendar_event")
      */
-    public function calendar_event (string $uuid)
+    public function calendar_event (string $uuid, Request $request)
     {
         $event = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
@@ -324,6 +360,9 @@ class PageController extends AbstractController
             throw $this->createNotFoundException();
             //return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
         }
+
+        $lastvisit = $this->pageReturnCookie('calendar_event_'.$uuid, $request);
+
         $this->initTemplateData();
         $this->addToTemplateData( 'calendar_event', $event);
         $this->addToTemplateData( 'calendar_posts', $this->getDoctrine()
