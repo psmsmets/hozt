@@ -116,46 +116,50 @@
       {% if page.competitions|length == 0 %}
         <p>Er staan geen wedstrijden op de kalender.</p>
       {% else %}
+
         {% for competition in page.competitions %}
-        <div class="row mb-4 mt-4 mb-md-3 mt-md-3 {% if competition.calendar.cancelled %}text-muted{% endif %}">
-          <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{competition.calendar.getFormattedPeriod}}</h6></div>
-          <div class="col-12 col-md-9 cal" onclick="window.location='{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}';">
 
-            <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title|ucfirst}}
-              <small>
-                {% if competition.calendar.body is not empty %}<span class="text-secondary"><i class="fas fa-info-circle"></i></span>{% endif %}
-                {% if competition.calendar.cancelled %}<span class="badge badge-hozt ml-1">Geannuleerd</span>{% endif %}
-                {% if competition.calendar.createdAt > date()|date_modify("-7 days") %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
-              </small>
-            </h5>
+          {% set cookie = 'calendar_event_'~competition.calendar.uuid %}
 
-            <ul class="list-unstyled text-muted small mb-1 cal">
-              <li><i class="fas fa-swimming-pool"></i> {{competition.pool}}{% if competition.calendar.location %}, {{competition.calendar.location|ucwords }}{% endif %}</li>
-              {% if competition.teamCategories|length > 0 %}
-                <li><i class="fas fa-swimmer"></i>
-                  {% for category in competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}
-                </li>
-              {% elseif competition.teams|length > 0%}
-                <li><i class="fas fa-swimmer"></i>
-                  {% for team in competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
-                </li>
-              {% endif %}
-              {% if competition.multiDay %}
-                <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
-              {% endif %}
-              {% if competition.restrictions %}
-                <li class="text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
-              {% endif %}
-              {% if competition.documents is not empty %}
-                <li><i class="fas fa-paperclip"></i>
-                  {% for doc in competition.documents %}
-                    <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="pr-2">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
-                  {% endfor %}
-                </li>
-              {% endif %}
-            </ul>
+          <div class="row mb-4 mt-4 mb-md-3 mt-md-3 {% if competition.calendar.cancelled %}text-muted{% endif %}">
+            <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{competition.calendar.getFormattedPeriod}}</h6></div>
+              <div class="col-12 col-md-9 cal" onclick="window.location='{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}';">
+
+              <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title|ucfirst}}
+                <small>
+                  {% if competition.calendar.body is not empty %}<span class="text-secondary d-inline-block align-bottom"><i class="fas fa-info-circle"></i></span>{% endif %}
+                  {% if competition.calendar.cancelled %}<span class="badge badge-hozt ml-1">Geannuleerd</span>{% endif %}
+                  {% if competition.calendar.createdAt > page.lastvisit|date_modify("-21 days") and cookie not in app.request.cookies|keys %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
+                </small>
+              </h5>
+
+              <ul class="list-unstyled text-muted small mb-1 cal">
+                <li><i class="fas fa-swimming-pool"></i> {{competition.pool}}{% if competition.calendar.location %}, {{competition.calendar.location|ucwords }}{% endif %}</li>
+                {% if competition.teamCategories|length > 0 %}
+                  <li><i class="fas fa-swimmer"></i>
+                    {% for category in competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}
+                  </li>
+                {% elseif competition.teams|length > 0%}
+                  <li><i class="fas fa-swimmer"></i>
+                    {% for team in competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
+                  </li>
+                {% endif %}
+                {% if competition.multiDay %}
+                  <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
+                {% endif %}
+                {% if competition.restrictions %}
+                  <li class="text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
+                {% endif %}
+                {% if competition.documents is not empty %}
+                  <li><i class="fas fa-paperclip"></i>
+                    {% for doc in competition.documents %}
+                      <a href="{{ vich_uploader_asset(doc,'documentFile') }}" class="pr-2">{{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                    {% endfor %}
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
           </div>
-        </div>
         {% endfor %}
       {% endif %}
       </div>
