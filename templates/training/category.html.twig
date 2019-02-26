@@ -130,14 +130,15 @@
             <div class="col-12 col-md-3 text-md-right"><h6 class="mb-1 mb-md-2">{{competition.calendar.getFormattedPeriod}}</h6></div>
               <div class="col-12 col-md-9 cal" onclick="window.location='{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}';">
 
-              <h5 class="pb-0 mb-1 d-flex justify-content-between">{{competition.calendar.title|ucfirst}}
+              <h5 class="pb-0 mb-1 d-flex justify-content-between">{% if competition.calendar.cancelled %}<s>{% endif %}{{competition.calendar.title|ucfirst}}{% if competition.calendar.cancelled %}</s>{% endif %}
                 <small>
                   {% if competition.calendar.cancelled %}
                     <span class="badge badge-danger ml-1">Geannuleerd</span>
                   {% else %}
-                    {% if competition.calendar.body is not empty %}<span class="text-secondary d-inline-block align-bottom"><i class="fas fa-info-circle"></i></span>{% endif %}
-                    {% if competition.calendar.createdAt > page.lastvisit|date_modify("-21 days") and not lastvisit %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
-                    {% if lastvisit and lastvisit < competition.calendar.updatedAt %}<span class="badge badge-info ml-1">Update</span>{% endif %}
+                    {% if competition.calendar.body is not empty %}<span class="badge badge-light">&nbsp;<i class="fas fa-info"></i>&nbsp;</span>{% endif %}
+                    {% if competition.calendar.createdAt > page.lastvisit|date_modify("-14 days") and not lastvisit %}<span class="badge badge-gold ml-1">Nieuw</span>
+                    {% elseif (lastvisit and lastvisit < competition.calendar.updatedAt) or (not lastvisit and  competition.calendar.updatedAt > page.lastvisit|date_modify("-7 days"))%}<span class="badge badge-info ml-1">Update</span>
+                    {% endif %}
                   {% endif %}
                 </small>
               </h5>

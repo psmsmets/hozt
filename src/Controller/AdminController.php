@@ -259,6 +259,16 @@ class AdminController extends EasyAdminController
         parent::persistEntity($entity);
     }
 
+    public function updateCompetitionEntity($entity)
+    {
+        $event = $entity->getCalendar();
+        $event->setUpdatedAt();
+        $this->em->flush();
+
+        $entity->setUpdatedAt();
+        parent::persistEntity($entity);
+    }
+
     public function updateCompetitionPoolEntity($entity)
     {
         $entity->setUpdatedAt();
