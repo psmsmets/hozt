@@ -269,7 +269,7 @@ class PageController extends AbstractController
     /**
      * @Route("/aanbod/{slug}", name="training_category")
      */
-    public function training_category($slug)
+    public function training_category($slug, Request $request)
     {
         $category = $this->getDoctrine()
             ->getRepository(TrainingTeamCategory::class)
@@ -280,6 +280,9 @@ class PageController extends AbstractController
         }
 
         $this->initTemplateData();
+        $this->addToTemplateData( 'lastvisit',
+            $this->pageReturnCookie('training_category', $request)
+        );
         $this->addToTemplateData( 'training_category', $category );
         $this->addToTemplateData( 'training_days', $this->getDoctrine()
             ->getRepository(TrainingDay::class)
