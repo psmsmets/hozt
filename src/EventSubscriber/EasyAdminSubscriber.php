@@ -46,24 +46,4 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         $event['entity'] = $entity;
     }
 
-/*
-    public function setSequence(GenericEvent $event)
-    {
-        $entity = $event->getSubject();
-        if (!method_exists($entity, 'setSequence')) {
-            return;
-        }
-        $entityName = $this->em->getMetadataFactory()->getMetadataFor(get_class($entity))->getName();
-        $repository = $this->em->getRepository($entityName);
-
-        $sequence = (int) $repository
-            ->createQueryBuilder('c')
-            ->select('MAX(c.sequence) as sequence')
-            ->getQuery()
-            ->getSingleScalarResult()+1;
-        $entity->setSequence($sequence);
-        $event['entity'] = $entity;
-    }
-*/
-
 }
