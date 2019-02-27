@@ -134,6 +134,11 @@ class CalendarEvent
      */
     private $posts;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\StaticPage", inversedBy="calendar")
+     */
+    private $staticPage;
+
     public function __construct()
     {
         $this->uuid = bin2hex(random_bytes(8));
@@ -516,6 +521,18 @@ class CalendarEvent
                 $post->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStaticPage(): ?StaticPage
+    {
+        return $this->staticPage;
+    }
+
+    public function setStaticPage(?StaticPage $staticPage): self
+    {
+        $this->staticPage = $staticPage;
 
         return $this;
     }
