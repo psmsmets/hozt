@@ -18,6 +18,12 @@
 
     {{ page.static.body|raw }}
 
+    {% if page.document is not empty %}
+      <p class="text-center text-md-left">
+        <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-hozt"><i class="fas fa-file-pdf"></i> bijlage</a>
+      </p>
+    {% endif %}
+
   </div>
 
 {% endblock %}
