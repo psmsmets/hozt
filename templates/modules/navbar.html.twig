@@ -24,8 +24,11 @@
       <li class="nav-item {% if currentPath == '/lid-worden' %}active{% endif%}">
         <a class="nav-link" href="/lid-worden"><i class="fas fa-hand-point-right d-lg-none"></i> Lid worden</a>
       </li>
-      <li class="nav-item {% if currentPath starts with '/inschrijven' %}active{% endif%} mt-4 mt-lg-0">
+      <li class="nav-item {% if currentPath starts with '/inschrijven' %}active{% endif%} mt-4 mt-lg-0 d-none">
         <a class="nav-link btn btn-outline-secondary" href="{{ path('enroll_list') }}"><i class="fas fa-check d-lg-none"></i> Inschrijven</a>
+      </li>
+      <li class="nav-item {% if currentPath starts with '/interscholen' %}active{% endif%} mt-4 mt-lg-0">
+        <a class="nav-link btn btn-outline-secondary" href="/interscholen"><i class="fas fa-trophy d-lg-none"></i> Interscholen <span class="d-md-none d-xl-inline">Wedstrijd</span></a>
       </li>
     </ul>
     <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
