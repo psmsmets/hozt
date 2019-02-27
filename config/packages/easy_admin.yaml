@@ -152,6 +152,7 @@ easy_admin:
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.staticPage_images%' }
+                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.staticPage_documents%' }
                     - { property: 'keywords', label: 'Keywords' }
                     - { property: 'showUpdatedAt', label: 'Toon laatst aangepast' }
                     - { property: 'access', label: 'Toegang' }
@@ -186,6 +187,8 @@ easy_admin:
                     - { property: 'publishUntil', label: 'Publiceer tot' }
                     - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getFilteredCalendarEvents'] } }
                     - { property: 'url', label: 'Externe url' }
+            edit:
+                actions: ['delete']
         Sponsor:
             class: App\Entity\Sponsor
             label: 'Sponsor'

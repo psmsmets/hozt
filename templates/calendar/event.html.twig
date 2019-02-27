@@ -56,14 +56,22 @@
         {% endif %}
 
         {% if event.competition is empty %}
-          {% if event.document is not empty %}
+          {% if event.document is not empty or event.url is not empty %}
             <p class="text-center text-md-left">
-              <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+              {% if event.url is not empty %}
+                <a href="{{event.url}}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-info-circle"></i> meer info</a>
+              {% endif %}
+              {% if event.document is not empty %}
+                <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+              {% endif %}
             </p>
           {% endif %}
         {% else %}
-          {% if event.document is not empty or event.competition.documents is not empty %}
+          {% if event.document is not empty or event.url is not empty or event.competition.documents is not empty %}
             <p class="text-center text-md-left">
+              {% if event.url is not empty %}
+                <a href="{{event.url}}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-info-circle"></i> meer info</a>
+              {% endif %}
               {% if event.document is not empty %}
                 <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
               {% endif %}

@@ -75,7 +75,7 @@ class PageController extends AbstractController
         $now = time();
 
         $response = new Response();
-        $response->headers->setCookie(new Cookie($cookie, $now, (2 * 365 * 24 * 60 * 60) + $now ));
+        $response->headers->setCookie(Cookie::create($cookie, $now, (2 * 365 * 24 * 60 * 60) + $now ));
         $response->send();
 
         return $lastvisit;
@@ -87,7 +87,7 @@ class PageController extends AbstractController
 
         if (!$visited) {
             $response = new Response();
-            $response->headers->setCookie(new Cookie($cookie, 1, (2 * 365 * 24 * 60 * 60) + $now ));
+            $response->headers->setCookie(Cookie::create($cookie, 1, (2 * 365 * 24 * 60 * 60) + $now ));
             $response->send();
         }
 

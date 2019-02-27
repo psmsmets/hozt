@@ -92,9 +92,15 @@ class StaticPage
     private $imageFile;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $views;
+    private $document;
+
+    /**
+     * @Vich\UploadableField(mapping="blogPost_documents", fileNameProperty="document")
+     * @var File
+     */
+    private $documentFile;
 
     public function __construct()
     {
@@ -102,7 +108,6 @@ class StaticPage
         $this->updatedAt = $this->createdAt;
         $this->enabled = StaticPage::ENABLED;
         $this->showUpdatedAt = StaticPage::SHOW_UPDATED_AT;
-        $this->resetViews();
     }
 
     public function getId(): ?int
@@ -276,23 +281,34 @@ class StaticPage
         return $this->imageFile;
     }
 
-    public function getViews(): ?int
+    public function getDocument(): ?string
     {
-        return $this->views;
+        return $this->document;
     }
 
-    public function resetViews(): self
+    public function setDocument(?string $document): self
     {
-        $this->views = 0;
+        $this->document = $document;
 
         return $this;
     }
 
-    public function addView(): self
+    public function setDocumentFile(File $document = null)
     {
-        $this->views = $this->views+1;
+        $this->documentFile = $document;
 
-        return $this;
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($document) {
+            $this->updatedAt = new \DateTime('now');
+        }
     }
+
+    public function getDocumentFile()
+    {
+        return $this->documentFile;
+    }
+
 
 }
