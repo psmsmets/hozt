@@ -9,6 +9,7 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 class BlogPostListener
 {
 
+/*
     private $entityManager;
     
     public function __construct(EntityManagerInterface $entityManager)
@@ -19,4 +20,5 @@ class BlogPostListener
     public function preUpdate()
     {
     }
+*/
 }

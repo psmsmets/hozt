@@ -26,4 +26,81 @@
 
   </div>
 
+  {% if page.static.calendar is not empty %}
+
+    <h5 class="m-3 ml-md-0"><i class="far fa-calendar-alt mr-1"></i> Kalender <span class="text-muted">en documenten</span></h5>
+
+    {% for event in page.static.calendar %}
+
+    <div class="p-3 mb-4 {% if event.cancelled %}alert-danger{% else %}bg-white{% endif %} shadow-sm">
+
+      <div class="media align-top pt-2 cal-{{event.category.sequence}}">
+
+        <span class="badge badge-dark mr-3 cal cal-md cal-{{event.category.sequence}}">{{event.startTime|date('d')}}<br>{{event.startTime|localizeddate('none', 'none', null, null, 'LLL')|trim('.')}}</span>
+
+        <div class="media-body lh-125">
+
+          <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|ucfirst}}
+            <small>
+              {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
+            </small>
+          </h5>
+
+          <h6 class="d-flex justify-content-between mb-2">{{event.getFormattedPeriod|lower}}</h6>
+
+          <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} small cal">
+            {% if event.competition is empty %}
+              {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|ucwords}}</li>{% endif %}
+            {% else %}
+              <li class="mb-1"><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}{% if event.location %}, {{event.location|ucwords}}{% endif %}</li>
+              {% if event.competition.teamCategories|length > 0 %}
+                <li class="mb-1"><i class="fas fa-swimmer"></i>
+                  {% for category in event.competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}
+                </li>
+              {% elseif event.competition.teams|length > 0%}
+                <li class="mb-1"><i class="fas fa-swimmer"></i>
+                  {% for team in event.competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
+                </li>
+              {% endif %}
+              {% if event.competition.restrictions %}
+                <li class="mb-1 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
+              {% endif %}
+              {% if event.competition.multiDay %}
+                <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> met overnachting</li>
+              {% endif %}
+            {% endif %}
+          </ul>
+
+          {% if event.competition is empty %}
+            {% if event.document is not empty %}
+              <p class="text-center text-md-left">
+                <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+              </p>
+            {% endif %}
+          {% else %}
+            {% if event.document is not empty or event.competition.documents is not empty %}
+              <p class="text-center text-md-left">
+                {% if event.document is not empty %}
+                  <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+                {% endif %}
+                {% if event.competition.documents is not empty %}
+                  {% for doc in event.competition.documents %}
+                    <a href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}" class="btn btn-sm btn-outline-hozt mr-2 mb-2"><i class="fas fa-file-pdf"></i> {{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                  {% endfor %}
+                {% endif %}
+              </p>
+            {% endif %}
+
+          {% endif %}
+
+        </div>
+
+      </div>
+
+    </div>
+
+    {% endfor %}
+
+  {% endif %}
+
 {% endblock %}

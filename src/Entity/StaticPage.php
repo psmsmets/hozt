@@ -15,12 +15,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class StaticPage
 {
     /**
-     * Parameters
-     */
-    const SHOW_UPDATED_AT = false;
-    const ENABLED = true;
-
-    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -113,9 +107,14 @@ class StaticPage
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->enabled = StaticPage::ENABLED;
-        $this->showUpdatedAt = StaticPage::SHOW_UPDATED_AT;
+        $this->enabled = true;
+        $this->showUpdatedAt = false;
         $this->calendar = new ArrayCollection();
+    }
+
+    public function __toString(): ?string
+    {
+        return $this->slug;
     }
 
     public function getId(): ?int
@@ -348,6 +347,5 @@ class StaticPage
 
         return $this;
     }
-
 
 }

@@ -150,12 +150,12 @@ easy_admin:
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } } 
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Actief' }
+                    - { property: 'showUpdatedAt', label: 'Toon laatst aangepast' }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
+                    - { property: 'keywords', label: 'Keywords' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.staticPage_images%' }
                     - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.staticPage_documents%' }
-                    - { property: 'keywords', label: 'Keywords' }
-                    - { property: 'showUpdatedAt', label: 'Toon laatst aangepast' }
-                    - { property: 'access', label: 'Toegang' }
+                    #- { property: 'access', label: 'Toegang' }
             edit:
                 actions: ['-delete']
                 fields:
@@ -490,6 +490,7 @@ easy_admin:
                     - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'location', label: 'Locatie' }
                     - { property: 'url', label: 'Website' }
+                    - { property: 'staticPage', label: 'Pagina' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.calendar_images%' }
                     - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.calendar_documents%' }
             search:

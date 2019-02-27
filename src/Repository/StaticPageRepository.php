@@ -24,9 +24,11 @@ class StaticPageRepository extends ServiceEntityRepository
     //  */
     public function findBySlug($slug): ?StaticPage
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.slug = :slug')
-            ->andWhere('c.enabled = :enabled')
+        return $this->createQueryBuilder('page')
+            ->leftJoin('page.calendar', 'cal')
+            ->addSelect('cal')
+            ->andWhere('page.slug = :slug')
+            ->andWhere('page.enabled = :enabled')
             ->setParameter('slug', $slug)
             ->setParameter('enabled', true)
             ->getQuery()
