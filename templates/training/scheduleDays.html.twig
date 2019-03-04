@@ -23,6 +23,7 @@
           <span class="badge badge-secondary mr-2">{{ team.abbr }}</span>
         {% endfor %}
         {% if schedule.comment is not empty %}<span class="badge badge-gold ml-3">{{ schedule.comment }}</span>{% endif %}
+        {% if schedule.description is not empty %}<span class="badge badge-light text-muted ml-2 ml-md-3"><i class="fas fa-comment"></i> {{schedule.description}}</span>{% endif %}
         </dt>
 
       {% endfor %}

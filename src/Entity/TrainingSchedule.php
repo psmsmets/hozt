@@ -80,11 +80,17 @@ class TrainingSchedule
      */
     private $persistent;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->startDate = $this->createdAt;
+        $this->endDate = $this->createdAt;
         $this->enabled = true;
         $this->persistent = false;
         $this->teams = new ArrayCollection();
@@ -276,6 +282,18 @@ class TrainingSchedule
                 ( $this->getEndDate() >= $end or is_null($this->getEndDate()) ) and
                 in_array( $this->getDay()->getId(), $days )
              );
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
     }
 
 }

@@ -21,7 +21,7 @@
         {% set previous = false %}
         {% for schedule in team.schedule %}
           <dt class="col-sm-3 text-md-right">{% if previous == false or previous.day.name != schedule.day.name %}{{schedule.day.name}}{%endif%}</dt>
-          <dd class="col-sm-9">{{ schedule.time }} {% if schedule.comment is not empty %}<span class="badge badge-gold ml-3">{{ schedule.comment }}</span>{% endif %}</dd>
+          <dd class="col-sm-9">{{ schedule.time }} {% if schedule.comment is not empty %}<span class="badge badge-gold ml-3">{{ schedule.comment }}</span>{% endif %}{% if schedule.description is not empty %}<span class="badge badge-light text-muted ml-2 ml-md-3"><i class="fas fa-comment"></i> {{schedule.description}}</span>{% endif %}</dd>
           {% set previous = schedule %}
         {% endfor %}
       </dl>

@@ -47,6 +47,13 @@ class EasyAdminRepository
             ->setParameter('enabled', true)
         ;
     }
+    public static function getTrainingTime(EntityRepository $er) {
+        return $er->createQueryBuilder('time')
+            ->where('time.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ->orderBy('time.startTime', 'ASC')
+        ;
+    }
     public static function getTrainingSchedule(EntityRepository $er) {
         return $er->createQueryBuilder('c')
             ->where('c.enabled = :enabled')
