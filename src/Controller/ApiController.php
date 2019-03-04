@@ -72,11 +72,12 @@ class ApiController extends AbstractController
      */
     public function training_today()
     {
-        $day_id = date('N', strtotime(date("Y-m-d")));
+        $date = new \DateTime('today midnight');
+        $day_id = date('N', $date->getTimestamp());
 
         $schedule = $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
-            ->findAllByDayJoinedToTeam($day_id)
+            ->findAllByDayJoinedToTeam($day_id,$date)
             ;
 
         if (!$schedule) {
@@ -101,11 +102,13 @@ class ApiController extends AbstractController
      */
     public function training_tomorrow()
     {
-        $day_id = date('N', strtotime(date("Y-m-d").'+1 day'));
+        $date = new \DateTime('today midnight');
+        $date->modify('+1 day');
+        $day_id = date('N', $date->getTimestamp());
 
         $schedule = $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
-            ->findAllByDayJoinedToTeam($day_id)
+            ->findAllByDayJoinedToTeam($day_id,$date)
             ;
 
         if (!$schedule) {

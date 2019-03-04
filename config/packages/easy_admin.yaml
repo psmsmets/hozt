@@ -372,8 +372,9 @@ easy_admin:
                 fields:
                     - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'day', label: 'Dag' }
-                    - { property: 'time', label: 'Tijdstip', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'time', label: 'Tijdstip', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getTrainingTime'] } }
                     - { property: 'comment', label: 'Opmerking' }
+                    - { property: 'description', label: 'Omschrijving' }
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot' }
                     - { property: 'enabled', label: 'Actief' }

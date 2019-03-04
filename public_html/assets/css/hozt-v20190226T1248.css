@@ -489,3 +489,20 @@ a.badge.cal-5:hover {
     bottom: 1.5rem;
   }
 }
+
+@media print {
+  .container {
+    width: auto;
+  }
+  body {
+    padding-top: 0;
+  }
+  .bg-light {
+    background-color: none;
+  }
+  .col-print-12 {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}

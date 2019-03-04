@@ -105,6 +105,7 @@
               <dd class="col-7 col-sm-7 mb-1">
                 {% for team in schedule.teams %}<span class="badge badge-secondary ml-1 ml-md-2">{{team}}</span>{% endfor %}
                 {% if schedule.comment is not empty %}<span class="badge badge-info ml-2 ml-md-3"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
+                {% if schedule.description is not empty %}<span class="badge badge-light text-muted ml-2 ml-md-3"><i class="fas fa-comment"></i> {{schedule.description}}</span>{% endif %}
             </dd>
             {% endfor %}
           </dl>

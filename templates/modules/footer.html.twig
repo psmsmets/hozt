@@ -1,4 +1,4 @@
-<footer class="container mt-2 mt-md-3">
+<footer class="container mt-2 mt-md-3 d-print-none">
 
   <div class="row justify-content-around text-center pt-2 pt-md-3">
     {% for sponsor in base.sponsors %} 
@@ -14,7 +14,7 @@
 
 <!--<footer class="bg-dark pb-4 pt-4 text-light">-->
 <!--<footer class="pb-3">-->
-<footer class="bg-gold pb-4 pt-4 text-light font-weight-light">
+<footer class="bg-gold pb-4 pt-4 text-light font-weight-light d-print-none">
 <div class="container">
   <h4 class="text-hozt"># We are red and gold</h4>
   <div class="row pt-2 pt-md-3">
@@ -67,7 +67,7 @@
 </div>
 </footer>
 
-<div class="bg-red">
+<div class="bg-red d-print-none">
   <div class="nav-scroller container mt-0">
     <nav class="nav nav-underline">
       <a class="nav-link" href="javascript:;"><i class="fas fa-copyright"></i> 2016-{{ "now"|date("Y") }}</a>
