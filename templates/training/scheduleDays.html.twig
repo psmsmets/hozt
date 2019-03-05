@@ -17,7 +17,7 @@
 
         {% for schedule in day.schedule %}
           <dt class="col-12 col-sm-2 col-lg-3 text-md-right mb-1"></dt>
-          <dd class="col-5 col-sm-3 col-lg-2 p-0 text-right mb-1">{{schedule.time}}</dd>
+          <dd class="col-5 col-sm-3 col-lg-2 p-0 text-right mb-1 {% if schedule.persistent %}text-info{% endif %}">{{schedule.time}}</dd>
           <dd class="col-7 col-sm-7 mb-1">
             {% for team in schedule.teams %}<span class="badge badge-secondary badge-team mr-1 mr-md-2">{{team}}</span>{% endfor %}
             {% if schedule.comment is not empty %}<span class="badge badge-info ml-md-1"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
