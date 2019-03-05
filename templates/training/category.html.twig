@@ -100,12 +100,14 @@
         {% for day in page.training_days %}
           <dl class="row mb-md-2"> 
             {% for schedule in day.schedule %}
-              <dt class="col-12 col-sm-3 text-md-right mb-1">{% if loop.index0 == 0%}{{day}}{% endif %}</dt>
-              <dd class="col-5 col-sm-2 p-0 text-right mb-1">{{schedule.time}}</dd>
+              <dt class="col-12 col-sm-2 col-lg-3 text-md-right mb-1">{% if loop.index0 == 0%}{{day}}{% endif %}</dt>
+              <dd class="col-5 col-sm-3 col-lg-2 p-0 text-right mb-1">{{schedule.time}}</dd>
               <dd class="col-7 col-sm-7 mb-1">
-                {% for team in schedule.teams %}<span class="badge badge-secondary ml-1 ml-md-2">{{team}}</span>{% endfor %}
-                {% if schedule.comment is not empty %}<span class="badge badge-info ml-2 ml-md-3"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
-                {% if schedule.description is not empty %}<span class="badge badge-light text-muted ml-2 ml-md-3"><i class="fas fa-comment"></i> {{schedule.description}}</span>{% endif %}
+                {% for team in schedule.teams %}<span class="badge badge-secondary badge-team mr-1 mr-md-2">{{team}}</span>{% endfor %}
+                {% if schedule.comment is not empty %}<span class="badge badge-info ml-md-1"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
+                {% if schedule.persistent or schedule.description is not empty %}
+                  <span class="badge badge-light text-muted float-md-right mt-md-2" {% if schedule.persistent %}data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% if schedule.enddate != schedule.startdate %}van {{schedule.startdate|localizeddate('medium','none')}} tot {{schedule.enddate|localizeddate('medium','none')}}{% else %}{{schedule.enddate|localizeddate('medium','none')}}{% endif %}"{% endif %}><i class="fas fa-comment"></i> {{schedule.description}}</span>
+                {% endif %}
             </dd>
             {% endfor %}
           </dl>

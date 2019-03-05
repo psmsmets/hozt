@@ -283,6 +283,10 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
   height: 44px;
 }
 
+.badge-team {
+  min-width: 30px;
+}
+
 /*
  * Calendar
 */
