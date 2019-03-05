@@ -63,12 +63,23 @@ class TrainingTeamRepository extends ServiceEntityRepository
 
     public function getEnabled()
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.enabled = :enabled')
+        return $this->createQueryBuilder('team')
+            ->andWhere('team.enabled = :enabled')
             ->setParameter('enabled', true)
             //->orderBy('t.abbr', 'ASC')
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    public function countEnabled()
+    {
+        return $this->createQueryBuilder('team')
+            ->select('count(team.id)')
+            ->andWhere('team.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ->getQuery()
+            ->getSingleScalarResult()
         ;
     }
 

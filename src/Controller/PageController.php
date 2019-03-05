@@ -56,6 +56,21 @@ class PageController extends AbstractController
                 ->findAllActiveCoreSponsors(), 
             'base'
             );
+        $this->addToTemplateData( 
+            'nofteams', 
+            $this->getDoctrine()
+                ->getRepository(TrainingTeam::class)
+                ->countEnabled(), 
+            'base'
+            );
+        $this->addToTemplateData( 
+            'nofcoaches', 
+            $this->getDoctrine()
+                ->getRepository(TrainingCoach::class)
+                ->countEnabled(), 
+            'base'
+            );
+
     }
 
     private function addToTemplateData(string $key, $data, string $cat = 'page')

@@ -80,19 +80,19 @@ $(document).ready(function(){
             separator: ',', 
             decimal: '.', 
         };
-        var demo = new CountUp('count-groepen', 0, 9, 0, 3.5, options);
+        var demo = new CountUp('count-groepen', 0, nofteams, 0, 3.5, options);
         if (!demo.error){
             demo.start();
         } else {
             console.error(demo.error);
         }
-        var demo = new CountUp('count-trainers', 0, 10, 0, 3.5, options);
+        var demo = new CountUp('count-trainers', 0, nofcoaches, 0, 3.5, options);
         if (!demo.error){
             demo.start();
         } else {
             console.error(demo.error);
         } 
-        var demo = new CountUp('count-zwemmers', 0, 124, 0, 3.5, options);
+        var demo = new CountUp('count-zwemmers', 0, nofswimmers, 0, 3.5, options);
         if (!demo.error){
             demo.start();
         } else {

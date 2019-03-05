@@ -36,4 +36,16 @@ class TrainingCoachRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function countEnabled()
+    {
+        return $this->createQueryBuilder('coach')
+            ->select('count(coach.id)')
+            ->andWhere('coach.enabled = :enabled')
+            ->setParameter('enabled', true)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
 }
