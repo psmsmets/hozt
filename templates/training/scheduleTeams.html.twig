@@ -17,11 +17,23 @@
 
       <h5><span class="badge badge-secondary pt-1 mr-2">{{team.abbr}}</span> {{team.name}}</h5>
 
-      <dl class="row">
+      <dl class="row mb-md-2">
+
         {% set previous = false %}
         {% for schedule in team.schedule %}
-          <dt class="col-sm-3 text-md-right">{% if previous == false or previous.day.name != schedule.day.name %}{{schedule.day.name}}{%endif%}</dt>
-          <dd class="col-sm-9">{{ schedule.time }} {% if schedule.comment is not empty %}<span class="badge badge-gold ml-3">{{ schedule.comment }}</span>{% endif %}{% if schedule.description is not empty %}<span class="badge badge-light text-muted ml-2 ml-md-3"><i class="fas fa-comment"></i> {{schedule.description}}</span>{% endif %}</dd>
+
+          <dt class="col-12 col-sm-2 col-lg-3 text-md-right mb-1">
+            {% if previous == false or previous.day.name != schedule.day.name %}{{schedule.day}}{% endif %}
+          </dt>
+          <dd class="col-5 col-sm-3 col-lg-2 p-0 text-right mb-1">{{schedule.time}}</dd>
+          <dd class="col-7 col-sm-7 mb-1">
+            {% if schedule.comment is not empty %}
+              <span class="badge badge-info ml-1"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>
+            {% endif %}
+            {% if schedule.description is not empty %}
+              <span class="badge badge-light text-muted float-md-right mt-md-2" {% if schedule.persistent %}data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{% if schedule.enddate != schedule.startdate %}van {{schedule.startdate|localizeddate('medium','none')}} tot {{schedule.enddate|localizeddate('medium','none')}}{% else %}{{schedule.enddate|localizeddate('medium','none')}}{% endif %}"{% endif %}><i class="fas fa-comment"></i> {{schedule.description}}</span>
+            {% endif %}
+          </dd>
           {% set previous = schedule %}
         {% endfor %}
       </dl>
