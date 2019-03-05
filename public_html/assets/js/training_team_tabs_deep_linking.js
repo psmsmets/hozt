@@ -7,7 +7,7 @@ $(document).ready(function(){
       $('#categoryTab a[href="#'+hash[1]+'"]').tab("show");
       $.scrollTo(0, 500);
   } else if (url.endsWith("wedstrijdzwemmers")) {
-      $('#categoryTab a[href="#wedstrijden"]').tab('show');
+      $('#wedstrijden-tab').tab('show');
   }
    
   $('a[data-toggle="tab"]').on("click", function() {
