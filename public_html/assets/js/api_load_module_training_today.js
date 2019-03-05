@@ -15,14 +15,15 @@ $(document).ready(function(){
     .done(function( training ) {
         if ( training.result ){
             $.each( training.data, function( i, item ) {
-                var t = "<div class=\"ml-3\"><span class=\"small mr-2\">"+ item.time + "</span>";
+                var t = "<div class=\"row no-gutters\"><div class=\"col-6 text-right pt-1 pr-1 small\">"+ item.time + "</div>";
+                t += "<div class=\"col-6\">";
                 $.each( item.teams, function( i, team ) {
                     t += "<span class=\"badge badge-hozt ml-1\">" + team.abbr + "</span>";
                 });
                 if ( item.comment ){
                    t += "<span class=\"badge badge-gold ml-1\">" + item.comment + "</span>";
                 }
-                t += "</div>";
+                t += "</div></div>";
                 $( t ).appendTo( "#"+module+"_items" );
             });
         } else {
