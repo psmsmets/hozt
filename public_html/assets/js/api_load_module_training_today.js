@@ -18,7 +18,7 @@ $(document).ready(function(){
                 var t = "<div class=\"row no-gutters\"><div class=\"col-6 text-right pt-1 pr-1 small\">"+ item.time + "</div>";
                 t += "<div class=\"col-6\">";
                 $.each( item.teams, function( i, team ) {
-                    t += "<span class=\"badge badge-hozt ml-1\">" + team.abbr + "</span>";
+                    t += "<span class=\"badge badge-hozt badge-team ml-1\">" + team.abbr + "</span>";
                 });
                 if ( item.comment ){
                    t += "<span class=\"badge badge-gold ml-1\">" + item.comment + "</span>";
