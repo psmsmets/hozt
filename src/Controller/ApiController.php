@@ -235,8 +235,37 @@ class ApiController extends AbstractController
      */
     public function documents_competition_latest(string $slug, int $limit=5)
     {
+        $events = $this->getDoctrine()
+            ->getRepository(CalendarEvent::class)
+            ->findCalendarEventByByLatestCompetitionDocuments($slug,$limit)
+            ;
+        if (!$events) {
+            return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
+        }
+        $data = array();
+        foreach ( $events as $e ) {
+            $event = $e[0];
+            $data[] = array(
+                    'title' => $event->getTitle(),
+                    'date' => $event->getStartTime()->format('Y-m-d'),
+                    'datestr' =>  strftime("%e %b", $event->getStartTime()->getTimestamp()),
+                    'location' => $event->getLocation(),
+                    'url' => $this->generateUrl('calendar_event',['uuid'=>$event->getUuid()]),
+                );
+        }
+        return $this->json(array( 
+                'result' => true, 
+                'category' => $slug, 
+                'type' => 'latest', 
+                'data' => $data,
+            ));
+    }
+
+/*
+    public function documents_competition_latest(string $slug, int $limit=5)
+    {
         $docs = $this->getDoctrine()
-            ->getRepository(CompetitionDocument::class)
+            ->getRepository(CompetitionDocuments::class)
             ->findLatestCompetitionDocuments($slug,$limit)
             ;
 
@@ -262,5 +291,6 @@ class ApiController extends AbstractController
                 'data' => $data,
             ));
     }
+*/
 
 }
