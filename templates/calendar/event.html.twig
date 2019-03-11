@@ -22,7 +22,7 @@
         <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|ucfirst}}
           <small>
             {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
-            {% if cookie not in app.request.cookies|keys %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
+            {% if cookie not in app.request.cookies|keys and event.startTime>date() %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
           </small>
         </h5>
 
