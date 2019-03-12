@@ -6,8 +6,8 @@ $(document).ready(function(){
       const hash = url.split("#");
       $('#categoryTab a[href="#'+hash[1]+'"]').tab("show");
       $.scrollTo(0, 500);
-  } else if (url.endsWith("wedstrijdzwemmers")) {
-      $('#wedstrijden-tab').tab('show');
+//  } else if (url.endsWith("wedstrijdzwemmers")) {
+//      $('#wedstrijden-tab').tab('show');
   }
    
   $('a[data-toggle="tab"]').on("click", function() {
