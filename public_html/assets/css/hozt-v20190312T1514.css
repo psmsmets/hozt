@@ -287,6 +287,10 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
   min-width: 30px;
 }
 
+.carousel-item a.btn {
+  min-width: 40px;
+}
+
 /*
  * Calendar
 */
