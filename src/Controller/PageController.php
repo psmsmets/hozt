@@ -302,7 +302,11 @@ class PageController extends AbstractController
         $this->addToTemplateData( 'training_category', $category );
         $this->addToTemplateData( 'training_days', $this->getDoctrine()
             ->getRepository(TrainingDay::class)
-            ->findAllByTeamCategoryJoinedToSchedule($category->getId())
+            ->findAllByTeamCategoryJoinedToSchedule($category)
+        );
+        $this->addToTemplateData( 'training_team_persistent', $this->getDoctrine()
+            ->getRepository(TrainingSchedule::class)
+            ->countPersistentByTeamCategory($category)
         );
         $this->addToTemplateData( 'training_team_exceptions', $this->getDoctrine()
             ->getRepository(TrainingException::class)

@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\TrainingSchedule;
+use App\Entity\TrainingTeam;
+use App\Entity\TrainingTeamCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -25,23 +27,21 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     public function findAllByDayJoinedToTeam(int $day, \DateTime $refdate = null  )
     {
         if (is_null($refdate)) $refdate = new \DateTime('today midnight');
-        return $this->createQueryBuilder('s')
-            ->innerJoin('s.teams', 't')
-            ->innerJoin('s.day', 'd')
-            ->innerJoin('s.time', 'h')
-            ->addSelect('t')
+        return $this->createQueryBuilder('schedule')
+            ->innerJoin('schedule.teams', 'teams')
+            ->innerJoin('schedule.day', 'day')
+            ->innerJoin('schedule.time', 'time')
+            ->addSelect('teams')
             //->addSelect('d')
-            ->addSelect('h')
-            ->andWhere('s.enabled = :enabled')
-            ->andWhere('t.enabled = :enabled')
-            ->andWhere('h.enabled = :enabled')
-            ->andWhere('d.id = :day')
-            ->andWhere('s.startDate <= :now')
-            ->andWhere('(s.endDate >= :now or s.endDate is null)')
+            ->addSelect('time')
+            ->andWhere('schedule.enabled = :enabled')
+            ->andWhere('day.id = :day')
+            ->andWhere('schedule.startDate <= :now')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('enabled', true)
             ->setParameter('day', $day)
             ->setParameter('now', $refdate->format("Y-m-d"))
-            ->orderBy('h.startTime, h.endTime, t.abbr', 'ASC')
+            ->orderBy('time.startTime, time.endTime, teams.abbr', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
@@ -49,51 +49,69 @@ class TrainingScheduleRepository extends ServiceEntityRepository
 
     public function findAllByTeamJoinedToTeam(string $team_abbr)
     {
-        return $this->createQueryBuilder('s')
-            ->innerJoin('s.teams', 't')
-            ->innerJoin('s.day', 'd')
-            ->innerJoin('s.time', 'h')
+        return $this->createQueryBuilder('schedule')
+            ->innerJoin('schedule.teams', 'teams')
+            ->innerJoin('schedule.day', 'day')
+            ->innerJoin('schedule.time', 'time')
             //->addSelect('t')
-            ->addSelect('d')
-            ->addSelect('h')
-            ->andWhere('s.enabled = :enabled')
-            ->andWhere('t.enabled = :enabled')
-            ->andWhere('h.enabled = :enabled')
-            ->andWhere('t.abbr = :abbr')
-            ->andWhere('s.startDate <= :now')
-            ->andWhere('(s.endDate >= :now or s.endDate is null)')
+            ->addSelect('day')
+            ->addSelect('time')
+            ->andWhere('schedule.enabled = :enabled')
+            ->andWhere('team.abbr = :abbr')
+            ->andWhere('schedule.startDate <= :now')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('enabled', true)
             ->setParameter('abbr', $team_abbr)
             ->setParameter('now', date("Y-m-d"))
-            ->orderBy('d.id, h.startTime', 'ASC')
+            ->orderBy('day.id, time.startTime, time.endTime', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
     }
 
-    public function findAllByTeamCategory(int $team_category)
+    public function findAllByTeamCategory(TrainingTeamCategory $teamCategory)
     {
-        return $this->createQueryBuilder('s')
-            ->innerJoin('s.teams', 't')
-            ->innerJoin('t.category', 'c')
-            ->innerJoin('s.day', 'd')
-            ->innerJoin('s.time', 'h')
-            ->addSelect('d')
-            ->addSelect('h')
-            ->andWhere('s.enabled = :enabled')
-            ->andWhere('t.enabled = :enabled')
-            ->andWhere('h.enabled = :enabled')
-            ->andWhere('c.enabled = :enabled')
-            ->andWhere('c.id = :id')
-            ->andWhere('(s.endDate >= :now or s.endDate is null)')
+        return $this->createQueryBuilder('schedule')
+            ->innerJoin('schedule.teams', 'teams')
+            ->innerJoin('teams.category', 'teamsCat')
+            ->innerJoin('schedule.day', 'day')
+            ->innerJoin('schedule.time', 'time')
+            ->addSelect('day')
+            ->addSelect('time')
+            ->andWhere('schedule.enabled = :enabled')
+            ->andWhere('teamsCat.id = :id')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('enabled', true)
-            ->setParameter('id', $team_category)
+            ->setParameter('id', $teamCategory->getId())
             ->setParameter('now', date("Y-m-d"))
-            ->orderBy('d.id, h.startTime', 'ASC')
+            ->orderBy('day.id, time.startTime, time.endTime', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
     }
+
+    public function countPersistentByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28)
+    {
+        $today = new \DateTime('today');
+        return $this->createQueryBuilder('schedule')
+            ->select('count(schedule.id)')
+            ->innerJoin('schedule.teams', 'teams')
+            ->innerJoin('teams.category', 'teamsCat')
+            ->andWhere('schedule.enabled = :enabled')
+            ->andWhere('schedule.persistent = :persistent')
+            ->andWhere('schedule.startDate <= :start')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
+            ->andWhere('teamsCat.id = :id')
+            ->setParameter('enabled', true)
+            ->setParameter('persistent', true)
+            ->setParameter('now', $today->format('Y-m-d'))
+            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('id', $teamCategory->getId())
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;     
+    }
+
 /*
     public function findAllSchedules()
     {
