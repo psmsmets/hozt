@@ -318,6 +318,9 @@ class AdminController extends EasyAdminController
             $entity->setPersistent(false);
             $this->addFlash('danger', 'Fout: Uitzondering enkel toegestaan met einddatum.');
         }
+        if (!is_null($entity->getEndDate()) and $entity->getEndDate() < $entity->getStartDate()) {
+            $this->addFlash('danger', 'Fout: einddatum moet groter of gelijk zijn aan de startdatum.');
+        }
         parent::persistEntity($entity);
     }
 
@@ -440,6 +443,21 @@ class AdminController extends EasyAdminController
             $entity->setUpdatedAt();
         }
         parent::persistEntity($entity);
+    }
+
+    // Remove
+    public function removeTrainingScheduleEntity($entity)
+    {
+        $now = new \DateTime("today midnight");
+        if (is_null($entity->getEndDate())) {
+            $this->addFlash('danger', 'Fout: Verwijderen enkel toegestaan na einddatum!');
+            return;
+        }
+        elseif ($entity->getEndDate() >= $now or $entity->getStartDate() >= $now ) {
+            $this->addFlash('danger', 'Fout: Verwijderen enkel toegestaan voor verlopen trainingsuren (start en einddatum in het verleden)! Bevestig eerst de einddatum alvorens te verwijderen.');
+            return;
+        }
+        parent::removeEntity($entity);
     }
 
 /*

@@ -9,12 +9,7 @@
     <h1 class="text-red">{{ page.training_category.name }}</h1>
     <p class="lead">{{ page.training_category.description }}</p>
 
-    {% set persistent = false %}
-    {% for day in page.training_days %}
-      {% for schedule in day.schedule %}
-        {% if schedule.persistent %}{% set persistent = true %}{% endif %}
-      {% endfor %}
-    {% endfor %}
+    {% set persistent = page.training_team_persistent > 0 %}
 
     {# Need a cookie to check #}
     {% if persistent %}

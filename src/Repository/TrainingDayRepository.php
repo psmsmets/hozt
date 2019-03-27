@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\TrainingDay;
+use App\Entity\TrainingTeam;
+use App\Entity\TrainingTeamCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -25,51 +27,47 @@ class TrainingDayRepository extends ServiceEntityRepository
     public function findAllJoinedToScheduleTeams(int $days=28)
     {
         $today = new \DateTime('today');
-        return $this->createQueryBuilder('d')
-            ->innerJoin('d.schedule', 's')
-            ->innerJoin('s.time', 'h')
-            ->innerJoin('s.teams', 't')
-            ->addSelect('d')
-            ->addSelect('h')
-            ->addSelect('t')
-            ->addSelect('s')
-            ->andWhere('h.enabled = :enabled')
-            ->andWhere('t.enabled = :enabled')
-            ->andWhere('s.enabled = :enabled')
-            ->andWhere('s.startDate <= :start')
-            ->andWhere('(s.endDate >= :now or s.endDate is null)')
+        return $this->createQueryBuilder('day')
+            ->innerJoin('day.schedule', 'schedule')
+            ->innerJoin('schedule.time', 'time')
+            ->innerJoin('schedule.teams', 'teams')
+            ->addSelect('day')
+            ->addSelect('time')
+            ->addSelect('schedule')
+            ->addSelect('teams')
+            ->andWhere('schedule.enabled = :enabled')
+            ->andWhere('teams.enabled = :enabled')
+            ->andWhere('schedule.startDate <= :start')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('enabled', true)
             ->setParameter('now', $today->format('Y-m-d'))
             ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
-            ->orderBy('d.id, h.startTime, t.abbr', 'ASC')
+            ->orderBy('day.id, time.startTime, teams.abbr', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
     }
 
-    public function findAllByTeamCategoryJoinedToSchedule(int $team_category, int $days=28)
+    public function findAllByTeamCategoryJoinedToSchedule(TrainingTeamCategory $teamCategory, int $days=28)
     {
         $today = new \DateTime('today');
-        return $this->createQueryBuilder('d')
-            ->innerJoin('d.schedule', 's')
-            ->innerJoin('s.time', 'h')
-            ->innerJoin('s.teams', 't')
-            ->innerJoin('t.category', 'c')
-            ->addSelect('h')
-            ->addSelect('s')
-            ->addSelect('t')
-            ->andWhere('s.enabled = :enabled')
-            ->andWhere('h.enabled = :enabled')
-            ->andWhere('t.enabled = :enabled')
-            ->andWhere('c.enabled = :enabled')
-            ->andWhere('s.startDate <= :start')
-            ->andWhere('(s.endDate >= :now or s.endDate is null)')
-            ->andWhere('c.id = :id')
+        return $this->createQueryBuilder('day')
+            ->innerJoin('day.schedule', 'schedule')
+            ->innerJoin('schedule.time', 'time')
+            ->innerJoin('schedule.teams', 'teams')
+            ->innerJoin('teams.category', 'teamsCat')
+            ->addSelect('schedule')
+            ->addSelect('time')
+            ->addSelect('teams')
+            ->andWhere('schedule.enabled = :enabled')
+            ->andWhere('schedule.startDate <= :start')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
+            ->andWhere('teamsCat.id = :id')
             ->setParameter('enabled', true)
             ->setParameter('now', $today->format('Y-m-d'))
             ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
-            ->setParameter('id', $team_category)
-            ->orderBy('d.id, h.startTime, t.abbr', 'ASC')
+            ->setParameter('id', $teamCategory->getId())
+            ->orderBy('day.id, time.startTime, teams.abbr', 'ASC')
             ->getQuery()
             ->getResult()
         ;     

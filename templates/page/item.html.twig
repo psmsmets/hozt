@@ -50,7 +50,7 @@
     {% endif %}
 
     {% if item.image is not empty %}
-        <p><img src="{{ vich_uploader_asset(item, 'imageFile') }}" class="img-fluid rounded scroll-fade-in"></p>
+        <p><img src="{{ vich_uploader_asset(item, 'imageFile') }}" class="img-fluid rounded scroll-fade-in" style="max-height:800px;"></p>
     {% endif %}
 
     <div class="small text-muted d-flex justify-content-between">

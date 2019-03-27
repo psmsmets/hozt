@@ -96,14 +96,14 @@ easy_admin:
                     - { property: 'archived', label: 'Gearchiveerd' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'author', label: 'Auteur', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
-                    - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getFilteredCalendarEvents'] } }
+                    - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
+                    - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getFilteredCalendarEvents'] } }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.blogPost_images%' }
                     - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.blogPost_documents%' }
                     - { property: 'keywords', label: 'Keywords' }
-                    - { property: 'publishAt', label: 'Publiceer vanaf' }
-                    - { property: 'publishUntil', label: 'Publiceer tot' }
-                    - { property: 'access', label: 'Toegang' }
+                    # - { property: 'publishUntil', label: 'Publiceer tot' }
+                    # - { property: 'access', label: 'Toegang' }
             edit:
                 #actions: ['delete']
         BlogCategory:
@@ -379,6 +379,8 @@ easy_admin:
                     - { property: 'endDate', label: 'Tot' }
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'persistent', label: 'Uitzondering' }
+            edit:
+                actions: ['delete']
             search:
                 fields: ['teams.abbr','day.name','time.startTime','time.endTime']
         TrainingException:
