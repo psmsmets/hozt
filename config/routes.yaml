@@ -1,9 +1,5 @@
 # config/routes.yaml
 
-# security
-#logout:
-#    path: uitloggen 
-
 # calendar
 calendar:
     path: /kalender
