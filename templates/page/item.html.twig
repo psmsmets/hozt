@@ -10,7 +10,7 @@
       <p class="text-center text-md-left">
 
         {% if item.document is not empty %}
-          <a href="{{ vich_uploader_asset(item, 'documentFile') }}" class="btn btn-sm btn-hozt mr-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+          <a href="{{ vich_uploader_asset(item, 'documentFile') }}" class="btn btn-sm btn-hozt ml-1 mr-1 mb-2"><i class="fas fa-file-pdf"></i> bijlage</a>
         {% endif %}
 
         {% if item.event is not empty %}
@@ -20,23 +20,23 @@
           {% if item.publishAt < item.event.startTime|date_modify('midnight') %}
 
             {% for doc in comp.documentsBySlug('info') %}
-              <a class="btn btn-hozt btn-sm" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+              <a class="btn btn-hozt btn-sm ml-1 mr-1 mb-2" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
             {% endfor %}
 
             {% for doc in comp.documentsBySlug('briefing') %}
-              <a class="btn btn-hozt btn-sm" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+              <a class="btn btn-hozt btn-sm ml-1 mr-1 mb-2" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
             {% endfor %}
 
             {% if comp.documentsContainSlug('programma') %}
 
               {% for doc in comp.documentsBySlug('programma') %}
-                <a class="btn btn-hozt btn-sm" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                <a class="btn btn-hozt btn-sm ml-1 mr-1 mb-2" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
               {% endfor %}
 
             {% else %}
 
               {% for doc in comp.documentsBySlug('voorprogramma') %}
-                <a class="btn btn-hozt btn-sm" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+                <a class="btn btn-hozt btn-sm ml-1 mr-1 mb-2" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
               {% endfor %}
 
             {% endif %}
@@ -44,7 +44,7 @@
           {% else %}
 
             {% for doc in comp.documentsBySlug('uitslag') %}
-              <a class="btn btn-hozt btn-sm" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
+              <a class="btn btn-hozt btn-sm ml-1 mr-1 mb-2" href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}"><i class="fas fa-file-pdf"></i> {{doc.category}} {{doc.description}}</a>
             {% endfor %}
 
           {% endif %}
