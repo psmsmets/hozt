@@ -12,6 +12,40 @@
     {% set persistent = page.training_team_persistent > 0 %}
 
     {# Need a cookie to check #}
+{% set enabled=false %}
+
+    {% if page.training_team_exceptions is not empty and enabled %}
+    <div class="alert alert-danger mb-4">
+      <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Eén of meerdere trainingen gaan niet door!</h5>
+      <ul class="list-unstyled"> 
+      {% for ex in page.training_team_exceptions %}
+          <li class="mb-2">
+            {% if ex.startDate == ex.endDate %}
+              <strong>Op {{ex.startDate|localizeddate('full','none')}} voor</strong>
+            {% else %}
+              Tijdens de periode van <strong>{{ex.startDate|localizeddate('long','none')}} tot {{ex.endDate|localizeddate('long','none')}}</strong> voor
+            {% endif %}
+            {% if ex.teams|length > 0 %}
+              {% for team in ex.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+            {% else %}
+              {% for team in page.training_category.teams %}{% if team.enabled %}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+            {% endif %}
+            {% if ex.comment is not empty %}<span class="badge badge-info ml-1"><i class="fas fa-info-circle"></i> {{ex.comment}}</span>{% endif %}
+            {% if ex.schedule|length > 0 %}
+              <ul>
+              {% for schedule in ex.schedule %}<li>specifiek op {{schedule.day|lower}} van {{schedule.time}}</li>{% endfor %}
+                <li class="list-unstyled"><small><i>Opgelet: Eventuele andere trainingen gaan gewoon door.</i></small></li>
+              </ul>
+            {% else %}
+              {% if ex.startDate != ex.endDate %}voor <u>alle trainingen</u>!{% endif %}
+            {% endif %}
+          </li>
+      {% endfor %}
+      </ul>
+    </div>
+    <p><em>Zwem je bij een andere groep? Kijk zeker bij <a href="{{ path('training_categories') }}">jouw trainingsgroep</a> of er ook geen trainingen wegvallen.</em></p>
+    {% endif %}
+
     {% if persistent %}
     <div class="alert alert-warning alert-dismissible show alert-persistent" role="alert">
       Er zijn <a class="alert-link" href="#trainingsuren" onclick="$('#trainingsuren-tab').tab('show')">extra trainingsuren</a>. Klik op <i class="fas fa-comment"></i> voor de juiste datum of periode.
@@ -73,40 +107,6 @@
       </div><!-- end tab info -->
 
       <div class="tab-pane fade mt-4" id="trainingsuren" role="tabpanel" aria-labelledby="trainingsuren-tab">
-
-{% set enabled=false %}
-
-        {% if page.training_team_exceptions is not empty and enabled %}
-        <div class="alert alert-danger mb-4">
-          <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Eén of meerdere trainingen gaan niet door!</h5>
-          <ul class="list-unstyled"> 
-          {% for ex in page.training_team_exceptions %}
-              <li class="mb-2">
-                {% if ex.startDate == ex.endDate %}
-                  <strong>Op {{ex.startDate|localizeddate('full','none')}}</strong>
-                {% else %}
-                  <strong>Tijdens de periode van {{ex.startDate|localizeddate('long','none')}} tot {{ex.endDate|localizeddate('long','none')}}</strong>
-                {% endif %}
-                {% if ex.teams|length > 0 %}
-                  {% for team in ex.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
-                {% else %}
-                  {% for team in page.training_category.teams %}{% if team.enabled %}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
-                {% endif %}
-                {% if ex.comment is not empty %}<span class="badge badge-info ml-2"><i class="fas fa-info-circle"></i> {{ex.comment}}</span>{% endif %}
-                {% if ex.schedule|length > 0 %}
-                  <ul>
-                  {% for schedule in ex.schedule %}<li>specifiek op {{schedule.day|lower}} van {{schedule.time}}</li>{% endfor %}
-                    <li class="list-unstyled"><small><i>Opgelet: Eventuele andere trainingen gaan gewoon door.</i></small></li>
-                  </ul>
-                {% else %}
-                  {% if ex.startDate != ex.endDate %}<strong>voor alle trainingen</strong>{% endif %}
-                {% endif %}
-              </li>
-          {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
-
 
         <h4 class="d-md-none pb-2">Trainingsuren</h4>
 

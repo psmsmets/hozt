@@ -184,12 +184,7 @@ class AdminController extends EasyAdminController
 
     public function persistTrainingScheduleEntity($entity)
     {
-        $entity->setUpdatedAt();
-        if ($entity->getPersistent() and is_null($entity->getEndDate())) {
-            $entity->setPersistent(false);
-            $this->addFlash('danger', 'Fout: Uitzondering enkel toegestaan met einddatum.');
-        }
-        parent::persistEntity($entity);
+        $this->checkTrainingScheduleEntity($entity);
     }
 
     public function persistTrainingExceptionEntity($entity)
@@ -307,6 +302,11 @@ class AdminController extends EasyAdminController
 
     public function updateTrainingScheduleEntity($entity)
     {
+        $this->checkTrainingScheduleEntity($entity);
+    }
+
+    public function checkTrainingScheduleEntity($entity)
+    {
         $entity->setUpdatedAt();
         if (!$entity->getEnabled()) {
             if (count($entity->getTeams())>0) {
@@ -394,7 +394,7 @@ class AdminController extends EasyAdminController
         if (!$entity->getEnabled()) {
             if (count($entity->getSchedule())>0 or count($entity->getCoaches())>0) {
                 $entity->setEnabled(true);
-                $this->addFlash('danger', 'Fout: Training group heeft gerelateerde data. Deactiveren niet toegestaan.');
+                $this->addFlash('danger', 'Fout: Training groep heeft gerelateerde data. Deactiveren niet toegestaan.');
             }
         }
         parent::persistEntity($entity);
@@ -455,6 +455,16 @@ class AdminController extends EasyAdminController
         }
         elseif ($entity->getEndDate() >= $now or $entity->getStartDate() >= $now ) {
             $this->addFlash('danger', 'Fout: Verwijderen enkel toegestaan voor verlopen trainingsuren (start en einddatum in het verleden)! Bevestig eerst de einddatum alvorens te verwijderen.');
+            return;
+        }
+        parent::removeEntity($entity);
+    }
+
+    public function removeTrainingExceptionEntity($entity)
+    {
+        $now = new \DateTime("today midnight");
+        if ($entity->getEndDate() >= $now or $entity->getStartDate() >= $now ) {
+            $this->addFlash('danger', 'Fout: Verwijderen enkel toegestaan voor verlopen uitzondering (start en einddatum in het verleden)! Bevestig eerst de einddatum alvorens te verwijderen.');
             return;
         }
         parent::removeEntity($entity);

@@ -7,9 +7,11 @@ parameters:
     locale: 'nl'
     app_locales: nl|en
     timezone: 'Europe/Brussels'
+    app.mailer.addr: 'webmaster@hozt.be'
+    app.mailer.name: 'Webmaster HoZT'
     app.about.abbr: 'HoZT'
     app.about.name: 'Hoogstratens Zwem Team'
-    app.about.org.name: 'Hoogstratens Zwem Team vzw'
+    app.about.org.name: '%app.about.name% vzw'
     app.about.org.number: 'BE0644916871'
     app.about.bank_account: 'BE88 0689 0449 7341'
     app.defaults.blogPost.items_home: 3
@@ -116,3 +118,11 @@ fos_ck_editor:
 #        default:
 #            - { name: 'Lead', element: 'p', attributes: { class: 'lead'} }
 #            - { name: 'Normal', element: 'p' }
+
+#fos_user:
+#    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+#    firewall_name: main
+#    user_class: AppBundle\Entity\User
+#    from_email:
+#        address: '%app.mailer.addr%'
+#        sender_name: '%app.mailer.name%'

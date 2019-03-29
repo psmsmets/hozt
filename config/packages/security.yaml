@@ -2,6 +2,7 @@
 
 security:
     encoders:
+#	FOS\UserBundle\Model\UserInterface: bcrypt
         App\Entity\User:
             algorithm: bcrypt
             cost: 12
