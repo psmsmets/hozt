@@ -11,11 +11,8 @@
 
     {% set persistent = page.training_team_persistent > 0 %}
 
-    {# Need a cookie to check #}
-{% set enabled=false %}
-
-    {% if page.training_team_exceptions is not empty and enabled %}
-    <div class="alert alert-danger mb-4">
+    {% if page.training_team_exceptions is not empty %}
+    <div class="alert alert-danger">
       <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Eén of meerdere trainingen gaan niet door!</h5>
       <ul class="list-unstyled"> 
       {% for ex in page.training_team_exceptions %}
@@ -42,13 +39,13 @@
           </li>
       {% endfor %}
       </ul>
+      <small><em>Zwem je bij een andere groep? Kijk zeker bij <a class="alert-link" href="{{ path('training_categories') }}">jouw trainingsgroep</a> of er ook geen trainingen wegvallen.</em></small>
     </div>
-    <p><em>Zwem je bij een andere groep? Kijk zeker bij <a href="{{ path('training_categories') }}">jouw trainingsgroep</a> of er ook geen trainingen wegvallen.</em></p>
     {% endif %}
 
     {% if persistent %}
     <div class="alert alert-warning alert-dismissible show alert-persistent" role="alert">
-      Er zijn <a class="alert-link" href="#trainingsuren" onclick="$('#trainingsuren-tab').tab('show')">extra trainingsuren</a>. Klik op <i class="fas fa-comment"></i> voor de juiste datum of periode.
+      <i class="fas fa-exclamation-triangle"></i> Er zijn <a class="alert-link" href="#trainingsuren" onclick="$('#trainingsuren-tab').tab('show')">extra trainingsuren</a>. Klik op <i class="fas fa-comment"></i> voor de juiste datum of periode.
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
