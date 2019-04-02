@@ -112,6 +112,23 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         ;     
     }
 
+    public function findAllPersistent(int $days=28)
+    {
+        $today = new \DateTime('today');
+        return $this->createQueryBuilder('schedule')
+            ->andWhere('schedule.enabled = :enabled')
+            ->andWhere('schedule.persistent = :persistent')
+            ->andWhere('schedule.startDate <= :start')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
+            ->setParameter('enabled', true)
+            ->setParameter('persistent', true)
+            ->setParameter('now', $today->format('Y-m-d'))
+            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->getQuery()
+            ->getResult()
+        ;     
+    }
+
 /*
     public function findAllSchedules()
     {

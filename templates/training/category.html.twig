@@ -10,7 +10,7 @@
     <p class="lead">{{ page.training_category.description }}</p>
 
     {% if page.training_team_exceptions is not empty %}
-    <div class="alert alert-danger alert-dismissible show">
+    <div class="alert alert-danger">
       <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Eén of meerdere trainingen gaan niet door!</h5>
       <ul class="list-unstyled"> 
       {% for ex in page.training_team_exceptions %}
@@ -38,19 +38,13 @@
       {% endfor %}
       </ul>
       <small><em>Zwem je bij een andere groep? Kijk zeker bij <a class="alert-link" href="{{ path('training_categories') }}">jouw trainingsgroep</a> of er ook geen trainingen wegvallen.</em></small>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
     </div>
     {% endif %}
 
     {% if page.training_team_persistent > 0 %}
-    <div class="alert alert-warning alert-dismissible show" role="alert">
+    <div class="alert alert-warning" role="alert">
       <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Er zijn <a class="alert-link" href="#trainingsuren" onclick="$('#trainingsuren-tab').tab('show')">extra trainingsuren</a>.</h5>
       <small><em>Klik op <i class="fas fa-comment"></i> voor de juiste datum of periode.</em></small>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
     </div>
     {% endif %}
 

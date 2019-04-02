@@ -148,4 +148,41 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllWithPersistentTraining(int $days=28)
+    {
+        $today = new \DateTime('today');
+        return $this->createQueryBuilder('teamsCat')
+            ->innerJoin('teamsCat.teams', 'teams')
+            ->leftJoin('teams.schedule', 'schedule')
+            ->andWhere('schedule.enabled = :enabled')
+            ->andWhere('schedule.persistent = :persistent')
+            ->andWhere('schedule.startDate <= :start')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
+            ->setParameter('enabled', true)
+            ->setParameter('persistent', true)
+            ->setParameter('now', $today->format('Y-m-d'))
+            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->getQuery()
+            ->getResult()
+        ;     
+    }
+
+    public function findAllWithTrainingException(int $days=28)
+    {
+        $today = new \DateTime('today');
+        return $this->createQueryBuilder('teamsCat')
+            ->innerJoin('teamsCat.teams', 'teams')
+            ->leftJoin('teams.exceptions', 'exceptions')
+            ->andWhere('exceptions.enabled = :enabled')
+            ->andWhere('exceptions.startDate <= :start')
+            ->andWhere('exceptions.endDate >= :now')
+            ->setParameter('enabled', true)
+            ->setParameter('now', $today->format('Y-m-d'))
+            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->getQuery()
+            ->getResult()
+        ;     
+    }
+
+
 }

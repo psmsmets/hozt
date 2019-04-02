@@ -46,4 +46,24 @@ class TrainingExceptionRepository extends ServiceEntityRepository
             ->getResult()
         ;     
     }
+
+    public function findAll(int $days=28)
+    {
+        $today = new \DateTime('today');
+        return $this->createQueryBuilder('exception')
+            ->leftJoin('exception.teams', 'teams')
+            ->leftJoin('exception.schedule', 'schedule')
+            ->addSelect('teams')
+            ->addSelect('schedule')
+            ->andWhere('exception.enabled = :enabled')
+            ->andWhere('exception.startDate < :start')
+            ->andWhere('exception.endDate >= :now')
+            ->setParameter('enabled', true)
+            ->setParameter('now', $today->format('Y-m-d'))
+            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->orderBy('exception.startDate, exception.endDate', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;     
+    }
 }
