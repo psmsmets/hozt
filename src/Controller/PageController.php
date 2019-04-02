@@ -109,7 +109,7 @@ class PageController extends AbstractController
         $check = serialize($data);
         $hash = md5($check);
 
-        $cookie = "scheduleNotice_$type";
+        $cookie = "scheduleNotice".ucfirst($type);
         $request = $this->requestStack->getCurrentRequest();
         $shown = $request->cookies->has($cookie);
 
@@ -117,6 +117,7 @@ class PageController extends AbstractController
             $category_data = array();
             foreach ($categories as $cat) {
                 $category_data[] = array( 
+                    'name' => $cat->getName(),
                     'abbr' => $cat->getAbbr(),
                     'url' => $this->get('router')->generate('training_category', array('slug' => $cat->getSlug())),
                 );
@@ -127,12 +128,10 @@ class PageController extends AbstractController
                     'type' => $alert, 
                     'title' => $title,
                     'categories' => $category_data,
+                    'cookie' => $cookie,
                     'md5' => $hash,
                 )
             );
-            $response = new Response();
-            $response->headers->setCookie(Cookie::create($cookie, $hash, (2 * 365 * 24 * 60 * 60) + time() ));
-            $response->send();
         }
     }
 
