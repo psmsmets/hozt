@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Cookie;
 
 # entities
@@ -38,6 +39,12 @@ use App\Form\ClubfeestType;
 class PageController extends AbstractController
 {
     private $template_data = [];
+    protected $requestStack;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
 
     private function initTemplateData()
     {
@@ -71,6 +78,62 @@ class PageController extends AbstractController
             'base'
             );
 
+        if ($exceptions = $this->getDoctrine()
+            ->getRepository(TrainingTeamCategory::class)
+            ->findAllWithTrainingException(28)
+        ) {
+            $this->scheduleNotice('exceptions','Eén of meerdere training gaan niet door',$exceptions,'danger');
+        }
+
+        if ($persistent = $this->getDoctrine()
+            ->getRepository(TrainingTeamCategory::class)
+            ->findAllWithPersistentTraining(28)
+        ) {
+            $this->scheduleNotice('persistent','Er zijn extra trainingsuren',$persistent,'warning');
+        }
+
+    }
+
+    private function scheduleNotice(string $type, string $title, array $categories, string $alert )
+    {
+        switch ($type) {
+            case  'exceptions':
+                $data = $this->getDoctrine()->getRepository(TrainingException::class)->findAll();
+                break;
+            case  'persistent':
+                $data = $this->getDoctrine()->getRepository(TrainingSchedule::class)->findAllPersistent();
+                break;
+            default:
+                return;
+        }
+        $check = serialize($data);
+        $hash = md5($check);
+
+        $cookie = "scheduleNotice_$type";
+        $request = $this->requestStack->getCurrentRequest();
+        $shown = $request->cookies->has($cookie);
+
+        if (!$shown) {
+            $category_data = array();
+            foreach ($categories as $cat) {
+                $category_data[] = array( 
+                    'abbr' => $cat->getAbbr(),
+                    'url' => $this->get('router')->generate('training_category', array('slug' => $cat->getSlug())),
+                );
+            }
+            $this->get('session')->getFlashBag()->add(
+                'scheduleNotice', 
+                array(
+                    'type' => $alert, 
+                    'title' => $title,
+                    'categories' => $category_data,
+                    'md5' => $hash,
+                )
+            );
+            $response = new Response();
+            $response->headers->setCookie(Cookie::create($cookie, $hash, (2 * 365 * 24 * 60 * 60) + time() ));
+            $response->send();
+        }
     }
 
     private function addToTemplateData(string $key, $data, string $cat = 'page')

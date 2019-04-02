@@ -98,6 +98,18 @@
                 </div>
               {% endfor %}
 
+              {% for msg in app.session.flashbag.get('scheduleNotice') %} 
+                <div class="alert alert-{{ msg.type }} alert-dismissible fade fade-in mt-3 show" role="alert">
+                  <strong>{{ msg.title }} voor</strong>
+                  {% for cat in msg.categories %}
+                    <a class="alert-link" href="{{cat.url}}">{{cat.abbr}}</a>
+                  {% endfor %}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              {% endfor %}
+
                   {% block lead %}{% endblock %}
                   {% block main %}{% endblock %}
 
