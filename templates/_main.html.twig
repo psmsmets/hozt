@@ -72,7 +72,7 @@
                 <!-- Main -->
                 <div class="col col-12 col-md-9 p-0 col-print-12">
 
-                  <div id="notices"></div>
+                  <div id="notices" class="p-2 p-md-0">
 
                   {% for flashMessage in app.session.flashbag.get('error') %}
                     <div class="alert alert-warning alert-dismissible fade fade-in mt-3 show" role="alert">
@@ -100,6 +100,8 @@
                       </button>
                     </div>
                   {% endfor %}
+
+                  </div>
 
                   {% block lead %}{% endblock %}
                   {% block main %}{% endblock %}
@@ -156,7 +158,7 @@
               var notice = scheduleNoticeAlert( {{ msg|json_encode|raw }});
               $( notice ).appendTo( "#notices" );
               $('#{{msg.cookie}}').on('closed.bs.alert', function () {
-                  setCookie('{{msg.cookie}}', '{{msg.md5}}', 365)
+                  setCookie('{{msg.cookie}}', '{{msg.md5}}', 60)
               })
             {% endfor %}
 
