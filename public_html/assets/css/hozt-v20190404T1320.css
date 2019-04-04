@@ -194,8 +194,9 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
 .banner-bg {
   background-image: url("/assets/img/bg/zwembad.jpg");
   background-size: cover;
-  background-position: center; 
   background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center top;
 }
 
 .banner-bg0 {
@@ -260,13 +261,13 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
 }
 
 .banner-md, .banner-md .carousel-item {
-    height: 270px;
+    height: 275px;
     background-position-y: 45%;
 }
 
 .banner-sm, .banner-sm .carousel-item {
-    height: 145px;
-    background-position-y: 45%;
+    height: 155px;
+    /*background-position-y: 25%;*/
 }
 
 .carousel-caption {
