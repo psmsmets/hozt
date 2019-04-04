@@ -142,10 +142,6 @@ $(document).ready(function(){
         });
       
         if (scrollPos <= bannerHeight0) {
-            $('.banner').each(function() {
-                bannerPosY = bannerPosY0 + ((bannerHeight0-scrollPos)/bannerHeight0-1)*50 * bannerVelocity;
-                $(this).css('backgroundPosition',bannerPos0[0] + ' ' + bannerPosY + '%'); 
-            }); 
             $('.carousel-item').each(function() {
                 bannerImgTop = bannerImgTop0 - 2 * ((bannerHeight0-scrollPos)/bannerHeight0-1)*50 * bannerVelocity;
                 $(this).children('img').css('top', bannerImgTop + '%'); 
