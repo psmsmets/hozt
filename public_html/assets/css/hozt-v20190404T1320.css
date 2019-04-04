@@ -262,11 +262,11 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
 
 .banner-md, .banner-md .carousel-item {
     height: 275px;
-    background-position-y: 45%;
+    /*background-position-y: 45%;*/
 }
 
 .banner-sm, .banner-sm .carousel-item {
-    height: 155px;
+    height: 160px;
     /*background-position-y: 25%;*/
 }
 
@@ -519,10 +519,20 @@ a.badge.cal-5:hover {
     filter: none; /* IE6-9 */
     -webkit-filter: grayscale(0); /* Google Chrome, Safari 6+ & Opera 15+ */ 
   }
+  .banner-sm, .banner-sm .carousel-item {
+    background-position-y: -15%;
+  }
+}
+
+@media (min-width: 1600px) {
+  .banner-sm, .banner-sm .carousel-item {
+    height: 185px;
+    background-position-y: -35%;
+  }
 }
 
 /* Minimum aspect ratio */
-@media (max-aspect-ratio: 4/3) {
+@media (max-aspect-ratio: 4/4) {
   .banner .carousel-item img {
     height: 100%;
     width: auto;
@@ -535,7 +545,9 @@ a.badge.cal-5:hover {
   }
 
   .carousel-caption {
-    bottom: 1.5rem;
+    bottom: 1.0rem;
+    padding-left: 1.0rem;
+    padding-right: 1.0rem;
   }
 }
 
