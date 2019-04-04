@@ -198,6 +198,22 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
   background-repeat: no-repeat;
 }
 
+.banner-bg0 {
+  background-image: url("/assets/img/bg/zwembad0.jpg");
+}
+
+.banner-bg1 {
+  background-image: url("/assets/img/bg/zwembad1.jpg");
+}
+
+.banner-bg2 {
+  background-image: url("/assets/img/bg/zwembad2.jpg");
+}
+
+.banner-bg3 {
+  background-image: url("/assets/img/bg/zwembad3.jpg");
+}
+
 .banner {
   background-size: 100%;
   /*margin-bottom: -2.75rem;*/
