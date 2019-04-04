@@ -199,19 +199,43 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
 }
 
 .banner-bg0 {
-  background-image: url("/assets/img/bg/zwembad0.jpg");
+  background-image: url("/assets/img/bg/bg0.jpg");
 }
 
 .banner-bg1 {
-  background-image: url("/assets/img/bg/zwembad1.jpg");
+  background-image: url("/assets/img/bg/bg1.jpg");
 }
 
 .banner-bg2 {
-  background-image: url("/assets/img/bg/zwembad2.jpg");
+  background-image: url("/assets/img/bg/bg2.jpg");
 }
 
 .banner-bg3 {
-  background-image: url("/assets/img/bg/zwembad3.jpg");
+  background-image: url("/assets/img/bg/bg3.jpg");
+}
+
+.banner-bg4 {
+  background-image: url("/assets/img/bg/bg4.jpg");
+}
+
+.banner-bg5 {
+  background-image: url("/assets/img/bg/bg5.jpg");
+}
+
+.banner-bg6 {
+  background-image: url("/assets/img/bg/bg6.jpg");
+}
+
+.banner-bg7 {
+  background-image: url("/assets/img/bg/bg7.jpg");
+}
+
+.banner-bg8 {
+  background-image: url("/assets/img/bg/bg8.jpg");
+}
+
+.banner-bg9 {
+  background-image: url("/assets/img/bg/bg9.jpg");
 }
 
 .banner {
