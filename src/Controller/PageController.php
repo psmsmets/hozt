@@ -89,7 +89,7 @@ class PageController extends AbstractController
             ->getRepository(TrainingTeamCategory::class)
             ->findAllWithPersistentTraining(28)
         ) {
-            $this->scheduleNotice('persistent','Er zijn extra trainingsuren',$persistent,'warning');
+            $this->scheduleNotice('persistent','Er zijn tijdelijk extra trainingsuren',$persistent,'warning');
         }
 
     }
@@ -294,6 +294,10 @@ class PageController extends AbstractController
                 ->getRepository(TrainingTeamCategory::class)
                 ->findAllJoinedToTeamsCoachesSchedule()
             );
+        $this->addToTemplateData( 'training_persistent', $this->getDoctrine()
+            ->getRepository(TrainingSchedule::class)
+            ->countPersistent()
+        );
 
         return $this->render('training/scheduleTeams.html.twig', $this->template_data );
     }
@@ -308,6 +312,10 @@ class PageController extends AbstractController
                 ->getRepository(TrainingDay::class)
                 ->findAllJoinedToScheduleTeams()
             );
+        $this->addToTemplateData( 'training_persistent', $this->getDoctrine()
+            ->getRepository(TrainingSchedule::class)
+            ->countPersistent()
+        );
 
         return $this->render('training/scheduleDays.html.twig', $this->template_data );
     }

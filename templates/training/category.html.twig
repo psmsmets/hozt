@@ -11,29 +11,29 @@
 
     {% if page.training_team_exceptions is not empty %}
     <div class="alert alert-danger">
-      <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Eén of meerdere trainingen gaan niet door!</h5>
+      <p><i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Eén of meerdere trainingen gaan niet door!</p>
       <ul class="list-unstyled"> 
       {% for ex in page.training_team_exceptions %}
           <li class="mb-2">
             {% if ex.startDate == ex.endDate %}
-              <strong>Op {{ex.startDate|localizeddate('full','none')}} voor</strong>
+              <strong>Op {{ex.startDate|localizeddate('full','none')}}</strong>
             {% else %}
-              Tijdens de periode van <strong>{{ex.startDate|localizeddate('long','none')}} tot {{ex.endDate|localizeddate('long','none')}}</strong> voor
+              <strong>Van {{ex.startDate|localizeddate('long','none')}} tot {{ex.endDate|localizeddate('long','none')}}</strong>
             {% endif %}
-            {% if ex.teams|length > 0 %}
-              {% for team in ex.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
-            {% else %}
-              {% for team in page.training_category.teams %}{% if team.enabled %}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
-            {% endif %}
-            {% if ex.comment is not empty %}<span class="badge badge-info ml-1"><i class="fas fa-info-circle"></i> {{ex.comment}}</span>{% endif %}
             {% if ex.schedule|length > 0 %}
               <ul>
               {% for schedule in ex.schedule %}<li>specifiek op {{schedule.day|lower}} van {{schedule.time}}</li>{% endfor %}
                 <li class="list-unstyled"><small><i>Opgelet: Eventuele andere trainingen gaan gewoon door.</i></small></li>
               </ul>
-            {% else %}
-              {% if ex.startDate != ex.endDate %}zijn er <u>géén trainingen</u>!{% endif %}
             {% endif %}
+             is er <u>géén training</u> voor 
+            {% if ex.teams|length > 0 %}
+              {% for team in ex.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+            {% else %}
+              {% for team in page.training_category.teams %}{% if team.enabled %}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+            {% endif %}
+
+            {% if ex.comment is not empty %}<span class="badge badge-info ml-1"><i class="fas fa-info-circle"></i> {{ex.comment}}</span>{% endif %}
           </li>
       {% endfor %}
       </ul>
@@ -43,8 +43,7 @@
 
     {% if page.training_team_persistent > 0 %}
     <div class="alert alert-warning" role="alert">
-      <h5 class="pb-2"><i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Er zijn <a class="alert-link" href="#trainingsuren" onclick="$('#trainingsuren-tab').tab('show')">extra trainingsuren</a>.</h5>
-      <small><em>Klik op <i class="fas fa-comment"></i> voor de juiste datum of periode.</em></small>
+      <i class="fas fa-exclamation-triangle"></i> <strong>Opgelet: </strong> Er zijn tijdelijk <a class="alert-link" href="#trainingsuren" onclick="$('#trainingsuren-tab').tab('show')">extra trainingsuren</a>.
     </div>
     {% endif %}
 
@@ -102,6 +101,10 @@
       <div class="tab-pane fade mt-4" id="trainingsuren" role="tabpanel" aria-labelledby="trainingsuren-tab">
 
         <h4 class="d-md-none pb-2">Trainingsuren</h4>
+
+        {% if page.training_team_persistent > 0 %}
+        <p class="text-right small"><i>Tijdelijke <u>extra trainingsuren</u> zijn aangegeven in <a href="https://en.wikipedia.org/wiki/Aqua_(color)" class="text-info" target="_Blank"><strong>aqua</strong></a>.<br>Klik op <i class="fas fa-comment"></i> voor de juiste datum of periode.</i></p>
+        {% endif %}
 
         {% for day in page.training_days %}
           <dl class="row mb-md-2"> 

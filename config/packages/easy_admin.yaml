@@ -600,6 +600,7 @@ easy_admin:
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
                     - { property: 'mobilePhone', label: 'Mobiel nr' }
+                    - { property: 'is_active', label: 'Ingelogd', type: 'boolean' }
                     - { property: 'lastLoginAt', label: 'Laatst ingelogd' }
                 sort: ['id', 'ASC']
             form:
