@@ -526,8 +526,8 @@ a.badge.cal-5:hover {
 
 @media (min-width: 1600px) {
   .banner-sm, .banner-sm .carousel-item {
-    height: 185px;
-    background-position-y: -35%;
+    height: 200px;
+    background-position-y: -25%;
   }
 }
 
