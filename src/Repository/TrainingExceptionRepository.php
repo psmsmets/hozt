@@ -66,4 +66,22 @@ class TrainingExceptionRepository extends ServiceEntityRepository
             ->getResult()
         ;     
     }
+
+    public function findAllGeneralOnDate(\DateTime $refdate = null )
+    {
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
+        return $this->createQueryBuilder('exception')
+            ->leftJoin('exception.teams', 'teams')
+            ->leftJoin('exception.schedule', 'schedule')
+            ->addSelect('teams')
+            ->andWhere('schedule is null')
+            ->andWhere('exception.enabled = :enabled')
+            ->andWhere('exception.startDate <= :ref')
+            ->andWhere('exception.endDate >= :ref')
+            ->setParameter('enabled', true)
+            ->setParameter('ref', $refdate->format("Y-m-d"))
+            ->getQuery()
+            ->getResult()
+        ;     
+    }
 }

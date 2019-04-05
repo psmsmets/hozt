@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
 use App\Entity\TrainingSchedule;
+use App\Entity\TrainingException;
 use App\Entity\CalendarEvent;
 use App\Entity\CalendarCategory;
 use App\Entity\Competition;
@@ -80,18 +81,16 @@ class ApiController extends AbstractController
             ->findAllByDayJoinedToTeam($day_id,$date)
             ;
 
-        if (!$schedule) {
+        $exceptions = $this->getDoctrine()
+            ->getRepository(TrainingException::class)
+            ->findAllGeneralOnDate($date)
+            ;
+
+        $data = $this->serialize_training_schedule($schedule, $exceptions);
+
+        if (!$data) {
             return $this->json(array('result'=>false,'error'=>'Er is vandaag geen training.'));
         } else {
-            $data = array();
-            foreach ($schedule as $training) {
-                $teams = array();
-                foreach ( $training->getTeams() as $team ) {
-                    $teams[] = array ('abbr' => $team->getAbbr(), 'name' => $team->getName() );
-                }
-                $data[] = array( 'time' => strval($training->getTime()), 'comment' => $training->getComment(), 'teams' => $teams );
-
-            }
             return $this->json(array('result'=>true,'data'=>$data));
         }
 
@@ -111,21 +110,45 @@ class ApiController extends AbstractController
             ->findAllByDayJoinedToTeam($day_id,$date)
             ;
 
-        if (!$schedule) {
-            return $this->json(array('result'=>false,'error'=>'Er is vandaag geen training.'));
-        } else {
-            $data = array();
-            foreach ($schedule as $training) {
-                $teams = array();
-                foreach ( $training->getTeams() as $team ) {
-                    $teams[] = array ('abbr' => $team->getAbbr(), 'name' => $team->getName() );
-                }
-                $data[] = array( 'time' => strval($training->getTime()), 'comment' => $training->getComment(), 'teams' => $teams );
+        $exceptions = $this->getDoctrine()
+            ->getRepository(TrainingException::class)
+            ->findAllGeneralOnDate($date)
+            ;
 
-            }
+        $data = $this->serialize_training_schedule($schedule, $exceptions);
+
+        if (!$data) {
+            return $this->json(array('result'=>false,'error'=>'Er is morgen geen training.'));
+        } else {
             return $this->json(array('result'=>true,'data'=>$data));
         }
 
+    }
+
+    private function serialize_training_schedule($schedule, $exceptions)
+    {
+        $data = array();
+        foreach ($schedule as $training) {
+            if (!empty($exceptions)) {
+                foreach( $exceptions as $ex ) {
+                    foreach( $ex->getTeams() as $team ) {
+                        $training->removeTeam($team);
+                    }
+                }
+            }
+            $teams = array();
+            foreach ( $training->getTeams() as $team ) {
+                $teams[] = array ('abbr' => $team->getAbbr(), 'name' => $team->getName() );
+            }
+            if (!empty($teams)) {
+                $data[] = array( 
+                    'time' => strval($training->getTime()),
+                    'comment' => $training->getComment(), 
+                    'teams' => $teams,
+                );
+            }
+        }
+        return $data;
     }
 
     /**
