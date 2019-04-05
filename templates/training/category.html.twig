@@ -18,7 +18,7 @@
             {% if ex.startDate == ex.endDate %}
               <strong>Op {{ex.startDate|localizeddate('full','none')}}</strong>
             {% else %}
-              <strong>Van {{ex.startDate|localizeddate('long','none')}} tot {{ex.endDate|localizeddate('long','none')}}</strong>
+              <strong>Van {{ex.startDate|localizeddate('long','none')}} tot en met {{ex.endDate|localizeddate('long','none')}}</strong>
             {% endif %}
             {% if ex.schedule|length > 0 %}
               <ul>
@@ -37,7 +37,7 @@
           </li>
       {% endfor %}
       </ul>
-      <small><em>Zwem je bij een andere groep? Kijk zeker bij <a class="alert-link" href="{{ path('training_categories') }}">jouw trainingsgroep</a> of er ook geen trainingen wegvallen.</em></small>
+      <small><i>Zwem je bij een andere groep? Kijk dan zeker bij <a class="alert-link" href="{{ path('training_categories') }}">jouw trainingsgroep</a> of er ook geen trainingen wegvallen.</i></small>
     </div>
     {% endif %}
 
