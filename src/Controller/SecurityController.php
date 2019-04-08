@@ -22,4 +22,28 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
+    /**
+     * @Route("/wachtwoord/vergeten", name="app_forgot_password")
+     */
+    public function forgot_password(): Response
+    {
+        return $this->render('security/forgot.html.twig');
+    }
+
+    /**
+     * @Route("/wachtwoord/veranderen", name="app_change_password")
+     */
+    public function change_password(): Response
+    {
+        return $this->render('security/change.html.twig');
+    }
+
+    /**
+     * @Route("/wachtwoord/instellen", name="app_update_password")
+     */
+    public function reset_password(): Response
+    {
+        return $this->render('security/reset.html.twig');
+    }
+
 }

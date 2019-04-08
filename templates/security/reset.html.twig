@@ -1,0 +1,26 @@
+{% extends '_main.html.twig' %}
+
+{% block title %}Wachtwoord instellen{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+
+    <form class="form-signin text-center" method="post">
+      <img class="mb-4" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="100">
+      <h1 class="h3 mb-3 font-weight-normal">Wachtwoord instellen</h1>
+      <label for="inputPasswordNew" class="sr-only">Nieuw wachtwoord</label>
+      <input type="password" name="password" id="inputPasswordNew" class="form-control" placeholder="Nieuw wachtwoord" required autofocus>
+      <label for="inputPasswordNewConfirm" class="sr-only">Bevestig nieuw wachtwoord</label>
+      <input type="password" name="passwordNewConfirm" id="inputPasswordNewConfirm" class="form-control" placeholder="Bevestig nieuw wachtwoord" required>
+      <input type="hidden" name="_csrf_token"
+           value="{{ csrf_token('authenticate') }}"
+      >
+      <button class="btn btn-lg btn-hozt btn-block mt-3" type="submit">Bevestig je wachtwoord</button>
+    </form>
+
+{% endblock %}
