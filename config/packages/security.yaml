@@ -2,7 +2,6 @@
 
 security:
     encoders:
-#	FOS\UserBundle\Model\UserInterface: bcrypt
         App\Entity\User:
             algorithm: bcrypt
             cost: 12
@@ -43,9 +42,11 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # require ROLE_ADMIN for /admin*
+         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+         #- { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/reset, role: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/beheer, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-
+         - { path: ^/profiel, roles: ROLE_USER }
 
     role_hierarchy:
       ROLE_SWIMMER:      ROLE_USER
