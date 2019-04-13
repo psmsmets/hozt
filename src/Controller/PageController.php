@@ -111,9 +111,9 @@ class PageController extends AbstractController
 
         $cookie = "scheduleNotice".ucfirst($type);
         $request = $this->requestStack->getCurrentRequest();
-        $shown = $request->cookies->has($cookie);
+        $shown = $request->cookies->has($cookie) ? $request->cookies->get($cookie) : false;
 
-        if (!$shown) {
+        if ($shown != $hash) {
             $category_data = array();
             foreach ($categories as $cat) {
                 $category_data[] = array( 

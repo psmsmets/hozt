@@ -15,7 +15,7 @@ body {
 
 .form-signin {
   width: 100%;
-  max-width: 330px;
+  max-width: 350px;
   padding: 15px;
   margin: auto;
 }
@@ -32,12 +32,21 @@ body {
 .form-signin .form-control:focus {
   z-index: 2;
 }
-.form-signin input[type="email"] {
+
+.input-t {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.form-signin input[type="password"] {
+.input-m {
+  margin-bottom: -1px;
+  margin-top: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.input-b {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;

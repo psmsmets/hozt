@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/security.css') }}" rel="stylesheet" />
 {% endblock %}
 
 
@@ -14,9 +14,9 @@
       <img class="mb-4" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="100">
       <h1 class="h3 mb-3 font-weight-normal">Wachtwoord instellen</h1>
       <label for="inputPasswordNew" class="sr-only">Nieuw wachtwoord</label>
-      <input type="password" name="password" id="inputPasswordNew" class="form-control" placeholder="Nieuw wachtwoord" required autofocus>
+      <input type="password" name="password" id="inputPasswordNew" class="form-control input-t" placeholder="Nieuw wachtwoord" required autofocus>
       <label for="inputPasswordNewConfirm" class="sr-only">Bevestig nieuw wachtwoord</label>
-      <input type="password" name="passwordNewConfirm" id="inputPasswordNewConfirm" class="form-control" placeholder="Bevestig nieuw wachtwoord" required>
+      <input type="password" name="passwordNewConfirm" id="inputPasswordNewConfirm" class="form-control input-b" placeholder="Bevestig nieuw wachtwoord" required>
       <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
       >

@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/security.css') }}" rel="stylesheet" />
 {% endblock %}
 
 
@@ -18,7 +18,7 @@
       <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
       >
-      <button class="btn btn-lg btn-hozt btn-block" type="submit">Wachtwoord aanvragen</button>
+      <button class="btn btn-lg btn-hozt btn-block mt-3" type="submit">Wachtwoord aanvragen</button>
     </form>
 
 {% endblock %}

@@ -1,0 +1,18 @@
+{% extends '_main.html.twig' %}
+
+{% block title %}Wachtwoord instellen{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/css/security.css') }}" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+
+    <form class="form-signin text-center" method="post">
+      <img class="mb-4" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="100">
+      <h1 class="h3 mb-3 font-weight-normal">Gebruikersaccount activeren</h1>
+    </form>
+
+{% endblock %}

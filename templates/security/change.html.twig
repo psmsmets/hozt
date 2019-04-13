@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/security.css') }}" rel="stylesheet" />
 {% endblock %}
 
 
@@ -14,15 +14,15 @@
       <img class="mb-4" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="100">
       <h1 class="h3 mb-3 font-weight-normal">Wachtwoord instellen</h1>
       <label for="inputPasswordOld" class="sr-only">Wachtwoord</label>
-      <input type="password" name="password" id="inputPasswordOld" class="form-control" placeholder="Huidig wachtwoord" required autofocus>
+      <input type="password" name="password" id="inputPasswordOld" class="form-control input-t" placeholder="Huidig wachtwoord" required autofocus>
       <label for="inputPasswordNew" class="sr-only">Wachtwoord</label>
-      <input type="password" name="password" id="inputPasswordNew" class="form-control" placeholder="Nieuw wachtwoord" required>
+      <input type="password" name="password" id="inputPasswordNew" class="form-control input-m" placeholder="Nieuw wachtwoord" required>
       <label for="inputPasswordNewConfirm" class="sr-only">Bevestig wachtwoord</label>
-      <input type="password" name="passwordNewConfirm" id="inputPasswordNewConfirm" class="form-control" placeholder="Bevestig nieuw wachtwoord" required>
+      <input type="password" name="passwordNewConfirm" id="inputPasswordNewConfirm" class="form-control input-b" placeholder="Bevestig nieuw wachtwoord" required>
       <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
       >
-      <button class="btn btn-lg btn-hozt btn-block" type="submit">Bevestig je wachtwoord</button>
+      <button class="btn btn-lg btn-hozt btn-block mt-3" type="submit">Bevestig je wachtwoord</button>
     </form>
 
 {% endblock %}

@@ -23,7 +23,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/wachtwoord/vergeten", name="app_forgot_password")
+     * @Route("/wachtwoord-vergeten", name="app_forgot_password")
      */
     public function forgot_password(): Response
     {
@@ -31,7 +31,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/wachtwoord/veranderen", name="app_change_password")
+     * @Route("/wachtwoord-veranderen", name="app_change_password")
      */
     public function change_password(): Response
     {
@@ -39,11 +39,19 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/wachtwoord/instellen", name="app_update_password")
+     * @Route("/wachtwoord-instellen", name="app_update_password")
      */
     public function reset_password(): Response
     {
         return $this->render('security/reset.html.twig');
+    }
+
+    /**
+     * @Route("/gebruikersaccount-activeren", name="app_activate_user_account")
+     */
+    public function activate_user_account(): Response
+    {
+        return $this->render('security/activate.html.twig');
     }
 
 }
