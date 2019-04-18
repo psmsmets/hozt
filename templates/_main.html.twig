@@ -73,36 +73,8 @@
                 <div class="col col-12 col-md-9 p-0 col-print-12">
 
                   <div id="notices" class="pl-2 pr-2 p-md-0">
-
-                  {% for flashMessage in app.session.flashbag.get('error') %}
-                    <div class="alert alert-warning alert-dismissible fade fade-in mt-3 show" role="alert">
-                      {{ flashMessage }}
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                  {% endfor %}
-
-                  {% for flashMessage in app.session.flashbag.get('success') %}
-                    <div class="alert alert-success alert-dismissible fade fade-in mt-3 show" role="alert">
-                      {{ flashMessage }}
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                  {% endfor %}
-
-                  {% for flashMessage in app.session.flashbag.get('warning') %}
-                    <div class="alert alert-warning alert-dismissible fade fade-in mt-3 show" role="alert">
-                      {{ flashMessage }}
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                  {% endfor %}
-
+                    {% include 'modules/alerts.html.twig' %}
                   </div>
-
                   {% block lead %}{% endblock %}
                   {% block main %}{% endblock %}
 
@@ -135,25 +107,8 @@
 
         <!-- Additional page JavaScript
         ================================================== -->
+        <script src="{{ asset('assets/js/scheduleNotice.js') }}"></script> 
         <script type="text/javascript">
-            function setCookie(cname, cvalue, exdays) {
-                var d = new Date();
-                d.setTime(d.getTime() + (exdays*24*60*60*1000));
-                var expires = "expires="+ d.toUTCString();
-                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-            }
-            function scheduleNoticeAlert(msg) {
-                notice = "<div class=\"alert alert-" + msg.type + " alert-dismissible fade fade-in mt-3 show\" role=\"alert\" id=\"" + msg.cookie + "\">";
-                notice += "<i class=\"fas fa-exclamation-triangle\"></i> " + msg.title + " voor<span class=\"d-none d-lg-inline\"> de </span>";
-                $.each( msg.categories, function( i, item ) {
-                    notice += "<a class=\"alert-link ml-1 mr-1 d-lg-none\" href=\"" + item.url + "\">" + item.abbr + "</a>";
-                    notice += "<a class=\"alert-link ml-1 mr-1 d-none d-lg-inline\" href=\"" + item.url + "\">" + item.name + "</a>";
-                });
-                notice += "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">";
-                notice += "<span aria-hidden=\"true\">&times;</span>";
-                notice += "</button></div>";
-                return notice;
-            }
             {% for msg in app.session.flashbag.get('scheduleNotice') %}
               var notice = scheduleNoticeAlert( {{ msg|json_encode|raw }});
               $( notice ).appendTo( "#notices" );
@@ -161,7 +116,6 @@
                   setCookie('{{msg.cookie}}', '{{msg.md5}}', 60)
               })
             {% endfor %}
-
         </script>
         {% block javascripts %}{% endblock %}
 

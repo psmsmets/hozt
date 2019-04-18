@@ -7,7 +7,7 @@ parameters:
     locale: 'nl'
     app_locales: nl|en
     timezone: 'Europe/Brussels'
-    app.mailer.addr: 'webmaster@hozt.be'
+    app.mailer.from: 'webmaster@hozt.be'
     app.mailer.name: 'Webmaster HoZT'
     app.about.abbr: 'HoZT'
     app.about.name: 'Hoogstratens Zwem Team'
@@ -78,14 +78,17 @@ services:
                 entity: App\Entity\BlogPost
                 entity_manager: custom
 
-
-cocur_slugify:
-    lowercase: true
-    separator: '-'
+    Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface:
+        alias: ambta_doctrine_encrypt.encryptor
+        public: false
 
 ambta_doctrine_encrypt:
     secret_directory_path: '%kernel.project_dir%'   # Default value
     encryptor_class: Defuse # Halite
+
+cocur_slugify:
+    lowercase: true
+    separator: '-'
 
 eu_cookie_law:
     response_injection: true # default true

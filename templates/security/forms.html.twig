@@ -1,0 +1,66 @@
+{% extends '_main.html.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('assets/css/security.css') }}" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+
+    {{ form_start(form, {attr: {class: 'needs-validation form-signin text-center'} }) }}
+
+      <img class="mb-4" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="100">
+
+      {% include 'modules/alerts.html.twig' %}
+
+      <h1 class="h3 mb-3 font-weight-normal">{{title}}</h1>
+      {{ form_widget(form) }}
+
+      {% if password_requirements is defined %}
+        <small class="text-left">{{password_requirements.length}}<ul>
+        {% for detail in password_requirements.details %}
+          <li>{{detail}}</li>
+        {% endfor %}
+        </ul></small>
+      {% endif %}
+
+      <button class="btn btn-lg btn-hozt btn-block mt-3" type="submit">{{submit}}</button>
+
+    {{ form_end(form) }}
+
+{% endblock %}
+
+
+
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+// Disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        $('#submit').prop('disabled', 'disabled');
+        $('#submit').html('<i class="fas fa-sync-alt"></i> Verwerken');
+        $('#submitHelp').removeClass( "d-none" );
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+          $('#submit').prop('disabled', false);
+          $('#submit').html('{{submit}}');
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+{% endblock %}

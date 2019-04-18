@@ -111,9 +111,9 @@ class PageController extends AbstractController
 
         $cookie = "scheduleNotice".ucfirst($type);
         $request = $this->requestStack->getCurrentRequest();
-        $shown = $request->cookies->has($cookie);
+        $shown = $request->cookies->has($cookie) ? $request->cookies->get($cookie) : false;
 
-        if (!$shown) {
+        if ($shown != $hash) {
             $category_data = array();
             foreach ($categories as $cat) {
                 $category_data[] = array( 
@@ -516,7 +516,7 @@ class PageController extends AbstractController
             // $entityManager->flush();
 
             $message = (new \Swift_Message('HoZT.be contactformulier'))
-                ->setFrom('webmaster@hozt.be')
+                ->setFrom('webmaster@hozt.be') /* make global */
                 ->setTo($data['question']->getEmail())
                 ->setReplyTo($data['email'])
                 ->setBody(
@@ -535,7 +535,7 @@ class PageController extends AbstractController
             if ($result) { 
                 $this->addFlash('success', 'Bericht verzonden! Dankjewel om ons te contacteren.');
             } else {
-                $this->addFlash('error', 'Sorry, er ging iets verkeerd. Controleer of alle velden correct ingevuld zijn en probeer later opnieuw.');
+                $this->addFlash('danger', 'Sorry, er ging iets verkeerd. Controleer of alle velden correct ingevuld zijn en probeer later opnieuw.');
             }
             return $this->redirectToRoute('contact_form');
         }
