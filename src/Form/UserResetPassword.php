@@ -22,7 +22,7 @@ class UserResetPassword extends AbstractType
                 'type' => PasswordType::class,
                 'first_options' => array(
                     'label' => false,
-                    'attr' => ['placeholder'=>'Nieuw wachtwoord', 'class'=>'input-t'],
+                    'attr' => ['placeholder'=>'Nieuw wachtwoord', 'class'=>'input-t', 'pattern' => User::PASSWORD_REGEX],
                     'required' => true,
                     ),
                 'second_options' => array(

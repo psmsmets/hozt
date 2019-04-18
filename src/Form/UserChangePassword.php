@@ -10,9 +10,6 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-//use Doctrine\ORM\EntityRepository;
-//use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
 class UserChangePassword extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -27,7 +24,7 @@ class UserChangePassword extends AbstractType
                 'type' => PasswordType::class,
                 'first_options' => array(
                     'label' => false,
-                    'attr' => ['placeholder'=>'Nieuw wachtwoord', 'class'=>'input-m'],
+                    'attr' => ['placeholder'=>'Nieuw wachtwoord', 'class'=>'input-m', 'pattern' => User::PASSWORD_REGEX],
                     'required' => true,
                     ),
                 'second_options' => array(

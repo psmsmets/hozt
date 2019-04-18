@@ -6,7 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Rollerworks\Component\PasswordStrength\Validator\Constraints as RollerworksPassword;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
+
 //use Ambta\DoctrineEncryptBundle\Configuration\Encrypted;
 
 /**
@@ -19,6 +21,16 @@ class User implements UserInterface
      */
     const PASSWORD_RESET = 'password_reset_token';
     const EMAIL_CONFIRM = 'email_confirm_token';
+    const PASSWORD_REGEX = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_!@#$%^&*(),.?":{}|<> ])\S{6,}$';
+    const PASSWORD_REQUIREMENTS = array(
+            'length' => 'Een wachtwoord bevat minstens 6 tekens waarvan',
+            'details' => array(
+                '1 kleine letter (a-z)',
+                '1 hoofdletter (A-Z)',
+                '1 getal (0-9)',
+                '1 symbool (?=.*[_!@#$%^&*(),.?":{}|<> ])',
+            ),
+        );
 
     /**
      * @ORM\Id()
@@ -42,11 +54,6 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
-
-    /**
-     * @RollerworksPassword\PasswordStrength(minLength=7, minStrength=3)
-     */
-    private $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -396,9 +403,14 @@ class User implements UserInterface
     }
 
 /*
-    public function resetPassword(): bool
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        return false;
+        $metadata->addPropertyConstraint('firstName', new Assert\Length([
+            'min' => 2,
+            'max' => 50,
+            'minMessage' => 'Your first name must be at least {{ limit }} characters long',
+            'maxMessage' => 'Your first name cannot be longer than {{ limit }} characters',
+        ]));
     }
 */
 

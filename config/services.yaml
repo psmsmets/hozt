@@ -82,14 +82,6 @@ services:
         alias: ambta_doctrine_encrypt.encryptor
         public: false
 
-    App\Entity\User:
-        properties:
-            plainPassword:
-                - Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints\PasswordStrength:
-                     minLength: 8
-                     minStrength: 4
-
-
 ambta_doctrine_encrypt:
     secret_directory_path: '%kernel.project_dir%'   # Default value
     encryptor_class: Defuse # Halite
@@ -129,9 +121,3 @@ fos_ck_editor:
 #        default:
 #            - { name: 'Lead', element: 'p', attributes: { class: 'lead'} }
 #            - { name: 'Normal', element: 'p' }
-
-rollerworks_password_strength:
-    blacklist:
-        # Replace rollerworks_password_strength.blacklist.provider.noop with the service-id of the provider you want to use
-        default_provider: rollerworks_password_strength.blacklist.provider.noop
-
