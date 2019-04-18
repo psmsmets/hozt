@@ -2,18 +2,15 @@
 
 namespace App\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+//use Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface;
 
 # entities
 use App\Entity\User;
@@ -28,15 +25,14 @@ use App\Form\UserChangePassword;
 
 class SecurityController extends AbstractController
 {
-
-    protected $requestStack;
+/*
     protected $encryptor;
     
-    public function __construct(RequestStack $requestStack, EncryptorInterface $encryptor)
+    public function __construct(EncryptorInterface $encryptor)
     {
-        $this->requestStack = $requestStack;
         $this->encryptor = $encryptor;
     }
+*/
 
     /**
      * @Route("/login", name="app_login")
@@ -110,7 +106,7 @@ class SecurityController extends AbstractController
             UserRepository $userRepository 
         ): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je moet ingelogd zijn om je wachtwoord aan te kunnen passen!');
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
@@ -136,7 +132,7 @@ class SecurityController extends AbstractController
 
             if ($encoder->isPasswordValid($user, $form->getData()['plainPassword'])) {
 
-                $this->addFlash('danger', 'Je nieuw wachtwoord mag niet gelijk zijn aan je oude wachtwoord.');
+                $this->addFlash('danger', 'Je nieuw wachtwoord mag niet gelijk zijn aan je oud wachtwoord.');
                 return $this->redirectToRoute('app_change_password');
 
             }
@@ -170,7 +166,6 @@ class SecurityController extends AbstractController
             \Swift_Mailer $mailer
         ): Response
     {
-        $request = $this->requestStack->getCurrentRequest();
 
         $token = (string) $request->query->get(User::PASSWORD_RESET, null);
 
@@ -193,7 +188,7 @@ class SecurityController extends AbstractController
 
                 if ($encoder->isPasswordValid($user, $form->getData()['plainPassword'])) {
 
-                    $this->addFlash('danger', 'Je nieuw wachtwoord mag niet gelijk zijn aan je oude wachtwoord.');
+                    $this->addFlash('danger', 'Je nieuw wachtwoord mag niet gelijk zijn aan je oud wachtwoord.');
                     return $this->redirectToRoute('app_reset_password', [ User::PASSWORD_RESET => $token ]);
 
                 }
