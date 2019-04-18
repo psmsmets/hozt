@@ -120,37 +120,34 @@ class SecurityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($encoder->isPasswordValid($user, $form->getData()['oldPassword'])) {
-
-                if (preg_match('/'.User::PASSWORD_REGEX.'/', $form->getData()['plainPassword'])) {
-
-                    if (!$encoder->isPasswordValid($user, $form->getData()['plainPassword'])) {
-
-                        $password = $encoder->encodePassword($user, $form->getData()['plainPassword']);
-                        $user->setPassword($password);
-                        $userRepository->flush();
-                
-                        $this->addFlash('success', 'Je wachtwoord is aangepast.');
-
-                        return $this->redirectToRoute('app_change_password');
-
-                    } else {
-
-                        $this->addFlash('danger', 'Je nieuw wachtwoord mag niet gelijk zijn aan je oude wachtwoord.');
-
-                    }
-
-                } else {
-
-                    $this->addFlash('danger', 'Je nieuw wachtwoord voldoet niet aan de voorwaarden.');
-
-                }
-
-            } else {
+            if (!$encoder->isPasswordValid($user, $form->getData()['oldPassword'])) {
 
                 $this->addFlash('danger', 'Je huidig wachtwoord is verkeerd.');
+                return $this->redirectToRoute('app_change_password');
 
             }
+
+            if (!preg_match('/'.User::PASSWORD_REGEX.'/', $form->getData()['plainPassword'])) {
+
+                $this->addFlash('danger', 'Je nieuw wachtwoord voldoet niet aan de voorwaarden.');
+                return $this->redirectToRoute('app_change_password');
+
+            }
+
+            if ($encoder->isPasswordValid($user, $form->getData()['plainPassword'])) {
+
+                $this->addFlash('danger', 'Je nieuw wachtwoord mag niet gelijk zijn aan je oude wachtwoord.');
+                return $this->redirectToRoute('app_change_password');
+
+            }
+
+            $password = $encoder->encodePassword($user, $form->getData()['plainPassword']);
+            $user->setPassword($password);
+            $userRepository->flush();
+               
+            $this->addFlash('success', 'Je wachtwoord is aangepast.');
+
+            return $this->redirectToRoute('homepage');
 
         }
 
@@ -177,67 +174,71 @@ class SecurityController extends AbstractController
 
         $token = (string) $request->query->get(User::PASSWORD_RESET, null);
 
-        if (strlen($token) == 64) {
+        if (strlen($token) != 64) return $this->redirectToRoute('app_login');
 
-            if ($user = $userRepository->findOneByToken($token, User::PASSWORD_RESET)) {
+        if ($user = $userRepository->findOneByToken($token, User::PASSWORD_RESET)) {
 
-                $form = $this->createForm(UserResetPassword::class);
+            $form = $this->createForm(UserResetPassword::class);
 
-                $form->handleRequest($request);
+            $form->handleRequest($request);
 
-                if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
 
-                    if (preg_match('/'.User::PASSWORD_REGEX.'/', $form->getData()['plainPassword'])) {
+                if (!preg_match('/'.User::PASSWORD_REGEX.'/', $form->getData()['plainPassword'])) {
 
-                        $password = $encoder->encodePassword($user, $form->getData()['plainPassword']);
-                        $user->setPassword($password);
-                        $user->expireSecret();
-                        $userRepository->flush();
-
-                        // send email
-                        $message = (new \Swift_Message())
-                            ->setSubject('Nieuw wachtwoord ingesteld')
-                            ->setFrom(array('webmaster@hozt.be'=>'HoZT'))  // variable app.mailer.from
-                            ->setTo($user->getEmail())
-                            ->setBody(
-                                $this->renderView(
-                                    'security/emails/reset_password.html.twig',
-                                    array( 
-                                    'name' => strval($user), 
-                                    )
-                                ),
-                                'text/html'
-                            );
-                        $sent = $mailer->send($message);
-                
-                        $this->addFlash('success', 'Je wachtwoord is aangepast.');
-
-                    } else {
-
-                        $this->addFlash('danger', 'Je nieuw wachtwoord voldoet niet aan de voorwaarden.');
-
-                    }
-
-                } else {
-
-                    return $this->render('security/forms.html.twig', array( 
-                            'form' => $form->createView(),
-                            'title' => 'Wachtwoord instellen',
-                            'submit' => 'Bevestig je wachtwoord',
-                            'password_requirements' => User::PASSWORD_REQUIREMENTS,
-                        ));
+                    $this->addFlash('danger', 'Je nieuw wachtwoord voldoet niet aan de voorwaarden.');
+                    return $this->redirectToRoute('app_reset_password', [ User::PASSWORD_RESET => $token ]);
 
                 }
 
-            } else {
+                if ($encoder->isPasswordValid($user, $form->getData()['plainPassword'])) {
 
-                $this->addFlash('danger', 'De token is verlopen of niet correct.');
+                    $this->addFlash('danger', 'Je nieuw wachtwoord mag niet gelijk zijn aan je oude wachtwoord.');
+                    return $this->redirectToRoute('app_reset_password', [ User::PASSWORD_RESET => $token ]);
 
-            }
+                }
+
+                $password = $encoder->encodePassword($user, $form->getData()['plainPassword']);
+                $user->setPassword($password);
+                $user->expireSecret();
+                $userRepository->flush();
+
+                // send email
+                $message = (new \Swift_Message())
+                    ->setSubject('Nieuw wachtwoord ingesteld')
+                    ->setFrom(array('webmaster@hozt.be'=>'HoZT'))  // variable app.mailer.from
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'security/emails/reset_password.html.twig',
+                            array( 
+                                'name' => strval($user), 
+                            )
+                        ),
+                        'text/html'
+                    );
+
+                $sent = $mailer->send($message);
+                
+                $this->addFlash('success', 'Je wachtwoord is aangepast.');
+
+                return $this->redirectToRoute('app_login');
+
+            } 
+
+        } else {
+
+            $this->addFlash('danger', 'De token is verlopen of niet correct.');
+            return $this->redirectToRoute('app_login');
 
         }
 
-        return $this->redirectToRoute('app_login');
+        return $this->render('security/forms.html.twig', array( 
+                'form' => $form->createView(),
+                'title' => 'Wachtwoord instellen',
+                'submit' => 'Bevestig je wachtwoord',
+                'password_requirements' => User::PASSWORD_REQUIREMENTS,
+            ));
 
     }
 
