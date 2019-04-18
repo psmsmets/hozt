@@ -11,6 +11,7 @@
         "friendsofsymfony/ckeditor-bundle": "^2.0",
         "michaeldegroot/doctrine-encrypt-bundle": "^4.0",
         "mustangx/eu-cookie-law-bundle": "^1.0",
+        "rollerworks/password-strength-bundle": "^2.1",
         "sensio/framework-extra-bundle": "^5.2",
         "snilius/twig-sort-by-field": "^0.1.5",
         "symfony/apache-pack": "^1.0",

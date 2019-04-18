@@ -10,6 +10,20 @@
 
 {% block body %}
 
+    {{ form_start(form, {attr: {class: 'needs-validation form-signin text-center'} }) }}
+
+      <img class="mb-4" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="100">
+
+      {% include 'modules/alerts.html.twig' %}
+
+      <h1 class="h3 mb-3 font-weight-normal">Wachtwoord vergeten?</h1>
+      {{ form_widget(form) }}
+
+      <button class="btn btn-lg btn-hozt btn-block mt-3" type="submit">Wachtwoord aanvragen</button>
+
+    {{ form_end(form) }}
+
+<!--
     <form class="form-signin text-center" method="post">
       <img class="mb-4" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="100">
       <h1 class="h3 mb-3 font-weight-normal">Wachtwoord vergeten?</h1>
@@ -20,5 +34,6 @@
       >
       <button class="btn btn-lg btn-hozt btn-block mt-3" type="submit">Wachtwoord aanvragen</button>
     </form>
+-->
 
 {% endblock %}

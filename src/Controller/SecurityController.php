@@ -3,12 +3,41 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+# entities
+use App\Entity\User;
+
+# repositories
+use App\Repository\UserRepository;
+
+# forms
+use App\Form\UserForgotPassword;
+use App\Form\UserResetPassword;
+use App\Form\UserChangePassword;
 
 class SecurityController extends AbstractController
 {
+
+    protected $requestStack;
+    protected $encryptor;
+    
+    public function __construct(RequestStack $requestStack, EncryptorInterface $encryptor)
+    {
+        $this->requestStack = $requestStack;
+        $this->encryptor = $encryptor;
+    }
+
     /**
      * @Route("/login", name="app_login")
      */
@@ -25,25 +54,164 @@ class SecurityController extends AbstractController
     /**
      * @Route("/wachtwoord-vergeten", name="app_forgot_password")
      */
-    public function forgot_password(): Response
+    public function forgot_password(Request $request, UserRepository $userRepository, \Swift_Mailer $mailer ): Response
     {
-        return $this->render('security/forgot.html.twig');
+        $form = $this->createForm(UserForgotPassword::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $email = $form->getData()['email'];
+            //$email = $this->encryptor->decrypt($this->encryptor->encrypt($form->getData()['email']));
+
+            if ($user = $userRepository->findOneByEmail($email)) {
+
+                $token = $user->newResetPasswordToken();
+                $userRepository->flush();
+
+                $url = $this->get('router')->generate('app_reset_password', array(User::PASSWORD_RESET => $token));
+
+                // send email
+                $message = (new \Swift_Message())
+                    ->setSubject('Instructies wachtwoord instellen')
+                    ->setFrom(array('webmaster@hozt.be'=>'HoZT'))  // variable app.mailer.from
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'security/emails/forgot_password.html.twig',
+                            array( 
+                                'name' => strval($user), 
+                                'url' => $url,
+                            )
+                        ),
+                        'text/html'
+                    );
+                $sent = $mailer->send($message);
+
+                $this->addFlash('success', 'Er is een email met de instructies onderweg als het adres ons bekend is.');
+                
+             }
+
+            return $this->redirectToRoute('app_forgot_password');
+        }
+        return $this->render('security/forms.html.twig', array( 
+                'form' => $form->createView(),
+                'title' => 'Wachtwoord vergeten?',
+                'submit' => 'Wachtwoord aanvragen',
+            ));
     }
 
     /**
      * @Route("/wachtwoord-veranderen", name="app_change_password")
      */
-    public function change_password(): Response
+    public function change_password(
+            Request $request, 
+            UserPasswordEncoderInterface $encoder,
+            UserRepository $userRepository 
+        ): Response
     {
-        return $this->render('security/change.html.twig');
+// http://www.pimwiddershoven.nl/entry/password-complexity-and-blacklist-in-symfony-optionally-with-fosuserbundle
+
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je moet ingelogd zijn om je wachtwoord aan te kunnen passen!');
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $form = $this->createForm(UserChangePassword::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            if ($encoder->isPasswordValid($user, $form->getData()['oldPassword'])) {
+
+                $password = $encoder->encodePassword($user, $form->getData()['plainPassword']);
+                $user->setPassword($password);
+                $userRepository->flush();
+                
+                $this->addFlash('success', 'Je wachtwoord is aangepast.');
+
+            } else {
+
+                $this->addFlash('danger', 'Je huidig wachtwoord is verkeerd.');
+
+            }
+
+        }
+
+        return $this->render('security/forms.html.twig', array( 
+                'form' => $form->createView(),
+                'title' => 'Wachtwoord veranderen',
+                'submit' => 'Wachtwoord veranderen',
+            ));
+
     }
 
     /**
-     * @Route("/wachtwoord-instellen", name="app_update_password")
+     * @Route("/wachtwoord-instellen", name="app_reset_password")
      */
-    public function reset_password(): Response
+    public function reset_password(
+            Request $request, 
+            UserPasswordEncoderInterface $encoder,
+            UserRepository $userRepository,
+            \Swift_Mailer $mailer
+        ): Response
     {
-        return $this->render('security/reset.html.twig');
+        $request = $this->requestStack->getCurrentRequest();
+
+        $token = (string) $request->query->get(User::PASSWORD_RESET, null);
+
+        if (strlen($token) == 64) {
+
+            if ($user = $userRepository->findOneByToken($token, User::PASSWORD_RESET)) {
+
+                $form = $this->createForm(UserResetPassword::class);
+
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+
+                    $password = $encoder->encodePassword($user, $form->getData()['plainPassword']);
+                    $user->setPassword($password);
+                    $user->expireSecret();
+                    $userRepository->flush();
+
+                    // send email
+                    $message = (new \Swift_Message())
+                        ->setSubject('Nieuw wachtwoord ingesteld')
+                        ->setFrom(array('webmaster@hozt.be'=>'HoZT'))  // variable app.mailer.from
+                        ->setTo($user->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'security/emails/reset_password.html.twig',
+                                array( 
+                                'name' => strval($user), 
+                                )
+                            ),
+                            'text/html'
+                        );
+                    $sent = $mailer->send($message);
+                
+                    $this->addFlash('success', 'Je wachtwoord is aangepast.');
+
+                } else {
+
+                    return $this->render('security/forms.html.twig', array( 
+                            'form' => $form->createView(),
+                            'title' => 'Wachtwoord instellen',
+                            'submit' => 'Bevestig je wachtwoord',
+                        ));
+
+                }
+
+            } else {
+
+                $this->addFlash('danger', 'De token is verlopen of niet correct.');
+
+            }
+
+        }
+        return $this->redirectToRoute('app_login');
     }
 
     /**
