@@ -11,7 +11,7 @@
       </trans-unit>
       <trans-unit id="nLQ._F." resname="cookie.message">
         <source>cookie.message</source>
-        <target>Deze website maakt gebruik van functionele en statistische cookies. Deze cookies zijn nodig om de website goed te laten werken en brengen, volledig anoniem, jouw gebruik in kaart voor het verbeteren van de website.</target>
+        <target>Door deze website te gebruiken stem je in met het gebruik van functionele en statistische cookies overeenkomstig ons privacybeleid op de HoZT website. Deze cookies zijn nodig om de website goed te laten werken en brengen, volledig anoniem, jouw gebruik in kaart voor het verbeteren van de website.</target>
       </trans-unit>
       <trans-unit id="prjKeTl" resname="cookie.message.accept">
         <source>cookie.message.accept</source>

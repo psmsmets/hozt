@@ -16,24 +16,30 @@
       {% for ex in page.training_team_exceptions %}
           <li class="mb-2">
             {% if ex.startDate == ex.endDate %}
-              <strong>Op {{ex.startDate|localizeddate('full','none')}}</strong>
+              <strong>{{ex.startDate|localizeddate('full','none')|ucfirst}}</strong>
             {% else %}
               <strong>Van {{ex.startDate|localizeddate('long','none')}} tot en met {{ex.endDate|localizeddate('long','none')}}</strong>
             {% endif %}
+            is er <u>géén training</u> 
             {% if ex.schedule|length > 0 %}
+              {% if ex.comment is not empty %}<span class="badge badge-info ml-1"><i class="fas fa-info-circle"></i> {{ex.comment}}</span>{% endif %}
               <ul>
-              {% for schedule in ex.schedule %}<li>specifiek op {{schedule.day|lower}} van {{schedule.time}}</li>{% endfor %}
-                <li class="list-unstyled"><small><i>Opgelet: Eventuele andere trainingen gaan gewoon door.</i></small></li>
+              {% for schedule in ex.schedule %}
+                <li>{% if  ex.startDate != ex.endDate %}specifiek op {{schedule.day|lower}} {% endif %}van {{schedule.time}}
+                voor {% for team in schedule.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %} 
+                </li>
+              {% endfor %}
               </ul>
-            {% endif %}
-             is er <u>géén training</u> voor 
-            {% if ex.teams|length > 0 %}
-              {% for team in ex.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+              <small><i><u>Opgelet:</u> Eventuele andere of bijkomende trainingen gaan gewoon door.</i></small>
             {% else %}
-              {% for team in page.training_category.teams %}{% if team.enabled %}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+              voor 
+              {% if ex.teams|length > 0 %}
+                {% for team in ex.teams %}{% if team.category == page.training_category%}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+              {% else %}
+                {% for team in page.training_category.teams %}{% if team.enabled %}<span class="badge badge-danger ml-1 mr-1">{{team}}</span>{% endif %}{% endfor %}
+              {% endif %}
+              {% if ex.comment is not empty %}<span class="badge badge-info ml-1"><i class="fas fa-info-circle"></i> {{ex.comment}}</span>{% endif %}
             {% endif %}
-
-            {% if ex.comment is not empty %}<span class="badge badge-info ml-1"><i class="fas fa-info-circle"></i> {{ex.comment}}</span>{% endif %}
           </li>
       {% endfor %}
       </ul>

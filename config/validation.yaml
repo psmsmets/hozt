@@ -1,6 +1,0 @@
-AppBundle\Entity\User:
-     properties:
-         plainPassword:
-             - Rollerworks\Bundle\PasswordStrengthBundle\Validator\Constraints\PasswordStrength:
-                 minLength: 8
-                 minStrength: 4
