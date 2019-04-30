@@ -30,6 +30,7 @@ easy_admin:
             edit:
                 fields:
                     - { property: 'slug', label: 'Slug' }
+
         CalendarEvent:
             class: App\Entity\CalendarEvent
             label: 'Kalender :: events'
@@ -48,14 +49,14 @@ easy_admin:
                 sort: ['startTime', 'DESC']
             form:
                 fields:
-                    - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
+                    - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'startTime', label: 'Van' }
                     - { property: 'endTime', label: 'Tot' }
                     - { property: 'allDay', label: 'Hele dag', help: 'Of bij onbekend (start)uur' }
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
                     - { property: 'cancelled', label: 'Geannuleerd' }
-                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
+                    - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
                     - { property: 'enabled', label: 'Actief' }
                     #- { property: 'archived', label: 'Gearchiveerd' }
                     - { property: 'isCompetition', label: 'Zwemwedstrijd' }
