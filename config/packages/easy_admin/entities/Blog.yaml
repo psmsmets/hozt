@@ -46,7 +46,7 @@ easy_admin:
                     # - { property: 'publishUntil', label: 'Publiceer tot' }
                     # - { property: 'access', label: 'Toegang' }
             edit:
-                #actions: ['delete']
+                actions: ['delete']
 
         BlogCategory:
             class: App\Entity\BlogCategory
