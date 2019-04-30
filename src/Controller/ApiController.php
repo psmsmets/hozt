@@ -112,7 +112,7 @@ class ApiController extends AbstractController
 
         $exceptions = $this->getDoctrine()
             ->getRepository(TrainingException::class)
-            ->findAllGeneralOnDate($date)
+            ->findAllOnDate($date)
             ;
 
         $data = $this->serialize_training_schedule($schedule, $exceptions);
@@ -129,13 +129,28 @@ class ApiController extends AbstractController
     {
         $data = array();
         foreach ($schedule as $training) {
+            // all day exception
             if (!empty($exceptions)) {
                 foreach( $exceptions as $ex ) {
-                    foreach( $ex->getTeams() as $team ) {
-                        $training->removeTeam($team);
+                    $exSchedule = $ex->getSchedule();
+                    if (count($exSchedule)>0) {
+                        // remove teams specific training
+                        foreach( $exSchedule as $exS ) {
+                            if ($exS == $training) {
+                                foreach( $ex->getTeams() as $team ) {
+                                    $training->removeTeam($team);
+                                }
+                            }
+                        }
+                    } else {
+                        // remove teams all trainings
+                        foreach( $ex->getTeams() as $team ) {
+                            $training->removeTeam($team);
+                        }
                     }
                 }
             }
+
             $teams = array();
             foreach ( $training->getTeams() as $team ) {
                 $teams[] = array ('abbr' => $team->getAbbr(), 'name' => $team->getName() );
