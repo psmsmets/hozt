@@ -23,13 +23,12 @@ class CarouselSlideRepository extends ServiceEntityRepository
     //  * @return CarouselSlide[] Returns an array of CarouselSlide objects
     //  */
     public function findCarouselSlides(bool $admin = false)
-    {
-    
+    { 
         if ($admin) {
             return $this->createQueryBuilder('carousel')
-                ->andWhere('(carousel.publishAt <= :now and carousel.enabled = :enabled) or carousel.publishAt >= :now')
+                //->andWhere('(carousel.publishAt <= :now and carousel.enabled = :enabled) or carousel.publishAt >= :now')
                 ->andWhere('(carousel.publishUntil > :now or carousel.publishUntil is null)')
-                ->setParameter('enabled', true)
+                //->setParameter('enabled', true)
                 ->setParameter('now', date("Y-m-d H:i"))
                 ->orderBy('carousel.publishAt', 'DESC')
                 ->getQuery()
