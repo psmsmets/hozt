@@ -1,0 +1,43 @@
+# This file sets the configuration of the 'Category' entity.
+#
+# NOTE: this demo application splits the backend configuration into several
+# small files for educational purposes. In your application you can put the
+# entire backend configuration in just one file.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    entities:
+        StaticPage:
+            class: App\Entity\StaticPage
+            label: 'Pagina'
+            list:
+                fields:
+                    - { property: 'id', label: 'Id' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'description', label: 'Korte omschrijving' }
+                    - { property: 'slug', label: 'Slug' }
+                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.staticPage_images%' }
+                    - { property: 'showUpdatedAt', label: 'Toon laatst aangepast', type: 'boolean' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['id', 'ASC']
+            form:
+                fields:
+                    - { type: 'group', columns: 12, label: 'Basisgegevens', icon: 'pencil', css_class: "w-100 col-12" }
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'titleShort', label: 'Verkorte titel' }
+                    - { property: 'slug', label: 'Slug' }
+                    - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } } 
+                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 12, css_class: "w-100 col-12" }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'showUpdatedAt', label: 'Toon laatst aangepast' }
+                    - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
+                    - { property: 'keywords', label: 'Keywords' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.staticPage_images%' }
+                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.staticPage_documents%' }
+                    #- { property: 'access', label: 'Toegang' }
+            edit:
+                actions: ['-delete']
+                fields:
+                    - '-slug'

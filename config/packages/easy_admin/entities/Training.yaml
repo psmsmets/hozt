@@ -1,0 +1,181 @@
+# This file sets the configuration of the 'Category' entity.
+#
+# NOTE: this demo application splits the backend configuration into several
+# small files for educational purposes. In your application you can put the
+# entire backend configuration in just one file.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    entities:
+        TrainingCoach:
+            class: App\Entity\TrainingCoach
+            label: 'Trainingen :: coach'
+            list:
+                fields:
+                    - { property: 'id', label: 'id' }
+                    #- { property: 'sequence', label: 'Nr' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'teams', label: 'Groepen' }
+                    - { property: 'head', label: 'Hoofdtrainer', type: 'boolean' }
+                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.user_images%' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['firstname', 'ASC']
+            edit:
+                actions: ['-delete']
+            form:
+                fields:
+                    - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
+                    - { property: 'firstname', label: 'Voornaam' }
+                    - { property: 'lastname', label: 'Achternaam' }
+                    #- { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'head', label: 'Hoofdtrainer' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.user_images%' }
+            search:
+                fields: ['teams.abbr','teams.name']
+        TrainingTeam:
+            class: App\Entity\TrainingTeam
+            label: 'Trainingen :: groep'
+            list:
+                fields:
+                    #- { property: 'id', label: 'id' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'abbr', label: 'Afkorting' }
+                    - { property: 'category', label: 'Categorie' }
+                    - { property: 'coaches', label: 'Coaches' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['abbr', 'ASC']
+            edit:
+                actions: ['-delete']
+            form:
+                fields:
+                    - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'coaches', label: 'Coaches' }
+                    - { property: 'goal', label: 'Doelstelling', type: 'textarea' }
+                    - { property: 'age', label: 'Leeftijd' }
+                    - { property: 'requirements', label: 'Toelatingsvoorwaarden' }
+                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'abbr', label: 'Afkorting' }
+                    - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
+        TrainingTeamCategory:
+            class: App\Entity\TrainingTeamCategory
+            label: 'Trainingen :: categorie'
+            list:
+                fields:
+                    #- { property: 'id', label: 'id' }
+                    - { property: 'sequence', label: 'Nr' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'abbr', label: 'Afkorting' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'duration', label: 'duurtijd' }
+                    - { property: 'times', label: 'per week' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['sequence', 'ASC']
+            form:
+                fields:
+                    - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'abbr', label: 'Afkorting' }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
+                    - { property: 'duration', label: 'Duurtijd' }
+                    - { property: 'times', label: 'Per week' }
+                    - { property: 'days', label: 'Trainingsdagen' }
+                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'sequence', label: 'Volgorde' }
+            edit:
+                actions: ['-delete']
+        TrainingTime:
+            class: App\Entity\TrainingTime
+            label: 'Trainingen :: uur'
+            list:
+                fields:
+                    #- { property: 'id', label: 'id' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'startTime', label: 'Startuur' }
+                    - { property: 'endTime', label: 'Einduur' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['startTime', 'ASC']
+                actions: ['-show','edit']
+            edit:
+                actions: ['-delete']
+            form:
+                fields:
+                    - { property: 'startTime', label: 'Startuur' }
+                    - { property: 'endTime', label: 'Einduur' }
+                    - { property: 'enabled', label: 'Actief' }
+        TrainingDay:
+            class: App\Entity\TrainingDay
+            label: 'Trainingen :: dag'
+            list:
+                fields:
+                    - { property: 'id', label: 'id' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'abbr', label: 'Afkorting' }
+                sort: ['id', 'ASC']
+                actions: ['-edit','-show','-new','-search']
+            form:
+                fields:
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'abbr', label: 'Afkorting' }
+        TrainingSchedule:
+            class: App\Entity\TrainingSchedule
+            label: 'Trainingen :: uurrooster'
+            list:
+                fields:
+                    #- { property: 'id', label: 'Id' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'teams', label: 'Groepen' }
+                    - { property: 'day', label: 'Dag' }
+                    - { property: 'time', label: 'Tijdstip' }
+                    - { property: 'comment', label: 'Opmerking' }
+                    - { property: 'startDate', label: 'Vanaf' }
+                    - { property: 'endDate', label: 'Tot' }
+                    - { property: 'persistent', label: 'Uitzondering', type: 'boolean' }
+                    #- { property: 'updatedAt', label: 'Aangepast' }
+                sort: ['day', 'ASC']
+            form:
+                fields:
+                    - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'day', label: 'Dag' }
+                    - { property: 'time', label: 'Tijdstip', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getTrainingTime'] } }
+                    - { property: 'comment', label: 'Opmerking' }
+                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'startDate', label: 'Vanaf' }
+                    - { property: 'endDate', label: 'Tot' }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'persistent', label: 'Uitzondering' }
+            edit:
+                actions: ['delete']
+            search:
+                fields: ['teams.abbr','day.name','time.startTime','time.endTime']
+        TrainingException:
+            class: App\Entity\TrainingException
+            label: 'Trainingen :: uurrooster uitzonderingen'
+            list:
+                fields:
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'startDate', label: 'Vanaf' }
+                    - { property: 'endDate', label: 'Tot' }
+                    - { property: 'teams', label: 'Groepen' }
+                    - { property: 'schedule', label: 'Uurrooster' }
+                    - { property: 'comment', label: 'Opmerking' }
+                sort: ['startDate', 'ASC']
+            form:
+                fields:
+                    - { property: 'startDate', label: 'Vanaf' }
+                    - { property: 'endDate', label: 'Tot', test: true }
+                    - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'schedule', label: 'Uurrooster', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getTrainingSchedule'] } }
+                    - { property: 'comment', label: 'Opmerking' }
+                    - { property: 'enabled', label: 'Actief' }
+            edit:
+                actions: ['delete']

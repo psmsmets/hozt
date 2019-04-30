@@ -1,0 +1,67 @@
+# This file sets the configuration of the main menu. If your backend is simple,
+# you probably can leave the 'menu' option empty and rely on the default menu
+# created by EasyAdmin.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    design:
+        menu:
+           - label: "Pagina's"
+           - label: 'Blog'
+             icon: 'book'
+             children:
+               - { entity: 'BlogPost', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
+               - { entity: 'BlogPost', label: 'Lijst', icon: 'list' }
+               - { entity: 'BlogCategory', label: 'Categorieën', icon: 'bookmark' }
+           - { entity: 'StaticPage', label: "Statische pagina's", icon: 'briefcase' }
+           - { entity: 'CarouselSlide', label: 'Carousel', icon: 'star' }
+           - label: "Training & Wedstrijden"
+           - label: 'Trainingen'
+             icon: 'tasks'
+             children:
+               - { entity: 'TrainingCoach', label: 'Coaches', icon: 'graduation-cap' }
+               - { entity: 'TrainingTeam', label: 'Groepen', icon: 'users' }
+               - { entity: 'TrainingTeamCategory', label: 'Categorie', icon: 'bookmark' }
+               - { entity: 'TrainingSchedule', label: 'Uurrooster', icon: 'table' }
+               - { entity: 'TrainingException', label: 'Uitzondering', icon: 'times-circle' }
+               - { entity: 'TrainingTime', label: 'Tijdstippen' }
+               - { entity: 'TrainingDay', label: 'Dag' }
+           - label: 'Kalender'
+             icon: 'calendar'
+             children:
+               - { entity: 'CalendarEvent', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
+               - { entity: 'CalendarEvent', label: 'Lijst', icon: 'list' }
+               - { entity: 'CalendarCategory', label: 'Categorieën', icon: 'bookmark' }
+           - label: 'Wedstrijden'
+             icon: 'trophy'
+             children:
+               - { entity: 'Competition', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
+               - { entity: 'Competition', label: 'Lijst', icon: 'list' }
+               - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'bookmark' }
+               - { entity: 'CompetitionDocument', label: 'Bijlagen', icon: 'file' }
+               - { entity: 'CompetitionDocumentCategory', label: 'Bijlage categorie', icon: 'folder-open' }
+           - label: "Varia"
+           - { entity: 'ContactForm', label: 'Contact', icon: 'comment' }
+           - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle' }
+           - label: 'Sponsors'
+             icon: 'life-ring'
+             children:
+               - { entity: 'Sponsor', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
+               - { entity: 'Sponsor', label: 'Lijst', icon: 'list' }
+               - { entity: 'SponsorCategory', label: 'Categorieën', icon: 'bookmark' }
+           - label: "Toegang"
+           - label: 'Gebruikers'
+             icon: 'user'
+             children:
+               - { entity: 'User', label: 'Lijst', icon: 'list' }
+    list:
+        title: '%%entity_label%%'
+        max_results: 30
+        actions: ['-delete']
+    edit:
+        title: '%%entity_label%% (#%%entity_id%%)'
+        actions: ['-delete']
+    show:
+        title: '%%entity_label%% (#%%entity_id%%)'
+        actions: ['-delete', '-edit']
