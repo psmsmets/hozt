@@ -26,19 +26,20 @@ easy_admin:
                 fields: ['-calendar']
             form:
                 fields:
-                    - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
+                    - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
                     - { property: 'calendar', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnassociatedCalendarEvents'] } }
                     - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'teamCategories', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     #- { property: 'delegate', label: 'Afgevaardigde' }
                     #- { property: 'coaches', label: 'Trainers' }
                     #- { property: 'officials', label: 'Officials' }
-                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
+                    - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
                     - { property: 'restrictions', label: 'Limieten' }
                     - { property: 'multiDay', label: 'Overnachting' }
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
             search:
                 fields: ['calendar.title','calendar.startTime','calendar.endTime','calendar.location','teams.name','teamCategories.name','teams.abbr','teamCategories.abbr']
+
         CompetitionPool:
             class: App\Entity\CompetitionPool
             label: 'Zwemwedstrijd bad'
@@ -55,6 +56,7 @@ easy_admin:
                     - { property: 'title', label: 'Titel' }
                     - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'enabled', label: 'Actief' }
+
         CompetitionDocument:
             class: App\Entity\CompetitionDocument
             label: 'Zwemwedstrijd bijlage'
@@ -79,6 +81,7 @@ easy_admin:
                 actions: ['delete']
             search:
                 fields: ['category.title','competition.teamCategories.name','competition.teamCategories.abbr','competition.teams.name','competition.teams.abbr','competition.calendar.location','competition.calendar.startTime','competition.calendar.endTime','competition.calendar.title']
+
         CompetitionDocumentCategory:
             class: App\Entity\CompetitionDocumentCategory
             label: 'Zwemwedstrijd bijlage categorie'
@@ -96,24 +99,3 @@ easy_admin:
                     - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'enabled', label: 'Actief' }
-        User:
-            class: App\Entity\User
-            label: 'Gebruikers'
-            list:
-                fields:
-                    - { property: 'id', label: 'Id' }
-                    - { property: 'email', label: 'Email' }
-                    - { property: 'firstname', label: 'Voornaam' }
-                    - { property: 'lastname', label: 'Achternaam' }
-                    - { property: 'mobilePhone', label: 'Mobiel nr' }
-                    - { property: 'is_active', label: 'Ingelogd', type: 'boolean' }
-                    - { property: 'lastLoginAt', label: 'Laatst ingelogd' }
-                sort: ['id', 'ASC']
-            form:
-                fields:
-                    - { property: 'firstname', label: 'Voornaam' }
-                    - { property: 'lastname', label: 'Achternaam' }
-                    - { property: 'email', label: 'Email' }
-                    - { property: 'mobilePhone', label: 'Mobiel nr' }
-#                    - { property: 'plainPassword', type: 'text', type_options: { required: false } }
-                    - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'ROLE_USER': 'ROLE_USER', 'ROLE_ADMIN': 'ROLE_ADMIN' } } }

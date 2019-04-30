@@ -23,10 +23,10 @@ easy_admin:
                 sort: ['id', 'ASC']
             form:
                 fields:
-                    - { type: 'group', label: 'Basisgegevens', icon: 'pencil', columns: 12, css_class: "w-100 col-12" }
+                    - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'minimal' } } 
-                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 12, css_class: "w-100 col-12" }
+                    - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'showTitle', label: 'Toon titel' }
                     - { property: 'overlay', label: 'Achtergrond donkerder maken' }

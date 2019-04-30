@@ -24,12 +24,12 @@ easy_admin:
                 sort: ['id', 'ASC']
             form:
                 fields:
-                    - { type: 'group', columns: 12, label: 'Basisgegevens', icon: 'pencil', css_class: "w-100 col-12" }
+                    - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'titleShort', label: 'Verkorte titel' }
                     - { property: 'slug', label: 'Slug' }
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } } 
-                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 12, css_class: "w-100 col-12" }
+                    - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'showUpdatedAt', label: 'Toon laatst aangepast' }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }

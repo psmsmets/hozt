@@ -3,6 +3,11 @@
  * HoZT.css
  *
  */
+:root {
+  --hozt-red: #ed1c24; 
+  --hozt-darkred: #c21c24; 
+}
+
 html,
 body {
   overflow-x: hidden; /* Prevent scroll on narrow devices */
@@ -69,15 +74,15 @@ a.text-decoration-none:hover { text-decoration: none; }
 
 
 .page-item.active a.page-link, .btn-outline-hozt:hover {
-  border-color: #ed1c24;
+  border-color: var(--hozt-red);
 }
 
 .bg-red, .bg-hozt, .btn-hozt, .badge.cal-1, .badge-hozt, .page-item.active a.page-link, .btn-outline-hozt:hover {
-  background-color: #ED1C24;
+  background-color: var(--hozt-red);
 }
 
 .bg-darkred, .btn-hozt:hover, .badge.cal-1:hover, a.badge-hozt:hover {
-  background-color: #c21c24;
+  background-color: var(--hozt-darkred);
 }
 
 .bg-red .nav-link, .btn-hozt, a.btn-hozt, .btn-hozt:hover, a.btn-hozt:hover, .badge-hozt, .page-item.active a.page-link, .btn-outline-hozt:hover, .badge-gold, a.badge-gold:hover, .btn-outline-gold:hover, a.btn-outline-gold:hover, .btn-gold, a.btn-gold:hover  {
@@ -95,9 +100,9 @@ a.text-decoration-none:hover { text-decoration: none; }
 }
 
 .btn-outline-hozt, a.btn-outline-hozt {
-  color: #ed1c24;
+  color: var(--hozt-red);
   background: none;
-  border-color: #ed1c24;
+  border-color: var(--hozt-red);
 }
 
 .btn-outline-gold, a.btn-outline-gold {
@@ -117,11 +122,11 @@ a.text-decoration-none:hover { text-decoration: none; }
 
 a, .text-red, .text-hozt, a.text-hozt, a.text-red, a.page-link,
 .navbar-brand.text-red, .navbar-brand.text-red:hover {
-  color: #ed1c24;
+  color: var(--hozt-red);
 }
 
 a:hover, a.text-red:hover, a.page-link:hover {
-  color: #c21c24;
+  color: var(--hozt-darkred);
 }
 
 .nav-header {
@@ -381,7 +386,7 @@ ul.cal i {
 }
 
 .badge.cal-1, .badge.cal.cal-1 {
-  background-color: #ed1c24;
+  background-color: var(--hozt-red);
 }
 
 .badge.cal-2, .badge.cal.cal-2 {

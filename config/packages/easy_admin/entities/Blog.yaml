@@ -1,9 +1,5 @@
 # This file sets the configuration of the 'Category' entity.
 #
-# NOTE: this demo application splits the backend configuration into several
-# small files for educational purposes. In your application you can put the
-# entire backend configuration in just one file.
-#
 # The configuration options are explained in detail in the bundle documentation,
 # which is published at https://github.com/javiereguiluz/EasyAdminBundle
 easy_admin:
@@ -25,12 +21,12 @@ easy_admin:
                 sort: ['publishAt', 'DESC']
             form:
                 fields:
-                    - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
+                    - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'titleShort', label: 'Verkorte titel' }
                     #- { property: 'slug', label: 'Slug' }
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } } 
-                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3, css_class: "col-xs-12 col-md-3"  }
+                    - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3"  }
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'special', label: 'Voorpagina' }
                     - { property: 'pinned', label: 'Vastgepind' }

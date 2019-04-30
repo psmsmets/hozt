@@ -15,7 +15,7 @@ easy_admin:
         assets:
             css:
 #                - 'bundles/easyadmin/bootstrap-all.css'
-#                - 'assets/css/bootstrap.min.css'
-#                - 'assets/css/hozt.css'
+                - 'https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'
+                - 'assets/css/easy_admin.css'
 #            js:
 #                - 'bundles/easyadmin/bootstrap-all.js'
