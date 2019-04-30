@@ -28,9 +28,7 @@ class StaticPageRepository extends ServiceEntityRepository
             ->leftJoin('page.calendar', 'cal')
             ->addSelect('cal')
             ->andWhere('page.slug = :slug')
-            ->andWhere('page.enabled = :enabled')
             ->setParameter('slug', $slug)
-            ->setParameter('enabled', true)
             ->getQuery()
             ->getOneOrNullResult()
         ;

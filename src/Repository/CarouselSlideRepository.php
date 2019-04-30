@@ -22,17 +22,31 @@ class CarouselSlideRepository extends ServiceEntityRepository
     // /**
     //  * @return CarouselSlide[] Returns an array of CarouselSlide objects
     //  */
-    public function findCarouselSlides()
+    public function findCarouselSlides(bool $admin = false)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.enabled = :enabled')
-            ->andWhere('c.publishAt <= :now')
-            ->andWhere('(c.publishUntil > :now or c.publishUntil is null)')
-            ->setParameter('enabled', true)
-            ->setParameter('now', date("Y-m-d H:i"))
-            ->orderBy('c.publishAt', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
+    
+        if ($admin) {
+            return $this->createQueryBuilder('carousel')
+                ->andWhere('(carousel.publishAt <= :now and carousel.enabled = :enabled) or carousel.publishAt >= :now')
+                ->andWhere('(carousel.publishUntil > :now or carousel.publishUntil is null)')
+                ->setParameter('enabled', true)
+                ->setParameter('now', date("Y-m-d H:i"))
+                ->orderBy('carousel.publishAt', 'DESC')
+                ->getQuery()
+                ->getResult()
+            ;
+
+        } else {
+            return $this->createQueryBuilder('carousel')
+                ->andWhere('carousel.enabled = :enabled')
+                ->andWhere('carousel.publishAt <= :now')
+                ->andWhere('(carousel.publishUntil > :now or carousel.publishUntil is null)')
+                ->setParameter('enabled', true)
+                ->setParameter('now', date("Y-m-d H:i"))
+                ->orderBy('carousel.publishAt', 'DESC')
+                ->getQuery()
+                ->getResult()
+            ;
+        }
     }
 }
