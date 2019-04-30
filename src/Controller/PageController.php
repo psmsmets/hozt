@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\Security\Core\Security;
 
 # entities
 use App\Entity\StaticPage;
@@ -40,10 +41,14 @@ class PageController extends AbstractController
 {
     private $template_data = [];
     protected $requestStack;
+    private $security;
+    private $now;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, Security $security)
     {
         $this->requestStack = $requestStack;
+        $this->security = $security;
+        $this->now = new \DateTime('now');
     }
 
     private function initTemplateData()
@@ -180,7 +185,7 @@ class PageController extends AbstractController
 
         $this->addToTemplateData( 'carousel', $this->getDoctrine()
                 ->getRepository(CarouselSlide::class)
-                ->findCarouselSlides()
+                ->findCarouselSlides($this->security->isGranted('ROLE_ADMIN'))
             );
 
         $this->addToTemplateData( 'pinned_blog_post', $this->getDoctrine()
@@ -205,11 +210,8 @@ class PageController extends AbstractController
             ->getRepository(StaticPage::class)
             ->findBySlug($slug);
 
-        if (!$static) {
-            throw $this->createNotFoundException(
-                'Pagina niet gevonden '.$slug
-            );
-        }
+        if (!$static) throw $this->createNotFoundException();
+        if (!$static->getEnabled()) $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         $this->initTemplateData();
         $this->addToTemplateData('static',$static);
@@ -226,9 +228,8 @@ class PageController extends AbstractController
             ->getRepository(BlogPost::class)
             ->findBlogPost($id);
 
-        if (!$blogPost) {
-            throw $this->createNotFoundException();
-        }
+        if (!$blogPost) throw $this->createNotFoundException();
+        if ($blogPost->getPublishAt()>$this->now or !$blogPost->getEnabled()) $this->denyAccessUnlessGranted('ROLE_ADMIN');
  
         if (is_null($slug) or $slug != $blogPost->getSlug())
         {
@@ -275,7 +276,9 @@ class PageController extends AbstractController
 
         $this->initTemplateData();
         $this->addToTemplateData( 'blog_category', $blogCategory );
-        $this->addToTemplateData( 'blog_posts', $repository->findBlogPosts( $slug, $page )
+        $this->addToTemplateData( 
+                'blog_posts', 
+                $repository->findBlogPosts( $blogCategory, $page, $this->security->isGranted('ROLE_ADMIN') )
             );
         $this->addToTemplateData( 'pagination', 
             ['current' => $page, 'last' => $last_page, 'isfirst' => $page==1, 'islast'=> $page==$last_page]

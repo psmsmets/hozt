@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\BlogPost;
+use App\Entity\BlogCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -72,7 +73,8 @@ class BlogPostRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    public function findBlogPosts(string $category = null, int $page = 1, int $limit = BlogPost::NUMBER_OF_ITEMS)
+    public function findBlogPosts(BlogCategory $category = null, int $page = 1,
+        bool $admin = false, int $limit = BlogPost::NUMBER_OF_ITEMS)
     {
         $offset = ( $page < 1 ? 0 : $page - 1 ) * BlogPost::NUMBER_OF_ITEMS;
 
@@ -106,7 +108,7 @@ class BlogPostRepository extends ServiceEntityRepository
                 ->addSelect('cat')
                 ->addSelect('event')
                 ->addSelect('competition')
-                ->andWhere('cat.slug = :category')
+                ->andWhere('post.category = :category')
                 ->andWhere('post.enabled = :enabled')
                 ->andWhere('post.publishAt <= :now')
                 //->andWhere('(p.publishUntil > :now or p.publishUntil is null)')
@@ -152,11 +154,13 @@ class BlogPostRepository extends ServiceEntityRepository
             ;
         }
     }
+
     public function getBlogPostPages(string $category = null)
     {
         return (int) ceil( $this->countBlogPosts($category) / BlogPost::NUMBER_OF_ITEMS );
     }
-    public function findBlogPost(int $id)
+
+    public function findBlogPost(int $id, bool $admin = false)
     {
         return $this->createQueryBuilder('post')
             ->innerJoin('post.category','category')
@@ -169,12 +173,10 @@ class BlogPostRepository extends ServiceEntityRepository
             ->addSelect('competition')
             ->addSelect('docs')
             ->andWhere('post.id = :id')
-            ->andWhere('post.enabled = :enabled')
-            ->andWhere('post.publishAt <= :now')
-            //->andWhere('(post.publishUntil > :now or post.publishUntil is null)')
+            //->andWhere('(post.enabled = :enabled and post.publishAt <= :now) or post.publishAt >= :now')
             ->setParameter('id', $id)
-            ->setParameter('enabled', true)
-            ->setParameter('now', date("Y-m-d H:i"))
+            //->setParameter('enabled', true)
+            //->setParameter('now', date("Y-m-d H:i"))
             ->getQuery()
             ->getOneOrNullResult()
         ;

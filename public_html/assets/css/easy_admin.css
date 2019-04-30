@@ -47,7 +47,7 @@ a.text-decoration-none:hover { text-decoration: none; }
   border-color: var(--hozt-red);
 }
 
-.bg-red, .btn-primary, .badge-primary ,.page-item.active a.page-link {
+.bg-red, .btn-primary, .badge-primary ,.page-item.active a.page-link, .btn-primary:visited {
   background-color: var(--hozt-red);
   border: none;
 }
@@ -71,6 +71,10 @@ a, .text-red, a.text-red, a.page-link,
 
 a:hover, a.text-red:hover, a.page-link:hover, .btn-link:hover {
   color: var(--hozt-darkred);
+}
+
+.btn-primary:hover, .btn-primary:active {
+  background-color: var(--hozt-darkred);
 }
 
 .sidebar a:hover {
