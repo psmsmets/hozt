@@ -1,0 +1,49 @@
+# This file sets the configuration of the 'Category' entity.
+#
+# NOTE: this demo application splits the backend configuration into several
+# small files for educational purposes. In your application you can put the
+# entire backend configuration in just one file.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    entities:
+        ContactForm:
+            class: App\Entity\ContactForm
+            label: 'Contactformulier'
+            list:
+                fields:
+                    #- { property: 'id', label: 'Id' }
+                    - { property: 'sequence', label: 'Nr' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'question', label: 'Vraag' }
+                    - { property: 'email', label: 'E-mail' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['sequence', 'ASC']
+            form:
+                fields:
+                    - { property: 'question', label: 'Vraag' }
+                    - { property: 'email', label: 'E-mail' }
+                    - { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'enabled', label: 'Actief' }
+            edit:
+                actions: ['delete']
+        ContactFaq:
+            class: App\Entity\ContactFaq
+            label: 'FAQ'
+            list:
+                fields:
+                    #- { property: 'id', label: 'Id' }
+                    - { property: 'sequence', label: 'Nr' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'question', label: 'Vraag' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['sequence', 'ASC']
+            form:
+                fields:
+                    - { property: 'question', label: 'Vraag', css_class: 'w-100' }
+                    - { property: 'answer', label: 'Antwoord', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'minimal' } } 
+                    - { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'enabled', label: 'Actief' }
+            edit:
+                actions: ['delete']

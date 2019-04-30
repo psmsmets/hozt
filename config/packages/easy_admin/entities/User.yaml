@@ -1,0 +1,31 @@
+# This file sets the configuration of the 'Category' entity.
+#
+# NOTE: this demo application splits the backend configuration into several
+# small files for educational purposes. In your application you can put the
+# entire backend configuration in just one file.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    entities:
+        User:
+            class: App\Entity\User
+            label: 'Gebruikers'
+            list:
+                fields:
+                    - { property: 'id', label: 'Id' }
+                    - { property: 'email', label: 'Email' }
+                    - { property: 'firstname', label: 'Voornaam' }
+                    - { property: 'lastname', label: 'Achternaam' }
+                    - { property: 'mobilePhone', label: 'Mobiel nr' }
+                    - { property: 'is_active', label: 'Ingelogd', type: 'boolean' }
+                    - { property: 'lastLoginAt', label: 'Laatst ingelogd' }
+                sort: ['id', 'ASC']
+            form:
+                fields:
+                    - { property: 'firstname', label: 'Voornaam' }
+                    - { property: 'lastname', label: 'Achternaam' }
+                    - { property: 'email', label: 'Email' }
+                    - { property: 'mobilePhone', label: 'Mobiel nr' }
+#                    - { property: 'plainPassword', type: 'text', type_options: { required: false } }
+                    - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'ROLE_USER': 'ROLE_USER', 'ROLE_ADMIN': 'ROLE_ADMIN' } } }

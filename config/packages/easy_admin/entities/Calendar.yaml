@@ -1,0 +1,72 @@
+# This file sets the configuration of the 'Category' entity.
+#
+# NOTE: this demo application splits the backend configuration into several
+# small files for educational purposes. In your application you can put the
+# entire backend configuration in just one file.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    entities:
+        CalendarCategory:
+            class: App\Entity\CalendarCategory
+            label: 'Kalender :: categorie'
+            list:
+                fields:
+                    - { property: 'id', label: 'Id' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'slug', label: 'Slug' }
+                    - { property: 'sequence', label: 'Nr' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['sequence', 'ASC']
+            form:
+                fields:
+                    - { property: 'title', label: 'Titel' }
+                    #- { property: 'slug', label: 'Slug' }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
+                    - { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'enabled', label: 'Actief' }
+            edit:
+                fields:
+                    - { property: 'slug', label: 'Slug' }
+        CalendarEvent:
+            class: App\Entity\CalendarEvent
+            label: 'Kalender :: events'
+            list:
+                dql_filter: ""
+                fields:
+                    #- { property: 'id', label: 'Id' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'startTime', label: 'Van' }
+                    - { property: 'endTime', label: 'Tot' }
+                    - { property: 'allDay', label: 'Hele dag', type: 'boolean' }
+                    - { property: 'category', label: 'Categorie' }
+                    - { property: 'cancelled', label: 'Annul.', type: 'boolean' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['startTime', 'DESC']
+            form:
+                fields:
+                    - { type: 'group', columns: 9, label: 'Basisgegevens', icon: 'pencil' }
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'startTime', label: 'Van' }
+                    - { property: 'endTime', label: 'Tot' }
+                    - { property: 'allDay', label: 'Hele dag', help: 'Of bij onbekend (start)uur' }
+                    - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
+                    - { property: 'cancelled', label: 'Geannuleerd' }
+                    - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
+                    - { property: 'enabled', label: 'Actief' }
+                    #- { property: 'archived', label: 'Gearchiveerd' }
+                    - { property: 'isCompetition', label: 'Zwemwedstrijd' }
+                    - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
+                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
+                    - { property: 'location', label: 'Locatie' }
+                    - { property: 'url', label: 'Website' }
+                    - { property: 'staticPage', label: 'Pagina' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.calendar_images%' }
+                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.calendar_documents%' }
+            search:
+                # using an empty value to not apply any condition when searching
+                # elements (this prevents inheriting the 'dql_filter' value defined in 'list')
+                dql_filter: ''

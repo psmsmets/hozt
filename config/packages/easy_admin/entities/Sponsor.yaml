@@ -1,0 +1,58 @@
+# This file sets the configuration of the 'Category' entity.
+#
+# NOTE: this demo application splits the backend configuration into several
+# small files for educational purposes. In your application you can put the
+# entire backend configuration in just one file.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    entities:
+        Sponsor:
+            class: App\Entity\Sponsor
+            label: 'Sponsor'
+            list:
+                fields:
+                    #- { property: 'id', label: 'Id' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.sponsor_images%' }
+                    - { property: 'category', label: 'Categorie' }
+                    - { property: 'publishAt', label: 'Van' }
+                    - { property: 'publishUntil', label: 'Tot' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['name', 'ASC']
+            form:
+                fields:
+                    - { property: 'name', label: 'Titel' }
+                    - { property: 'url', label: 'Website', help: 'Volledig pad, bv. https://www.hozt.be' }
+                    - { property: 'caption', label: 'Bijschrift', help: 'Tekst onder logo of ipv logo' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.sponsor_images%' }
+                    - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'publishAt', label: 'Van' }
+                    - { property: 'publishUntil', label: 'Tot' }
+                    - { property: 'enabled', label: 'Actief' }
+            edit:
+                actions: ['delete']
+
+        SponsorCategory:
+            class: App\Entity\SponsorCategory
+            label: 'Sponsor :: categorie'
+            list:
+                fields:
+                    #- { property: 'id', label: 'Id' }
+                    - { property: 'sequence', label: 'Nr' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'description', label: 'Korte omschrijving' }
+                    - { property: 'core', label: 'Kernsponsor', type: 'boolean' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['sequence', 'ASC']
+            form:
+                fields:
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'description', label: 'Korte omschrijving' }
+                    - { property: 'core', label: 'Kernsponsor', help: 'Sponsor categoriën waarvan de logos op elke pagina verschijnen' }
+                    - { property: 'class', label: 'CSS Class', help: 'CSS class voor het bepalen van de layout en grootte van de afbeelding.' }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'sequence', label: 'Volgorde' }
