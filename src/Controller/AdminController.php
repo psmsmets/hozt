@@ -192,6 +192,15 @@ class AdminController extends EasyAdminController
         $this->checkTrainingExceptionEntity($entity);
     }
 
+    public function persistCompetitionDocumentEntity($entity)
+    {
+        $comp = $entity->getCompetition();
+        $comp->setUpdatedAt();
+        $event = $comp->getCalendar();
+        $event->setUpdatedAt();
+        $this->em->flush();
+    }
+
     // special update
     private function unpinBlogPosts(int $current=null)
     {
@@ -273,6 +282,18 @@ class AdminController extends EasyAdminController
                 $this->addFlash('danger', 'Fout: Zwembad type heeft gerelateerde wedstrijden. Deactiveren niet toegestaan.');
             }
         }
+        parent::persistEntity($entity);
+    }
+
+    public function updateCompetitionDocumentEntity($entity)
+    {
+        $comp = $entity->getCompetition();
+        $comp->setUpdatedAt();
+        $event = $comp->getCalendar();
+        $event->setUpdatedAt();
+        $this->em->flush();
+
+        $entity->setUpdatedAt();
         parent::persistEntity($entity);
     }
 
