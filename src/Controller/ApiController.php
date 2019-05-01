@@ -83,7 +83,7 @@ class ApiController extends AbstractController
 
         $exceptions = $this->getDoctrine()
             ->getRepository(TrainingException::class)
-            ->findAllGeneralOnDate($date)
+            ->findAllOnDate($date)
             ;
 
         $data = $this->serialize_training_schedule($schedule, $exceptions);
