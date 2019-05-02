@@ -85,14 +85,14 @@ class PageController extends AbstractController
 
         if ($exceptions = $this->getDoctrine()
             ->getRepository(TrainingTeamCategory::class)
-            ->findAllWithTrainingException(28)
+            ->findAllWithTrainingException($this->getParameter('app.defaults.scheduleNotice.days'))
         ) {
             $this->scheduleNotice('exceptions','Eén of meerdere training gaan niet door',$exceptions,'danger');
         }
 
         if ($persistent = $this->getDoctrine()
             ->getRepository(TrainingTeamCategory::class)
-            ->findAllWithPersistentTraining(28)
+            ->findAllWithPersistentTraining($this->getParameter('app.defaults.scheduleNotice.days'))
         ) {
             $this->scheduleNotice('persistent','Er zijn tijdelijk extra trainingsuren',$persistent,'warning');
         }
@@ -103,15 +103,17 @@ class PageController extends AbstractController
     {
         switch ($type) {
             case  'exceptions':
-                $data = $this->getDoctrine()->getRepository(TrainingException::class)->findAll();
+                $data = $this->getDoctrine()->getRepository(TrainingException::class)
+                    ->findAll($this->getParameter('app.defaults.scheduleNotice.days'));
                 break;
             case  'persistent':
-                $data = $this->getDoctrine()->getRepository(TrainingSchedule::class)->findAllPersistent();
+                $data = $this->getDoctrine()->getRepository(TrainingSchedule::class)
+                    ->findAllPersistent($this->getParameter('app.defaults.scheduleNotice.days'));
                 break;
             default:
                 return;
         }
-        $check = serialize($data);
+        $check = $this->serialize_notice($data);
         $hash = md5($check);
 
         $cookie = "scheduleNotice".ucfirst($type);
@@ -138,6 +140,25 @@ class PageController extends AbstractController
                 )
             );
         }
+    }
+
+    private function serialize_notice($data)
+    {
+        $str = '';
+        foreach ($data as $dat) {
+           $tmp = array(
+              'id' => $dat->getId(),
+              'createdAt' => $dat->getCreatedAt()->getTimestamp(),
+              'updatedAt' => $dat->getUpdatedAt()->getTimestamp(),
+           );
+           $str .= implode(',', array_map(
+               function ($v, $k) { return sprintf("%s=%s", $k, $v); },
+                   $tmp,
+                   array_keys($tmp)
+               )) . ";";
+        }
+        unset($tmp);
+        return $str;
     }
 
     private function addToTemplateData(string $key, $data, string $cat = 'page')
@@ -295,11 +316,11 @@ class PageController extends AbstractController
         $this->initTemplateData();
         $this->addToTemplateData( 'training_categories', $this->getDoctrine()
                 ->getRepository(TrainingTeamCategory::class)
-                ->findAllJoinedToTeamsCoachesSchedule()
+                ->findAllJoinedToTeamsCoachesSchedule($this->getParameter('app.defaults.scheduleNotice.days'))
             );
         $this->addToTemplateData( 'training_persistent', $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
-            ->countPersistent()
+            ->countPersistent($this->getParameter('app.defaults.scheduleNotice.days'))
         );
 
         return $this->render('training/scheduleTeams.html.twig', $this->template_data );
@@ -313,11 +334,11 @@ class PageController extends AbstractController
         $this->initTemplateData();
         $this->addToTemplateData( 'training_days', $this->getDoctrine()
                 ->getRepository(TrainingDay::class)
-                ->findAllJoinedToScheduleTeams()
+                ->findAllJoinedToScheduleTeams($this->getParameter('app.defaults.scheduleNotice.days'))
             );
         $this->addToTemplateData( 'training_persistent', $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
-            ->countPersistent()
+            ->countPersistent($this->getParameter('app.defaults.scheduleNotice.days'))
         );
 
         return $this->render('training/scheduleDays.html.twig', $this->template_data );
@@ -375,15 +396,15 @@ class PageController extends AbstractController
         $this->addToTemplateData( 'training_category', $category );
         $this->addToTemplateData( 'training_days', $this->getDoctrine()
             ->getRepository(TrainingDay::class)
-            ->findAllByTeamCategoryJoinedToSchedule($category)
+            ->findAllByTeamCategoryJoinedToSchedule($category, $this->getParameter('app.defaults.scheduleNotice.days') )
         );
         $this->addToTemplateData( 'training_team_persistent', $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
-            ->countPersistentByTeamCategory($category)
+            ->countPersistentByTeamCategory($category, $this->getParameter('app.defaults.scheduleNotice.days') )
         );
         $this->addToTemplateData( 'training_team_exceptions', $this->getDoctrine()
             ->getRepository(TrainingException::class)
-            ->findAllByTeamCategory($category)
+            ->findAllByTeamCategory($category, $this->getParameter('app.defaults.scheduleNotice.days') )
         );
         $this->addToTemplateData( 'competitions', $this->getDoctrine()
             ->getRepository(Competition::class)
@@ -508,18 +529,11 @@ class PageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // $form->getData() holds the submitted values
-            // but, the original `$task` variable has also been updated
+
             $data = $form->getData();
 
-            // ... perform some action, such as saving the task to the database
-            // for example, if Task is a Doctrine entity, save it!
-            // $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($task);
-            // $entityManager->flush();
-
             $message = (new \Swift_Message('HoZT.be contactformulier'))
-                ->setFrom('webmaster@hozt.be') /* make global */
+                ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
                 ->setTo($data['question']->getEmail())
                 ->setReplyTo($data['email'])
                 ->setBody(
@@ -529,10 +543,8 @@ class PageController extends AbstractController
                     'text/html'
                 )
             ;
-            if ($data['copy'])
-            {
-                $message->setBcc($data['email']);
-            }
+            if ($data['copy']) $message->setBcc($data['email']);
+
             $result = $mailer->send($message);
 
             if ($result) { 
@@ -540,7 +552,9 @@ class PageController extends AbstractController
             } else {
                 $this->addFlash('danger', 'Sorry, er ging iets verkeerd. Controleer of alle velden correct ingevuld zijn en probeer later opnieuw.');
             }
+
             return $this->redirectToRoute('contact_form');
+
         }
 
         $this->initTemplateData();
@@ -581,7 +595,7 @@ class PageController extends AbstractController
 
             $message = (new \Swift_Message())
                 ->setSubject('Inschrijving HoZT '.$event->getTitle().' '.ucfirst($event->getFormattedPeriod()))
-                ->setFrom('webmaster@hozt.be')
+                ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
                 ->setTo($data['email'])
                 ->setBody(
                     $this->renderView(
