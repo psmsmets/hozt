@@ -70,7 +70,7 @@ class SecurityController extends AbstractController
                 // send email
                 $message = (new \Swift_Message())
                     ->setSubject('Instructies wachtwoord instellen')
-                    ->setFrom(array('webmaster@hozt.be'=>'HoZT'))  // variable app.mailer.from
+                    ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
                     ->setTo($user->getEmail())
                     ->setBody(
                         $this->renderView(
@@ -201,7 +201,7 @@ class SecurityController extends AbstractController
                 // send email
                 $message = (new \Swift_Message())
                     ->setSubject('Nieuw wachtwoord ingesteld')
-                    ->setFrom(array('webmaster@hozt.be'=>'HoZT'))  // variable app.mailer.from
+                    ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
                     ->setTo($user->getEmail())
                     ->setBody(
                         $this->renderView(

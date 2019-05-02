@@ -4,3 +4,4 @@ swiftmailer:
 #default_mailer: webmaster
 #    mailers:
 #        webmaster:
+#            url: '%env(MAILER_URL)%' 

@@ -20,6 +20,7 @@ parameters:
     app.defaults.calendarCategory.id: 3
     app.defaults.competitionPool.id: 1
     app.defaults.sponsorCategory.id: 1
+    app.defaults.scheduleNotice.days: 14
     app.path.blogPost_documents: /uploads/files/blog
     app.path.blogPost_images: /uploads/images/blog
     app.path.calendar_documents: /uploads/files/calendar
