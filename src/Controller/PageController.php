@@ -36,6 +36,7 @@ use App\Entity\Clubfeest;
 # forms
 use App\Form\ContactFormType;
 use App\Form\ClubfeestType;
+use App\Form\TryoutEnrolmentForm;
 
 class PageController extends AbstractController
 {
@@ -564,9 +565,9 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/clubfeest", name="enroll_clubfeest")
+     * @Route("/clubfeest", name="enrol_clubfeest")
      */
-    public function enroll_clubfeest(Request $request, \Swift_Mailer $mailer)
+    public function enrol_clubfeest(Request $request, \Swift_Mailer $mailer)
     {
         $closure = new \DateTime('2019/03/01 12:00');
         $now = new \DateTime('now');
@@ -583,15 +584,15 @@ class PageController extends AbstractController
 
             if ( $data['adults'] == 0 and $data['children'] == 0 ) {
                 $this->addFlash('warning', 'Bijna gelukt, maar je moet toch minstens iemand inschrijven.');
-                return $this->redirectToRoute('enroll_clubfeest');
+                return $this->redirectToRoute('enrol_clubfeest');
             }
 
-            $enroll = new Clubfeest();
-            $enroll->setAdults($data['adults']);
-            $enroll->setChildren($data['children']);
-            $enroll->setName($data['name']);
-            $enroll->setEmail($data['email']);
-            $enroll->setMessage($data['message']);
+            $enrol = new Clubfeest();
+            $enrol->setAdults($data['adults']);
+            $enrol->setChildren($data['children']);
+            $enrol->setName($data['name']);
+            $enrol->setEmail($data['email']);
+            $enrol->setMessage($data['message']);
 
             $message = (new \Swift_Message())
                 ->setSubject('Inschrijving HoZT '.$event->getTitle().' '.ucfirst($event->getFormattedPeriod()))
@@ -599,16 +600,16 @@ class PageController extends AbstractController
                 ->setTo($data['email'])
                 ->setBody(
                     $this->renderView(
-                        'emails/clubfeest.html.twig', [ 'enroll' => $enroll, 'event' => $event ]
+                        'emails/clubfeest.html.twig', [ 'enrol' => $enrol, 'event' => $event ]
                     ),
                     'text/html'
                 )
             ;
             $sent = $mailer->send($message);
-            $enroll->setEmailSent($sent);
+            $enrol->setEmailSent($sent);
 
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($enroll);
+            $entityManager->persist($enrol);
             $entityManager->flush();
 
             $this->addFlash('success', 'Ingeschreven! We verwachten je '.$event->getFormattedPeriod().'.');
@@ -619,7 +620,7 @@ class PageController extends AbstractController
                 $this->addFlash('warning', 'Het is helaas niet gelukt de bevestigingsmail te verzenden.');
             }
 
-            return $this->redirectToRoute('enroll_clubfeest');
+            return $this->redirectToRoute('enrol_clubfeest');
         }
 
         $this->initTemplateData();
@@ -627,7 +628,7 @@ class PageController extends AbstractController
         $this->addToTemplateData( 'form_closure', $closure );
         $this->addToTemplateData( 'calendar_event', $event );
 
-        return $this->render('enroll/clubfeest.html.twig', $this->template_data );
+        return $this->render('enrol/clubfeest.html.twig', $this->template_data );
     }
 
     /**
@@ -652,51 +653,112 @@ class PageController extends AbstractController
         $this->addToTemplateData( 'form_closure', $closure );
         $this->addToTemplateData( 'calendar_event', $event );
 
-        return $this->render('enroll/enrolled.html.twig', $this->template_data );
+        return $this->render('enrol/enrolled.html.twig', $this->template_data );
+    }
+
+
+    /**
+     * @Route("/testmoment", name="enrol_tryout")
+     */
+    public function enrol_tryout(Request $request, \Swift_Mailer $mailer)
+    {
+        $form = $this->createForm(TryoutEnrolmentForm::class);
+        $form->handleRequest($request);
+
+/*
+        if ($form->isSubmitted() && $form->isValid() && $now <= $closure) {
+            $data = $form->getData();
+
+            if ( $data['adults'] == 0 and $data['children'] == 0 ) {
+                $this->addFlash('warning', 'Bijna gelukt, maar je moet toch minstens iemand inschrijven.');
+                return $this->redirectToRoute('enrol_clubfeest');
+            }
+
+            $enrol = new Clubfeest();
+            $enrol->setAdults($data['adults']);
+            $enrol->setChildren($data['children']);
+            $enrol->setName($data['name']);
+            $enrol->setEmail($data['email']);
+            $enrol->setMessage($data['message']);
+
+            $message = (new \Swift_Message())
+                ->setSubject('Inschrijving HoZT '.$event->getTitle().' '.ucfirst($event->getFormattedPeriod()))
+                ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
+                ->setTo($data['email'])
+                ->setBody(
+                    $this->renderView(
+                        'emails/clubfeest.html.twig', [ 'enrol' => $enrol, 'event' => $event ]
+                    ),
+                    'text/html'
+                )
+            ;
+            $sent = $mailer->send($message);
+            $enrol->setEmailSent($sent);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($enrol);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Ingeschreven! We verwachten je '.$event->getFormattedPeriod().'.');
+
+            if ($sent) { 
+                $this->addFlash('success', 'Een bevestigingsmail is verzonden naar het opgegeven e-mail adres.');
+            } else {
+                $this->addFlash('warning', 'Het is helaas niet gelukt de bevestigingsmail te verzenden.');
+            }
+
+            return $this->redirectToRoute('enrol_clubfeest');
+        }
+*/
+
+        $this->initTemplateData();
+        $this->addToTemplateData( 'form', $form->createView() );
+
+        return $this->render('tryout/form.html.twig', $this->template_data );
     }
 
     /**
-     * @Route("/inschrijven", name="enroll_list")
+     * @Route("/inschrijven", name="enrol_list")
      */
-    public function enroll_list()
+    public function enrol_list()
     {
         $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::enroll_list');
+        $this->addToTemplateData( 'controller_name', 'PageController::enrol_list');
 
-        return $this->render('enroll/list.html.twig', $this->template_data );
+        return $this->render('enrol/list.html.twig', $this->template_data );
     }
 
     /**
-     * @Route("/inschrijven/{slug}", name="enroll_item")
+     * @Route("/inschrijven/{slug}", name="enrol_item")
      */
-    public function enroll_item()
+    public function enrol_item()
     {
         $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::enroll_list');
+        $this->addToTemplateData( 'controller_name', 'PageController::enrol_list');
 
-        return $this->render('enroll/list.html.twig', $this->template_data );
+        return $this->render('enrol/list.html.twig', $this->template_data );
     }
 
     /**
-     * @Route("/inschrijven/{slug}/details", name="enroll_details")
+     * @Route("/inschrijven/{slug}/details", name="enrol_details")
      */
-    public function enroll_details()
+    public function enrol_details()
     {
         $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::enroll_list');
+        $this->addToTemplateData( 'controller_name', 'PageController::enrol_list');
 
-        return $this->render('enroll/list.html.twig', $this->template_data );
+        return $this->render('enrol/list.html.twig', $this->template_data );
     }
 
     /**
-     * @Route("/inschrijven/{slug}/formulier", name="enroll_form")
+     * @Route("/inschrijven/{slug}/formulier", name="enrol_form")
      */
-    public function enroll_form()
+    public function enrol_form()
     {
         $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::enroll_list');
+        $this->addToTemplateData( 'controller_name', 'PageController::enrol_list');
 
-        return $this->render('enroll/list.html.twig', $this->template_data );
+        return $this->render('enrol/list.html.twig', $this->template_data );
     }
 
 }

@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -45,11 +46,19 @@ class ContactFormType extends AbstractType
                 'attr' => ['placeholder'=>'Naam'],
                 'required' => true,
                 ))
-            ->add('email', EmailType::class, array(
-                'label'    => 'Je e-mail adres',
-                'attr' => ['placeholder'=>'E-mail'],
+            ->add('email', RepeatedType::class, array(
+                'type' => EmailType::class,
                 'help' => 'We houden je e-mail adres strikt voor onszelf.',
-                'required' => true,
+                'first_options' => array(
+                    'label'    => 'Je e-mail adres',
+                    'attr' => ['placeholder'=>'E-mail'],
+                    'required' => true,
+                    ),
+                'second_options' => array(
+                    'label' => false,
+                    'attr' => ['placeholder'=>'Bevestig e-mail'],
+                    'required' => true,
+                    ),
                 ))
             ->add('copy', CheckboxType::class, array(
                 'label'    => 'Stuur mij een kopie',

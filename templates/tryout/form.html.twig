@@ -1,0 +1,68 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Testmomenten{% endblock %}
+
+{% block main %}
+
+  <div class="p-3 mb-4 bg-white shadow-sm">
+
+    <h1 class="text-red mb-4">Testmomenten</h1>
+
+    <p>Hartelijk dank voor jouw interesse in onze club. Je kan je op deze pagina inschrijven voor een van onze testmomenten.</p>
+    <p>Tijdens een testmoment proberen we een zo goed mogelijk beeld te krijgen van jouw (zoon- of dochters) zwemniveau.
+Deze inschatting hebben we nodig om een zo goed mogelijk <a href="{{ path('training_categories') }}">groepsadvies</a> te kunnen geven, zodat iedereen op zijn eigen zwemniveau kan genieten van de zwemsport. Pas na het groepsadvies kan je defintief inschrijven.</p>
+    <p>Aangezien we momenteel nog niet voor alle <a href="{{ path('training_categories') }}">zwemniveau's</a> een groepje aanbieden kan het zijn dat we in het slechtste geval vragen om nog een jaartje te oefenen. Wegens een mogelijk plaatsgebrek in de juiste groep kan het dus zijn dat niet elk kandidaatlid dit seizoen kan starten, nu alvast onze excuses hiervoor.</p>
+    <p>Je krijgt van deze inschrijving een bevestigingsmail. Enkele dagen voor het testmoment krijg je ook nog een herinneringsmail.</p>
+    <p>Onze testmomenten vinden plaats in het <a href="/zwembad">zwembad Sportoase Stede Akkers Hoogstraten</a>.</p>
+
+    <div class="row mt-5">
+      <div class="col col-12 col-md-10 col-lg-8">
+
+    {{ form_start(page.form, {attr: {class: 'needs-validation'} }) }}
+    {{ form_widget(page.form) }}
+
+      <div class="form-group row pt-3">
+        <div class="col-sm-10">
+            <button type="submit" class="btn btn-hozt" id="submit" value="Send"><i class="fas fa-share"></i> Verzend</button>
+            <small id="submitHelp" class="form-text text-muted d-none">Gelieve de pagina <strong>niet</strong> te herladen tijdens het verzenden.</small>
+        </div>
+      </div>
+
+    {{ form_end(page.form) }}
+
+      </div>
+    </div>
+
+  </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+// Disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        $('#submit').prop('disabled', 'disabled');
+        $('#submit').html('<i class="fas fa-sync-alt"></i> Verwerken');
+        $('#submitHelp').removeClass( "d-none" );
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+          $('#submit').prop('disabled', false);
+          $('#submit').html('<i class="fas fa-share"></i> Verzend');
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+{% endblock %}

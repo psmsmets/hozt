@@ -14,23 +14,23 @@
       <li class="nav-item {% if currentPath == "/" %}active{% endif%}">
         <a class="nav-link" href="/"><i class="fas fa-swimming-pool"></i> Home<span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item {% if currentPath starts with '/kalender' %}active{% endif%}">
+      <li class="nav-item {% if currentPath starts with path('calendar') %}active{% endif%}">
         <a class="nav-link" href="{{ path('calendar') }}"><i class="far fa-calendar-alt d-lg-none"></i> Kalender</a>
       </li>
 <!--      <li class="nav-item <?echo $page->isActive('news');?>">
         <a class="nav-link" href="#"><i class="fas fa-newspaper d-md-none"></i> Nieuws</a>
       </li> -->
-      <li class="nav-item {% if currentPath starts with '/aanbod' %}active{% endif%}">
+      <li class="nav-item {% if currentPath starts with path('training_categories') %}active{% endif%}">
         <a class="nav-link" href="{{ path('training_categories') }}"><i class="fas fa-swimmer d-lg-none"></i> Aanbod</a>
       </li>
       <li class="nav-item {% if currentPath == '/lid-worden' %}active{% endif%}">
         <a class="nav-link" href="/lid-worden"><i class="fas fa-hand-point-right d-lg-none"></i> Lid worden</a>
       </li>
-      <li class="nav-item {% if currentPath starts with '/inschrijven' %}active{% endif%} mt-4 mt-lg-0 d-none">
-        <a class="nav-link btn btn-outline-secondary" href="{{ path('enroll_list') }}"><i class="fas fa-check d-lg-none"></i> Inschrijven</a>
+      <li class="nav-item {% if currentPath starts with path('enrol_list') %}active{% endif%} mt-4 mt-lg-0 d-none">
+        <a class="nav-link btn btn-outline-secondary" href="{{ path('enrol_list') }}"><i class="fas fa-check d-lg-none"></i> Inschrijven</a>
       </li>
-      <li class="nav-item {% if currentPath starts with '/interscholen' %}active{% endif%} mt-4 mt-lg-0">
-        <a class="nav-link btn btn-outline-secondary" href="/interscholen"><i class="fas fa-trophy d-lg-none"></i> Interscholen <span class="d-md-none d-xl-inline">Wedstrijd</span></a>
+      <li class="nav-item {% if currentPath starts with path('enrol_tryout') %}active{% endif%} mt-4 mt-lg-0">
+        <a class="nav-link btn btn-outline-secondary" href="{{path('enrol_tryout')}}"><i class="far fa-hand-point-right"></i> Testmoment</a>
       </li>
     </ul>
     <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
