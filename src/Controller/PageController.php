@@ -33,6 +33,13 @@ use App\Entity\Sponsor;
 use App\Entity\SponsorCategory;
 use App\Entity\Clubfeest;
 
+use App\Entity\TryoutEnrolment;
+use App\Entity\Tryout;
+
+# repositories
+use App\Repository\TryoutEnrolmentRepository;
+use App\Repository\TryoutRepository;
+
 # forms
 use App\Form\ContactFormType;
 use App\Form\ClubfeestType;
@@ -580,24 +587,18 @@ class PageController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid() && $now <= $closure) {
-            $data = $form->getData();
 
-            if ( $data['adults'] == 0 and $data['children'] == 0 ) {
+            $enrol = $form->getData();
+
+            if ( $enrol->getAdults() == 0 and $enrol->getChildren() == 0 ) {
                 $this->addFlash('warning', 'Bijna gelukt, maar je moet toch minstens iemand inschrijven.');
                 return $this->redirectToRoute('enrol_clubfeest');
             }
 
-            $enrol = new Clubfeest();
-            $enrol->setAdults($data['adults']);
-            $enrol->setChildren($data['children']);
-            $enrol->setName($data['name']);
-            $enrol->setEmail($data['email']);
-            $enrol->setMessage($data['message']);
-
             $message = (new \Swift_Message())
                 ->setSubject('Inschrijving HoZT '.$event->getTitle().' '.ucfirst($event->getFormattedPeriod()))
                 ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
-                ->setTo($data['email'])
+                ->setTo($enrol->getEmail())
                 ->setBody(
                     $this->renderView(
                         'emails/clubfeest.html.twig', [ 'enrol' => $enrol, 'event' => $event ]
@@ -660,46 +661,40 @@ class PageController extends AbstractController
     /**
      * @Route("/testmoment", name="enrol_tryout")
      */
-    public function enrol_tryout(Request $request, \Swift_Mailer $mailer)
+    public function enrol_tryout(Request $request, TryoutRepository $tryOutRep, TryoutEnrolmentRepository $tryOutEnrolmentRep, \Swift_Mailer $mailer)
     {
+        $this->initTemplateData();
+        $tryouts = $tryOutRep->findTryouts();
+
+        if (sizeof($tryouts)==0) return $this->render('tryout/form.html.twig', $this->template_data );
+
         $form = $this->createForm(TryoutEnrolmentForm::class);
         $form->handleRequest($request);
 
-/*
-        if ($form->isSubmitted() && $form->isValid() && $now <= $closure) {
-            $data = $form->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            if ( $data['adults'] == 0 and $data['children'] == 0 ) {
-                $this->addFlash('warning', 'Bijna gelukt, maar je moet toch minstens iemand inschrijven.');
-                return $this->redirectToRoute('enrol_clubfeest');
-            }
-
-            $enrol = new Clubfeest();
-            $enrol->setAdults($data['adults']);
-            $enrol->setChildren($data['children']);
-            $enrol->setName($data['name']);
-            $enrol->setEmail($data['email']);
-            $enrol->setMessage($data['message']);
+            $enrol = $form->getData();
 
             $message = (new \Swift_Message())
-                ->setSubject('Inschrijving HoZT '.$event->getTitle().' '.ucfirst($event->getFormattedPeriod()))
+                ->setSubject('Inschrijving HoZT testmoment')
                 ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
-                ->setTo($data['email'])
+                ->setTo($enrol->getEmail())
                 ->setBody(
                     $this->renderView(
-                        'emails/clubfeest.html.twig', [ 'enrol' => $enrol, 'event' => $event ]
+                        'emails/tryout.html.twig', [ 'enrol' => $enrol ]
                     ),
                     'text/html'
                 )
             ;
             $sent = $mailer->send($message);
             $enrol->setEmailSent($sent);
-
+/*
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($enrol);
             $entityManager->flush();
+*/
 
-            $this->addFlash('success', 'Ingeschreven! We verwachten je '.$event->getFormattedPeriod().'.');
+            $this->addFlash('success', 'Ingeschreven! We verwachten je '.$enrol->getTryout()->getFormattedPeriod().'.');
 
             if ($sent) { 
                 $this->addFlash('success', 'Een bevestigingsmail is verzonden naar het opgegeven e-mail adres.');
@@ -707,11 +702,9 @@ class PageController extends AbstractController
                 $this->addFlash('warning', 'Het is helaas niet gelukt de bevestigingsmail te verzenden.');
             }
 
-            return $this->redirectToRoute('enrol_clubfeest');
+            return $this->redirectToRoute('enrol_tryout');
         }
-*/
 
-        $this->initTemplateData();
         $this->addToTemplateData( 'form', $form->createView() );
 
         return $this->render('tryout/form.html.twig', $this->template_data );

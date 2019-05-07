@@ -19,32 +19,8 @@ class TryoutEnrolmentRepository extends ServiceEntityRepository
         parent::__construct($registry, TryoutEnrolment::class);
     }
 
-    // /**
-    //  * @return TryoutEnrolment[] Returns an array of TryoutEnrolment objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function flush()
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $this->_em->flush();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?TryoutEnrolment
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

@@ -107,7 +107,6 @@ class TryoutEnrolment
     {
         $this->uuid = bin2hex(random_bytes(8));
         $this->enrolledAt = new \DateTime("now");
-        $this->updatedAt = $this->createdAt;
         $this->withdrawn = false;
         $this->withdrawnAt = null;
     }

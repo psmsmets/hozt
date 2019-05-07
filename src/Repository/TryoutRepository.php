@@ -19,32 +19,25 @@ class TryoutRepository extends ServiceEntityRepository
         parent::__construct($registry, Tryout::class);
     }
 
-    // /**
-    //  * @return Tryout[] Returns an array of Tryout objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findTryouts()
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
+        $now = new \DateTime('now');
+        return $this->createQueryBuilder('tryout')
+            ->where('tryout.enabled = :enabled')
+            ->andwhere('tryout.startTime > :today')
+            ->andwhere('tryout.publishAt < :now')
+            ->setParameter('enabled', true)
+            ->setParameter('today', $now->format('Y-m-d').' 00:00')
+            ->setParameter('now', $now->format('Y-m-d H:i'))
+            ->orderBy('tryout.startTime', 'ASC')
             ->getQuery()
             ->getResult()
-        ;
+        ;     
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Tryout
+    public function flush()
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->_em->flush();
     }
-    */
+
 }

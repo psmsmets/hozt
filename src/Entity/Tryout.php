@@ -132,12 +132,12 @@ class Tryout
         return $this;
     }
 
-    public function getDuration(): ?\TimeInterface
+    public function getDuration(): ?\DateTimeInterface
     {
         return $this->duration;
     }
 
-    public function setDuration(\TimeInterface $duration): self
+    public function setDuration(\DateTimeInterface $duration): self
     {
         $this->duration = $duration;
 

@@ -53,6 +53,7 @@ class ClubfeestType extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+            'data_class' => TryoutEnrolment::class,
         ]);
     }
 }

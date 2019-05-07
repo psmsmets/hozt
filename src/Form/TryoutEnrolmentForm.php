@@ -80,13 +80,15 @@ class TryoutEnrolmentForm extends AbstractType
                 'class' => Tryout::class,
                 'choice_label' => 'getFormattedPeriod',
                 'query_builder' => function (EntityRepository $er) {
-                    $today = new \DateTime('today');
-                    return $er->createQueryBuilder('c')
-                        ->where('c.enabled = :enabled')
-                        ->andwhere('c.startTime > :today')
+                    $now = new \DateTime('now');
+                    return $er->createQueryBuilder('tryout')
+                        ->where('tryout.enabled = :enabled')
+                        ->andwhere('tryout.startTime > :today')
+                        ->andwhere('tryout.publishAt < :now')
                         ->setParameter('enabled', true)
-                        ->setParameter('today', $today->format('Y-m-d  H:M'))
-                        ->orderBy('c.startTime', 'ASC')
+                        ->setParameter('today', $now->format('Y-m-d').' 00:00')
+                        ->setParameter('now', $now->format('Y-m-d H:i'))
+                        ->orderBy('tryout.startTime', 'ASC')
                         ;
                 },
                 'label'    => 'Kies een testmoment',
@@ -104,7 +106,7 @@ class TryoutEnrolmentForm extends AbstractType
                         ->orderBy('c.sequence', 'ASC')
                         ;
                 },
-                'label'    => 'Voor welk zwemniveau wil je testen?',
+                'label'    => 'Voor welk groep wil je testen?',
                 'attr' => ['class'=>'custom-select'],
                 'required' => true,
                 'placeholder' => '-- Maak een keuze --',
@@ -114,6 +116,11 @@ class TryoutEnrolmentForm extends AbstractType
                 'attr' => ['rows'=>8],
                 'required' => false,
                 ))
+            ->add('terms', CheckboxType::class, array(
+                'label'    => 'Privacybeleid',
+                'required' => true,
+                'mapped' => false,
+                ))
         ;
     }
 
@@ -121,6 +128,7 @@ class TryoutEnrolmentForm extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
+            'data_class' => TryoutEnrolment::class,
         ]);
     }
 }
