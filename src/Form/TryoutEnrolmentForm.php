@@ -46,7 +46,6 @@ class TryoutEnrolmentForm extends AbstractType
                 ))
             ->add('email', RepeatedType::class, array(
                 'type' => EmailType::class,
-                'help' => 'We houden al jouw gegevens strikt én met zorg voor onszelf.',
                 'first_options' => array(
                     'label'    => 'E-mail adres',
                     'attr' => ['placeholder'=>'E-mail'],
@@ -79,11 +78,12 @@ class TryoutEnrolmentForm extends AbstractType
                 ))
             ->add('tryout', EntityType::class, array(
                 'class' => Tryout::class,
+                'choice_label' => 'getFormattedPeriod',
                 'query_builder' => function (EntityRepository $er) {
                     $today = new \DateTime('today');
                     return $er->createQueryBuilder('c')
                         ->where('c.enabled = :enabled')
-                        ->andwhere('c.startTime < :today')
+                        ->andwhere('c.startTime > :today')
                         ->setParameter('enabled', true)
                         ->setParameter('today', $today->format('Y-m-d  H:M'))
                         ->orderBy('c.startTime', 'ASC')

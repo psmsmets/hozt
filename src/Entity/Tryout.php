@@ -44,9 +44,9 @@ class Tryout
     private $startTime;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="time")
      */
-    private $endTime;
+    private $duration;
 
     /**
      * @ORM\Column(type="integer")
@@ -59,11 +59,6 @@ class Tryout
     private $publishAt;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $description;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\TryoutEnrolment", mappedBy="tryout")
      */
     private $enrolments;
@@ -73,17 +68,17 @@ class Tryout
         $this->uuid = bin2hex(random_bytes(8));
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
+        $this->publishAt = $this->createdAt;
         $this->startTime = new \DateTime("today noon"); 
-        $this->endTime = new \DateTime("today noon +1 hour");
-        #$this->endTime->modify('+1 hour');
+        $this->duration = new \DateTime("today 1am");
         $this->enabled = true;
         $this->enrolments = new ArrayCollection();
     }
 
     public function __toString(): ?string
     {
-        $fmt = 'Y-m-d H:M';
-        return $this->startTime->format($fmt) . " " . $this->endTime->format($fmt);
+        $fmt = 'Y-m-d H:i';
+        return $this->startTime->format($fmt) . " (#)" ;
     }
 
     public function getId(): ?int
@@ -137,16 +132,33 @@ class Tryout
         return $this;
     }
 
-    public function getEndTime(): ?\DateTimeInterface
+    public function getDuration(): ?\TimeInterface
     {
-        return $this->endTime;
+        return $this->duration;
     }
 
-    public function setEndTime(\DateTimeInterface $endTime): self
+    public function setDuration(\TimeInterface $duration): self
     {
-        $this->endTime = $endTime;
+        $this->duration = $duration;
 
         return $this;
+    }
+
+    public function getEndTime(): ?\DateTimeInterface
+    {
+        $endTime = clone $this->startTime;
+        return $endTime->modify('+'.$this->duration->format('h').'hour +'.$this->duration->format('i').'min');
+    }
+
+    public function getFormattedPeriod(): ?string
+    {
+        $fmt = "%A %e %B %Y";
+
+        $startTime = $this->getStartTime()->getTimestamp();
+        $endTime = $this->getEndTime()->getTimestamp();
+
+        return strftime($fmt.' van %H:%M', $startTime).strftime(' tot %H:%M', $endTime);
+
     }
 
     public function getMaxEnrolments(): ?int
@@ -173,18 +185,6 @@ class Tryout
            $publishAt->modify('-14 days');
         }
         $this->publishAt = $publishAt;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }

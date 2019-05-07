@@ -44,6 +44,7 @@ easy_admin:
            - label: "Varia"
            - { entity: 'ContactForm', label: 'Contact', icon: 'comment' }
            - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle' }
+           - { entity: 'Tryout', label: 'Testmomenten', icon: 'thumbs-up' }
            - label: 'Sponsors'
              icon: 'life-ring'
              children:
