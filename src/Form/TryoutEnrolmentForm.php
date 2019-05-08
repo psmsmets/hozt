@@ -67,8 +67,10 @@ class TryoutEnrolmentForm extends AbstractType
                 'label'    => 'Geboortedatum',
                  'widget' => 'choice',
                  'years' => range(date('Y')-5, date('Y')-80),
-                 #'months' => range(1, 12),
-                 #'days' => range(1, 31),
+                 'months' => range(1, 12),
+                 'days' => range(1, 31),
+                 #'help'    => 'dag/maand/jaar',
+                 #'attr' => ['placeholder'=>'1/1/2016','pattern'=>$this->params->get('app.regex.datestring')],
                 'required' => true,
                 ))
             ->add('address', TextType::class, array(
@@ -83,10 +85,8 @@ class TryoutEnrolmentForm extends AbstractType
                     $now = new \DateTime('now');
                     return $er->createQueryBuilder('tryout')
                         ->where('tryout.enabled = :enabled')
-                        ->andwhere('tryout.startTime > :today')
-                        ->andwhere('tryout.publishAt < :now')
+                        ->andwhere('tryout.enrolFrom < :now')
                         ->setParameter('enabled', true)
-                        ->setParameter('today', $now->format('Y-m-d').' 00:00')
                         ->setParameter('now', $now->format('Y-m-d H:i'))
                         ->orderBy('tryout.startTime', 'ASC')
                         ;

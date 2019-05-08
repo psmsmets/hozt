@@ -8,15 +8,36 @@
 
     <h1 class="text-red mb-4">Testmomenten</h1>
 
-    <p>Hartelijk dank voor jouw interesse in onze club. Je kan je op deze pagina inschrijven voor een van onze testmomenten.</p>
     <p>Tijdens een testmoment proberen we een zo goed mogelijk beeld te krijgen van jouw (zoon- of dochters) zwemniveau.
 Deze inschatting hebben we nodig om een zo goed mogelijk <a href="{{ path('training_categories') }}">groepsadvies</a> te kunnen geven, zodat iedereen op zijn eigen zwemniveau kan genieten van de zwemsport. Pas na het groepsadvies kan je definitief inschrijven.</p>
 
-    <div class="alert alert-secondary pb-2 pt-2 mt-3" role="alert"><i class="fas fa-info-circle"></i>&nbsp;Aangezien we momenteel nog niet voor alle <a href="{{ path('training_categories') }}">zwemniveau's</a> een groepje aanbieden kan het zijn dat we in het slechtste geval vragen om nog een jaartje te oefenen. Wegens een mogelijk plaatsgebrek in de juiste groep kan het dus zijn dat niet elk kandidaatlid dit seizoen kan starten, nu alvast onze excuses hiervoor.</div>
+    {% if page.disabled_teams > 0 %}
+    <div class="alert alert-secondary pb-2 pt-2 mt-3" role="alert"><i class="fas fa-info-circle"></i>&nbsp;Aangezien we momenteel nog niet voor alle <a href="{{ path('training_categories') }}">zwemniveau's</a> een groep aanbieden kan het zijn dat we in het slechtste geval vragen om nog een jaar te oefenen. Wegens mogelijk plaatsgebrek in de juiste groep kan het dus zijn dat niet elk kandidaat lid kan starten. Alvast onze excuses.</div>
+    {% endif %}
 
     <p>Onze testmomenten vinden plaats in het <a href="/zwembad">zwembad Sportoase Stede Akkers Hoogstraten</a>.</p>
 
+    <h4 class="mt-5">Overzicht testmomenten</h4>
+
     {% if page.form is defined %}
+
+    <ul class="list-group list-group-flush mt-3">
+    {% for tryout in page.tryouts %}
+
+      <li class="list-group-item d-flex justify-content-between align-items-center {% if tryout.enrolFrom > date() %}text-muted{% endif %}">
+        {{ tryout.formattedPeriod }}
+        <span>
+          {% if tryout.enrolFrom > date() %}
+            <small>inschrijven vanaf {{ tryout.enrolFrom|localizeddate('medium','none')}}</small>
+          {% else %}
+            <small>beschikbare plaatsen:</small> <span class="badge badge-hozt badge-pill">{{ tryout.remainingEnrolments }}</span><br>
+            <small>inschrijven tot {{ tryout.enrolUntil|localizeddate('medium','short')}}</small>
+          {% endif %}
+        </span>
+      </li>
+
+    {% endfor %}
+    </ul>
 
     <div class="row mt-5">
       <div class="col col-12 col-md-10 col-lg-8">
@@ -26,10 +47,10 @@ Deze inschatting hebben we nodig om een zo goed mogelijk <a href="{{ path('train
     {{ form_start(page.form, {attr: {class: 'needs-validation'} }) }}
     {{ form_widget(page.form) }}
 
-      <p class="small text-muted"><a href="/privacy" class="text-muted">We houden al je gegevens strikt voor onszelf en met de nodige zorg.</a></p>
       <div class="form-group row pt-3">
         <div class="col-sm-10">
             <button type="submit" class="btn btn-hozt" id="submit" value="Send"><i class="fas fa-share"></i> Verzend</button>
+            <small id="submitHelp" class="form-text text-muted d-none">Gelieve de pagina <strong>niet</strong> te herladen tijdens het verzenden.</small>
         </div>
       </div>
 
@@ -38,11 +59,9 @@ Deze inschatting hebben we nodig om een zo goed mogelijk <a href="{{ path('train
       </div>
     </div>
 
-    <p>Je ontvangt direct een bevestigingsmail van deze inschrijving. Enkele dagen voor het testmoment krijg je ook nog een herinneringsmail.</p>
+    <p>Je ontvangt direct een bevestigingsmail van deze inschrijving. Enkele dagen voor het testmoment krijg je nog een herinneringsmail.</p>
 
     {% else %}
-
-    <h4 class="mt-5">Inschrijven voor een testmoment</h4>
 
     <p><strong><i class="fas fa-exclamation-triangle"></i> Er zijn op dit moment helaas geen testmomenten waarvoor je kan inschrijven.</strong></p>
 

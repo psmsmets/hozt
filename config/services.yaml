@@ -22,7 +22,8 @@ parameters:
     app.defaults.sponsorCategory.id: 1
     app.defaults.scheduleNotice.days: 14
     app.regex.telephone: '^(\+|00)(324|316)([1-9]\d{7})$' # enkel Belgie en Nederland
-    app.regex.postalcode: '^([1-9]{1}\d{3})(|[A-Z]{2})'
+    app.regex.postalcode: '^([1-9]{1}\d{3})(|[A-Z]{2})$'
+    app.regex.datestring: '^((0[1-9]|[12]\d|3[01]|[1-9])[/.-](0[1-9]|1[0-2]|[1-9])[/.-][12]\d{3})$'
     app.path.blogPost_documents: /uploads/files/blog
     app.path.blogPost_images: /uploads/images/blog
     app.path.calendar_documents: /uploads/files/calendar

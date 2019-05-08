@@ -8,10 +8,10 @@
 
 <p>We hebben je inschrijving voor het testmoment ontvangen.</p>
 
-<p>We verwachten je <strong>{{enrol.tryout.getFormattedPeriod()}}</strong> om te testen voor de groep <strong>{{enrol.category.name}}</strong>.
+<p>We verwachten je <strong>{{enrol.tryout.formattedPeriod}}</strong> om te testen voor de groep <strong>{{enrol.category.name}}</strong>.
 
 <p>Onze testmomenten gaan door in het <a href="https://www.hozt.be/zwembad">zwembad Sportoase Stede Akkers Hoogstraten</a>. Je dient je aan te melden aan de balie van het zwembad.</p>
 
-<p>Alle info over het testmoment kan je op deze <a href="https://www.hozt.be{{ path('enrol_tryout', {'inschrijving': enrol.uuid}) }}">link</a> terugvinden. Ben je verhinderd? Dan kan je tot twee dagen voordien je inschrijving via de link annuleren.</p>
+<p>Alle info over het testmoment kan je op deze <a href="https://www.hozt.be{{ path('enrol_tryout', {'inschrijving': enrol.uuid}) }}">link</a> terugvinden. Ben je verhinderd? Dan kan je tot {{ enrol.tryout.enrolUntil|localizeddate('long','short')}} je inschrijving via de link annuleren.</p>
 
 <p class="small text-muted">** Dit is een automatisch bericht van <a href="https://www.hozt.be">HoZT.be</a> **</p>

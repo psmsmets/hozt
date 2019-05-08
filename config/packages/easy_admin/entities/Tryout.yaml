@@ -16,7 +16,7 @@ easy_admin:
                     #- { property: 'id', label: 'Id' }
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'startTime', label: 'Wanneer' }
-                    - { property: 'duration', label: 'Duur' }
+                    - { property: 'duration', label: 'Duur', template: 'easy_admin/date_interval_template_duration.html.twig' }
                     - { property: 'enrolments', label: 'Inschrijvingen' }
                     - { property: 'maxEnrolments', label: 'Max' }
                     - { property: 'publishAt', label: 'Gepubliceerd op' }
@@ -25,9 +25,10 @@ easy_admin:
             form:
                 fields:
                     - { property: 'startTime', label: 'Wanneer' }
-                    - { property: 'duration', label: 'Duur' }
+                    - { property: 'duration', label: 'Duur', type_options: { with_years: false, with_months: false, with_days: false, with_hours: true, with_minutes: true } }
                     - { property: 'maxEnrolments', label: 'Max inschrijvingen' }
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'publishAt', label: 'Publiceren vanaf' }
+                    - { property: 'enrolFrom', label: 'Inschrijven vanaf' }
             edit:
                 actions: ['delete']

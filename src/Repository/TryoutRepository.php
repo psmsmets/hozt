@@ -24,10 +24,10 @@ class TryoutRepository extends ServiceEntityRepository
         $now = new \DateTime('now');
         return $this->createQueryBuilder('tryout')
             ->where('tryout.enabled = :enabled')
-            ->andwhere('tryout.startTime > :today')
+            ->andwhere('tryout.startTime >= :today')
             ->andwhere('tryout.publishAt < :now')
             ->setParameter('enabled', true)
-            ->setParameter('today', $now->format('Y-m-d').' 00:00')
+            ->setParameter('today', $now->format('Y-m-d').' 23:59')
             ->setParameter('now', $now->format('Y-m-d H:i'))
             ->orderBy('tryout.startTime', 'ASC')
             ->getQuery()

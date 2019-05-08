@@ -19,23 +19,6 @@ class TrainingTeamRepository extends ServiceEntityRepository
         parent::__construct($registry, TrainingTeam::class);
     }
 
-    // /**
-    //  * @return TrainingTeam[] Returns an array of TrainingTeam objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
     public function findAllJoinedToCoachesAndSchedule()
     {
         return $this->createQueryBuilder('t')
@@ -81,6 +64,22 @@ class TrainingTeamRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult()
         ;
+    }
+
+    public function countDisabled()
+    {
+        return $this->createQueryBuilder('team')
+            ->select('count(team.id)')
+            ->andWhere('team.enabled = :enabled')
+            ->setParameter('enabled', false)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
     }
 
 }

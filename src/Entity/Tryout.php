@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Tryout
 {
     /**
+     * Parameters
+     */
+    const enrol_days_before_starttime = 2;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -44,7 +49,7 @@ class Tryout
     private $startTime;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="dateinterval")
      */
     private $duration;
 
@@ -59,6 +64,11 @@ class Tryout
     private $publishAt;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $enrolFrom;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\TryoutEnrolment", mappedBy="tryout")
      */
     private $enrolments;
@@ -68,9 +78,11 @@ class Tryout
         $this->uuid = bin2hex(random_bytes(8));
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->publishAt = $this->createdAt;
-        $this->startTime = new \DateTime("today noon"); 
-        $this->duration = new \DateTime("today 1am");
+        $this->publishAt = new \DateTime("tomorrow midnight");
+        $this->enrolFrom = $this->publishAt; 
+        $this->startTime = new \DateTime("today noon + 14 days"); 
+        $this->duration = new \DateTimeInterval("1 hour");
+        $this->maxEnrolments = 12;
         $this->enabled = true;
         $this->enrolments = new ArrayCollection();
     }
@@ -132,12 +144,12 @@ class Tryout
         return $this;
     }
 
-    public function getDuration(): ?\DateTimeInterface
+    public function getDuration(): ?\DateInterval
     {
         return $this->duration;
     }
 
-    public function setDuration(\DateTimeInterface $duration): self
+    public function setDuration(\DateInterval $duration): self
     {
         $this->duration = $duration;
 
@@ -146,8 +158,7 @@ class Tryout
 
     public function getEndTime(): ?\DateTimeInterface
     {
-        $endTime = clone $this->startTime;
-        return $endTime->modify('+'.$this->duration->format('h').'hour +'.$this->duration->format('i').'min');
+        return (clone $this->startTime)->add($this->duration);
     }
 
     public function getFormattedPeriod(): ?string
@@ -173,6 +184,11 @@ class Tryout
         return $this;
     }
 
+    public function getRemainingEnrolments(): ?int
+    {
+        return $this->maxEnrolments - sizeof($this->getEnrolments());
+    }
+
     public function getPublishAt(): ?\DateTimeInterface
     {
         return $this->publishAt;
@@ -187,6 +203,23 @@ class Tryout
         $this->publishAt = $publishAt;
 
         return $this;
+    }
+
+    public function getEnrolFrom(): ?\DateTimeInterface
+    {
+        return $this->enrolFrom;
+    }
+
+    public function setEnrolFrom(\DateTimeInterface $enrolFrom): self
+    {
+        $this->enrolFrom = $enrolFrom;
+
+        return $this;
+    }
+
+    public function getEnrolUntil(): ?\DateTimeInterface
+    {
+        return (clone $this->startTime)->modify('midnight -'.abs(Tryout::enrol_days_before_starttime).'days');
     }
 
     /**

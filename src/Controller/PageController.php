@@ -663,8 +663,16 @@ class PageController extends AbstractController
      */
     public function enrol_tryout(Request $request, TryoutRepository $tryOutRep, TryoutEnrolmentRepository $tryOutEnrolmentRep, \Swift_Mailer $mailer)
     {
-        $this->initTemplateData();
         $tryouts = $tryOutRep->findTryouts();
+
+        $this->initTemplateData();
+
+        $this->addToTemplateData( 
+            'disabled_teams', 
+            $this->getDoctrine()->getRepository(TrainingTeam::class)->countDisabled()
+        );
+
+        $this->addToTemplateData( 'tryouts', $tryouts );
 
         if (sizeof($tryouts)==0) return $this->render('tryout/form.html.twig', $this->template_data );
 
