@@ -19,6 +19,17 @@ class TryoutEnrolmentRepository extends ServiceEntityRepository
         parent::__construct($registry, TryoutEnrolment::class);
     }
 
+    public function findEnrolment(string $uuid = null)
+    {
+        if (is_null($uuid)) return null;
+        return $this->createQueryBuilder('enrol')
+            ->andWhere('enrol.uuid = :uuid')
+            ->setParameter('uuid', $uuid)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     public function flush()
     {
         $this->_em->flush();

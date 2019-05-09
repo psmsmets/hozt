@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Security;
+use Doctrine\ORM\EntityManagerInterface;
 
 # entities
 use App\Entity\StaticPage;
@@ -51,11 +52,13 @@ class PageController extends AbstractController
     protected $requestStack;
     private $security;
     private $now;
+    private $em;
 
-    public function __construct(RequestStack $requestStack, Security $security)
+    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em)
     {
         $this->requestStack = $requestStack;
         $this->security = $security;
+        $this->em = $em;
         $this->now = new \DateTime('now');
     }
 
@@ -167,6 +170,16 @@ class PageController extends AbstractController
         }
         unset($tmp);
         return $str;
+    }
+
+    private function email_flash(bool $sent)
+    {
+        // twig content??
+        if ($sent) { 
+            $this->addFlash('success', 'Een bevestigingsmail is verzonden naar het opgegeven e-mail adres.');
+        } else {
+            $this->addFlash('warning', 'Het is helaas niet gelukt de bevestigingsmail te verzenden.');
+        }
     }
 
     private function addToTemplateData(string $key, $data, string $cat = 'page')
@@ -609,17 +622,12 @@ class PageController extends AbstractController
             $sent = $mailer->send($message);
             $enrol->setEmailSent($sent);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($enrol);
-            $entityManager->flush();
+            $this->em->persist($enrol);
+            $this->em->flush();
 
             $this->addFlash('success', 'Ingeschreven! We verwachten je '.$event->getFormattedPeriod().'.');
 
-            if ($sent) { 
-                $this->addFlash('success', 'Een bevestigingsmail is verzonden naar het opgegeven e-mail adres.');
-            } else {
-                $this->addFlash('warning', 'Het is helaas niet gelukt de bevestigingsmail te verzenden.');
-            }
+            $this->email_flash($sent);
 
             return $this->redirectToRoute('enrol_clubfeest');
         }
@@ -661,9 +669,9 @@ class PageController extends AbstractController
     /**
      * @Route("/testmoment", name="enrol_tryout")
      */
-    public function enrol_tryout(Request $request, TryoutRepository $tryOutRep, TryoutEnrolmentRepository $tryOutEnrolmentRep, \Swift_Mailer $mailer)
+    public function enrol_tryout( TryoutRepository $tryoutRep, TryoutEnrolmentRepository $enrolRep, 
+         Request $request, \Swift_Mailer $mailer )
     {
-        $tryouts = $tryOutRep->findTryouts();
 
         $this->initTemplateData();
 
@@ -672,14 +680,66 @@ class PageController extends AbstractController
             $this->getDoctrine()->getRepository(TrainingTeam::class)->countDisabled()
         );
 
+        $tryouts = $tryoutRep->findTryouts();
         $this->addToTemplateData( 'tryouts', $tryouts );
 
-        if (sizeof($tryouts)==0) return $this->render('tryout/form.html.twig', $this->template_data );
+        $enrol = $enrolRep->findEnrolment($request->query->get('inschrijving', null));
+
+        if ($enrol)
+        {
+            if ( $enrol->getWithdrawn() )
+            {
+                $this->addFlash('warning', 'Je hebt je inschrijving voor het testmoment geannulleerd op ' .
+                    $enrol->getWithdrawnAt()->format('Y-m-d H:i:s') . '.'
+                );      
+                return $this->redirectToRoute('enrol_tryout');
+            }
+            elseif ( $request->query->get('withdraw', false) == true and
+                 $request->query->get('token', null) == $enrol->getTryout()->getUuid()
+               )
+            {
+                if ( $this->now > $enrol->getTryout()->getEnrolUntil() )
+                {
+                    $this->addFlash('danger', 'Je bent te laat om je inschrijving nog te annuleren.');      
+                    return $this->redirectToRoute('enrol_tryout');
+                }
+                $enrol->setWithdrawn(true);
+                $enrolRep->flush();
+
+                $message = (new \Swift_Message())
+                    ->setSubject('Annulering HoZT testmoment')
+                    ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
+                    ->setTo($enrol->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'emails/tryout_withdraw.html.twig', [ 'enrol' => $enrol ]
+                        ),
+                        'text/html'
+                    )
+                ;
+                $mailer->send($message);
+
+                $this->addFlash('success', 'Je hebt je inschrijving voor het testmoment geannulleerd.');
+                
+                return $this->redirectToRoute('enrol_tryout');
+            }
+
+            $this->addToTemplateData( 'enrolment', $enrol );
+
+            return $this->render('tryout/enrolment.html.twig', $this->template_data );
+        }
+
+        $active_tryouts = 0;
+        foreach( $tryouts as $tryout ) {
+            if ( $this->now > $tryout->getEnrolFrom() ) $active_tryouts += 1;
+        }
+        if ($active_tryouts==0) return $this->render('tryout/form.html.twig', $this->template_data );
 
         $form = $this->createForm(TryoutEnrolmentForm::class);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid())
+        {
 
             $enrol = $form->getData();
 
@@ -689,28 +749,20 @@ class PageController extends AbstractController
                 ->setTo($enrol->getEmail())
                 ->setBody(
                     $this->renderView(
-                        'emails/tryout.html.twig', [ 'enrol' => $enrol ]
+                        'emails/tryout_enrol.html.twig', [ 'enrol' => $enrol ]
                     ),
                     'text/html'
                 )
             ;
             $sent = $mailer->send($message);
             $enrol->setEmailSent($sent);
-/*
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($enrol);
-            $entityManager->flush();
-*/
 
-            $this->addFlash('success', 'Ingeschreven! We verwachten je '.$enrol->getTryout()->getFormattedPeriod().'.');
+            $this->em->persist($enrol);
+            $this->em->flush();
 
-            if ($sent) { 
-                $this->addFlash('success', 'Een bevestigingsmail is verzonden naar het opgegeven e-mail adres.');
-            } else {
-                $this->addFlash('warning', 'Het is helaas niet gelukt de bevestigingsmail te verzenden.');
-            }
+            $this->email_flash($sent);
 
-            return $this->redirectToRoute('enrol_tryout');
+            return $this->redirectToRoute('enrol_tryout', array('inschrijving'=>$enrol->getUuid()));
         }
 
         $this->addToTemplateData( 'form', $form->createView() );

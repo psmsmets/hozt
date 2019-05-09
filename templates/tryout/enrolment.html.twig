@@ -1,0 +1,69 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Testmoment{% endblock %}
+
+{% block main %}
+
+  {% set enrol = page.enrolment %}
+
+  <div class="p-3 mb-4 bg-white shadow-sm">
+
+    <h1 class="text-red mb-4">Jouw testmoment</h1>
+
+    <h4>Hallo {{enrol.firstname}} {{enrol.lastname}},</h4>
+
+    <p>Je hebt je ingeschreven voor een testmoment.</p>
+
+    <p>Alvast bedankt voor jouw interesse in onze zwemclub.</p>
+
+    <p>We verwachten je <strong>{{enrol.tryout.startTime|localizeddate('full','short')}}</strong> in het <a href="https://www.hozt.be/zwembad">zwembad Sportoase Stede Akkers Hoogstraten</a> om te testen voor de groep <strong>{{enrol.category.name}}</strong>.<p>
+    <p>Je dient je aan te melden aan de balie van het zwembad. Het testmoment duurt tot uiterlijk {{enrol.tryout.endTime|localizeddate('none','short')}}.</p>
+
+    <p>Enkele dagen voor het testmoment krijg je nog een herinneringsmail.</p>
+
+    <p>&nbsp;</p>
+
+    <p>Ben je verhinderd? Dan kan je tot {{ enrol.tryout.enrolUntil|localizeddate('long','short')}} je inschrijving annuleren.</p>
+
+    <p class="text-center"><a class="btn btn-dark btn-sm" href="{{ path('enrol_tryout', {'inschrijving': enrol.uuid, 'withdraw': true, 'token':enrol.tryout.uuid}) }}" onclick="return confirm('Ben je zeker?')"><i class="fas fa-times-circle"></i> inschrijving annuleren</a></p>
+
+    <h4 class="mt-5">Testmoment?</h4>
+
+    {% include 'tryout/description.html.twig' with {'disabled_teams': page.disabled_teams } %}
+
+  </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+// Disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        $('#submit').prop('disabled', 'disabled');
+        $('#submit').html('<i class="fas fa-sync-alt"></i> Verwerken');
+        $('#submitHelp').removeClass( "d-none" );
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+          $('#submit').prop('disabled', false);
+          $('#submit').html('<i class="fas fa-share"></i> Verzend');
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+$("label[for='tryout_enrolment_form_terms']").html("Ik heb het <a href=\"/privacy\">privacybeleid</a> gelezen en ga hiermee akkoord.")
+ 
+</script>
+{% endblock %}

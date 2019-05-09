@@ -186,7 +186,13 @@ class Tryout
 
     public function getRemainingEnrolments(): ?int
     {
-        return $this->maxEnrolments - sizeof($this->getEnrolments());
+        if (sizeof($this->getEnrolments())==0) return $this->maxEnrolments;
+
+        $remaining = $this->maxEnrolments;
+        foreach ( $this->getEnrolments() as $enrol ) {
+           if (!$enrol->getWithdrawn()) $remaining -= 1;
+        }
+        return $remaining;
     }
 
     public function getPublishAt(): ?\DateTimeInterface

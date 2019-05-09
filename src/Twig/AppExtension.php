@@ -12,6 +12,8 @@ class AppExtension extends AbstractExtension
         return [
             new TwigFilter('price', [$this, 'formatPrice']),
             new TwigFilter('epoch', [$this, 'fromTimestamp']),
+            new TwigFilter('hide_email', [$this, 'hideEmail']),
+            new TwigFilter('hide_telephone', [$this, 'hideTelephone']),
             new TwigFilter('ucfirst', 'ucfirst'),
             new TwigFilter('lcfirst', 'lcfirst'),
             new TwigFilter('ucwords', 'ucwords'),
@@ -30,5 +32,23 @@ class AppExtension extends AbstractExtension
     {
         $time = new \DateTime;
         return $time->setTimestamp($timestamp);
+    }
+
+    public function hideEmail(string $email): string
+    {
+        if ( filter_var( $email, FILTER_VALIDATE_EMAIL) )
+        {
+           $parts = explode("@", $email);
+           $parts[0] = substr($parts[0], 0, 1) . str_repeat("*", strlen($parts[0]) - 2) . substr($parts[0], -1);
+           $pos = strpos($parts[1], '.');
+           $parts[1] = substr($parts[1], 0, 1) . str_repeat("*", strlen($parts[1]) - $pos+1) . substr($parts[1], $pos-1);
+           return implode("@", $parts); 
+        }
+    }
+
+    public function hideTelephone(string $tel): string
+    {
+        // return only four last digits
+        return str_repeat("*", strlen($tel) - 2) . substr($tel, -2);
     }
 }

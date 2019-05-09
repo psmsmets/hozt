@@ -86,10 +86,15 @@ class TryoutEnrolmentForm extends AbstractType
                     return $er->createQueryBuilder('tryout')
                         ->where('tryout.enabled = :enabled')
                         ->andwhere('tryout.enrolFrom < :now')
+                        ->andwhere(':now <= tryout.startTime')
                         ->setParameter('enabled', true)
                         ->setParameter('now', $now->format('Y-m-d H:i'))
                         ->orderBy('tryout.startTime', 'ASC')
                         ;
+                },
+                'choice_attr' => function($choice) {
+                    $now = new \DateTime('now');
+                    return ['disabled' => ($choice->getRemainingEnrolments()==0 or $now > $choice->getEnrolUntil())];
                 },
                 'label'    => 'Kies een testmoment',
                 'attr' => ['class'=>'custom-select'],
@@ -100,10 +105,10 @@ class TryoutEnrolmentForm extends AbstractType
                 'class' => TrainingTeamCategory::class,
                 'choice_label' => 'name',
                 'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('c')
-                        ->where('c.enabled = :enabled')
+                    return $er->createQueryBuilder('trainingCategory')
+                        ->where('trainingCategory.enabled = :enabled')
                         ->setParameter('enabled', true)
-                        ->orderBy('c.sequence', 'ASC')
+                        ->orderBy('trainingCategory.sequence', 'ASC')
                         ;
                 },
                 'label'    => 'Voor welk groep wil je testen?',

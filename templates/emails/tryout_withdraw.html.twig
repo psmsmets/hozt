@@ -1,0 +1,14 @@
+{# templates/emails/tryout.html.twig #}
+
+{% include 'emails/_style.html.twig' %}
+
+<p class="text-hozt"><strong>HoZT testmoment</strong></p>
+
+<p>Hallo {{enrol.firstname}} {{enrol.lastname}},</p>
+
+<p>Je hebt je inschrijving voor het testmoment van {{enrol.tryout.starttime|localizeddate('long','short')}} <strong>geannulleerd</strong>.
+
+<p>Heb je verdere vragen aarzel dan niet om <a href="https://www.hozt.be/contact">contact</a> op te nemen. En je kan je gerust opnieuw inschrijven voor een ander <a href="https://www.hozt.be{{ path('enrol_tryout') }}">testmoment</a>.</p>
+
+
+<p class="small text-muted">** Dit is een automatisch bericht van <a href="https://www.hozt.be">HoZT.be</a> **</p>

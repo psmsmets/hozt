@@ -42,14 +42,14 @@ class TryoutEnrolment
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=180)
+     * @ORM\Column(type="string", length=255)
      * @Encrypted
      * @var int
      */
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=15)
+     * @ORM\Column(type="string", length=255)
      * @Encrypted
      * @var int
      */
@@ -57,10 +57,10 @@ class TryoutEnrolment
 
     /**
      * @ORM\Column(type="date")
-     * @Encrypted
-     * @var int
+     * @//Encrypted
+     * @//var int
      */
-    private $birthdate;
+    private $birthdate; // should store it as a string with length=255
 
     /**
      * @ORM\Column(type="string", length=255)
