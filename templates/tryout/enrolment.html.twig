@@ -1,0 +1,50 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Testmoment{% endblock %}
+
+{% block main %}
+
+  {% set enrol = page.enrolment %}
+
+  <div class="p-3 mb-4 bg-white shadow-sm">
+
+    <h1 class="text-red mb-4">Jouw testmoment</h1>
+
+    <h4 class="mb-3">Hallo {{enrol.firstname}} {{enrol.lastname}},</h4>
+
+    <p>Je hebt je ingeschreven voor een testmoment.</p>
+
+    <p>Alvast bedankt voor jouw interesse in onze zwemclub!</p>
+
+    <p>We verwachten je <strong>{{enrol.tryout.startTime|localizeddate('full','short')}}</strong> in het <a href="/zwembad">zwembad Sportoase Stede Akkers Hoogstraten</a> voor een vrijblijvend testmoment voor de groep <strong><a href="{{ path('training_category', {'slug': enrol.category.slug}) }}">{{enrol.category.name}}</a></strong>.<p>
+    <p>Je dient je aan te melden aan de balie van het zwembad. Het testmoment duurt tot uiterlijk {{enrol.tryout.endTime|localizeddate('none','short')}}.</p>
+
+    <p>Enkele dagen voor het testmoment krijg je nog een herinneringsmail.</p>
+
+    <h4 class="mt-5 mb-4">Je gegevens</h4>
+    <dl class="row mb-4 pb-3">
+      <dt class="col-sm-3">Email adres</dt>
+      <dd class="col-sm-9">{{enrol.email|hide_email}}</dd>
+      <dt class="col-sm-3">Mobiele telefoon</dt>
+      <dd class="col-sm-9">{{enrol.telephone|hide_telephone}}</dd>
+      <dt class="col-sm-3">Postcode</dt>
+      <dd class="col-sm-9">{{enrol.address}}</dd>
+      <dt class="col-sm-3">Geboortejaar</dt>
+      <dd class="col-sm-9">{{enrol.birthdate|date('Y')}}</dd>
+    {% if enrol.message %}
+      <dt class="col-sm-3">Je vraag/opmerking</dt>
+      <dd class="col-sm-9">{{enrol.message}}</dd>
+    {% endif %}
+    </dl>
+
+    <p>Ben je verhinderd? Dan kan je tot {{ enrol.tryout.enrolUntil|localizeddate('long','short')}} je inschrijving annuleren.</p>
+
+    <p class="text-center"><a class="btn btn-dark btn-sm" href="{{ path('enrol_tryout', {'inschrijving': enrol.uuid, 'withdraw': true, 'token':enrol.tryout.uuid}) }}" onclick="return confirm('Ben je zeker?')"><i class="fas fa-times-circle"></i> inschrijving annuleren</a></p>
+
+    <h4 class="mt-5">Testmoment?</h4>
+
+    {% include 'tryout/description.html.twig' with {'disabled_teams': page.disabled_teams } %}
+
+  </div>
+
+{% endblock %}

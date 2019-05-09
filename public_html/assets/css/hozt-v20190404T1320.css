@@ -17,6 +17,10 @@ body {
   padding-top: 105px;
 }
 
+.line-through {
+  text-decoration: line-through;
+}
+
 a.text-decoration-none:hover { text-decoration: none; }
 
 .nav-scroller {

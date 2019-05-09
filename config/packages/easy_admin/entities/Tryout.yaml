@@ -1,0 +1,35 @@
+# This file sets the configuration of the 'Category' entity.
+#
+# NOTE: this demo application splits the backend configuration into several
+# small files for educational purposes. In your application you can put the
+# entire backend configuration in just one file.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    entities:
+        Tryout:
+            class: App\Entity\Tryout
+            label: 'Contactformulier'
+            list:
+                fields:
+                    #- { property: 'id', label: 'Id' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'startTime', label: 'Wanneer' }
+                    - { property: 'duration', label: 'Duur', template: 'easy_admin/date_interval_template_duration.html.twig' }
+                    - { property: 'enrolments', label: 'Inschrijvingen' }
+                    - { property: 'maxEnrolments', label: 'Max' }
+                    - { property: 'publishAt', label: 'Gepubliceerd op' }
+                    - { property: 'enrolFrom', label: 'Inschrijven vanaf' }
+                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['startTime', 'ASC']
+            form:
+                fields:
+                    - { property: 'startTime', label: 'Wanneer' }
+                    - { property: 'duration', label: 'Duur', type_options: { with_years: false, with_months: false, with_days: false, with_hours: true, with_minutes: true } }
+                    - { property: 'maxEnrolments', label: 'Max inschrijvingen' }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'publishAt', label: 'Publiceren vanaf' }
+                    - { property: 'enrolFrom', label: 'Inschrijven vanaf' }
+            edit:
+                actions: ['delete']

@@ -48,6 +48,7 @@ class BlogPostRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
     public function findSpecialBlogPosts(int $limit)
     {
         return $this->createQueryBuilder('post')
@@ -73,6 +74,7 @@ class BlogPostRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
     public function findBlogPosts(BlogCategory $category = null, int $page = 1,
         bool $admin = false, int $limit = BlogPost::NUMBER_OF_ITEMS)
     {
@@ -123,6 +125,7 @@ class BlogPostRepository extends ServiceEntityRepository
             ;
         }
     }
+
     public function countBlogPosts(string $category = null)
     {
         if (is_null($category))

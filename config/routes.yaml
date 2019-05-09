@@ -34,30 +34,30 @@ training_coaches:
     path: /trainers
     controller: App\Controller\PageController::training_coaches
 
-# enroll
-enroll_list:
+# enrol
+enrol_list:
     path: /inschrijven
-    controller: App\Controller\PageController::enroll_list
+    controller: App\Controller\PageController::enrol_list
 
-enroll_clubfeest:
+enrol_clubfeest:
     path: /clubfeest
-    controller: App\Controller\PageController:enroll_clubfeest
+    controller: App\Controller\PageController:enrol_clubfeest
 
-enrolled_clubfeest:
+enroled_clubfeest:
     path: /clubfeest/ingeschreven
-    controller: App\Controller\PageController:enrolled_clubfeest
+    controller: App\Controller\PageController:enroled_clubfeest
 
-#enroll_item:
+#enrol_item:
 #    path: /inschrijvingen/{slug}
-#    controller: App\Controller\PageController::enroll_item
+#    controller: App\Controller\PageController::enrol_item
 
-#enroll_details:
+#enrol_details:
 #    path: /inschrijvingen/{slug}/details
-#    controller: App\Controller\PageController::enroll_details
+#    controller: App\Controller\PageController::enrol_details
 
-#enroll_form:
+#enrol_form:
 #    path: /inschrijvingen/{slug}/formulier
-#    controller: App\Controller\PageController::enroll_form
+#    controller: App\Controller\PageController::enrol_form
 
 # contact
 contact_form:

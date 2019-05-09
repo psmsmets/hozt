@@ -84,12 +84,18 @@ class TrainingTeamCategory
      */
     private $competitions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TryoutEnrolment", mappedBy="category")
+     */
+    private $tryoutEnrolments;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->enabled = true;
         $this->teams = new ArrayCollection();
         $this->competitions = new ArrayCollection();
+        $this->tryoutEnrolments = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -258,6 +264,37 @@ class TrainingTeamCategory
         if ($this->competitions->contains($competition)) {
             $this->competitions->removeElement($competition);
             $competition->removeTeamCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TryoutEnrolment[]
+     */
+    public function getTryoutEnrolments(): Collection
+    {
+        return $this->tryoutEnrolments;
+    }
+
+    public function addTryoutEnrolment(TryoutEnrolment $tryoutEnrolment): self
+    {
+        if (!$this->tryoutEnrolments->contains($tryoutEnrolment)) {
+            $this->tryoutEnrolments[] = $tryoutEnrolment;
+            $tryoutEnrolment->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTryoutEnrolment(TryoutEnrolment $tryoutEnrolment): self
+    {
+        if ($this->tryoutEnrolments->contains($tryoutEnrolment)) {
+            $this->tryoutEnrolments->removeElement($tryoutEnrolment);
+            // set the owning side to null (unless already changed)
+            if ($tryoutEnrolment->getCategory() === $this) {
+                $tryoutEnrolment->setCategory(null);
+            }
         }
 
         return $this;

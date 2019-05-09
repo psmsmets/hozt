@@ -19,33 +19,13 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
-
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
     
     public function findOneByEmail(string $email): ?User
     {
         return $this->createQueryBuilder('user')
             ->andWhere('user.enabled = :enabled')
-            ->andWhere('user.verified = :verified')
             ->andWhere('user.email = :email')
             ->setParameter('enabled', true)
-            ->setParameter('verified', true)
             ->setParameter('email', $email)
             ->getQuery()
             ->getOneOrNullResult()
@@ -57,11 +37,9 @@ class UserRepository extends ServiceEntityRepository
         $now = new \DateTime('now');
         return $this->createQueryBuilder('user')
             ->andWhere('user.enabled = :enabled')
-            ->andWhere('user.verified = :verified')
             ->andWhere('user.secret = :secret')
             ->andWhere('user.secretExpiration > :now')
             ->setParameter('enabled', true)
-            ->setParameter('verified', true)
             ->setParameter('secret', "$type=$token" )
             ->setParameter('now', $now->format('Y-m-d H:i:s') )
             ->getQuery()

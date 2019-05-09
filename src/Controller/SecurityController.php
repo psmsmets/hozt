@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-//use Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface;
+use Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface;
 
 # entities
 use App\Entity\User;
@@ -25,14 +25,23 @@ use App\Form\UserChangePassword;
 
 class SecurityController extends AbstractController
 {
-/*
+    private $userRepository;
+    private $mailer;
+    private $encoder;
     protected $encryptor;
     
-    public function __construct(EncryptorInterface $encryptor)
+    public function __construct(
+            UserRepository $userRepository, 
+            \Swift_Mailer $mailer, 
+            UserPasswordEncoderInterface $encoder, 
+            EncryptorInterface $encryptor
+        )
     {
+        $this->userRepository = $userRepository;
+        $this->mailer = $mailer;
+        $this->encoder = $encoder;
         $this->encryptor = $encryptor;
     }
-*/
 
     /**
      * @Route("/login", name="app_login")
@@ -50,7 +59,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/wachtwoord-vergeten", name="app_forgot_password")
      */
-    public function forgot_password(Request $request, UserRepository $userRepository, \Swift_Mailer $mailer ): Response
+    public function forgot_password(Request $request): Response
     {
         $form = $this->createForm(UserForgotPassword::class);
 
@@ -60,32 +69,18 @@ class SecurityController extends AbstractController
 
             $email = $form->getData()['email'];
 
-            if ($user = $userRepository->findOneByEmail($email)) {
+            if ($user = $this->userRepository->findOneByEmail($email))
+            {
+                if ( !$user->isVerified() ) {
 
-                $token = $user->newResetPasswordToken();
-                $userRepository->flush();
+                    $this->email_verification($user);
 
-                $url = $this->get('router')->generate('app_reset_password', array(User::PASSWORD_RESET => $token));
+                } else {
 
-                // send email
-                $message = (new \Swift_Message())
-                    ->setSubject('Instructies wachtwoord instellen')
-                    ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
-                    ->setTo($user->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'security/emails/forgot_password.html.twig',
-                            array( 
-                                'name' => strval($user), 
-                                'url' => $url,
-                            )
-                        ),
-                        'text/html'
-                    );
-                $sent = $mailer->send($message);
-
-                $this->addFlash('success', 'Er is een email met de instructies onderweg als het adres ons bekend is.');
+                    $this->password_reset($user);
                 
+                }
+
              }
 
             return $this->redirectToRoute('app_forgot_password');
@@ -100,11 +95,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/wachtwoord-veranderen", name="app_change_password")
      */
-    public function change_password(
-            Request $request, 
-            UserPasswordEncoderInterface $encoder,
-            UserRepository $userRepository 
-        ): Response
+    public function change_password ( Request $request, UserPasswordEncoderInterface $encoder ): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -139,7 +130,7 @@ class SecurityController extends AbstractController
 
             $password = $encoder->encodePassword($user, $form->getData()['plainPassword']);
             $user->setPassword($password);
-            $userRepository->flush();
+            $this->userRepository->flush();
                
             $this->addFlash('success', 'Je wachtwoord is aangepast.');
 
@@ -162,7 +153,6 @@ class SecurityController extends AbstractController
     public function reset_password(
             Request $request, 
             UserPasswordEncoderInterface $encoder,
-            UserRepository $userRepository,
             \Swift_Mailer $mailer
         ): Response
     {
@@ -171,7 +161,7 @@ class SecurityController extends AbstractController
 
         if (strlen($token) != 64) return $this->redirectToRoute('app_login');
 
-        if ($user = $userRepository->findOneByToken($token, User::PASSWORD_RESET)) {
+        if ($user = $this->userRepository->findOneByToken($token, User::PASSWORD_RESET)) {
 
             $form = $this->createForm(UserResetPassword::class);
 
@@ -196,7 +186,7 @@ class SecurityController extends AbstractController
                 $password = $encoder->encodePassword($user, $form->getData()['plainPassword']);
                 $user->setPassword($password);
                 $user->expireSecret();
-                $userRepository->flush();
+                $this->userRepository->flush();
 
                 // send email
                 $message = (new \Swift_Message())
@@ -213,7 +203,7 @@ class SecurityController extends AbstractController
                         'text/html'
                     );
 
-                $sent = $mailer->send($message);
+                $sent = $this->mailer->send($message);
                 
                 $this->addFlash('success', 'Je wachtwoord is aangepast.');
 
@@ -238,11 +228,79 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/gebruikersaccount-activeren", name="app_activate_user_account")
+     * @Route("/verificatie", name="app_verify_user")
      */
-    public function activate_user_account(): Response
+    public function verify_user( Request $request ): Response
     {
-        return $this->render('security/activate.html.twig');
+        $token = (string) $request->query->get(User::EMAIL_VERIFICATION, null);
+
+        if (strlen($token) != 64) return $this->redirectToRoute('app_login');
+
+        if ($user = $this->userRepository->findOneByToken($token, User::EMAIL_VERIFICATION)) {
+
+            $user->setVerified(true);
+            $user->expireSecret();
+            $this->userRepository->flush();
+
+            $this->addFlash('success', 'Je email adres is geverifieerd.');
+            return $this->redirectToRoute('app_forgot_password');
+        }
+
+        return $this->redirectToRoute('app_login');
+
     }
 
+    private function email_verification( User $user )
+    {
+        if ( $user->isVerified() ) return;
+
+        $token = $user->newEmailVerificationToken();
+        $this->userRepository->flush();
+
+        $link = $this->get('router')->generate('app_verify_user', array(User::EMAIL_VERIFICATION => $token));
+
+        // send email
+        $message = (new \Swift_Message())
+            ->setSubject('Account verificatie')
+            ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->renderView(
+                    'security/emails/verify_email.html.twig',
+                    array( 
+                        'name' => strval($user), 
+                        'link' => $link,
+                    )
+                ),
+                'text/html'
+            );
+        $this->mailer->send($message);
+        $this->addFlash('warning', 'Gelieve eerst je email adres te bevestigen. Een verificatie email is onderweg.'); 
+    }
+
+    private function password_reset( User $user )
+    {
+        $token = $user->newResetPasswordToken();
+        $this->userRepository->flush();
+
+        $link = $this->get('router')->generate('app_reset_password', array(User::PASSWORD_RESET => $token));
+
+        // send email
+        $message = (new \Swift_Message())
+            ->setSubject('Instructies wachtwoord instellen')
+            ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
+            ->setTo($user->getEmail())
+            ->setBody(
+                $this->renderView(
+                    'security/emails/forgot_password.html.twig',
+                    array( 
+                        'name' => strval($user), 
+                        'link' => $link,
+                    )
+                ),
+                'text/html'
+            );
+        $this->mailer->send($message);
+        $this->addFlash('success', 'Er is een email met de instructies onderweg als het adres ons bekend is.');
+    }
 }

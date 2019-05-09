@@ -4,6 +4,7 @@ namespace App\Security;
 
 use App\Exception\AccountDeletedException;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\Exception\AccountExpiredException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
@@ -13,11 +14,9 @@ class UserChecker implements UserCheckerInterface
 {
     public function checkPreAuth(UserInterface $user)
     {
-//echo "<script>alert(\"checkPreAuth!\");</script>";
         if (!$user instanceof User) {
             return;
         }
-
     }
 
     public function checkPostAuth(UserInterface $user)
@@ -25,27 +24,24 @@ class UserChecker implements UserCheckerInterface
         if (!$user instanceof User) {
             return;
         }
-
-//echo "<script>alert(\"checkPostAuth!\");</script>";
-
         // user is not verified, show a generic message.
         if (!$user->isVerified()) {
             throw new CustomUserMessageAuthenticationException(
-                'Your account is not yet verified.'
+                'Je account is nog niet geverifieerd.'
             );
         }
 
         // user is not activated, show a generic message.
         if (!$user->isEnabled()) {
             throw new CustomUserMessageAuthenticationException(
-                'Your account is not active.'
+                'Je account is niet actief.'
             );
         }
 
         // user account is expired, the user may be notified
         if ($user->isPasswordExpired()) {
             throw new CustomUserMessageAuthenticationException(
-                'Your password has been expired.'
+                'Je wachtwoord is verlopen.'
             );
         }
 
