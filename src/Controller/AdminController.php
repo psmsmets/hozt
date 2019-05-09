@@ -25,6 +25,7 @@ use App\Entity\TrainingSchedule;
 use App\Entity\TrainingException;
 use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
+use App\Entity\Tryout;
 
 class AdminController extends EasyAdminController
 {
@@ -493,6 +494,17 @@ class AdminController extends EasyAdminController
         }
         parent::removeEntity($entity);
     }
+
+    public function removeTryoutEntity($entity)
+    {
+        $now = new \DateTime("today midnight");
+        if ( $entity->getEndTime() >= $now  or sizeof($entity->getEnrolments)>0 ) {
+            $this->addFlash('danger', 'Fout: Verwijderen enkel toegestaan na afloop zonder inschrijvingen.');
+            return;
+        }
+        parent::removeEntity($entity);
+    }
+
 
 /*
     public function createTrainingCoachEntityFormBuilder($entity, $view)

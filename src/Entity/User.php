@@ -20,7 +20,7 @@ class User implements UserInterface
      * Parameters
      */
     const PASSWORD_RESET = 'password_reset_token';
-    const EMAIL_CONFIRM = 'email_confirm_token';
+    const EMAIL_VERIFICATION = 'email_verification_token';
     const PASSWORD_REGEX = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_!@#$%^&*(),.?":{}|<> ])\S{6,}$';
     const PASSWORD_REQUIREMENTS = array(
             'length' => 'Een wachtwoord bevat minstens 6 tekens waarvan',
@@ -119,7 +119,13 @@ class User implements UserInterface
     {
       $this->createdAt = new \DateTime("now");
       $this->passwordUpdatedAt = $this->createdAt;
-      $this->roles = array('ROLE_USER');
+      $this->password = bin2hex(random_bytes(64));
+      $this->enabled = true;
+      $this->verified = false;
+      $this->isActive = false;
+      $this->roles = array();
+      $this->secret = null;
+      $this->secretExpiration = $this->createdAt;
       $this->blogPosts = new ArrayCollection();
     }
 
@@ -391,15 +397,15 @@ class User implements UserInterface
         return $this->getToken(self::PASSWORD_RESET);
     }
 
-    public function newConfirmEmailToken(): ?string
+    public function newEmailVerificationToken(): ?string
     {
-        $this->newSecret(self::EMAIL_CONFIRM);
-        return $this->getToken(self::EMAIL_CONFIRM);
+        $this->newSecret(self::EMAIL_VERIFICATION);
+        return $this->getToken(self::EMAIL_VERIFICATION);
     }
 
-    public function getConfirmEmailToken(): ?string
+    public function getEmailVerificationToken(): ?string
     {
-        return $this->getToken(self::EMAIL_CONFIRM);
+        return $this->getToken(self::EMAIL_VERIFICATION);
     }
 
 /*

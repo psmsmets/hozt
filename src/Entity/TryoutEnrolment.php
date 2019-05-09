@@ -30,49 +30,49 @@ class TryoutEnrolment
     /**
      * @ORM\Column(type="string", length=255)
      * @Encrypted
-     * @var int
+     * @var string
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Encrypted
-     * @var int
+     * @var string
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Encrypted
-     * @var int
+     * @var string
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Encrypted
-     * @var int
+     * @var string
      */
     private $telephone;
 
     /**
-     * @ORM\Column(type="date")
-     * @//Encrypted
-     * @//var int
+     * @ORM\Column(type="string", length=255)
+     * @Encrypted
+     * @var string
      */
-    private $birthdate; // should store it as a string with length=255
+    private $dob;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Encrypted
-     * @var int
+     * @var string
      */
     private $address;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Encrypted
-     * @var int
+     * @var string
      */
     private $message;
 
@@ -92,7 +92,7 @@ class TryoutEnrolment
     private $withdrawnAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Tryout", inversedBy="category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Tryout", inversedBy="enrolments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $tryout;
@@ -174,14 +174,26 @@ class TryoutEnrolment
         return $this;
     }
 
-    public function getBirthdate(): ?\DateTimeInterface
+    public function getDob(): string
     {
-        return $this->birthdate;
+        return $this->dob;
+    }
+
+    public function setDob(string $dob): self
+    {
+        $this->dob = $dob;
+
+        return $this;
+    }
+
+    public function getBirthdate(): \DateTimeInterface
+    {
+        return new \DateTime($this->dob);
     }
 
     public function setBirthdate(\DateTimeInterface $birthdate): self
     {
-        $this->birthdate = $birthdate;
+        $this->dob = $birthdate->format('Y-m-d');
 
         return $this;
     }

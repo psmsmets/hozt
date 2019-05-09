@@ -10,13 +10,13 @@
 
 <p>Alvast bedankt voor jouw interesse in onze zwemclub.</p>
 
-<p>We verwachten je <strong>{{enrol.tryout.startTime|localizeddate('full','short')}}</strong> in het <a href="https://www.hozt.be/zwembad">zwembad Sportoase Stede Akkers Hoogstraten</a> om te testen voor de groep <strong>{{enrol.category.name}}</strong>.<p>
+<p>We verwachten je <strong>{{enrol.tryout.startTime|localizeddate('full','short')}}</strong> in het <a href="{{absolute_url('/zwembad')}}">zwembad Sportoase Stede Akkers Hoogstraten</a> voor een vrijblijvend testmoment voor de groep <strong><a href="{{absolute_url(path('training_category', {'slug': enrol.category.slug})) }}">{{enrol.category.name}}</a></strong>.<p>
 <p>Je dient je aan te melden aan de balie van het zwembad. Het testmoment duurt tot uiterlijk {{enrol.tryout.endTime|localizeddate('none','short')}}.</p>
 
 <p>Enkele dagen voor het testmoment krijg je nog een herinneringsmail.</p>
 
 <p>&nbsp;</p>
 
-<p>Alle info over het testmoment kan je op deze <a href="https://www.hozt.be{{ path('enrol_tryout', {'inschrijving': enrol.uuid}) }}">link</a> terugvinden. Ben je verhinderd? Dan kan je tot {{ enrol.tryout.enrolUntil|localizeddate('long','short')}} je inschrijving via de link annuleren.</p>
+<p>Alle info over het testmoment kan je op deze <a href="{{absolute_url(path('enrol_tryout', {'inschrijving': enrol.uuid})) }}">link</a> terugvinden. Ben je verhinderd? Dan kan je tot {{ enrol.tryout.enrolUntil|localizeddate('long','short')}} je inschrijving via de link annuleren.</p>
 
-<p class="small text-muted">** Dit is een automatisch bericht van <a href="https://www.hozt.be">HoZT.be</a> **</p>
+<p class="small text-muted">** Dit is een automatisch bericht van <a href="{{absolute_url('/')}}">HoZT.be</a> **</p>

@@ -19,16 +19,27 @@ class TryoutRepository extends ServiceEntityRepository
         parent::__construct($registry, Tryout::class);
     }
 
-    public function findTryouts()
+    public function findTryouts($ref = null)
     {
-        $now = new \DateTime('now');
+        if (is_null($ref)) $ref = new \DateTime('now');
         return $this->createQueryBuilder('tryout')
             ->where('tryout.enabled = :enabled')
-            ->andwhere('tryout.startTime >= :today')
-            ->andwhere('tryout.publishAt < :now')
+            ->andwhere('tryout.publishAt < :ref')
             ->setParameter('enabled', true)
-            ->setParameter('today', $now->format('Y-m-d').' 23:59')
-            ->setParameter('now', $now->format('Y-m-d H:i'))
+            ->setParameter('ref', $ref->format('Y-m-d H:i'))
+            ->orderBy('tryout.startTime', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;     
+    }
+
+    public function tryoutsAndEnrolments()
+    {
+        return $this->createQueryBuilder('tryout')
+            ->leftJoin('tryout.enrolments','enrolments')
+            ->addSelect('enrolments')
+            ->where('tryout.enabled = :enabled')
+            ->setParameter('enabled', true)
             ->orderBy('tryout.startTime', 'ASC')
             ->getQuery()
             ->getResult()

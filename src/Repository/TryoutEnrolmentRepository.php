@@ -23,6 +23,10 @@ class TryoutEnrolmentRepository extends ServiceEntityRepository
     {
         if (is_null($uuid)) return null;
         return $this->createQueryBuilder('enrol')
+            ->leftJoin('enrol.tryout','tryout')
+            ->leftJoin('enrol.category','category')
+            ->addSelect('tryout')
+            ->addSelect('category')
             ->andWhere('enrol.uuid = :uuid')
             ->setParameter('uuid', $uuid)
             ->getQuery()

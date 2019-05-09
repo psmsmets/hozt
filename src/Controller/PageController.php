@@ -665,6 +665,18 @@ class PageController extends AbstractController
         return $this->render('enrol/enrolled.html.twig', $this->template_data );
     }
 
+    /**
+     * @Route("/testmoment/ingeschreven", name="enrolled_tryout")
+     */
+    public function enrolled_tryout( TryoutRepository $tryoutRep, TryoutEnrolmentRepository $enrolRep, Request $request )
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+
+        $this->initTemplateData();
+        $this->addToTemplateData( 'tryouts', $tryoutRep->tryoutsAndEnrolments() );
+
+        return $this->render('tryout/enrolled.html.twig', $this->template_data );
+    }
 
     /**
      * @Route("/testmoment", name="enrol_tryout")
@@ -672,7 +684,6 @@ class PageController extends AbstractController
     public function enrol_tryout( TryoutRepository $tryoutRep, TryoutEnrolmentRepository $enrolRep, 
          Request $request, \Swift_Mailer $mailer )
     {
-
         $this->initTemplateData();
 
         $this->addToTemplateData( 
@@ -689,7 +700,7 @@ class PageController extends AbstractController
         {
             if ( $enrol->getWithdrawn() )
             {
-                $this->addFlash('warning', 'Je hebt je inschrijving voor het testmoment geannulleerd op ' .
+                $this->addFlash('warning', 'Je hebt je inschrijving voor het testmoment geannuleerd op ' .
                     $enrol->getWithdrawnAt()->format('Y-m-d H:i:s') . '.'
                 );      
                 return $this->redirectToRoute('enrol_tryout');
@@ -719,7 +730,7 @@ class PageController extends AbstractController
                 ;
                 $mailer->send($message);
 
-                $this->addFlash('success', 'Je hebt je inschrijving voor het testmoment geannulleerd.');
+                $this->addFlash('success', 'Je hebt je inschrijving voor het testmoment geannuleerd.');
                 
                 return $this->redirectToRoute('enrol_tryout');
             }
@@ -728,6 +739,8 @@ class PageController extends AbstractController
 
             return $this->render('tryout/enrolment.html.twig', $this->template_data );
         }
+
+        if (sizeof($tryouts)==0) return $this->render('tryout/waitinglist.html.twig', $this->template_data );
 
         $active_tryouts = 0;
         foreach( $tryouts as $tryout ) {
@@ -740,8 +753,13 @@ class PageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-
             $enrol = $form->getData();
+
+            if ( $this->now > $enrol->getTryout()->getEnrolUntil() )
+            {
+                $this->addFlash('danger', 'Je bent te laat om je in te schrijven voor de testmoment.');      
+                return $this->redirectToRoute('enrol_tryout');
+            }
 
             $message = (new \Swift_Message())
                 ->setSubject('Inschrijving HoZT testmoment')

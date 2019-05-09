@@ -52,10 +52,8 @@ easy_admin:
                - { entity: 'Sponsor', label: 'Lijst', icon: 'list' }
                - { entity: 'SponsorCategory', label: 'Categorieën', icon: 'bookmark' }
            - label: "Toegang"
-           - label: 'Gebruikers'
-             icon: 'user'
-             children:
-               - { entity: 'User', label: 'Lijst', icon: 'list' }
+           - { entity: 'User', label: 'Gebruikers', icon: 'user' }
+
     list:
         title: '%%entity_label%%'
         max_results: 30

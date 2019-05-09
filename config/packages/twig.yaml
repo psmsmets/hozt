@@ -5,6 +5,7 @@ twig:
     globals:
         locale: '%locale%'
         timezone: '%timezone%'
+        webmaster: '%app.mailer.from%'
     form_themes:
         - 'bootstrap_4_layout.html.twig'
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
