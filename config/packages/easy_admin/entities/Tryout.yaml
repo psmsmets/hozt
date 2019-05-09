@@ -20,6 +20,7 @@ easy_admin:
                     - { property: 'enrolments', label: 'Inschrijvingen' }
                     - { property: 'maxEnrolments', label: 'Max' }
                     - { property: 'publishAt', label: 'Gepubliceerd op' }
+                    - { property: 'enrolFrom', label: 'Inschrijven vanaf' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['startTime', 'ASC']
             form:
