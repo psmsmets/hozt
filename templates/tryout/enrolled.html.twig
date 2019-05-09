@@ -25,6 +25,7 @@
             </span>
           </div>
           {% if tryout.enrolments|length>0%}
+          <div class="table-responsive">
             <table class="table table-sm table-borderless table-hover mt-2">
               <caption>Inschrijvingen</caption>
               <thead>
@@ -33,7 +34,9 @@
                   <th scope="col">Voornaam</th>
                   <th scope="col">Naam</th>
                   <th scope="col">Geboortjaar</th>
+                  <th scope="col">Postcode</th>
                   <th scope="col">Groep</th>
+                  <th scope="col">Ingeschreven</th>
                   <th scope="col">Afgemeld</th>
                 </tr>
               </thead>
@@ -45,10 +48,12 @@
                   <td>{{enrol.firstname}}</td>
                   <td>{{enrol.lastname}}</td>
                   <td>{{enrol.birthdate|date('Y')}}</td>
+                  <td>{{enrol.address}}</td>
                   <td>{{enrol.category}}</td>
+                  <td>{{enrol.enrolledAt|localizeddate('short','short')}}</td>
                   <td class="small">
                     {% if enrol.withdrawn %}
-                      {{(enrol.withdrawnAt|localizeddate('short','short'))}}
+                      {{enrol.withdrawnAt|localizeddate('short','short')}}
                     {% else %}
                     {% endif %}
                   </td>
@@ -56,6 +61,7 @@
                 {% endfor %}
               </tbody>
             </table>
+          </div>
           {% endif %}
         </li>
       {% endfor %}
