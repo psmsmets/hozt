@@ -10,7 +10,7 @@ easy_admin:
     entities:
         Tryout:
             class: App\Entity\Tryout
-            label: 'Contactformulier'
+            label: 'Testmoment'
             list:
                 fields:
                     #- { property: 'id', label: 'Id' }
