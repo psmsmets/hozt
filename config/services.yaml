@@ -20,7 +20,7 @@ parameters:
     app.defaults.calendarCategory.id: 3
     app.defaults.competitionPool.id: 1
     app.defaults.sponsorCategory.id: 1
-    app.defaults.scheduleNotice.days: 14
+    app.defaults.scheduleNotice.days: 21
     app.regex.telephone: '^(\+|00)(324|316)([1-9]\d{7})$' # enkel Belgie en Nederland
     app.regex.postalcode: '^([1-9]{1}\d{3})(|[A-Z]{2})$'
     app.regex.datestring: '^((0[1-9]|[12]\d|3[01]|[1-9])[/.-](0[1-9]|1[0-2]|[1-9])[/.-][12]\d{3})$'
