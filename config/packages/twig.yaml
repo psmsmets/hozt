@@ -5,8 +5,6 @@ twig:
     globals:
         locale: '%locale%'
         timezone: '%timezone%'
-        bootstrap.version: '%bootstrap.version%'
-        bootstrap.cdn: '%bootstrap.cdn%'
         webmaster: '%app.mailer.from%'
     form_themes:
         - 'bootstrap_4_layout.html.twig'
