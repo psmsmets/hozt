@@ -7,6 +7,8 @@ parameters:
     locale: 'nl'
     app_locales: nl|en
     timezone: 'Europe/Brussels'
+    bootstrap.version: '4.3.1'
+    bootstrap.cdn: 'https://stackpath.bootstrapcdn.com/bootstrap/%bootstrap.version%'
     app.mailer.from: 'webmaster@hozt.be'
     app.mailer.name: 'Webmaster HoZT'
     app.about.abbr: 'HoZT'
