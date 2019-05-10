@@ -425,7 +425,7 @@ class PageController extends AbstractController
         );
         $this->addToTemplateData( 'training_team_exceptions', $this->getDoctrine()
             ->getRepository(TrainingException::class)
-            ->findAllByTeamCategory($category, $this->getParameter('app.defaults.scheduleNotice.days') )
+            ->findAllByTeamCategory($category, $this->getParameter('app.defaults.scheduleNotice.days') ) 
         );
         $this->addToTemplateData( 'competitions', $this->getDoctrine()
             ->getRepository(Competition::class)
