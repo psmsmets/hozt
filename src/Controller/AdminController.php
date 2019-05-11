@@ -449,6 +449,19 @@ class AdminController extends EasyAdminController
         parent::persistEntity($entity);
     }
 
+    public function updateTryoutEntity($entity)
+    {
+    // todo: get tryout from database and check that date. Inject repository!!
+    //       same trick can be user to check enabled status elsewhere.
+        $now = new \DateTime("now");
+        $entity->setUpdatedAt();
+        if ($now > $entity->getEnrolFrom()) {
+            $this->addFlash('danger', 'Fout: Inschrijvingen zijn bezig. Wijzigingen zijn niet meer toegestaan.');
+            return;
+        }
+        parent::persistEntity($entity);
+    }
+
     public function updateSponsorCategoryEntity($entity)
     {
         $entity->setUpdatedAt();

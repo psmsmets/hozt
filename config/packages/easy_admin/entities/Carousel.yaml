@@ -35,5 +35,6 @@ easy_admin:
                     - { property: 'publishUntil', label: 'Publiceer tot' }
                     - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getFilteredCalendarEvents'] } }
                     - { property: 'url', label: 'Externe url' }
+                    - { property: 'urlButton', label: 'Naam externe url', type_options: { attr: { maxlength: 20 } } }
             edit:
                 actions: ['delete']

@@ -85,6 +85,11 @@ class CarouselSlide
      */
     private $overlay;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $urlButton;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -253,6 +258,18 @@ class CarouselSlide
     public function setOverlay(bool $overlay): self
     {
         $this->overlay = $overlay;
+
+        return $this;
+    }
+
+    public function getUrlButton(): ?string
+    {
+        return $this->urlButton;
+    }
+
+    public function setUrlButton(?string $urlButton): self
+    {
+        $this->urlButton = $urlButton;
 
         return $this;
     }
