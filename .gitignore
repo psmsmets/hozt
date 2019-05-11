@@ -6,7 +6,6 @@
 !/public_html/assets
 !/public_html/htaccess.txt
 !/public_html/*.php
-#composer.lock
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
