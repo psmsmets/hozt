@@ -691,61 +691,62 @@ class PageController extends AbstractController
             $this->getDoctrine()->getRepository(TrainingTeam::class)->countDisabled()
         );
 
+        if ($request->query->get('inschrijving', null))
+        {
+
+            if ($enrol = $enrolRep->findEnrolment($request->query->get('inschrijving', null)))
+            {
+                if ( $enrol->getWithdrawn() )
+                {
+                    $this->addFlash('warning', 'Je hebt je inschrijving voor het testmoment geannuleerd op ' .
+                        $enrol->getWithdrawnAt()->format('Y-m-d H:i:s') . '.'
+                    );      
+                    return $this->redirectToRoute('enrol_tryout');
+                }
+                elseif ( $request->query->get('withdraw', false) == true and
+                     $request->query->get('token', null) == $enrol->getTryout()->getUuid()
+                   )
+                {
+                    if ( $this->now > $enrol->getTryout()->getEnrolUntil() )
+                    {
+                        $this->addFlash('danger', 'Je bent te laat om je inschrijving nog te annuleren.');      
+                        return $this->redirectToRoute('enrol_tryout');
+                    }
+                    $enrol->setWithdrawn(true);
+                    $enrol->getTryout()->nofEnrolmentsSubtractOne();
+                    $enrolRep->flush();
+
+                    $message = (new \Swift_Message())
+                        ->setSubject('Annulering HoZT testmoment')
+                        ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
+                        ->setTo($enrol->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'emails/tryout_withdraw.html.twig', [ 'enrol' => $enrol ]
+                            ),
+                            'text/html'
+                        )
+                    ;
+                    $mailer->send($message);
+
+                    $this->addFlash('success', 'Je hebt je inschrijving voor het testmoment geannuleerd.');
+                
+                    return $this->redirectToRoute('enrol_tryout');
+                }
+
+                $this->addToTemplateData( 'enrolment', $enrol );
+
+                return $this->render('tryout/enrolment.html.twig', $this->template_data );
+            }
+
+        }
+
         $tryouts = $tryoutRep->findTryouts();
         $this->addToTemplateData( 'tryouts', $tryouts );
 
-        $enrol = $enrolRep->findEnrolment($request->query->get('inschrijving', null));
-
-        if ($enrol)
-        {
-            if ( $enrol->getWithdrawn() )
-            {
-                $this->addFlash('warning', 'Je hebt je inschrijving voor het testmoment geannuleerd op ' .
-                    $enrol->getWithdrawnAt()->format('Y-m-d H:i:s') . '.'
-                );      
-                return $this->redirectToRoute('enrol_tryout');
-            }
-            elseif ( $request->query->get('withdraw', false) == true and
-                 $request->query->get('token', null) == $enrol->getTryout()->getUuid()
-               )
-            {
-                if ( $this->now > $enrol->getTryout()->getEnrolUntil() )
-                {
-                    $this->addFlash('danger', 'Je bent te laat om je inschrijving nog te annuleren.');      
-                    return $this->redirectToRoute('enrol_tryout');
-                }
-                $enrol->setWithdrawn(true);
-                $enrolRep->flush();
-
-                $message = (new \Swift_Message())
-                    ->setSubject('Annulering HoZT testmoment')
-                    ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
-                    ->setTo($enrol->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'emails/tryout_withdraw.html.twig', [ 'enrol' => $enrol ]
-                        ),
-                        'text/html'
-                    )
-                ;
-                $mailer->send($message);
-
-                $this->addFlash('success', 'Je hebt je inschrijving voor het testmoment geannuleerd.');
-                
-                return $this->redirectToRoute('enrol_tryout');
-            }
-
-            $this->addToTemplateData( 'enrolment', $enrol );
-
-            return $this->render('tryout/enrolment.html.twig', $this->template_data );
-        }
-
         if (sizeof($tryouts)==0) return $this->render('tryout/waitinglist.html.twig', $this->template_data );
 
-        $active_tryouts = 0;
-        foreach( $tryouts as $tryout ) {
-            if ( $this->now > $tryout->getEnrolFrom() ) $active_tryouts += 1;
-        }
+        $active_tryouts = $tryoutRep->countActiveTryouts();
         if ($active_tryouts==0) return $this->render('tryout/form.html.twig', $this->template_data );
 
         $form = $this->createForm(TryoutEnrolmentForm::class);
@@ -774,6 +775,7 @@ class PageController extends AbstractController
             ;
             $sent = $mailer->send($message);
             $enrol->setEmailSent($sent);
+            $enrol->getTryout()->nofEnrolmentsAddOne();
 
             $this->em->persist($enrol);
             $this->em->flush();

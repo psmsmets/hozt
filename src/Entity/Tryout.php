@@ -56,6 +56,11 @@ class Tryout
     /**
      * @ORM\Column(type="integer")
      */
+    private $nofEnrolments;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $maxEnrolments;
 
     /**
@@ -82,6 +87,7 @@ class Tryout
         $this->enrolFrom = $this->publishAt; 
         $this->startTime = new \DateTime("today noon + 14 days"); 
         $this->duration = new \DateTimeInterval("1 hour");
+        $this->nofEnrolments = 0;
         $this->maxEnrolments = 12;
         $this->enabled = true;
         $this->enrolments = new ArrayCollection();
@@ -172,6 +178,23 @@ class Tryout
 
     }
 
+    public function getNofEnrolments(): ?int
+    {
+        return $this->nofEnrolments;
+    }
+
+    public function nofEnrolmentsSubtractOne(): self
+    {
+        $this->nofEnrolments -= 1;
+        return $this;
+    }
+
+    public function nofEnrolmentsAddOne(): self
+    {
+        $this->nofEnrolments += 1;
+        return $this;
+    }
+
     public function getMaxEnrolments(): ?int
     {
         return $this->maxEnrolments;
@@ -186,13 +209,7 @@ class Tryout
 
     public function getRemainingEnrolments(): ?int
     {
-        if (sizeof($this->getEnrolments())==0) return $this->maxEnrolments;
-
-        $remaining = $this->maxEnrolments;
-        foreach ( $this->getEnrolments() as $enrol ) {
-           if (!$enrol->getWithdrawn()) $remaining -= 1;
-        }
-        return $remaining;
+        return $this->maxEnrolments - $this->nofEnrolments;
     }
 
     public function getPublishAt(): ?\DateTimeInterface
