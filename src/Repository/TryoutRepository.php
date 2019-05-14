@@ -33,19 +33,6 @@ class TryoutRepository extends ServiceEntityRepository
         ;     
     }
 
-    public function tryoutsAndEnrolments()
-    {
-        return $this->createQueryBuilder('tryout')
-            ->leftJoin('tryout.enrolments','enrolments')
-            ->addSelect('enrolments')
-            ->where('tryout.enabled = :enabled')
-            ->setParameter('enabled', true)
-            ->orderBy('tryout.startTime', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;     
-    }
-
     public function countActiveTryouts()
     {
         $now = new \DateTime('now');
