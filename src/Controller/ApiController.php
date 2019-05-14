@@ -11,6 +11,8 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 */
+
+# entities
 use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
 use App\Entity\TrainingSchedule;
@@ -20,6 +22,11 @@ use App\Entity\CalendarCategory;
 use App\Entity\Competition;
 use App\Entity\CompetitionDocument;
 use App\Entity\CompetitionDocumentCategory;
+use App\Entity\Tryout;
+
+# repositories
+use App\Repository\TryoutEnrolmentRepository;
+use App\Repository\TryoutRepository;
 
 class ApiController extends AbstractController
 {
@@ -297,6 +304,23 @@ class ApiController extends AbstractController
                 'type' => 'latest', 
                 'data' => $data,
             ));
+    }
+
+    /**
+     * @Route("/api/ingeschreven/testmomenten", name="api_enrolled_tryout")
+     */
+    public function api_enrolled_tryout(TryoutRepository $tryoutRep)
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->json( $this->render(
+                        'tryout/enrolleddata.html.twig', 
+                        ['tryouts' => $tryoutRep->tryoutsAndEnrolments()]
+                ));
+        } else {
+            return $this->json(array( 
+                    'content' => false, 
+                )); 
+        }
     }
 
 /*
