@@ -33,7 +33,6 @@ use App\Entity\CompetitionState;
 use App\Entity\Sponsor;
 use App\Entity\SponsorCategory;
 use App\Entity\Clubfeest;
-
 use App\Entity\TryoutEnrolment;
 use App\Entity\Tryout;
 
@@ -668,12 +667,12 @@ class PageController extends AbstractController
     /**
      * @Route("/testmoment/ingeschreven", name="enrolled_tryout")
      */
-    public function enrolled_tryout( TryoutRepository $tryoutRep, TryoutEnrolmentRepository $enrolRep, Request $request )
+    public function enrolled_tryout()
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
 
         $this->initTemplateData();
-        $this->addToTemplateData( 'tryouts', $tryoutRep->tryoutsAndEnrolments() );
+        //$this->addToTemplateData( 'tryouts', $tryoutRep->tryoutsAndEnrolments() );
 
         return $this->render('tryout/enrolled.html.twig', $this->template_data );
     }
