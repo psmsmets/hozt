@@ -19,14 +19,14 @@ class TryoutRepository extends ServiceEntityRepository
         parent::__construct($registry, Tryout::class);
     }
 
-    public function findTryouts($ref = null)
+    public function findTryouts()
     {
-        if (is_null($ref)) $ref = new \DateTime('now');
+        $now = new \DateTime('now');
         return $this->createQueryBuilder('tryout')
             ->where('tryout.enabled = :enabled')
             ->andwhere('tryout.publishAt < :ref')
             ->setParameter('enabled', true)
-            ->setParameter('ref', $ref->format('Y-m-d H:i'))
+            ->setParameter('ref', $now->format('Y-m-d H:i'))
             ->orderBy('tryout.startTime', 'ASC')
             ->getQuery()
             ->getResult()
@@ -44,6 +44,20 @@ class TryoutRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;     
+    }
+
+    public function countActiveTryouts()
+    {
+        $now = new \DateTime('now');
+        return $this->createQueryBuilder('tryout')
+            ->select('count(tryout.id)')
+            ->where('tryout.enabled = :enabled')
+            ->andwhere('tryout.publishAt < :ref')
+            ->setParameter('enabled', true)
+            ->setParameter('ref', $now->format('Y-m-d H:i'))
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;    
     }
 
     public function flush()

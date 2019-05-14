@@ -6,6 +6,10 @@
 :root {
   --hozt-red: #ed1c24; 
   --hozt-darkred: #c21c24; 
+  --hozt-gold: linear-gradient(top, #FAD766, #DF9F28); 
+  --hozt-gold-webkit: -webkit-linear-gradient(top, #FAD766 0%, #DF9F28 100%); 
+  --hozt-darkgold: linear-gradient(top, #E1BE4D, #C6860F); 
+  --hozt-darkgold-webkit: -webkit-linear-gradient(top, #E1BE4D 0%, #C6860F 100%);
 }
 
 html,
@@ -93,14 +97,20 @@ a.text-decoration-none:hover { text-decoration: none; }
   color: #fff;
 }
 
+.text-gold {
+  background: var(--hozt-gold-webkit);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .bg-gold, .btn-gold, .badge-gold, .btn-outline-gold:hover {
-  background: -webkit-linear-gradient(top, #FAD766 0%, #DF9F28 100%);
-  background: linear-gradient(top, #FAD766, #DF9F28);
+  background: var(--hozt-gold);
+  background: var(--hozt-gold-webkit);
 }
 
 .bg-darkgold, .btn-gold:hover, .badge.cal-2:hover, a.badge-gold:hover {
-  background: -webkit-linear-gradient(top, #E1BE4D 0%, #C6860F 100%);
-  background: linear-gradient(top, #E1BE4D, #C6860F);
+  background: var(--hozt-darkgold);
+  background: var(--hozt-darkgold-webkit);
 }
 
 .btn-outline-hozt, a.btn-outline-hozt {
@@ -110,7 +120,9 @@ a.text-decoration-none:hover { text-decoration: none; }
 }
 
 .btn-outline-gold, a.btn-outline-gold {
-  color: #FAD766;
+  background: var(--hozt-gold-webkit);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   background: none;
   border-color: #FAD766;
 }

@@ -14,7 +14,7 @@
 
     <h4 class="mt-5">Overzicht testmomenten</h4>
 
-    {% if page.tryouts|length > 0 %}
+    {% if page.tryouts is defined %}
 
       <ul class="list-group list-group-flush mt-3">
       {% for tryout in page.tryouts %}
