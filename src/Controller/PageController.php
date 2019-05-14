@@ -667,12 +667,12 @@ class PageController extends AbstractController
     /**
      * @Route("/testmoment/ingeschreven", name="enrolled_tryout")
      */
-    public function enrolled_tryout()
+    public function enrolled_tryout( TryoutRepository $tryoutRep )
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
 
         $this->initTemplateData();
-        //$this->addToTemplateData( 'tryouts', $tryoutRep->tryoutsAndEnrolments() );
+        $this->addToTemplateData( 'tryouts', $tryoutRep->findTryouts() );
 
         return $this->render('tryout/enrolled.html.twig', $this->template_data );
     }

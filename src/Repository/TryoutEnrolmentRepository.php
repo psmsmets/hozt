@@ -34,6 +34,21 @@ class TryoutEnrolmentRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findEnrolments(string $uuid = null)
+    {
+        if (is_null($uuid)) return null;
+        return $this->createQueryBuilder('enrol')
+            ->leftJoin('enrol.tryout','tryout')
+            ->leftJoin('enrol.category','category')
+            ->addSelect('tryout')
+            ->addSelect('category')
+            ->andWhere('tryout.uuid = :uuid')
+            ->setParameter('uuid', $uuid)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function flush()
     {
         $this->_em->flush();

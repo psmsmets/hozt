@@ -307,19 +307,19 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/ingeschreven/testmomenten", name="api_enrolled_tryout")
+     * @Route("/api/ingeschreven/testmomenten/{uuid}", name="api_enrolled_tryout")
      */
-    public function api_enrolled_tryout(TryoutRepository $tryoutRep)
+    public function api_enrolled_tryout(string $uuid, TryoutEnrolmentRepository $TryoutEnrolRep)
     {
-        if ($this->isGranted('ROLE_ADMIN')) {
+        if (!$this->isGranted('ROLE_ADMIN')) return $this->json(array('content' => false));
+        
+        if ($enrols = $TryoutEnrolRep->findEnrolments($uuid)) {   
             return $this->json( $this->render(
-                        'tryout/enrolleddata.html.twig', 
-                        ['tryouts' => $tryoutRep->tryoutsAndEnrolments()]
+                    'tryout/enrolleddata.html.twig', 
+                    ['enrolments' => $enrols]
                 ));
         } else {
-            return $this->json(array( 
-                    'content' => false, 
-                )); 
+            return $this->json(array('content' => false));
         }
     }
 

@@ -8,11 +8,35 @@
 
     <h1 class="text-red">Testmomenten</h1>
 
-    <div class="d-flex justify-content-center" id="api_load_tryout_enrolled">
-      <div class="spinner-border m-5" role="status" >
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
+    {% if page.tryouts|length > 0 %}
+
+      <ul class="list-group list-group-flush mt-3">
+      {% for tryout in page.tryouts %}
+        <li class="list-group-item pl-0 pl-md-3 pr-0 pr-md-3">
+          <div class="d-flex w-100 justify-content-between align-items-center">
+            <h5 class="mb-1">{{ tryout.startTime|localizeddate('full','none') }}<br> van {{ tryout.startTime|localizeddate('none','short') }} tot {{ tryout.endTime|localizeddate('none','short') }}</h5>
+            <span class="pl-1 text-right">
+              {% if tryout.enrolFrom > date() %}
+                <small class="text-muted">inschrijven vanaf {{ tryout.enrolFrom|localizeddate('medium','none')}}</small>
+              {% else %}
+                <small>beschikbare plaatsen:</small> <span class="badge badge-hozt badge-pill">{{ tryout.remainingEnrolments }}</span><br>
+                <small>inschrijven tot {{ tryout.enrolUntil|localizeddate('medium','short')}}</small>
+              {% endif %}
+            </span>
+          </div>
+          {% if tryout.nofEnrolments>0 %}
+            <div class="table-responsive" id="api_load_tryout_enrolled_{{tryout.uuid}}">
+              <div class="d-flex justify-content-center">
+                <div class="spinner-border m-5" role="status" >
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+      </ul>
+    {% endif %}
 
   </div>
 
@@ -21,5 +45,22 @@
 
 {% block javascripts %}
   {{ parent() }}
-  <script src="{{ asset('assets/js/api_load_ingeschreven_testmoment.js') }}"></script>
+<script>
+
+$(window).bind("load", function() {
+
+    var div = "api_load_tryout_enrolled_";
+    var hoztAPI  = "/api/ingeschreven/testmomenten/";
+
+    $.each( $('div[id^="'+div+'"]'), function(i,tryout) {
+        var uuid = $(tryout).attr('id').split(div)[1];
+        $.getJSON( hoztAPI+uuid, {}).done(function(enrolments) {
+            $(tryout).html(enrolments.content);
+        });
+    });
+
+
+});
+
+</script>
 {% endblock %}
