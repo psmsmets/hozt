@@ -1,6 +1,6 @@
 // api_load_module_training_tomorrow
 
-$(document).ready(function(){
+$(window).on( "load", function() {
 
     var module = "api_load_module_training_tomorrow";
     var hoztAPI  = "/api/training/morgen";

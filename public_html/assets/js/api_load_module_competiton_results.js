@@ -1,6 +1,6 @@
 // api_load_module_competition_results
 
-$(document).ready(function(){
+$(window).on( "load", function() {
 
     var module = "api_load_module_competition_results";
     var hoztAPI  = "/api/documenten/wedstrijden/laatste/uitslag/5";

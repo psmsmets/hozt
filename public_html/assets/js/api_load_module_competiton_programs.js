@@ -1,6 +1,6 @@
 // api_load_module_competition_programs
 
-$(document).ready(function(){
+$(window).on( "load", function() {
 
     var module  = "api_load_module_competition_programs";
     var hoztAPI = "/api/documenten/wedstrijden/aanstaande/programma";

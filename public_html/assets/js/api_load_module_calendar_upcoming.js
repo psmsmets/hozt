@@ -1,6 +1,6 @@
 // api_load_module_training_tomorrow
 
-$(document).ready(function(){
+$(window).on( "load", function() {
 
     $('#api_load_module_calendar_upcoming').html('<div class="p-3"><h5 class="pb-2 mb-0">Kalender</h5><div id="api_load_module_calendar_upcoming_items"></div></div>');
 

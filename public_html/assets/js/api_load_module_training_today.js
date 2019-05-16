@@ -1,6 +1,6 @@
 // api_load_module_training_today
 
-$(document).ready(function(){
+$(window).on( "load", function() {
 
     var module = "api_load_module_training_today";
     var hoztAPI  = "/api/training/vandaag";

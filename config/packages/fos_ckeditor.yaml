@@ -1,5 +1,33 @@
 # Read the documentation: https://symfony.com/doc/current/bundles/FOSCKEditorBundle/index.html
 
+fos_ck_editor:
+    default_config: standard
+    configs:
+        extended:
+            toolbar: 'extended_toolbar'
+            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css']
+            allowedContent: true
+            format_tags: 'p;h3;h4;h5;pre;div'
+        standard:
+            toolbar: 'standard_toolbar'
+            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css']
+            allowedContent: true
+            format_tags: 'p;h3;h4;h5;pre;div'
+        minimal:
+            toolbar: 'minimal_toolbar'
+            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css']
+            allowedContent: false 
+            format_tags: 'p'
+    toolbars:
+        configs:
+            extended_toolbar: [['Save','Undo','Redo'],['Cut','Copy','Paste','PasteText','RemoveFormat'],['Image','Table','HorizontalRule','SpecialChar'],['Maximize', 'ShowBlocks'],['Source'],'/',['Format'],['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],['Link','Unlink','Anchor']]
+            standard_toolbar: [['Save','Undo','Redo'],['Cut','Copy','Paste','PasteText','RemoveFormat'],['Maximize','ShowBlocks'],['Source'],'/',['Format'],['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],['Link','Unlink']]
+            minimal_toolbar: [['Save','Undo','Redo'],['Cut','Copy','Paste','PasteText','RemoveFormat'],['Source'],'/',['Bold','Italic','Underline','Strike'],['Link','Unlink']]
+#    styles:
+#        default:
+#            - { name: 'Lead', element: 'p', attributes: { class: 'lead'} }
+#            - { name: 'Normal', element: 'p' }
+
 twig:
     form_themes:
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
