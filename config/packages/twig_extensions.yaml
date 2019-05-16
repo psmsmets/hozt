@@ -4,8 +4,19 @@ services:
         autowire: true
         autoconfigure: true
 
+#    twig.extension.intl:
+#        class: Twig_Extensions_Extension_Intl
+#        tags:
+#            - { name: twig.extension }
+
+    twig.extension.sortbyfield:
+        class: Snilius\Twig\SortByFieldExtension
+        tags:
+            - { name: twig.extension }
+
     # Uncomment any lines below to activate that Twig extension
+    Twig\Extension\StringLoaderExtension: ~
     #Twig\Extensions\ArrayExtension: ~
     #Twig\Extensions\DateExtension: ~
-    #Twig\Extensions\IntlExtension: ~
-    #Twig\Extensions\TextExtension: ~
+    Twig\Extensions\IntlExtension: ~
+    Twig\Extensions\TextExtension: ~

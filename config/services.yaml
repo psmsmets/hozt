@@ -60,16 +60,6 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    twig.extension.intl:
-        class: Twig_Extensions_Extension_Intl
-        tags:
-            - { name: twig.extension }
-
-    twig.extension.sortbyfield:
-        class: Snilius\Twig\SortByFieldExtension
-        tags:
-            - { name: twig.extension }
-
     app.logout.listener:
         class: App\Listener\LogoutListener
 
@@ -104,31 +94,3 @@ cocur_slugify:
 eu_cookie_law:
     response_injection: true # default true
     template: modules/cookie_modal.html.twig # twig template name, default: EuCookieLawBundle::cookie_law_bar.html.twig
-
-fos_ck_editor:
-    default_config: standard
-    configs:
-        extended:
-            toolbar: 'extended_toolbar'
-            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css']
-            allowedContent: true
-            format_tags: 'p;h3;h4;h5;pre;div'
-        standard:
-            toolbar: 'standard_toolbar'
-            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css']
-            allowedContent: true
-            format_tags: 'p;h3;h4;h5;pre;div'
-        minimal:
-            toolbar: 'minimal_toolbar'
-            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css']
-            allowedContent: false 
-            format_tags: 'p'
-    toolbars:
-        configs:
-            extended_toolbar: [['Save','Undo','Redo'],['Cut','Copy','Paste','PasteText','RemoveFormat'],['Image','Table','HorizontalRule','SpecialChar'],['Maximize', 'ShowBlocks'],['Source'],'/',['Format'],['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],['Link','Unlink','Anchor']]
-            standard_toolbar: [['Save','Undo','Redo'],['Cut','Copy','Paste','PasteText','RemoveFormat'],['Maximize','ShowBlocks'],['Source'],'/',['Format'],['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],['Link','Unlink']]
-            minimal_toolbar: [['Save','Undo','Redo'],['Cut','Copy','Paste','PasteText','RemoveFormat'],['Source'],'/',['Bold','Italic','Underline','Strike'],['Link','Unlink']]
-#    styles:
-#        default:
-#            - { name: 'Lead', element: 'p', attributes: { class: 'lead'} }
-#            - { name: 'Normal', element: 'p' }

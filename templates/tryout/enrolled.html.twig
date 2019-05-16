@@ -45,9 +45,10 @@
 
 {% block javascripts %}
   {{ parent() }}
+
 <script>
 
-$(window).bind("load", function() {
+$(window).on( "load", function() {
 
     var div = "api_load_tryout_enrolled_";
     var hoztAPI  = "/api/ingeschreven/testmomenten/";
@@ -58,7 +59,6 @@ $(window).bind("load", function() {
             $(tryout).html(enrolments.content);
         });
     });
-
 
 });
 
