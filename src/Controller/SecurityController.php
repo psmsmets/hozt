@@ -44,7 +44,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="app_login")
+     * @Route("/login", name="security_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -57,7 +57,16 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/wachtwoord-vergeten", name="app_forgot_password")
+     * @Route("/logout", name="security_logout", methods={"GET"})
+     */
+    public function logout()
+    {
+        // controller can be blank: it will never be executed!
+        throw new \Exception('Don\'t forget to activate logout in security.yaml');
+    }
+
+    /**
+     * @Route("/wachtwoord-vergeten", name="security_forgot_password")
      */
     public function forgot_password(Request $request): Response
     {
@@ -83,7 +92,7 @@ class SecurityController extends AbstractController
 
              }
 
-            return $this->redirectToRoute('app_forgot_password');
+            return $this->redirectToRoute('security_forgot_password');
         }
         return $this->render('security/forms.html.twig', array( 
                 'form' => $form->createView(),
@@ -93,7 +102,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/wachtwoord-veranderen", name="app_change_password")
+     * @Route("/wachtwoord-veranderen", name="security_change_password")
      */
     public function change_password ( Request $request, UserPasswordEncoderInterface $encoder ): Response
     {
@@ -110,21 +119,21 @@ class SecurityController extends AbstractController
             if (!$encoder->isPasswordValid($user, $form->getData()['oldPassword'])) {
 
                 $this->addFlash('danger', 'Je huidig wachtwoord is verkeerd.');
-                return $this->redirectToRoute('app_change_password');
+                return $this->redirectToRoute('security_change_password');
 
             }
 
             if (!preg_match('/'.User::PASSWORD_REGEX.'/', $form->getData()['plainPassword'])) {
 
                 $this->addFlash('danger', 'Je nieuw wachtwoord voldoet niet aan de voorwaarden.');
-                return $this->redirectToRoute('app_change_password');
+                return $this->redirectToRoute('security_change_password');
 
             }
 
             if ($encoder->isPasswordValid($user, $form->getData()['plainPassword'])) {
 
                 $this->addFlash('danger', 'Je nieuw wachtwoord mag niet gelijk zijn aan je oud wachtwoord.');
-                return $this->redirectToRoute('app_change_password');
+                return $this->redirectToRoute('security_change_password');
 
             }
 
@@ -148,7 +157,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/wachtwoord-instellen", name="app_reset_password")
+     * @Route("/wachtwoord-instellen", name="security_reset_password")
      */
     public function reset_password(
             Request $request, 
@@ -159,7 +168,7 @@ class SecurityController extends AbstractController
 
         $token = (string) $request->query->get(User::PASSWORD_RESET, null);
 
-        if (strlen($token) != 64) return $this->redirectToRoute('app_login');
+        if (strlen($token) != 64) return $this->redirectToRoute('security_login');
 
         if ($user = $this->userRepository->findOneByToken($token, User::PASSWORD_RESET)) {
 
@@ -172,14 +181,14 @@ class SecurityController extends AbstractController
                 if (!preg_match('/'.User::PASSWORD_REGEX.'/', $form->getData()['plainPassword'])) {
 
                     $this->addFlash('danger', 'Je nieuw wachtwoord voldoet niet aan de voorwaarden.');
-                    return $this->redirectToRoute('app_reset_password', [ User::PASSWORD_RESET => $token ]);
+                    return $this->redirectToRoute('security_reset_password', [ User::PASSWORD_RESET => $token ]);
 
                 }
 
                 if ($encoder->isPasswordValid($user, $form->getData()['plainPassword'])) {
 
                     $this->addFlash('danger', 'Je nieuw wachtwoord mag niet gelijk zijn aan je oud wachtwoord.');
-                    return $this->redirectToRoute('app_reset_password', [ User::PASSWORD_RESET => $token ]);
+                    return $this->redirectToRoute('security_reset_password', [ User::PASSWORD_RESET => $token ]);
 
                 }
 
@@ -207,14 +216,14 @@ class SecurityController extends AbstractController
                 
                 $this->addFlash('success', 'Je wachtwoord is aangepast.');
 
-                return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('security_login');
 
             } 
 
         } else {
 
             $this->addFlash('danger', 'De token is verlopen of niet correct.');
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('security_login');
 
         }
 
@@ -228,13 +237,13 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/verificatie", name="app_verify_user")
+     * @Route("/verificatie", name="security_verify_user")
      */
     public function verify_user( Request $request ): Response
     {
         $token = (string) $request->query->get(User::EMAIL_VERIFICATION, null);
 
-        if (strlen($token) != 64) return $this->redirectToRoute('app_login');
+        if (strlen($token) != 64) return $this->redirectToRoute('security_login');
 
         if ($user = $this->userRepository->findOneByToken($token, User::EMAIL_VERIFICATION)) {
 
@@ -243,10 +252,10 @@ class SecurityController extends AbstractController
             $this->userRepository->flush();
 
             $this->addFlash('success', 'Je email adres is geverifieerd.');
-            return $this->redirectToRoute('app_forgot_password');
+            return $this->redirectToRoute('security_forgot_password');
         }
 
-        return $this->redirectToRoute('app_login');
+        return $this->redirectToRoute('security_login');
 
     }
 
@@ -257,7 +266,7 @@ class SecurityController extends AbstractController
         $token = $user->newEmailVerificationToken();
         $this->userRepository->flush();
 
-        $link = $this->get('router')->generate('app_verify_user', array(User::EMAIL_VERIFICATION => $token));
+        $link = $this->get('router')->generate('security_verify_user', array(User::EMAIL_VERIFICATION => $token));
 
         // send email
         $message = (new \Swift_Message())
@@ -283,7 +292,7 @@ class SecurityController extends AbstractController
         $token = $user->newResetPasswordToken();
         $this->userRepository->flush();
 
-        $link = $this->get('router')->generate('app_reset_password', array(User::PASSWORD_RESET => $token));
+        $link = $this->get('router')->generate('security_reset_password', array(User::PASSWORD_RESET => $token));
 
         // send email
         $message = (new \Swift_Message())

@@ -7,6 +7,7 @@ parameters:
     locale: 'nl'
     app_locales: nl|en
     timezone: 'Europe/Brussels'
+    session_max_idle_time: 1800
     app.mailer.from: 'webmaster@hozt.be'
     app.mailer.name: 'Webmaster HoZT'
     app.about.abbr: 'HoZT'
@@ -85,6 +86,12 @@ services:
     Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface:
         alias: ambta_doctrine_encrypt.encryptor
         public: false
+
+    app.session_idle.handler:
+        class: App\Security\SessionIdleHandler
+        arguments: ["@session", "@router", '%session_max_idle_time%']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
 ambta_doctrine_encrypt:
     secret_directory_path: '%kernel.project_dir%'   # Default value
