@@ -34,7 +34,7 @@ security:
             # form_login: true
             # https://symfony.com/doc/current/security/form_login_setup.html
             logout:
-                path: /logout
+                path: security_logout
                 target: /
                 handlers: [app.logout.listener]
 
