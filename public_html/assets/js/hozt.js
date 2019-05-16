@@ -132,12 +132,22 @@ $(document).ready(function(){
             });
         }
         /* Check the location of each desired element */
-        $('.scroll-fade-in').each( function(i){     
-            var bottom_of_object = $(this).position().top + $(this).outerHeight();
-            var bottom_of_window = $(window).scrollTop() + $(window).height();      
-            /* If the object is completely visible in the window, fade it it */
-            if (bottom_of_window-300 > bottom_of_object){
-                $(this).animate({'opacity':'1'},1500);
+        $('.scroll-fade-in').each( function(i){
+
+            /*if (bottom_of_window > bottom_of_object){*/
+            if ( $(window).scrollTop() > $(this).position().top - $(window).height()/3 ){
+
+              $(this).animate({
+                opacity: "1"
+              }, {
+                duration: 1000,
+                specialEasing: {
+                },
+                complete: function() {
+                  $( this ).removeClass( "scroll-fade-in" );
+                }
+              });
+
             }      
         });
       
