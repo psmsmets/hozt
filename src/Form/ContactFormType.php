@@ -65,6 +65,11 @@ class ContactFormType extends AbstractType
                 'data' => true,
                 'required' => false,
                 ))
+            ->add('terms', CheckboxType::class, array(
+                'label'    => 'Privacybeleid',
+                'required' => true,
+                'mapped' => false,
+                ))
         ;
     }
 

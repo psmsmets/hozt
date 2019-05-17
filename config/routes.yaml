@@ -2,7 +2,7 @@
 
 #security
 security_logout:
-    path: /logout
+    path: /loguit
     methods: GET
 
 # calendar

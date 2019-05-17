@@ -18,9 +18,9 @@
       {% include 'modules/alerts.html.twig' %}
       <h1 class="h3 mb-3 font-weight-normal">Gelieve in te loggen</h1>
       <label for="inputEmail" class="sr-only">Email adres</label>
-      <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control input-t" placeholder="Email" required autofocus>
+      <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control input-t" placeholder="Email" required>
       <label for="inputPassword" class="sr-only">Wachtwoord</label>
-      <input type="password" name="password" id="inputPassword" class="form-control input-b" placeholder="Wachtwoord" required>
+      <input type="password" name="password" id="inputPassword" class="form-control input-b" placeholder="Wachtwoord" required autofocus>
       <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
       >
