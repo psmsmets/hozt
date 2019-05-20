@@ -17,6 +17,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('ucfirst', 'ucfirst'),
             new TwigFilter('lcfirst', 'lcfirst'),
             new TwigFilter('ucwords', 'ucwords'),
+            new TwigFilter('pretty', [$this, 'prettify']),
         ];
     }
 
@@ -32,6 +33,11 @@ class AppExtension extends AbstractExtension
     {
         $time = new \DateTime;
         return $time->setTimestamp($timestamp);
+    }
+
+    public function prettify(string $str): string
+    {
+        return ucfirst(strtolower($str));
     }
 
     public function hideEmail(string $email): string

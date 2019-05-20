@@ -513,6 +513,9 @@ a.badge.cal-5:hover {
     padding: .2rem 1rem;
     font-size: 1.35rem;
   }
+  .offcanvas-collapse .nav-item .btn {
+    font-size: 1.35rem;
+  }
   .carousel-caption {
     left:0;
     right:0;
