@@ -66,9 +66,10 @@ class TryoutEnrolmentForm extends AbstractType
             ->add('birthdate', DateType::class, array(
                 'label'    => 'Geboortedatum',
                  'widget' => 'choice',
-                 'years' => range(date('Y')-5, date('Y')-80),
-                 'months' => range(1, 12),
-                 'days' => range(1, 31),
+                 'years' => range(date('Y')-5, date('Y')-85),
+                 #'months' => range(1, 12),
+                 #'days' => array(range(1, 31),
+                 #'attr' => ['class'=>'custom-select'],
                  #'help'    => 'dag/maand/jaar',
                  #'attr' => ['placeholder'=>'1/1/2016','pattern'=>$this->params->get('app.regex.datestring')],
                 'required' => true,

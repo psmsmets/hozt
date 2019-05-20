@@ -18,8 +18,8 @@
       {% for enrol in enrolments|sortbyfield('lastname')|reverse %}
       <tr class="{%if enrol.withdrawn %}line-through text-muted{%endif%}">
         <th>{% if not enrol.withdrawn %}{% set i = i + 1 %}{{i}}{% endif %}</th>
-        <td>{{enrol.firstname|ucfirst}}</td>
-        <td>{{enrol.lastname|ucfirst}}</td>
+        <td>{{enrol.firstname|title}}</td>
+        <td>{{enrol.lastname|title}}</td>
         <td>{{enrol.birthdate|date('Y')}}</td>
         <td>{{enrol.address}}</td>
         <td>{{enrol.category}}</td>
