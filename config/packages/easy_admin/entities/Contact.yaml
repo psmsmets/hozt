@@ -22,7 +22,7 @@ easy_admin:
                 sort: ['sequence', 'ASC']
             form:
                 fields:
-                    - { property: 'question', label: 'Vraag' }
+                    - { property: 'question', label: 'Vraag', type_options: { attr: { maxlength: 45 } } }
                     - { property: 'email', label: 'E-mail' }
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'enabled', label: 'Actief' }
