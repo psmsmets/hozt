@@ -169,12 +169,12 @@ class Tryout
 
     public function getFormattedPeriod(): ?string
     {
-        $fmt = "%A %e %B %Y";
+        $fmt = "%a %e %b. %Y";
 
         $startTime = $this->getStartTime()->getTimestamp();
         $endTime = $this->getEndTime()->getTimestamp();
 
-        return strftime($fmt.' van %H:%M', $startTime).strftime(' tot %H:%M', $endTime);
+        return strftime($fmt.' %H:%M', $startTime).strftime(' tot %H:%M', $endTime);
 
     }
 
