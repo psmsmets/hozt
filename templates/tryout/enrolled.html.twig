@@ -134,8 +134,8 @@ $(window).on( "load", function() {
 
             var table = $('#'+uuid);
  
-            $('th[id^="sort_'+uuid+'_"]')
-                .wrapInner('<button class="btn btn-outline-dark btn-sm btn-block p-0"/>')
+            $('#'+ uuid + ' th.sortable')
+                .wrapInner('<button class="btn btn-link btn-sm"/>')
                 .each(function(){
             
                 var th = $(this);

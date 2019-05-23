@@ -353,6 +353,19 @@ h1 .badge, h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
   min-width: 40px;
 }
 
+th .btn-sm {
+  padding: 0;
+  text-align: left;
+  font-weight: bold;
+  line-height: 1.4;
+  color: inherit;
+  font-size: unset;
+}
+th .btn-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
 /*
  * Calendar
 */
