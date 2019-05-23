@@ -18,7 +18,7 @@
 <div class="container">
   <h4 class="text-hozt"># We are red and gold</h4>
   <div class="row">
-    <div class="col-12 col-md pt-2 pt-md-3">
+    <div class="col-12 col-md mt-2 mb-2">
       <img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="40">
       <address class="text-red">
         <span>Hoogstratens Zwem Team vzw</span><br>
@@ -29,7 +29,7 @@
         </small>
       </address>
     </div>
-    <div class="col-12 col-md pt-2 pt-md-3 text-center">
+    <div class="col-12 col-md mt-2 mt-md-0 mb-2 text-center">
       <h4><i class="fas fa-swimmer"></i><br>Aanbod</h4>
       <ul class="list-unstyled">
       {% for category in base.training_team_categories %}
@@ -37,7 +37,7 @@
       {% endfor %}
       </ul>
     </div>
-    <div class="col-12 col-md pt-2 pt-md-3 text-center">
+    <div class="col-12 col-md mt-2 mt-md-0 mb-2 text-center">
       <h4><i class="fas fa-fish"></i><br>Praktisch</h4>
       <ul class="list-unstyled">
         <li><a class="{{urlfmt}}" href="/lid-worden">Lid worden</a></li>
@@ -51,7 +51,7 @@
         <li><a class="{{urlfmt}}" href="/interscholen">Interscholen Zwemwedstrijd</a></li>
       </ul>
     </div>
-    <div class="col-12 col-md pt-2 pt-md-3 text-center">
+    <div class="col-12 col-md mt-2 mt-md-0 mb-2 text-center">
       <h4><i class="fas fa-swimming-pool"></i><br>Algemeen</h4>
       <ul class="list-unstyled">
         <li><a class="{{urlfmt}}" href="{{ path('training_coaches') }}">Trainers</a></li>
