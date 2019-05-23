@@ -40,9 +40,12 @@ class ApiController extends AbstractController
             ->findAllByTeamJoinedToTeam($team_abbr)
             ;
 
-        if (!$schedule) {
-            return $this->json(array( 'result' => false, 'error' => 'Zwemgroep '.strtoupper($team_abbr).' niet gevonden.' ));
-        }
+        if (!$schedule) return $this->json(
+            array( 
+                'result' => false,
+                'error' => 'Zwemgroep '.strtoupper($team_abbr).' niet gevonden.' 
+            )
+        );
 
         $day_id = date('N', strtotime(date("Y-m-d")));
 
@@ -184,9 +187,12 @@ class ApiController extends AbstractController
                 ['enabled' => true, 'abbr' => $team_abbr  ]
             );
 
-        if (!$team) {
-            return $this->json(array( 'result' => false, 'error' => 'Zwemgroep '.strtoupper($team_abbr).' niet gevonden.' ));
-        }
+        if (!$team) return $this->json(
+            array( 
+                'result' => false,
+                'error' => 'Zwemgroep '.strtoupper($team_abbr).' niet gevonden.' 
+            )
+        );
 
         $training = $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
@@ -252,9 +258,8 @@ class ApiController extends AbstractController
             ->findUpcomingCompetitionDocuments($slug,$limit)
             ;
 
-        if (!$docs) {
-            return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
-        }
+        if (!$docs) return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
+
         $data = array();
         $base = $this->getParameter('app.path.competition_documents');
         foreach ( $docs as $doc ) {
@@ -284,9 +289,8 @@ class ApiController extends AbstractController
             ->getRepository(CalendarEvent::class)
             ->findCalendarEventByByLatestCompetitionDocuments($slug,$limit)
             ;
-        if (!$events) {
-            return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
-        }
+        if (!$events) return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
+
         $data = array();
         foreach ( $events as $e ) {
             $event = $e[0];

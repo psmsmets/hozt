@@ -60,7 +60,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->addSelect('day')
             ->addSelect('time')
             ->andWhere('schedule.enabled = :enabled')
-            ->andWhere('team.abbr = :abbr')
+            ->andWhere('teams.abbr = :abbr')
             ->andWhere('schedule.startDate <= :now')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('enabled', true)
