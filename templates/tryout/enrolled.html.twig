@@ -10,7 +10,7 @@
 
     {% if page.tryouts|length > 0 %}
 
-      <p class="text-muted mt-3 mt-md-4"><i class="fas fa-info-circle"></i> klik op een kolom titel om te sorteren</p>
+      <p class="text-muted mt-3 mt-md-4 d-print-none"><i class="fas fa-info-circle"></i> klik op een kolom titel om te sorteren <i class="fas fa-sort"></i></p>
 
       <ul class="list-group list-group-flush mt-3">
       {% for tryout in page.tryouts %}
@@ -30,7 +30,7 @@
             <div class="table-responsive" id="api_load_tryout_enrolled_{{tryout.uuid}}">
               <div class="d-flex justify-content-center">
                 <div class="spinner-border m-5" role="status" >
-                  <span class="sr-only">Loading...</span>
+                  <span class="sr-only">Laden...</span>
                 </div>
               </div>
             </div>
@@ -49,7 +49,6 @@
   {{ parent() }}
 
 <script>
-
 /**
  * jQuery.fn.sortElements
  * --------------
@@ -120,8 +119,6 @@ jQuery.fn.sortElements = (function(){
     
 })();
 
-
-
 $(window).on( "load", function() {
 
     var div = "api_load_tryout_enrolled_";
@@ -137,29 +134,33 @@ $(window).on( "load", function() {
 
             var table = $('#'+uuid);
  
-            $('th[id^="sort_'+uuid+'_"]').wrapInner('<span title="Sorteer"/>').each(function(){
+            $('th[id^="sort_'+uuid+'_"]')
+                .wrapInner('<button class="btn btn-outline-dark btn-sm btn-block p-0"/>')
+                .each(function(){
             
                 var th = $(this);
                 var thIndex = th.index();
                 var inverse = false;
             
                 th.click(function(){
-                
+
+                    $("#" + uuid + " th button").removeClass("dropdown-toggle");
+                    $(th).children('button').addClass('dropdown-toggle');
+                    $(th).removeClass(inverse ? 'dropup' : 'dropdown').addClass(inverse ? 'dropdown' : 'dropup');
+
                     table.find('td').filter(function(){
-                   
+
                         return $(this).index() === thIndex;
-                    
+
                     }).sortElements(function(a, b){
 
                         return $.text([a]) > $.text([b]) ?
                             inverse ? -1 : 1
                             : inverse ? 1 : -1;
-                    
-                    }, function(){
 
+                    }, function(){
                         // parentNode is the element we want to move
-                        return this.parentNode; 
-                    
+                        return this.parentNode;
                     });
                 
                     inverse = !inverse;
@@ -172,7 +173,5 @@ $(window).on( "load", function() {
     });
 
 });
-
-
 </script>
 {% endblock %}
