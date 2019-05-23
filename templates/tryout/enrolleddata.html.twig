@@ -1,23 +1,23 @@
 {% if enrolments|length > 0 %}
-  <table class="table table-sm table-borderless table-hover mt-2">
-    <caption>Inschrijvingen</caption>
+  <table class="table table-sm table-borderless table-hover mt-2" id="{{uuid}}">
+    <!--<caption>Inschrijvingen</caption>-->
     <thead>
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">Voornaam</th>
-        <th scope="col">Naam</th>
-        <th scope="col">Geboortjaar</th>
-        <th scope="col">Postcode</th>
-        <th scope="col">Groep</th>
-        <th scope="col">Ingeschreven</th>
-        <th scope="col">Afgemeld</th>
+        <th scope="col" id="sort_{{uuid}}_id">#</th>
+        <th scope="col" id="sort_{{uuid}}_firstname">Voornaam</th>
+        <th scope="col" id="sort_{{uuid}}_lastname">Naam</th>
+        <th scope="col" id="sort_{{uuid}}_year">Geboortjaar</th>
+        <th scope="col" id="sort_{{uuid}}_address">Postcode</th>
+        <th scope="col" id="sort_{{uuid}}_team">Groep</th>
+        <th scope="col" id="sort_{{uuid}}_enrolled">Ingeschreven</th>
+        <th scope="col" id="sort_{{uuid}}_withdrawn">Afgemeld</th>
       </tr>
     </thead>
     <tbody>
       {% set i=0 %}
       {% for enrol in enrolments %}
-      <tr class="{%if enrol.withdrawn %}line-through text-muted{%endif%}">
-        <th>{% if not enrol.withdrawn %}{% set i = i + 1 %}{{i}}{% endif %}</th>
+      <tr class="{%if enrol.withdrawn %}line-through text-muted withdrawn{%endif%}">
+        <td><strong>{% if not enrol.withdrawn %}{% set i = i + 1 %}{{i}}{% endif %}</strong></td>
         <td>{{enrol.firstname|title}}</td>
         <td>{{enrol.lastname|title}}</td>
         <td>{{enrol.birthdate|date('Y')}}</td>

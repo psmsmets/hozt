@@ -320,7 +320,7 @@ class ApiController extends AbstractController
         if ($enrols = $TryoutEnrolRep->findEnrolments($uuid)) {   
             return $this->json( $this->render(
                     'tryout/enrolleddata.html.twig', 
-                    ['enrolments' => $enrols]
+                    ['enrolments' => $enrols, 'uuid' => $uuid ]
                 ));
         } else {
             return $this->json(array('content' => false));
