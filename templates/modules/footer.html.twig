@@ -14,11 +14,11 @@
   </div><!-- close div row -->
 </footer>
 
-<footer class="bg-gold pb-4 pt-4 text-dark d-print-none">
+<footer class="bg-gold pb-4 pt-4 text-dark d-print-none text-center text-md-left">
 <div class="container">
   <h4 class="text-hozt"># We are red and gold</h4>
   <div class="row">
-    <div class="col-12 col-md mt-2 mb-2">
+    <div class="col-12 col-md mt-4 mt-md-3 mb-4">
       <img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="40">
       <address class="text-red">
         <span>Hoogstratens Zwem Team vzw</span><br>
@@ -29,16 +29,16 @@
         </small>
       </address>
     </div>
-    <div class="col-12 col-md mt-2 mt-md-0 mb-2 text-center">
-      <h4><i class="fas fa-swimmer"></i><br>Aanbod</h4>
+    <div class="col-12 col-md mt-2 mt-md-0 mb-4 text-center">
+      <h3><small class="pb-2"><i class="fas fa-swimmer"></i></small><br>Aanbod</h3>
       <ul class="list-unstyled">
       {% for category in base.training_team_categories %}
         <li><a class="{{urlfmt}}" href="{{ path('training_category', {'slug': category.slug}) }}">{{ category.name }}</a></li>
       {% endfor %}
       </ul>
     </div>
-    <div class="col-12 col-md mt-2 mt-md-0 mb-2 text-center">
-      <h4><i class="fas fa-fish"></i><br>Praktisch</h4>
+    <div class="col-12 col-md mt-2 mt-md-0 mb-4 text-center">
+      <h3><small class="pb-2"><i class="fas fa-fish"></i></small><br>Praktisch</h3>
       <ul class="list-unstyled">
         <li><a class="{{urlfmt}}" href="/lid-worden">Lid worden</a></li>
         <li><a class="{{urlfmt}}" href="{{ path('enrol_tryout') }}">Testmoment</a></li>
@@ -51,8 +51,8 @@
         <li><a class="{{urlfmt}}" href="/interscholen">Interscholen Zwemwedstrijd</a></li>
       </ul>
     </div>
-    <div class="col-12 col-md mt-2 mt-md-0 mb-2 text-center">
-      <h4><i class="fas fa-swimming-pool"></i><br>Algemeen</h4>
+    <div class="col-12 col-md mt-2 mt-md-0 mb-4 text-center">
+      <h3><small class="pb-2"><i class="fas fa-swimming-pool"></i></small><br>Algemeen</h3>
       <ul class="list-unstyled">
         <li><a class="{{urlfmt}}" href="{{ path('training_coaches') }}">Trainers</a></li>
         <li><a class="{{urlfmt}}" href="/bestuur">Bestuur</a></li>
