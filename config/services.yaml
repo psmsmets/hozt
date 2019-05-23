@@ -79,7 +79,7 @@ services:
 
     app.session_idle.handler:
         class: App\Security\SessionIdleHandler
-        arguments: ["@session", "@router", '%session_max_idle_time%']
+        arguments: ["@session", "@router", "@security.helper", '%session_max_idle_time%']
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 

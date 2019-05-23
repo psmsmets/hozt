@@ -1,3 +1,5 @@
+{% set urlfmt = 'text-dark text-decoration-none' %}
+
 <footer class="container mt-2 mt-md-3 d-print-none">
 
   <div class="row justify-content-around text-center pt-2 pt-md-3">
@@ -12,16 +14,14 @@
   </div><!-- close div row -->
 </footer>
 
-<!--<footer class="bg-dark pb-4 pt-4 text-light">-->
-<!--<footer class="pb-3">-->
-<footer class="bg-gold pb-4 pt-4 text-light font-weight-light d-print-none">
+<footer class="bg-gold pb-4 pt-4 text-dark d-print-none">
 <div class="container">
   <h4 class="text-hozt"># We are red and gold</h4>
-  <div class="row pt-2 pt-md-3">
-    <div class="col-12 col-md">
+  <div class="row">
+    <div class="col-12 col-md mt-2 mb-2">
       <img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="" height="40">
-      <address class="text-light">
-        <span class="text-hozt">Hoogstratens Zwem Team vzw</span><br>
+      <address class="text-red">
+        <span>Hoogstratens Zwem Team vzw</span><br>
         <small>
           Achtelsestraat 76A, 2320 Hoogstraten<br>
           <abbr title="Bankrekening">B:</abbr> <span>BE88&nbsp;0689&nbsp;0449&nbsp;7341<br>
@@ -29,39 +29,39 @@
         </small>
       </address>
     </div>
-    <div class="col-12 col-md">
-      <h5><b>A</b>anbod</h5>
+    <div class="col-12 col-md mt-2 mt-md-0 mb-2 text-center">
+      <h4><i class="fas fa-swimmer"></i><br>Aanbod</h4>
       <ul class="list-unstyled">
       {% for category in base.training_team_categories %}
-        <li><a class="text-light text-decoration-none" href="{{ path('training_category', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+        <li><a class="{{urlfmt}}" href="{{ path('training_category', {'slug': category.slug}) }}">{{ category.name }}</a></li>
       {% endfor %}
       </ul>
     </div>
-    <div class="col-12 col-md">
-      <h5><b>P</b>raktisch</h5>
+    <div class="col-12 col-md mt-2 mt-md-0 mb-2 text-center">
+      <h4><i class="fas fa-fish"></i><br>Praktisch</h4>
       <ul class="list-unstyled">
-        <li><a class="text-light text-decoration-none" href="/lid-worden">Lid worden</a></li>
-        <li><a class="text-light text-decoration-none" href="{{ path('enrol_tryout') }}">Testmoment</a></li>
-        <li><a class="text-light text-decoration-none" href="{{ path('training_schedule_teams') }}">Trainingsuren</a></li>
-        <li><a class="text-light text-decoration-none" href="{{ path('calendar') }}">Kalender</a></li>
-        <li><a class="text-light text-decoration-none" href="/clubkledij">Clubkledij</a></li>
-        <li><a class="text-light text-decoration-none" href="{{ path('blog') }}">Nieuwsberichten</a></li>
-<!--    <li><a class="text-light text-decoration-none" href="#">Clubrecords</a></li> -->
-        <li><a class="text-light text-decoration-none" href="{{ path('enrol_list') }}">Inschrijven</a></li>
-        <li><a class="text-light text-decoration-none" href="/interscholen">Interscholen Zwemwedstrijd</a></li>
+        <li><a class="{{urlfmt}}" href="/lid-worden">Lid worden</a></li>
+        <li><a class="{{urlfmt}}" href="{{ path('enrol_tryout') }}">Testmoment</a></li>
+        <li><a class="{{urlfmt}}" href="{{ path('training_schedule_teams') }}">Trainingsuren</a></li>
+        <li><a class="{{urlfmt}}" href="{{ path('calendar') }}">Kalender</a></li>
+        <li><a class="{{urlfmt}}" href="/clubkledij">Clubkledij</a></li>
+        <li><a class="{{urlfmt}}" href="{{ path('blog') }}">Nieuwsberichten</a></li>
+<!--    <li><a class="{{urlfmt}}" href="#">Clubrecords</a></li> -->
+        <li><a class="{{urlfmt}}" href="{{ path('enrol_list') }}">Inschrijven</a></li>
+        <li><a class="{{urlfmt}}" href="/interscholen">Interscholen Zwemwedstrijd</a></li>
       </ul>
     </div>
-    <div class="col-12 col-md">
-      <h5><b>A</b>lgemeen</h5>
+    <div class="col-12 col-md mt-2 mt-md-0 mb-2 text-center">
+      <h4><i class="fas fa-swimming-pool"></i><br>Algemeen</h4>
       <ul class="list-unstyled">
-        <li><a class="text-light text-decoration-none" href="{{ path('training_coaches') }}">Trainers</a></li>
-        <li><a class="text-light text-decoration-none" href="/bestuur">Bestuur</a></li>
-        <li><a class="text-light text-decoration-none" href="/vacatures">Vacatures</a></li>
-        <li><a class="text-light text-decoration-none" href="/zwembad">Zwembad</a></li>
-        <li><a class="text-light text-decoration-none" href="{{ path('sponsors') }}">Sponsors</a></li>
-        <li><a class="text-light text-decoration-none" href="/gedragsregels">Gedragsregels</a></li>
-        <li><a class="text-light text-decoration-none" href="{{ path('contact_faq') }}">Veelgestelde vragen</a></li>
-        <li><a class="text-light text-decoration-none" href="{{ path('contact_form') }}">Contact</a></li>
+        <li><a class="{{urlfmt}}" href="{{ path('training_coaches') }}">Trainers</a></li>
+        <li><a class="{{urlfmt}}" href="/bestuur">Bestuur</a></li>
+        <li><a class="{{urlfmt}}" href="/vacatures">Vacatures</a></li>
+        <li><a class="{{urlfmt}}" href="/zwembad">Zwembad</a></li>
+        <li><a class="{{urlfmt}}" href="{{ path('sponsors') }}">Sponsors</a></li>
+        <li><a class="{{urlfmt}}" href="/gedragsregels">Gedragsregels</a></li>
+        <li><a class="{{urlfmt}}" href="{{ path('contact_faq') }}">Veelgestelde vragen</a></li>
+        <li><a class="{{urlfmt}}" href="{{ path('contact_form') }}">Contact</a></li>
       </ul>
     </div>
   </div>
