@@ -141,8 +141,12 @@ a, .text-red, .text-hozt, a.text-hozt, a.text-red, a.page-link,
   color: var(--hozt-red);
 }
 
-a:hover, a.text-red:hover, a.page-link:hover {
+a:hover, a.text-red:hover, a.page-link:hover, .text-darkred {
   color: var(--hozt-darkred);
+}
+
+a.text-darkred:hover {
+  color: var(--hozt-red);
 }
 
 .nav-header {

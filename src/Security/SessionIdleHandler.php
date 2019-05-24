@@ -42,12 +42,12 @@ class SessionIdleHandler
 
                 $this->session->invalidate();
               
-                if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
+                //if ($this->security->isGranted('IS_AUTHENTICATED_FULLY')) {
 
                     $this->session->getFlashBag()->add('warning', 'Je sessie is verlopen wegens inactiviteit.');
-                    $event->setResponse(new RedirectResponse($this->router->generate('security_logout')));
+                    //$event->setResponse(new RedirectResponse($this->router->generate('security_logout')));
 
-                }
+                //}
             }
         }
     }

@@ -26,6 +26,14 @@ security:
                     - App\Security\LoginFormAuthenticator
             user_checker: App\Security\UserChecker
 
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
+                # possible values: 'strict', 'lax' and null
+                samesite: 'strict'
+                # https://symfony.com/doc/current/security/remember_me.html
+
             # activate different ways to authenticate
 
             # http_basic: true
