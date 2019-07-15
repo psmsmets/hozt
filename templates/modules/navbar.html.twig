@@ -1,10 +1,10 @@
 <!-- NAVBAR
 ================================================== -->
-<div class="navbar-brand text-red bg-white d-none d-print-block"><img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" height="40"> Hoogstratens Zwem Team</div>
+<div class="navbar-brand text-primary bg-white d-none d-print-block"><img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" height="40"> Hoogstratens Zwem Team</div>
 
 <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-white shadow-sm d-print-none">
   <div class="container">
-  <a class="navbar-brand mr-auto mr-lg-0 text-red pr-3" href="#" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation"><img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="Hoogstratens Zwem Team" height="40"> <div class="d-none d-xl-inline-block">Hoogstratens Zwem Team</div></a>
+  <a class="navbar-brand mr-auto mr-lg-0 text-primary pr-3" href="#" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false"><img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="Hoogstratens Zwem Team" height="40"> <div class="d-none d-xl-inline-block">Hoogstratens Zwem Team</div></a>
   <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -27,12 +27,12 @@
         <a class="nav-link" href="/lid-worden"><i class="fas fa-users d-lg-none"></i> Lid worden</a>
       </li>
       <li class="nav-item {% if currentPath starts with path('enrol_tryout') %}active{% endif%} d-inline-flex justify-content-center">
-        <a class="nav-link btn btn-outline-secondary p-2" href="{{path('enrol_tryout')}}"><i class="far fa-hand-point-right"></i> Testmoment</a>
+        <a class="nav-link btn btn-outline-medium p-2" href="{{path('enrol_tryout')}}"><i class="far fa-hand-point-right"></i> Testmoment</a>
       </li>
     </ul>
     <ul class="navbar-nav flex-row ml-md-auto d-flex justify-content-around">
       <li class="nav-item {% if currentPath in ['/contact','/faq','/bestuur','/zwembad'] %}active{% endif%}">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation" onclick="$('.offcanvas-collapse').toggleClass('open');">Contact</a>
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false">Contact</a>
       </li>
       <li class="nav-item">
         <a class="nav-link p-2" href="https://nl-nl.facebook.com/hoogstratensZT/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
@@ -42,12 +42,12 @@
       </li>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
       <li class="nav-item d-flex align-items-center ml-lg-3">
-        <a class="btn btn-outline-hozt" href="{{ path('security_logout') }}" data-toggle="tooltip" data-placement="auto" title="" data-original-title="uitloggen"><i class="fas fa-sign-out-alt"></i></a>
+        <a class="btn btn-outline-primary" href="{{ path('security_logout') }}" data-toggle="tooltip" data-placement="auto" title="" data-original-title="uitloggen"><i class="fas fa-sign-out-alt"></i></a>
       </li>
     {% endif %}
     </ul>
 <!--
-        <button class="btn btn-outline-secondary d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" type="submit" disabled>Inloggen</button>
+        <button class="btn btn-outline-medium d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" type="submit" disabled>Inloggen</button>
 -->
   </div>
 </div>

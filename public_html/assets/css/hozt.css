@@ -1,0 +1,361 @@
+.nav-scroller {
+  position: relative;
+  z-index: 2;
+  height: 2.75rem;
+  overflow-y: hidden;
+}
+
+.nav-scroller .nav {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  padding-bottom: 1rem;
+  margin-top: -1px;
+  overflow-x: auto;
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.nav-underline .nav-link {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.nav-underline .nav-link:hover {
+  color: #007bff;
+}
+
+.nav-underline .active {
+  font-weight: 500;
+  color: #343a40;
+}
+
+.nav-scroller.fixed-top {
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin-top: 77px;
+  opacity: 1;
+}
+
+.page-item.active a.page-link, .btn-outline-hozt:hover {
+  border-color: var(--primary);
+}
+
+.bg-red, .bg-hozt, .btn-hozt, .badge.cal-1, .badge-hozt, .page-item.active a.page-link, .btn-outline-hozt:hover {
+  background-color: var(--primary);
+}
+
+.bg-darkred, .btn-hozt:hover, .badge.cal-1:hover, a.badge-hozt:hover {
+  background-color: var(--secondary);
+}
+
+.bg-red .nav-link, .btn-hozt, a.btn-hozt, .btn-hozt:hover, a.btn-hozt:hover, .badge-hozt, .page-item.active a.page-link, .btn-outline-hozt:hover {
+  color: #fff;
+}
+
+.btn-outline-hozt, a.btn-outline-hozt {
+  color: var(--primary);
+  background: none;
+  border-color: var(--primary);
+}
+
+.btn-white, a.btn-white {
+  background: #fff;
+  border-color: #fff;
+}
+
+.bg-red a.nav-link:hover {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+a, .text-red, .text-hozt, a.text-hozt, a.text-red, a.page-link,
+.navbar-brand.text-red, .navbar-brand.text-red:hover {
+  color: var(--primary);
+}
+
+a:hover, a.text-red:hover, a.page-link:hover, .text-darkred {
+  color: var(--secondary);
+}
+
+a.text-darkred:hover {
+  color: var(--primary);
+}
+
+.nav-header {
+  margin-top: 72px;
+}
+
+.nav-scroller {
+  height: 1.75rem;
+  margin-top: 5px;
+}
+
+.nav-scroller .nav-link {
+  padding: 0.2rem 1rem;
+}
+
+.nav-scroller-fixed-top {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1020;
+}
+
+.navbar-brand {
+  margin-top: 0.175rem;
+}
+
+.banner-bg {
+  background-image: url("/assets/img/bg/zwembad.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center top;
+}
+
+.banner-bg0 {
+  background-image: url("/assets/img/bg/bg0.jpg");
+}
+
+.banner-bg1 {
+  background-image: url("/assets/img/bg/bg1.jpg");
+}
+
+.banner-bg2 {
+  background-image: url("/assets/img/bg/bg2.jpg");
+}
+
+.banner-bg3 {
+  background-image: url("/assets/img/bg/bg3.jpg");
+}
+
+.banner-bg4 {
+  background-image: url("/assets/img/bg/bg4.jpg");
+}
+
+.banner-bg5 {
+  background-image: url("/assets/img/bg/bg5.jpg");
+}
+
+.banner-bg6 {
+  background-image: url("/assets/img/bg/bg6.jpg");
+}
+
+.banner-bg7 {
+  background-image: url("/assets/img/bg/bg7.jpg");
+}
+
+.banner-bg8 {
+  background-image: url("/assets/img/bg/bg8.jpg");
+}
+
+.banner-bg9 {
+  background-image: url("/assets/img/bg/bg9.jpg");
+}
+
+.banner {
+  background-size: 100%;
+  /*margin-bottom: -2.75rem;*/
+}
+
+.overlay:before {
+  position: absolute;
+  content: " ";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  background-color: rgba(52, 58, 64, 0.4);
+}
+
+.banner-lg, .banner-lg .carousel-item {
+  height: 405px;
+}
+
+.banner-md, .banner-md .carousel-item {
+  height: 275px;
+  /*background-position-y: 45%;*/
+}
+
+.banner-sm, .banner-sm .carousel-item {
+  height: 160px;
+  /*background-position-y: 25%;*/
+}
+
+.carousel-caption {
+  bottom: 20%;
+}
+
+.carousel-caption .btn {
+  min-width: 35px;
+}
+
+.banner .carousel-item img {
+  width: 100%;
+  max-width: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.carousel-caption h1, .carousel-caption h2, .carousel-caption h3, .carousel-caption h4, .carousel-caption h5, .carousel-caption h6 {
+  line-height: 0.85;
+}
+
+.map-responsive {
+  overflow: hidden;
+  padding-bottom: 50%;
+  position: relative;
+  height: 0;
+}
+
+.map-responsive iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.card.groups {
+  min-height: 12.5rem;
+}
+
+#toTop {
+  text-decoration: none;
+  position: fixed;
+  bottom: 1.85rem;
+  right: 0.85rem;
+  overflow: hidden;
+  border: none;
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+}
+
+.badge-team {
+  min-width: 30px;
+}
+
+.carousel-item a.btn {
+  min-width: 40px;
+}
+
+th .btn-sm {
+  padding: 0;
+  text-align: left;
+  font-weight: bold;
+  line-height: 1.4;
+  color: inherit;
+  font-size: unset;
+}
+
+th .btn-link:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+/*
+ * Calendar
+*/
+.cal-cancelled {
+  text-decoration: line-through;
+}
+
+.cal {
+  cursor: pointer;
+}
+
+.cal:hover {
+  background-color: #f8f9fa;
+}
+
+.badge.cal {
+  width: 48px;
+  height: 48px;
+  font-weight: 300;
+  line-height: 1.2;
+  font-size: 1.65rem;
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.badge.cal.cal-md {
+  width: 48px;
+  height: 48px;
+  font-weight: 300;
+  line-height: 0.8;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 0.3rem;
+}
+
+.badge.cal.cal-sm {
+  width: 28px;
+  height: 28px;
+  font-size: 0.85rem;
+  padding: 0.2rem;
+  line-height: 0.85;
+  margin-top: 0.15rem;
+}
+
+ul.cal i {
+  width: 1.25rem;
+}
+
+.badge.cal-1, .badge.cal.cal-1 {
+  background-color: var(--primary);
+}
+
+.badge.cal-2, .badge.cal.cal-2 {
+  /*background-color: #007bff;*/
+  background-color: #d4af37;
+  background: -webkit-linear-gradient(top, #FAD766 0%, #DF9F28 100%);
+  background: linear-gradient(top, #FAD766, #DF9F28);
+}
+
+a.badge.cal-2:hover {
+  /*background-color: #0062cc;*/
+  background-color: #ae8911;
+}
+
+.badge.cal-3 {
+  /*background-color: #17a2b8;*/
+  /*background-color: #343a40;*/
+  background-color: #6c757d;
+}
+
+a.badge.cal-3:hover {
+  /*background-color: #117a8b;*/
+  /*background-color: #1d2124;*/
+  background-color: #545b62;
+}
+
+.badge.cal-4 {
+  background-color: #343a40;
+}
+
+a.badge.cal-4:hover {
+  background-color: #1d2124;
+}
+
+.badge.cal-5 {
+  background-color: #ffc107;
+}
+
+a.badge.cal-5:hover {
+  background-color: #d39e00;
+}
+
+/*# sourceMappingURL=hozt.css.map */

@@ -1,0 +1,170 @@
+/* 
+    hozt_bootstrap.scss
+
+    to compile run: sass --watch sass:public_html/assets
+
+*/
+
+:root {
+  --gradient-gold: linear-gradient(top, #FAD766, #DF9F28); 
+  --gradient-gold-webkit: -webkit-linear-gradient(top, #FAD766 0%, #DF9F28 100%); 
+  --gradient-darkgold: linear-gradient(top, #E1BE4D, #C6860F); 
+  --gradient-darkgold-webkit: -webkit-linear-gradient(top, #E1BE4D 0%, #C6860F 100%);
+}
+
+// variable overrides
+
+// colors
+$red: #ed1c24;
+$gold: #d4af37;
+$primary: $red;
+$secondary: $gold;
+
+// Typography
+$headings-font-weight: 300;
+$headings-line-height: 1.2;
+
+// Import all of Bootstrap
+@import "../bootstrap/scss/bootstrap";
+
+
+/* 
+    Custom Styling
+*/
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+a.text-decoration-none:hover { 
+  text-decoration: none;
+}
+
+.text-white-50 { 
+  color: rgba($white, .5);
+}
+
+.lh-100 { line-height: 1; }
+.lh-125 { line-height: 1.25; }
+.lh-150 { line-height: 1.5; }
+
+
+/* bg */
+.bg-primary {
+  & a.nav-link { color:$white; }
+  & a.nav-link:hover { color:rgba(0,0,0,.5); }
+}
+.bg-secondary {
+  color: $white; 
+  background-color: $gold;
+}
+
+/* gold (secondary) gradient fix */
+.text-secondary {
+  background: var(--gradient-gold-webkit);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-secondary, .btn-secondary, .badge-secondary, .btn-outline-secondary:hover {
+  background: var(--gradient-gold);
+  background: var(--gradient-gold-webkit);
+}
+
+.btn-outline-secondary, a.btn-outline-secondary {
+  background: var(--gradient-gold-webkit);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background: none;
+  border-color: #FAD766;
+}
+
+/* nav-header  */
+.nav-header {
+  margin-top: 72px;
+}
+
+/* navbar */
+.navbar-brand {
+  margin-top: .175rem;
+}
+
+/* nav scroller */
+.nav-scroller {
+  position: relative;
+  z-index: 2;
+  height: 2.75rem;
+  overflow-y: hidden;
+  height: 1.75rem;
+  margin-top: 5px;
+  font-size: .875rem;
+
+  & .nav {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    padding-bottom: 1rem;
+    margin-top: -1px;
+    overflow-x: auto;
+    color: rgba(255, 255, 255, .75);
+    text-align: center;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  & .nav-link {
+    padding: .2rem 1rem;
+  }
+
+  &.fixed-top {
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin-top: 77px;
+    opacity: 1;
+    z-index: 1020;
+  }
+}
+
+.btn-white, a.btn-white {
+  background: $white;
+  border-color: $white;
+}
+
+/* cards */
+.card.groups {
+  min-height: 12.5rem;
+}
+
+/* carousel */
+.carousel-caption {
+  bottom: 20%;
+}
+
+.carousel-caption .btn {
+  min-width: 35px;
+}
+
+/* 
+    RESPONSIVE CSS
+*/
+@media (max-width: 991.98px) {
+
+  /* all 10% smaller */
+  h1,.h1 { font-size: 2.25rem; }
+  h2,.h2 { font-size: 1.8rem; }
+  h3,.h3 { font-size: 1.575rem; }
+  h4,.h4 { font-size: 1.35rem; }
+  h5,.h5 { font-size: 1.125rem; }
+
+  .display-1 { font-size: 4.5rem; }
+  .display-2 { font-size: 4.0rem; }
+  .display-3 { font-size: 3.2rem; }
+  .display-4 { font-size: 2.5rem; }
+
+}

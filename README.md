@@ -1,6 +1,6 @@
 # HoZT
 
-Symfony 4 project
+Symfony 4 project with Encore webpack as frontend manager.
 
 Run `git pull` to update the master branch clone to its latest version.
 

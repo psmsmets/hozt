@@ -6,9 +6,5 @@
 
 {% block javascripts %}
   {{ parent() }}
-  <script src="{{ asset('assets/js/jquery.bcSwipe.min.js') }}"></script>
-  <script>
-    $('.carousel').carousel({ interval: 6500 });
-    $('.carousel').bcSwipe({ threshold: 60 });
-  </script>
+  {{ encore_entry_script_tags('carousel') }}
 {% endblock %}

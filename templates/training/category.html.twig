@@ -6,7 +6,7 @@
 
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <h1 class="text-red">{{ page.training_category.name }}</h1>
+    <h1 class="text-primary">{{ page.training_category.name }}</h1>
     <p class="lead">{{ page.training_category.description }}</p>
 
     {% if page.training_team_exceptions is not empty %}
@@ -74,16 +74,16 @@
         {% for team in page.training_category.teams %}
           <dl class="row mb-md-1"> 
             <dt class="col-12 col-sm-3 d-none d-sm-block text-right">
-              <h5><span class="badge badge-secondary pt-1">{{team.abbr}}</span></h5>
+              <h5><span class="badge badge-medium pt-1">{{team.abbr}}</span></h5>
             </dt>
             <dd class="col-12 col-sm-9">
-              <h5><span class="badge badge-secondary pt-1 mr-2 d-sm-none">{{team.abbr}}</span> {{team.name}}</h5>
+              <h5><span class="badge badge-medium pt-1 mr-2 d-sm-none">{{team.abbr}}</span> {{team.name}}</h5>
             </dd>
             {% if team.coaches|length > 0 %}
             <dt class="col-12 col-sm-3 text-md-right">Trainer{% if team.coaches|length > 1 %}s{%endif%}</dt>
             <dd class="col-12 col-sm-9">
               {% for coach in team.coaches %}
-                <span class="badge badge-gold">{{coach.firstname}}</span>
+                <span class="badge badge-secondary">{{coach.firstname}}</span>
               {% endfor %}
             </dd>
             {% endif %}
@@ -155,7 +155,7 @@
                     <span class="badge badge-danger ml-1">Geannuleerd</span>
                   {% else %}
                     {% if competition.calendar.body is not empty %}<span class="badge badge-light">&nbsp;<i class="fas fa-info"></i>&nbsp;</span>{% endif %}
-                    {% if competition.calendar.createdAt > page.lastvisit|date_modify("-14 days") and not lastvisit %}<span class="badge badge-gold ml-1">Nieuw</span>
+                    {% if competition.calendar.createdAt > page.lastvisit|date_modify("-14 days") and not lastvisit %}<span class="badge badge-secondary ml-1">Nieuw</span>
                     {% elseif (lastvisit and lastvisit < competition.calendar.updatedAt) or (not lastvisit and  competition.calendar.updatedAt > page.lastvisit|date_modify("-7 days"))%}<span class="badge badge-info ml-1">Update</span>
                     {% endif %}
                   {% endif %}
@@ -226,5 +226,5 @@
 
 {% block javascripts %}
   {{ parent() }}
-  <script src="{{ asset('assets/js/training_team_tabs_deep_linking.js') }}"></script>
+  {{ encore_entry_script_tags('training_category') }}
 {% endblock %}

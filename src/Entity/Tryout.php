@@ -74,6 +74,15 @@ class Tryout
     private $enrolFrom;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $reminderSent;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $reminderSentAt;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\TryoutEnrolment", mappedBy="tryout")
      */
     private $enrolments;
@@ -90,13 +99,14 @@ class Tryout
         $this->nofEnrolments = 0;
         $this->maxEnrolments = 12;
         $this->enabled = true;
+        $this->reminderSent = false;
         $this->enrolments = new ArrayCollection();
     }
 
     public function __toString(): ?string
     {
         $fmt = 'Y-m-d H:i';
-        return $this->startTime->format($fmt) . " (#)" ;
+        return $this->startTime->format($fmt);
     }
 
     public function getId(): ?int
@@ -243,6 +253,24 @@ class Tryout
     public function getEnrolUntil(): ?\DateTimeInterface
     {
         return (clone $this->startTime)->modify('midnight -'.abs(Tryout::enrol_days_before_starttime).'days');
+    }
+
+    public function getReminderSent(): ?bool
+    {
+        return $this->reminderSent;
+    }
+
+    public function setReminderSent(bool $reminderSent): self
+    {
+        $this->reminderSent = $reminderSent;
+        $this->reminderSentAt = new \DateTime("now");
+
+        return $this;
+    }
+
+    public function getReminderSentAt(): ?\DateTimeInterface
+    {
+        return $this->reminderSentAt;
     }
 
     /**

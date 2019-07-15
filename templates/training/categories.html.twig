@@ -6,7 +6,7 @@
 
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <h1 class="text-red">Aanbod</h1>
+    <h1 class="text-primary">Aanbod</h1>
     <p class="lead mb-4">De HoZT-zwemmers zijn ingedeeld in volgende groepen</p>
 
     <p class="text-muted"><i class="fas fa-info-circle"></i> Klik op een groep voor meer informatie.<p>
@@ -20,10 +20,10 @@
                         <h4 class="card-title">{{ category.name }}</h4>
                         <h6 class="card-subtitle mb-2 text-muted">{{ category.description }}</h6>
                         <p class="card-text">
-                            <span class="badge badge-hozt">{{ category.times }} <i class="fas fa-times"></i></span>
-                            <span class="badge badge-hozt">{{ category.duration }}</span><br>
+                            <span class="badge badge-primary">{{ category.times }} <i class="fas fa-times"></i></span>
+                            <span class="badge badge-primary">{{ category.duration }}</span><br>
                             {% for day in category.days %}
-                            <span class="badge badge-secondary">{{ day }}</span>
+                            <span class="badge badge-medium">{{ day }}</span>
                             {% endfor %}
                         </p>
                     </div>

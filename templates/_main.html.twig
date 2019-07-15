@@ -1,6 +1,7 @@
 {% set strategy = 'html' %}
 {% set scheduleNotice = [] %}
 {% set loading = '<div class="d-flex justify-content-center"><div class="spinner-border m-5" role="status" ><span class="sr-only">Loading...</span></div></div>' %}
+{% set _side = block('side') %}
 <!DOCTYPE html>
 <html>
 
@@ -50,74 +51,49 @@
         <title>{% block title %}{% endblock %} - Hoogstratens Zwem Team</title>
 
         <!-- Core CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" rel="stylesheet" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-        <link href="{{ asset('assets/css/animate.css') }}" rel="stylesheet" />
-        <link href="{{ asset('assets/css/hozt-v20190520T2129.css') }}" rel="stylesheet" />
+        {{ encore_entry_link_tags('animate') }}
+        {{ encore_entry_link_tags('bootstrap') }}
+        {{ encore_entry_link_tags('hozt') }}
+        <!--<link href="{{ asset('assets/css/hozt-v20190520T2129.css') }}" rel="stylesheet" />-->
         <!-- Custom styles for this template -->
         {% block stylesheets %}{% endblock %}
 
     </head>
 
-    <body class="bg-light">
+    <body class="bg-light" {% block js_global_data %}{% endblock %}>
 
         {% block nav %}{% endblock %}
         {% block top %}{% endblock %}
 
         <div class="container">
-
             <div class="row">
-
             {% block body %}
-
-                <!-- Main -->
-                <div class="col col-12 col-md-9 p-0 col-print-12">
-
+                <div class="col col-12 {% if _side is not empty %}col-md-9{%endif%} p-0 col-print-12">
                   <div id="notices" class="pl-2 pr-2 p-md-0">
                     {% include 'modules/alerts.html.twig' %}
                   </div>
                   {% block lead %}{% endblock %}
                   {% block main %}{% endblock %}
-
                 </div>
-
-                <!-- Sidebar -->
+              {% if _side is not empty %}
                 <div class="col col-12 col-md-3 d-print-none">
-
                    {% block side %}{% endblock %}
-
                 </div>
+              {% endif %}
 
             {% endblock %}
 
             </div><!-- /div row -->
-
         </div><!-- /div container -->
 
         {% block footer %}{% endblock %}
 
         <a id="toTop" href="javascript:;" style="visibility:hidden;"><span id="toTopHover"></span><img width="40" height="40" alt="To Top" src="/assets/img/to-top@2x.png"></a>
 
-        <!-- Bootstrap core JavaScript
+        <!-- JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script> 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-scrollTo/2.1.2/jquery.scrollTo.js"></script>
-
-        <!-- Additional page JavaScript
-        ================================================== -->
-        <script src="{{ asset('assets/js/scheduleNotice.js') }}"></script> 
-        <script type="text/javascript">
-            {% for msg in app.session.flashbag.get('scheduleNotice') %}
-              var notice = scheduleNoticeAlert( {{ msg|json_encode|raw }});
-              $( notice ).appendTo( "#notices" );
-              $('#{{msg.cookie}}').on('closed.bs.alert', function () {
-                  setCookie('{{msg.cookie}}', '{{msg.md5}}', 60)
-              })
-            {% endfor %}
-        </script>
         {% block javascripts %}{% endblock %}
 
     </body>

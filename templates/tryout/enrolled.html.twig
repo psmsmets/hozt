@@ -6,7 +6,7 @@
 
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <h1 class="text-red">Testmomenten</h1>
+    <h1 class="text-primary">Testmomenten</h1>
 
     {% if page.tryouts|length > 0 %}
 
@@ -14,14 +14,14 @@
 
       <ul class="list-group list-group-flush mt-3">
       {% for tryout in page.tryouts %}
-        <li class="list-group-item pl-0 pl-md-3 pr-0 pr-md-3">
+        <li class="list-group-item pl-0 pl-md-3 pr-0 pr-md-3 {% if tryout.enrolFrom > date() %}d-print-none{% endif %}">
           <div class="d-flex w-100 justify-content-between align-items-center">
             <h5 class="mb-1">{{ tryout.startTime|localizeddate('full','none') }}<br> van {{ tryout.startTime|localizeddate('none','short') }} tot {{ tryout.endTime|localizeddate('none','short') }}</h5>
             <span class="pl-1 text-right">
               {% if tryout.enrolFrom > date() %}
                 <small class="text-muted">inschrijven vanaf {{ tryout.enrolFrom|localizeddate('medium','none')}}</small>
               {% else %}
-                <small>beschikbare plaatsen:</small> <span class="badge badge-hozt badge-pill">{{ tryout.remainingEnrolments }}</span><br>
+                <small>beschikbare plaatsen:</small> <span class="badge badge-primary badge-pill">{{ tryout.remainingEnrolments }}</span><br>
                 <small>inschrijven tot {{ tryout.enrolUntil|localizeddate('medium','short')}}</small>
               {% endif %}
             </span>
@@ -34,6 +34,13 @@
                 </div>
               </div>
             </div>
+            <p class="text-right small d-print-none">
+              {% if tryout.reminderSent %}
+              reminder verzonden {{tryout.reminderSentAt|localizeddate('medium','short')}}
+              {% else %}
+              <button class="btn btn-sm btn-secondary" {%if date() < tryout.enrolUntil or date() > tryout.startTime %}disabled{%endif%}><i class="fas fa-paper-plane"></i> reminder</button>
+              {% endif %}
+            </p>
           {% endif %}
         </li>
       {% endfor %}
@@ -47,131 +54,5 @@
 
 {% block javascripts %}
   {{ parent() }}
-
-<script>
-/**
- * jQuery.fn.sortElements
- * --------------
- * @author James Padolsey (http://james.padolsey.com)
- * @version 0.11
- * @updated 18-MAR-2010
- * --------------
- * @param Function comparator:
- *   Exactly the same behaviour as [1,2,3].sort(comparator)
- *   
- * @param Function getSortable
- *   A function that should return the element that is
- *   to be sorted. The comparator will run on the
- *   current collection, but you may want the actual
- *   resulting sort to occur on a parent or another
- *   associated element.
- *   
- *   E.g. $('td').sortElements(comparator, function(){
- *      return this.parentNode; 
- *   })
- *   
- *   The <td>'s parent (<tr>) will be sorted instead
- *   of the <td> itself.
- */
-jQuery.fn.sortElements = (function(){
-    
-    var sort = [].sort;
-    
-    return function(comparator, getSortable) {
-        
-        getSortable = getSortable || function(){return this;};
-        
-        var placements = this.map(function(){
-            
-            var sortElement = getSortable.call(this),
-                parentNode = sortElement.parentNode,
-                
-                // Since the element itself will change position, we have
-                // to have some way of storing it's original position in
-                // the DOM. The easiest way is to have a 'flag' node:
-                nextSibling = parentNode.insertBefore(
-                    document.createTextNode(''),
-                    sortElement.nextSibling
-                );
-            
-            return function() {
-                
-                if (parentNode === this) {
-                    throw new Error(
-                        "You can't sort elements if any one is a descendant of another."
-                    );
-                }
-                
-                // Insert before flag:
-                parentNode.insertBefore(this, nextSibling);
-                // Remove flag:
-                parentNode.removeChild(nextSibling);
-                
-            };
-            
-        });
-       
-        return sort.call(this, comparator).each(function(i){
-            placements[i].call(getSortable.call(this));
-        });
-        
-    };
-    
-})();
-
-$(window).on( "load", function() {
-
-    var div = "api_load_tryout_enrolled_";
-    var hoztAPI  = "/api/ingeschreven/testmomenten/";
-
-    $.each( $('div[id^="'+div+'"]'), function(i,tryout) {
-
-        var uuid = $(tryout).attr('id').split(div)[1];
-
-        $.getJSON( hoztAPI+uuid, {}).done(function(enrolments) {
-
-            $(tryout).html(enrolments.content);
-
-            var table = $('#'+uuid);
- 
-            $('#'+ uuid + ' th.sortable')
-                .wrapInner('<button class="btn btn-link btn-sm"/>')
-                .each(function(){
-            
-                var th = $(this);
-                var thIndex = th.index();
-                var inverse = false;
-            
-                th.click(function(){
-
-                    $("#" + uuid + " th button").removeClass("dropdown-toggle");
-                    $(th).children('button').addClass('dropdown-toggle');
-                    $(th).removeClass(inverse ? 'dropup' : 'dropdown').addClass(inverse ? 'dropdown' : 'dropup');
-
-                    table.find('td').filter(function(){
-
-                        return $(this).index() === thIndex;
-
-                    }).sortElements(function(a, b){
-
-                        return $.text([a]) > $.text([b]) ?
-                            inverse ? -1 : 1
-                            : inverse ? 1 : -1;
-
-                    }, function(){
-                        // parentNode is the element we want to move
-                        return this.parentNode;
-                    });
-                
-                    inverse = !inverse;
-                    
-                });
-                
-            });
-
-        });
-    });
-
-});
-</script>
+  {{ encore_entry_script_tags('tryout_enrolled') }}
 {% endblock %}

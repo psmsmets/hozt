@@ -6,18 +6,18 @@
 
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <h1 class="text-red">Kalender</h1>
+    <h1 class="text-primary">Kalender</h1>
 
     <p class="lead">Overzicht van het zwemjaar</p>
 
-    <div class="text-center mb-3">
+    <div class="text-center mb-3 js-calendar-past" data-past-hidden="{{ date() < page.calendar_period.end ? 'true' : 'false' }}">
       {% if page.calendar_period.start > date('2017-01-01') %} 
-      <a class="btn btn-outline-secondary" href="{{ path('calendar_list', { 'year': page.calendar_period.start|date_modify("-1 year")|date('Y') }) }}"><span aria-hidden="true">&laquo;</span></a>
+      <a class="btn btn-outline-medium" href="{{ path('calendar_list', { 'year': page.calendar_period.start|date_modify("-1 year")|date('Y') }) }}"><span aria-hidden="true">&laquo;</span></a>
       {% else %}
-      <a class="btn btn-outline-secondary disabled" href="#" disabled><span aria-hidden="true">&laquo;</span></a>
+      <a class="btn btn-outline-medium disabled" href="#" disabled><span aria-hidden="true">&laquo;</span></a>
       {% endif %}
-      <button class="btn btn-secondary">{{page.calendar_period.start|date('Y')}}-{{page.calendar_period.end|date('y')}}</button>
-      <a class="btn btn-outline-secondary" href="{{ path('calendar_list', { 'year': page.calendar_period.start|date_modify("+1 year")|date('Y') }) }}"><span aria-hidden="true">&raquo;</span></a>
+      <button class="btn btn-medium">{{page.calendar_period.start|date('Y')}}-{{page.calendar_period.end|date('y')}}</button>
+      <a class="btn btn-outline-medium" href="{{ path('calendar_list', { 'year': page.calendar_period.start|date_modify("+1 year")|date('Y') }) }}"><span aria-hidden="true">&raquo;</span></a>
     </div>
 
     <div class="mt-4 d-flex justify-content-between">
@@ -26,9 +26,11 @@
         <a href="javascript:;" class="badge badge-primary cal-{{category.sequence}}" id="cal-{{category.sequence}}"><i class="far fa-eye"></i> {{category.title}}</a>
       {% endfor %}
       </div>
+      {% if date() < page.calendar_period.end %}
       <div>
-        <a href="javascript:;" class="badge badge-secondary" id="toggle-past"><i class="far fa-eye"></i> voorbije events</a>
+        <a href="javascript:;" class="badge badge-medium" id="toggle-past"><i class="far fa-eye-slash"></i> voorbije events</a>
       </div>
+      {% endif %}
     </div>
 
     {% if page.calendar_events|length == 0 %}
@@ -62,7 +64,7 @@
         {% if year>prev_year %}<h3 class="mt-4 pt-4 pl-2 border-top border-gray {% if year<this_year %} past{% endif %}">{{year|date('Y')}}</h3>{% endif %}
         {% if month>prev_month %}<h4 class="p-2 mb-2 mt-4 bg-light rounded {% if month<this_month %} past{% endif %}">{{month|localizeddate('none', 'none', null, "Europe/Paris", "MMMM")|capitalize}}</h4>{% endif %}
 
-        <div class="media align-top mt-3 cal cal-{{event.category.sequence}}{% if past %} text-muted past{% endif %}{% if event.cancelled %} alert-danger rounded{% endif %}" onclick="window.location='{{ path('calendar_event', {'uuid': event.uuid}) }}';">
+        <div class="media align-top mt-3 cal cal-{{event.category.sequence}}{% if past %}{% if date() < page.calendar_period.end %} text-muted{% endif %} past{% endif %}{% if event.cancelled %} alert-danger rounded{% endif %}" onclick="window.location='{{ path('calendar_event', {'uuid': event.uuid}) }}';">
 
           <span class="badge badge-dark mr-3 cal cal-{{event.category.sequence}}">{% if past %}<s>{% endif %}{{event.startTime|date('d')}}{% if past %}</s>{% endif %}</span>
 
@@ -74,7 +76,7 @@
                   <span class="badge badge-danger ml-1">Geannuleerd</span>
                 {% else %}
                   {% if event.body is not empty %}<span class="badge badge-light">&nbsp;<i class="fas fa-info"></i>&nbsp;</span>{% endif %}
-                  {% if event.createdAt > page.lastvisit|date_modify("-14 days") and not lastvisit %}<span class="badge badge-gold ml-1">Nieuw</span>
+                  {% if event.createdAt > page.lastvisit|date_modify("-14 days") and not lastvisit %}<span class="badge badge-secondary ml-1">Nieuw</span>
                   {% elseif (lastvisit and lastvisit < event.updatedAt) or (not lastvisit and  event.updatedAt > page.lastvisit|date_modify("-7 days"))%}<span class="badge badge-info ml-1">Update</span>
                   {% endif %}
                 {% endif %}
@@ -132,75 +134,5 @@
 
 {% block javascripts %}
 {{ parent() }}
-<script>
-
-var pasthidden = true;
-$('.past').hide();
-
-$(document).ready(function(){
-
-  $('#toggle-past').click(function(e) {
-    if (pasthidden){
-      $('.past').show(400);
-      $('#toggle-past i').removeClass("fa-eye-slash");
-      $('#toggle-past i').addClass("fa-eye");
-      if ($('#cal-1').hasClass('hidden')){ $('.media.cal-1').hide(); }
-      if ($('#cal-2').hasClass('hidden')){ $('.media.cal-2').hide(); }
-      if ($('#cal-3').hasClass('hidden')){ $('.media.cal-3').hide(); }
-      pasthidden = false;
-    } else {
-      $('.past').hide(400);
-      $('#toggle-past i').removeClass("fa-eye");
-      $('#toggle-past i').addClass("fa-eye-slash");
-      pasthidden = true;
-    }
-  });
-
-  $('#cal-1').click(function(e) {
-    if ($(this).hasClass('hidden')) {
-      $('.media.cal-1').show(400);
-      if (pasthidden){ $('.past').hide(); }
-      $(this).removeClass("hidden");
-      $('#cal-1 i').removeClass("fa-eye-slash");
-      $('#cal-1 i').addClass("fa-eye");
-    } else {
-      $('.media.cal-1').hide(400);
-      $(this).addClass("hidden");
-      $('#cal-1 i').removeClass("fa-eye");
-      $('#cal-1 i').addClass("fa-eye-slash");
-    }
-  });
-
-  $('#cal-2').click(function(e) {
-    if ($(this).hasClass('hidden')) {
-      $('.media.cal-2').show(400);
-      if (pasthidden){ $('.past').hide(); }
-      $(this).removeClass("hidden");
-      $('#cal-2 i').removeClass("fa-eye-slash");
-      $('#cal-2 i').addClass("fa-eye");
-    } else {
-      $('.media.cal-2').hide(400);
-      $(this).addClass("hidden");
-      $('#cal-2 i').removeClass("fa-eye");
-      $('#cal-2 i').addClass("fa-eye-slash");
-    }
-  });
-
-  $('#cal-3').click(function(e) {
-    if ($(this).hasClass('hidden')) {
-      $('.media.cal-3').show(400);
-      if (pasthidden){ $('.past').hide(); }
-      $(this).removeClass("hidden");
-      $('#cal-3 i').removeClass("fa-eye-slash");
-      $('#cal-3 i').addClass("fa-eye");
-    } else {
-      $('.media.cal-3').hide(400);
-      $(this).addClass("hidden");
-      $('#cal-3 i').removeClass("fa-eye");
-      $('#cal-3 i').addClass("fa-eye-slash");
-    }
-  });
-
-});
-</script>
+{{ encore_entry_script_tags('calendar') }}
 {% endblock %}

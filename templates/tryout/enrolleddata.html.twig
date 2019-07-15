@@ -3,28 +3,32 @@
     <!--<caption>Inschrijvingen</caption>-->
     <thead>
       <tr>
-        <th scope="col" class="">#</th>
+        <th scope="col" class="d-print-none">#</th>
         <th scope="col" class="sortable">Voornaam</th>
         <th scope="col" class="sortable">Naam</th>
         <th scope="col" class="sortable">Geb.jaar</th>
         <th scope="col" class="sortable">Postcode</th>
+        <th scope="col" class="sortable">Telefoon</th>
+        <th scope="col" class="sortable">Email</th>
         <th scope="col" class="sortable">Groep</th>
-        <th scope="col" class="sortable">Ingeschreven</th>
-        <th scope="col" class="sortable">Afgemeld</th>
+        <th scope="col" class="sortable d-print-none">Ingeschreven</th>
+        <th scope="col" class="sortable d-print-none">Afgemeld</th>
       </tr>
     </thead>
     <tbody>
       {% set i=0 %}
       {% for enrol in enrolments %}
       <tr class="{%if enrol.withdrawn %}line-through text-muted withdrawn{%endif%}">
-        <td><strong>{% if not enrol.withdrawn %}{% set i = i + 1 %}{{i}}{% endif %}</strong></td>
+        <td class="d-print-none"><strong>{% if not enrol.withdrawn %}{% set i = i + 1 %}{{i}}{% endif %}</strong></td>
         <td>{{enrol.firstname|title}}</td>
         <td>{{enrol.lastname|title}}</td>
         <td>{{enrol.birthdate|date('Y')}}</td>
         <td>{{enrol.address}}</td>
+        <td>{{enrol.telephone}}</td>
+        <td>{{enrol.email}}</td>
         <td>{{enrol.category}}</td>
-        <td class="small">{{enrol.enrolledAt|localizeddate('short','short')}}</td>
-        <td class="small">
+        <td class="small d-print-none">{{enrol.enrolledAt|localizeddate('short','short')}}</td>
+        <td class="small d-print-none">
           {% if enrol.withdrawn %} {{enrol.withdrawnAt|localizeddate('short','short')}} {% endif %}
         </td>
       </tr>

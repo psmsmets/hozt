@@ -1,7 +1,7 @@
 <!-- NAV-SCROLLER
 ================================================== -->
-<div class="nav-scroller bg-red shadow-sm fixed-top d-print-none" id="nav-categories">
-  <nav class="nav nav-underline container">
+<div class="nav-scroller bg-primary shadow-sm fixed-top d-print-none" id="nav-categories">
+  <nav class="nav container">
   {% for category in base.training_team_categories %}
     <a class="nav-link" href="{{ path('training_category', {'slug': category.slug}) }}">{{ category.name }}</a>
   {% endfor %}

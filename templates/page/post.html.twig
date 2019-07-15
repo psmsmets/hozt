@@ -1,6 +1,6 @@
 {% extends 'default.html.twig' %}
 
-{% block title %}{{ page.blog_post.title }}{% endblock %}
+{% block title %}{% if page.blog_post.titleShort is empty %}{{ page.blog_post.title }}{% else %}{{ page.blog_post.titleShort }}{% endif %}{% endblock %}
 
 {% block main %}
 
