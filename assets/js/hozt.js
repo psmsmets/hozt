@@ -128,7 +128,9 @@ $(document).ready(function(){
  
     /* Every time the window is scrolled ... */
     $(window).scroll( function(){
+
         scrollPos = $(window).scrollTop();
+
         // show back to top
         if ( scrollPos >= 400 && !toTopVisible ){
             toTopVisible=true;
@@ -142,6 +144,7 @@ $(document).ready(function(){
                 toTop.style.visibility="hidden";
             });
         }
+
         /* Check the location of each desired element */
         $('.scroll-fade-in').each( function(i){
 
@@ -165,7 +168,7 @@ $(document).ready(function(){
         if (scrollPos <= bannerHeight0) {
             $('.carousel-item').each(function() {
                 bannerImgTop = bannerImgTop0 - 2 * ((bannerHeight0-scrollPos)/bannerHeight0-1)*50 * bannerVelocity;
-                $(this).children('img').css('top', bannerImgTop + '%'); 
+                $(this).children('img').css('top', Math.round(bannerImgTop * 100) / 100 + '%'); 
             }); 
         }
  
