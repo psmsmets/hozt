@@ -65,8 +65,8 @@ easy_admin:
                     - { property: 'location', label: 'Locatie' }
                     - { property: 'url', label: 'Website' }
                     - { property: 'staticPage', label: 'Pagina' }
-                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.calendar_images%' }
-                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.calendar_documents%' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.img.calendar%' }
+                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.doc.calendar%' }
             search:
                 # using an empty value to not apply any condition when searching
                 # elements (this prevents inheriting the 'dql_filter' value defined in 'list')

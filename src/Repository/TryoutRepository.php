@@ -19,6 +19,18 @@ class TryoutRepository extends ServiceEntityRepository
         parent::__construct($registry, Tryout::class);
     }
 
+    public function findTryout(string $uuid)
+    {
+        return $this->createQueryBuilder('tryout')
+            ->where('tryout.enabled = :enabled')
+            ->andwhere('tryout.uuid = :uuid')
+            ->setParameter('enabled', true)
+            ->setParameter('uuid', $uuid)
+            ->getQuery()
+            ->getOneOrNullResult() 
+        ;     
+    }
+
     public function findTryouts(int $pastdays = 0)
     {
         $now = new \DateTime('now');

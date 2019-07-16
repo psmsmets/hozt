@@ -12,7 +12,7 @@ easy_admin:
                     - { property: 'id', label: 'Id' }
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'title', label: 'Titel' }
-                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.blogPost_images%' }
+                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.img.blogPost%' }
                     - { property: 'category', label: 'Categorie' }
                     - { property: 'special', label: 'Voorpagina' }
                     - { property: 'pinned', label: 'Pin', type: 'boolean' }
@@ -36,8 +36,8 @@ easy_admin:
                     - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
                     - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getFilteredCalendarEvents'] } }
-                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.blogPost_images%' }
-                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.blogPost_documents%' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.img.blogPost%' }
+                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.doc.blogPost%' }
                     - { property: 'keywords', label: 'Keywords' }
                     # - { property: 'publishUntil', label: 'Publiceer tot' }
                     # - { property: 'access', label: 'Toegang' }

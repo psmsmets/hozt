@@ -672,7 +672,7 @@ class PageController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
 
         $this->initTemplateData();
-        $this->addToTemplateData( 'tryouts', $tryoutRep->findTryouts(14) );
+        $this->addToTemplateData( 'tryouts', $tryoutRep->findTryouts(21) );
 
         return $this->render('tryout/enrolled.html.twig', $this->template_data );
     }

@@ -8,24 +8,33 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 
-use App\Entity\User;
+# entities
+use App\Entity\StaticPage;
 use App\Entity\BlogPost;
 use App\Entity\BlogCategory;
-use App\Entity\CalendarEvent;
-use App\Entity\CalendarCategory;
-use App\Entity\Competition;
-use App\Entity\CompetitionPool;
-use App\Entity\CompetitionDocument;
-use App\Entity\CompetitionDocumentCategory;
-use App\Entity\ContactFaq;
-use App\Entity\ContactForm;
-use App\Entity\SponsorCategory;
+use App\Entity\CarouselSlide;
 use App\Entity\TrainingCoach;
-use App\Entity\TrainingSchedule;
-use App\Entity\TrainingException;
+use App\Entity\TrainingDay;
+use App\Entity\TrainingTime;
 use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
+use App\Entity\TrainingSchedule;
+use App\Entity\TrainingException;
+use App\Entity\ContactFaq;
+use App\Entity\ContactForm;
+use App\Entity\CalendarCategory;
+use App\Entity\CalendarEvent;
+use App\Entity\Competition;
+use App\Entity\CompetitionState;
+use App\Entity\Sponsor;
+use App\Entity\SponsorCategory;
+use App\Entity\Clubfeest;
+use App\Entity\TryoutEnrolment;
 use App\Entity\Tryout;
+
+# repositories
+use App\Repository\TryoutEnrolmentRepository;
+use App\Repository\TryoutRepository;
 
 class AdminController extends EasyAdminController
 {
@@ -462,6 +471,15 @@ class AdminController extends EasyAdminController
         parent::persistEntity($entity);
     }
 
+    public function persistTryoutEnrolmentEntity($entity )
+    {
+        $tryout = $entity->getTryout();
+        if (!$entity->getWithdrawn()) $tryout->nofEnrolmentsSubtractOne();
+        $this->em->flush();
+
+        parent::persistEntity($entity);
+    }
+
     public function updateSponsorCategoryEntity($entity)
     {
         $entity->setUpdatedAt();
@@ -511,7 +529,7 @@ class AdminController extends EasyAdminController
     public function removeTryoutEntity($entity)
     {
         $now = new \DateTime("today midnight");
-        if ( $entity->getEndTime() >= $now  or sizeof($entity->getEnrolments)>0 ) {
+        if ( $entity->getEndTime() >= $now  or sizeof($entity->getEnrolments())>0 ) {
             $this->addFlash('danger', 'Fout: Verwijderen enkel toegestaan na afloop zonder inschrijvingen.');
             return;
         }

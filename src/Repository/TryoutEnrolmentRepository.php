@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Tryout;
 use App\Entity\TryoutEnrolment;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -47,6 +48,20 @@ class TryoutEnrolmentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function countEnrolments(Tryout $tryout)
+    {
+        return $this->createQueryBuilder('enrol')
+            ->leftJoin('enrol.tryout','tryout')
+            ->select('count(enrol.id)')
+            ->where('tryout.id = :id')
+            ->andwhere('enrol.withdrawn = :wd')
+            ->setParameter('id', $tryout->getId())
+            ->setParameter('wd', false)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;    
     }
 
     public function flush()

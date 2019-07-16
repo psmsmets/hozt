@@ -27,7 +27,7 @@
             </span>
           </div>
           {% if tryout.nofEnrolments>0 %}
-            <div class="table-responsive" id="api_load_tryout_enrolled_{{tryout.uuid}}">
+            <div class="table-responsive api_load_tryout_enrolled" data-tryout={{tryout.uuid}}>
               <div class="d-flex justify-content-center">
                 <div class="spinner-border m-5" role="status" >
                   <span class="sr-only">Laden...</span>
@@ -38,7 +38,7 @@
               {% if tryout.reminderSent %}
               reminder verzonden {{tryout.reminderSentAt|localizeddate('medium','short')}}
               {% else %}
-              <button class="btn btn-sm btn-secondary" {%if date() < tryout.enrolUntil or date() > tryout.startTime %}disabled{%endif%}><i class="fas fa-paper-plane"></i> reminder</button>
+              <button class="btn btn-sm btn-medium send-reminder" {%if date() < tryout.enrolUntil or date() > tryout.startTime %}disabled{%endif%} data-tryout={{tryout.uuid}} ><i class="fas fa-paper-plane"></i> reminder</button>
               {% endif %}
             </p>
           {% endif %}
@@ -46,9 +46,7 @@
       {% endfor %}
       </ul>
     {% endif %}
-
   </div>
-
 
 {% endblock %}
 

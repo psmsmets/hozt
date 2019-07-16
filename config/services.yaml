@@ -28,23 +28,14 @@ parameters:
 
     app.path.doc.blogPost: /uploads/files/blog
     app.path.img.blogPost: /uploads/images/blog
-    app.path.doc.staticPage: /uploads/files/page
-    app.path.img.staticPage: /uploads/images/page
     app.path.doc.calendar: /uploads/files/calendar
     app.path.img.calendar: /uploads/images/calendar
     app.path.img.carousel: /uploads/images/carousel
+    app.path.doc.competition: /uploads/files/competition
+    app.path.img.sponsor: /uploads/images/sponsor
+    app.path.doc.staticPage: /uploads/files/page
+    app.path.img.staticPage: /uploads/images/page
     app.path.img.user: /uploads/images/user
-
-    app.path.blogPost_documents: /uploads/files/blog
-    app.path.blogPost_images: /uploads/images/blog
-    app.path.calendar_documents: /uploads/files/calendar
-    app.path.calendar_images: /uploads/images/calendar
-    app.path.carousel_images: /uploads/images/carousel
-    app.path.competition_documents: /uploads/files/competition
-    app.path.sponsor_images: /uploads/images/sponsor
-    app.path.staticPage_documents: /uploads/files/page
-    app.path.staticPage_images: /uploads/images/page
-    app.path.user_images: /uploads/images/user
 
 services:
     # default configuration for services in *this* file

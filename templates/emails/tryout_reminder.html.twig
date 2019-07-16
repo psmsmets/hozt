@@ -1,0 +1,20 @@
+{# templates/emails/tryout.html.twig #}
+
+{% include 'emails/_style.html.twig' %}
+
+<p class="text-hozt"><strong>HoZT testmoment</strong></p>
+
+<p>Hallo {{enrol.firstname}} {{enrol.lastname}},</p>
+
+<p>Je hebt je ingeschreven voor een testmoment.</p>
+
+<p>Alvast bedankt voor jouw interesse in onze zwemclub.</p>
+
+<p>We verwachten je <strong>{{enrol.tryout.startTime|localizeddate('full','short')}}</strong> in het <a href="{{absolute_url('/zwembad')}}">zwembad Sportoase Stede Akkers Hoogstraten</a> voor een vrijblijvend testmoment voor de groep <strong><a href="{{absolute_url(path('training_category', {'slug': enrol.category.slug})) }}">{{enrol.category.name}}</a></strong>.<p>
+<p>Je dient je aan te melden aan de balie van het zwembad. Het testmoment duurt tot uiterlijk {{enrol.tryout.endTime|localizeddate('none','short')}}.</p>
+
+<p>&nbsp;</p>
+
+<p>Alle info over het testmoment kan je op deze <a href="{{absolute_url(path('enrol_tryout', {'inschrijving': enrol.uuid})) }}">link</a> terugvinden.</p>
+
+<p class="small text-muted">** Dit is een automatisch bericht van <a href="{{absolute_url('/')}}">HoZT.be</a> **</p>

@@ -38,6 +38,10 @@
 
     {% endif %}
 
+    {% if is_granted('ROLE_ADMIN') %}
+    <p class="mt-2"><a class="btn btn-sm btn-primary" href="{{ path('enrolled_tryout') }}"><i class="fas fa-lock-open"></i> Ingeschreven</a></p>
+    {% endif %}
+
     {% if page.form is defined %}
 
     <div class="row mt-5">

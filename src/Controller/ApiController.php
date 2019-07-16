@@ -5,6 +5,12 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\Security\Core\Security;
+use Doctrine\ORM\EntityManagerInterface;
+
+
 /*
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -30,6 +36,15 @@ use App\Repository\TryoutRepository;
 
 class ApiController extends AbstractController
 {
+
+    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em)
+    {
+        $this->requestStack = $requestStack;
+        $this->security = $security;
+        $this->em = $em;
+        $this->now = new \DateTime('now');
+    }
+
     /**
      * @Route("/api/traint-{team_abbr}-vandaag", name="api_training_team_today")
      */
@@ -311,7 +326,7 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/ingeschreven/testmomenten/{uuid}", name="api_enrolled_tryout")
+     * @Route("/api/ingeschreven/testmoment/{uuid}", name="api_enrolled_tryout")
      */
     public function api_enrolled_tryout(string $uuid, TryoutEnrolmentRepository $TryoutEnrolRep)
     {
@@ -324,6 +339,62 @@ class ApiController extends AbstractController
                 ));
         } else {
             return $this->json(array('content' => false));
+        }
+    }
+
+    /**
+     * @Route("/api/herinnering/testmoment/{uuid}", name="api_reminder_tryout")
+     */
+    public function api_reminder_tryout(string $uuid, TryoutRepository $TryoutRep, \Swift_Mailer $mailer )
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) return $this->json(array(
+                'success' => false, 
+                'message' => 'Je bent niet gemachtigd', 
+            ));
+        
+        if ($tryout = $TryoutRep->findTryout($uuid)) {
+
+          if ($tryout->getReminderSent()) return $this->json(array(
+                  'success' => false, 
+                  'message' => 'Herinneringen zijn alreeds verzonden', 
+                  'reminderSent' => $tryout->getReminderSent(), 
+                  'reminderSentAt' => $tryout->getReminderSentAt())
+              );
+
+          foreach( $tryout->getEnrolments() as $enrol ) {
+
+            $message = (new \Swift_Message())
+                ->setSubject('Herinnering HoZT testmoment')
+                ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
+                ->setTo($enrol->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'emails/tryout_reminder.html.twig', [ 'enrol' => $enrol ]
+                    ),
+                    'text/html'
+                )
+            ;
+            $mailer->send($message);
+          }
+
+          $tryout->setReminderSent(true);
+          $this->em->persist($tryout);
+          $this->em->flush();
+
+          return $this->json(array(
+                  'success' => true, 
+                  'message' => 'Herinneringen verzonden', 
+                  'reminderSent' => $tryout->getReminderSent(), 
+                  'reminderSentAt' => $tryout->getReminderSentAt(),
+              ));
+
+        } else {
+
+          return $this->json(array(
+                  'success' => false, 
+                  'message' => 'Ongeldige tryout uuid', 
+              ));
+
         }
     }
 

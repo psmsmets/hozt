@@ -68,14 +68,14 @@ jQuery.fn.sortElements = (function(){
     
 })();
 
+// get the encrypted data
 $(window).on( "load", function() {
 
-    var div = "api_load_tryout_enrolled_";
-    var hoztAPI  = "/api/ingeschreven/testmomenten/";
+    var hoztAPI  = "/api/ingeschreven/testmoment/";
 
-    $.each( $('div[id^="'+div+'"]'), function(i,tryout) {
+    $.each( $('.api_load_tryout_enrolled'), function(i,tryout) {
 
-        var uuid = $(tryout).attr('id').split(div)[1];
+        var uuid = $(tryout).data('tryout');
 
         $.getJSON( hoztAPI+uuid, {}).done(function(enrolments) {
 
@@ -120,5 +120,31 @@ $(window).on( "load", function() {
 
         });
     });
+
+});
+
+// send reminders
+$.each( $('.send-reminder'), function(i,tryout) {
+
+  $(tryout).click(function() {
+
+    var uuid = $(tryout).data('tryout');
+    
+    $(tryout).html('<span class="spinner-border spinner-grow-sm" role="status" aria-hidden="true"></span> verzenden');
+    $(tryout).prop('disabled',true);
+
+    alert("Reminder emails worden verzonden.");
+
+    $.getJSON( "/api/herinnering/testmoment/"+uuid, {}).done(function(data) {
+      if (data.success) {
+        $(tryout).html('<i class="fas fa-check"></i> reminder');
+      } else {
+        $(tryout).html('<i class="fas fa-times"></i> reminder'); 
+      }
+      alert(data.message);
+
+    });
+
+  });
 
 });

@@ -242,7 +242,8 @@ class TryoutEnrolment
     public function setWithdrawn(bool $withdrawn): self
     {
         $this->withdrawn = $withdrawn;
-        $this->withdrawnAt = new \DateTime('now');
+        $this->withdrawnAt = null;
+        if ($withdrawn) $this->withdrawnAt = new \DateTime('now');
 
         return $this;
     }

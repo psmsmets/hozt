@@ -193,6 +193,12 @@ class Tryout
         return $this->nofEnrolments;
     }
 
+    public function setNofEnrolments(int $nofEnrolments): self
+    {
+        $this->nofEnrolments = $nofEnrolments;
+        return $this;
+    }
+
     public function nofEnrolmentsSubtractOne(): self
     {
         $this->nofEnrolments -= 1;

@@ -64,7 +64,7 @@
         {% if year>prev_year %}<h3 class="mt-4 pt-4 pl-2 border-top border-gray {% if year<this_year %} past{% endif %}">{{year|date('Y')}}</h3>{% endif %}
         {% if month>prev_month %}<h4 class="p-2 mb-2 mt-4 bg-light rounded {% if month<this_month %} past{% endif %}">{{month|localizeddate('none', 'none', null, "Europe/Paris", "MMMM")|capitalize}}</h4>{% endif %}
 
-        <div class="media align-top mt-3 cal cal-{{event.category.sequence}}{% if past %}{% if date() < page.calendar_period.end %} text-muted{% endif %} past{% endif %}{% if event.cancelled %} alert-danger rounded{% endif %}" onclick="window.location='{{ path('calendar_event', {'uuid': event.uuid}) }}';">
+        <div class="media align-top mt-3 cal cal-link cal-{{event.category.sequence}}{% if past %}{% if date() < page.calendar_period.end %} text-muted{% endif %} past{% endif %}{% if event.cancelled %} alert-danger rounded{% endif %}" onclick="window.location='{{ path('calendar_event', {'uuid': event.uuid}) }}';">
 
           <span class="badge badge-dark mr-3 cal cal-{{event.category.sequence}}">{% if past %}<s>{% endif %}{{event.startTime|date('d')}}{% if past %}</s>{% endif %}</span>
 

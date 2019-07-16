@@ -14,7 +14,7 @@ easy_admin:
         brand_color: '#ed1c24'
         assets:
             css:
-                - 'assets/css/hozt_bootstrap.css'
-                - 'assets/css/easy_admin.css'
+                - 'assets/build/bootstrap.css'
+                - 'assets/build/easy_admin.css'
             js:
                 - 'bundles/easyadmin/bootstrap-all.js'

@@ -18,7 +18,7 @@ easy_admin:
                     - { property: 'title', label: 'Titel' }
                     - { property: 'description', label: 'Korte omschrijving' }
                     - { property: 'slug', label: 'Slug' }
-                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.staticPage_images%' }
+                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.img.staticPage%' }
                     - { property: 'showUpdatedAt', label: 'Toon laatst aangepast', type: 'boolean' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['id', 'ASC']
@@ -34,8 +34,8 @@ easy_admin:
                     - { property: 'showUpdatedAt', label: 'Toon laatst aangepast' }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
                     - { property: 'keywords', label: 'Keywords' }
-                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.staticPage_images%' }
-                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.staticPage_documents%' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.img.staticPage%' }
+                    - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.doc.staticPage%' }
                     #- { property: 'access', label: 'Toegang' }
             edit:
                 actions: ['-delete']
