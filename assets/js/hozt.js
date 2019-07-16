@@ -313,7 +313,7 @@ function api_load_module_competition_results() {
 function api_load_module_competition_programs() {
 
     var module  = "api_load_module_competition_programs";
-    var hoztAPI = "/api/documenten/wedstrijden/aanstaande/programma";
+    var hoztAPI = "/api/documenten/wedstrijden/aanstaande/programma/5";
 
     $('#'+module).html("<div class=\"p-3\"><h5 class=\"pb-2 mb-0\">Programma's</h5><div id=\""+module+"_items\"></div></div>"); 
 

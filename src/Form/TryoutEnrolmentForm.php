@@ -127,6 +127,8 @@ class TryoutEnrolmentForm extends AbstractType
                 'required' => true,
                 'mapped' => false,
                 ))
+            // Honeypot field
+            ->add('Straat', HoneypotType::class);
         ;
     }
 
