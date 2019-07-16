@@ -8,6 +8,7 @@
         "cocur/slugify": "^3.2",
         "defuse/php-encryption": "^2.0",
         "easycorp/easyadmin-bundle": "^2.1",
+        "eo/honeypot-bundle": "^1.2",
         "friendsofsymfony/ckeditor-bundle": "^2.1",
         "michaeldegroot/doctrine-encrypt-bundle": "^4.0",
         "mustangx/eu-cookie-law-bundle": "^1.0",

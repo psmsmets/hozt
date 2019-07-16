@@ -95,6 +95,9 @@
     "egulias/email-validator": {
         "version": "2.1.7"
     },
+    "eo/honeypot-bundle": {
+        "version": "v1.2.3"
+    },
     "facebook/webdriver": {
         "version": "1.6.0"
     },
