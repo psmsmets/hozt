@@ -1,0 +1,16 @@
+eo_honeypot:
+    storage:
+        database:
+            enabled: false
+        #    driver: mongodb # orm and mongodb are supported
+        #    class: ApplicationEoHoneypotBundle:HoneypotPrey
+        # You can also use file format to store honeypot preys.
+        # This may come handy if you need to parse logs with fail2ban
+        file:
+            enabled: true
+            output: /var/log/honeypot.log
+    redirect:
+        enabled: true
+        url: "/"
+        # route: homepage
+        # route_parameters: ~

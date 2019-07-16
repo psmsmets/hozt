@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use Eo\HoneypotBundle\Form\Type\HoneypotType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -70,6 +71,9 @@ class ContactFormType extends AbstractType
                 'required' => true,
                 'mapped' => false,
                 ))
+
+            // Honeypot field
+            ->add('Straat', HoneypotType::class);
         ;
     }
 
