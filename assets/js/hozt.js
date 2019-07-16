@@ -351,7 +351,7 @@ function api_load_module_calendar_upcoming() {
         if ( calendar.result ){
             $.each( calendar.data, function( i, item ) {
                 var t = '';
-                t += "<div class=\"media cal pt-2\" onclick=\"window.location='" + item.url + "';\">";
+                t += "<div class=\"media cal cal-link pt-2\" onclick=\"window.location='" + item.url + "';\">";
                 t += '  <span class="badge badge-dark mr-2 cal cal-sm '+ item.class 
                 t += '">'+ item.day +'<br>'+ item.month +'</span>';
                 t += '  <div class="media-body pb-2 mb-0 small lh-125 border-bottom border-gray ';
