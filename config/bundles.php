@@ -21,4 +21,5 @@ return [
     Ambta\DoctrineEncryptBundle\AmbtaDoctrineEncryptBundle::class => ['all' => true],
     Eu\CookieLawBundle\EuCookieLawBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
+    Eo\HoneypotBundle\EoHoneypotBundle::class => ['all' => true],
 ];
