@@ -276,7 +276,7 @@ class ApiController extends AbstractController
         if (!$docs) return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
 
         $data = array();
-        $base = $this->getParameter('app.path.competition_documents');
+        $base = $this->getParameter('app.path.doc.competition');
         foreach ( $docs as $doc ) {
            $event = $doc->getCompetition()->getCalendar();
            $data[] = array(
@@ -410,7 +410,7 @@ class ApiController extends AbstractController
             return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
         }
         $data = array();
-        $base = $this->getParameter('app.path.competition_documents');
+        $base = $this->getParameter('app.path.doc.competition');
         foreach ( $docs as $doc ) {
            $event = $doc->getCompetition()->getCalendar();
            $data[] = array(
