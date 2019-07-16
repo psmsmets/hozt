@@ -65,7 +65,7 @@ easy_admin:
                     - { property: 'id', label: 'Id' }
                     - { property: 'competition', label: 'Wedstrijd' }
                     - { property: 'category', label: 'Categorie' }
-                    - { property: 'document', type: 'file', label: 'Document', base_path: '%app.path.competition_documents%' }
+                    - { property: 'document', type: 'file', label: 'Document', base_path: '%app.path.doc.competition%' }
                     #- { property: 'url', label: 'Url' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
@@ -74,7 +74,7 @@ easy_admin:
                 fields:
                     - { property: 'competition', label: 'Wedstrijd', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnarchivedCompetitionEvents'] } }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
-                    - { property: 'documentFile', type: 'vich_file', label: 'Document', base_path: '%app.path.competition_documents%' }
+                    - { property: 'documentFile', type: 'vich_file', label: 'Document', base_path: '%app.path.doc.competition%' }
                     - { property: 'url', label: 'Externe url', help: 'In plaats van een document up te loaden kan je een extern document linken. Wel de volledige url geven. En een bijlage heeft voorrang op een externe link.' }
                     - { property: 'description', label: 'Bijschrift', help: 'Extra omschrijving bij meerdere documenten van dezelfde categorie, bv. {categorie} za voormiddag' }
             edit:

@@ -9,16 +9,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use App\Entity\BlogPost;
 use App\Entity\BlogCategory;
+use App\Entity\Tryout;
+use App\Entity\TryoutEnrolment;
+
+# repositories
+use App\Repository\TryoutRepository;
+use App\Repository\TryoutEnrolmentRepository;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
     private $slugger;
     private $em;
 
-    public function __construct(\Cocur\Slugify\SlugifyInterface $slugify, EntityManagerInterface $entityManager)
+    public function __construct(\Cocur\Slugify\SlugifyInterface $slugify, EntityManagerInterface $entityManager, 
+        TryoutRepository $TryoutRep, TryoutEnrolmentRepository $TryoutEnrolRep )
     {
         $this->slugger = $slugify;
         $this->em = $entityManager;
+        $this->tryoutRep = $TryoutRep;
+        $this->tryoutEnrolRep = $TryoutEnrolRep;
     }
 
     public static function getSubscribedEvents()
@@ -26,6 +35,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         return array(
             'easy_admin.pre_persist' => array('setSlug'),
             'easy_admin.pre_update' => array('setSlug'),
+            'easy_admin.post_update' => array('updateTryoutCounters'),
         );
     }
 
@@ -44,6 +54,24 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             return;
         }
         $event['entity'] = $entity;
+    }
+
+
+    public function updateTryoutCounters(GenericEvent $event )
+    {
+        $entity = $event->getSubject();
+
+        if (!($entity instanceof TryoutEnrolment)) return;
+
+        $tryouts = $this->tryoutRep->findAll();
+        //$tryouts = $this->tryoutRep->findTryouts(7);
+
+        foreach( $tryouts as $tryout ) {
+          $tryout->setNofEnrolments( $this->tryoutEnrolRep->countEnrolments($tryout) );
+        }
+        $this->tryoutRep->flush();
+
+//        $event['entity'] = $entity;
     }
 
 }

@@ -17,7 +17,7 @@ easy_admin:
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'showTitle', label: 'Toon titel' }
-                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.carousel_images%' }
+                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.img.carousel%' }
                     - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'publishUntil', label: 'Publiceer tot' }
                 sort: ['id', 'ASC']
@@ -30,7 +30,7 @@ easy_admin:
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'showTitle', label: 'Toon titel' }
                     - { property: 'overlay', label: 'Achtergrond donkerder maken' }
-                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.carousel_images%' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.img.carousel%' }
                     - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'publishUntil', label: 'Publiceer tot' }
                     - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getFilteredCalendarEvents'] } }

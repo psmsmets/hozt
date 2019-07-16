@@ -19,14 +19,29 @@ class TryoutRepository extends ServiceEntityRepository
         parent::__construct($registry, Tryout::class);
     }
 
-    public function findTryouts()
+    public function findTryout(string $uuid)
+    {
+        return $this->createQueryBuilder('tryout')
+            ->where('tryout.enabled = :enabled')
+            ->andwhere('tryout.uuid = :uuid')
+            ->setParameter('enabled', true)
+            ->setParameter('uuid', $uuid)
+            ->getQuery()
+            ->getOneOrNullResult() 
+        ;     
+    }
+
+    public function findTryouts(int $pastdays = 0)
     {
         $now = new \DateTime('now');
+        $old = new \DateTime("today midnight -$pastdays days");
         return $this->createQueryBuilder('tryout')
             ->where('tryout.enabled = :enabled')
             ->andwhere('tryout.publishAt < :ref')
+            ->andwhere('tryout.startTime > :end')
             ->setParameter('enabled', true)
             ->setParameter('ref', $now->format('Y-m-d H:i'))
+            ->setParameter('end', $old->format('Y-m-d H:i'))
             ->orderBy('tryout.startTime', 'ASC')
             ->getQuery()
             ->getResult()
@@ -36,12 +51,15 @@ class TryoutRepository extends ServiceEntityRepository
     public function countActiveTryouts()
     {
         $now = new \DateTime('now');
+        $old = new \DateTime('today midnight -0 days');
         return $this->createQueryBuilder('tryout')
             ->select('count(tryout.id)')
             ->where('tryout.enabled = :enabled')
             ->andwhere('tryout.publishAt < :ref')
+            ->andwhere('tryout.startTime > :end')
             ->setParameter('enabled', true)
             ->setParameter('ref', $now->format('Y-m-d H:i'))
+            ->setParameter('end', $old->format('Y-m-d H:i'))
             ->getQuery()
             ->getSingleScalarResult()
         ;    

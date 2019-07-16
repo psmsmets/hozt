@@ -22,7 +22,7 @@
         <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|ucfirst}}
           <small>
             {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
-            {% if cookie not in app.request.cookies|keys and event.startTime>date() %}<span class="badge badge-gold ml-1">Nieuw</span>{% endif %}
+            {% if cookie not in app.request.cookies|keys and event.startTime>date() %}<span class="badge badge-secondary ml-1">Nieuw</span>{% endif %}
           </small>
         </h5>
 
@@ -59,10 +59,10 @@
           {% if event.document is not empty or event.url is not empty %}
             <p class="text-center text-md-left">
               {% if event.url is not empty %}
-                <a href="{{event.url}}" class="btn btn-sm btn-outline-hozt mr-2 mb-2"><i class="fas fa-info-circle"></i> meer info</a>
+                <a href="{{event.url}}" class="btn btn-sm btn-outline-primary mr-2 mb-2"><i class="fas fa-info-circle"></i> meer info</a>
               {% endif %}
               {% if event.document is not empty %}
-                <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2 mb-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+                <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-primary mr-2 mb-2"><i class="fas fa-file-pdf"></i> bijlage</a>
               {% endif %}
             </p>
           {% endif %}
@@ -70,14 +70,14 @@
           {% if event.document is not empty or event.url is not empty or event.competition.documents is not empty %}
             <p class="text-center text-md-left">
               {% if event.url is not empty %}
-                <a href="{{event.url}}" class="btn btn-sm btn-outline-hozt mr-2 mb-2"><i class="fas fa-info-circle"></i> meer info</a>
+                <a href="{{event.url}}" class="btn btn-sm btn-outline-primary mr-2 mb-2"><i class="fas fa-info-circle"></i> meer info</a>
               {% endif %}
               {% if event.document is not empty %}
-                <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-hozt mr-2 mb-2"><i class="fas fa-file-pdf"></i> bijlage</a>
+                <a href="{{ vich_uploader_asset(event, 'documentFile') }}" class="btn btn-sm btn-outline-primary mr-2 mb-2"><i class="fas fa-file-pdf"></i> bijlage</a>
               {% endif %}
               {% if event.competition.documents is not empty %}
                 {% for doc in event.competition.documents %}
-                  <a href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}" class="btn btn-sm btn-outline-hozt mr-2 mb-2"><i class="fas fa-file-pdf"></i> {{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
+                  <a href="{% if doc.document is not empty %}{{vich_uploader_asset(doc,'documentFile')}}{% else %}{{doc.url}}{% endif %}" class="btn btn-sm btn-outline-primary mr-2 mb-2"><i class="fas fa-file-pdf"></i> {{doc.category}}{% if doc.description is not empty%} {{doc.description}}{% endif %}</a>
                 {% endfor %}
               {% endif %}
             </p>

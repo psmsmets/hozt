@@ -25,16 +25,17 @@ parameters:
     app.regex.telephone: '^(\+|00)(324|316)([1-9]\d{7})$' # enkel Belgie en Nederland
     app.regex.postalcode: '^([1-9]{1}\d{3})(|[A-Z]{2})$'
     app.regex.datestring: '^((0[1-9]|[12]\d|3[01]|[1-9])[/.-](0[1-9]|1[0-2]|[1-9])[/.-][12]\d{3})$'
-    app.path.blogPost_documents: /uploads/files/blog
-    app.path.blogPost_images: /uploads/images/blog
-    app.path.calendar_documents: /uploads/files/calendar
-    app.path.calendar_images: /uploads/images/calendar
-    app.path.carousel_images: /uploads/images/carousel
-    app.path.competition_documents: /uploads/files/competition
-    app.path.sponsor_images: /uploads/images/sponsor
-    app.path.staticPage_documents: /uploads/files/page
-    app.path.staticPage_images: /uploads/images/page
-    app.path.user_images: /uploads/images/user
+
+    app.path.doc.blogPost: /uploads/files/blog
+    app.path.img.blogPost: /uploads/images/blog
+    app.path.doc.calendar: /uploads/files/calendar
+    app.path.img.calendar: /uploads/images/calendar
+    app.path.img.carousel: /uploads/images/carousel
+    app.path.doc.competition: /uploads/files/competition
+    app.path.img.sponsor: /uploads/images/sponsor
+    app.path.doc.staticPage: /uploads/files/page
+    app.path.img.staticPage: /uploads/images/page
+    app.path.img.user: /uploads/images/user
 
 services:
     # default configuration for services in *this* file
@@ -63,15 +64,15 @@ services:
     app.logout.listener:
         class: App\Listener\LogoutListener
 
-    app.blogPost.listener:
-        class: App\Listener\BlogPostListener
-        tags:
-            - { name: doctrine.orm.entity_listener }
-            -
-                name: doctrine.orm.entity_listener
-                event: preUpdate
-                entity: App\Entity\BlogPost
-                entity_manager: custom
+#    app.blogPost.listener:
+#        class: App\Listener\BlogPostListener
+#        tags:
+#            - { name: doctrine.orm.entity_listener }
+#            -
+#                name: doctrine.orm.entity_listener
+#                event: preUpdate
+#                entity: App\Entity\BlogPost
+#                entity_manager: custom
 
     Ambta\DoctrineEncryptBundle\Encryptors\EncryptorInterface:
         alias: ambta_doctrine_encrypt.encryptor

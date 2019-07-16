@@ -5,17 +5,17 @@ fos_ck_editor:
     configs:
         extended:
             toolbar: 'extended_toolbar'
-            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css']
+            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/ckeditor/bootstrap.css']
             allowedContent: true
             format_tags: 'p;h3;h4;h5;pre;div'
         standard:
             toolbar: 'standard_toolbar'
-            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css']
+            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/ckeditor/bootstrap.css']
             allowedContent: true
             format_tags: 'p;h3;h4;h5;pre;div'
         minimal:
             toolbar: 'minimal_toolbar'
-            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/css/bootstrap.min.css']
+            contentsCss: ['https://use.fontawesome.com/releases/v5.3.1/css/all.css','/assets/ckeditor/bootstrap.css']
             allowedContent: false 
             format_tags: 'p'
     toolbars:

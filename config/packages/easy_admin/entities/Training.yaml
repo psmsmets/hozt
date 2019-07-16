@@ -19,7 +19,7 @@ easy_admin:
                     - { property: 'name', label: 'Naam' }
                     - { property: 'teams', label: 'Groepen' }
                     - { property: 'head', label: 'Hoofdtrainer', type: 'boolean' }
-                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.user_images%' }
+                    - { property: 'image', type: 'image', label: 'Afbeelding', base_path: '%app.path.img.user%' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['firstname', 'ASC']
             edit:
@@ -34,7 +34,7 @@ easy_admin:
                     - { type: 'group', label: 'Opties', icon: 'cog', columns: 3 }
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'head', label: 'Hoofdtrainer' }
-                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.user_images%' }
+                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.img.user%' }
             search:
                 fields: ['teams.abbr','teams.name']
         TrainingTeam:

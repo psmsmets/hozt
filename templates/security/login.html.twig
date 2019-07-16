@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="{{ asset('assets/css/security.css') }}" rel="stylesheet" />
+    {{ encore_entry_link_tags('security') }}
 {% endblock %}
 
 
@@ -30,7 +30,7 @@
         </label>
         <a href="{{ path('security_forgot_password') }}">Wachtwoord vergeten?</a>
       </div>
-      <button class="btn btn-lg btn-hozt btn-block mt-1" type="submit">Inloggen</button>
+      <button class="btn btn-lg btn-primary btn-block mt-1" type="submit">Inloggen</button>
     </form>
 
 {% endblock %}

@@ -3,42 +3,42 @@ vich_uploader:
     db_driver: orm
     mappings:
         blogPost_documents:
-            uri_prefix:         '%app.path.blogPost_documents%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.blogPost_documents%'
+            uri_prefix:         '%app.path.doc.blogPost%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.doc.blogPost%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
         blogPost_images:
-            uri_prefix:         '%app.path.blogPost_images%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.blogPost_images%'
+            uri_prefix:         '%app.path.doc.blogPost%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.img.blogPost%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
         calendar_documents:
-            uri_prefix:         '%app.path.calendar_documents%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.calendar_documents%'
+            uri_prefix:         '%app.path.doc.calendar%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.doc.calendar%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
         calendar_images:
-            uri_prefix:         '%app.path.calendar_images%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.calendar_images%'
+            uri_prefix:         '%app.path.img.calendar%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.img.calendar%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
         carousel_images:
-            uri_prefix:         '%app.path.carousel_images%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.carousel_images%'
+            uri_prefix:         '%app.path.img.carousel%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.img.carousel%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
         competition_documents:
-            uri_prefix:         '%app.path.competition_documents%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.competition_documents%'
+            uri_prefix:         '%app.path.doc.competition%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.doc.competition%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
         sponsor_images:
-            uri_prefix:         '%app.path.sponsor_images%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.sponsor_images%'
+            uri_prefix:         '%app.path.img.sponsor%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.img.sponsor%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
         staticPage_documents:
-            uri_prefix:         '%app.path.staticPage_documents%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.staticPage_documents%'
+            uri_prefix:         '%app.path.doc.staticPage%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.doc.staticPage%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
         staticPage_images:
-            uri_prefix:         '%app.path.staticPage_images%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.staticPage_images%'
+            uri_prefix:         '%app.path.img.staticPage%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.img.staticPage%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer
         user_images:
-            uri_prefix:         '%app.path.user_images%'
-            upload_destination: '%kernel.project_dir%/public_html%app.path.user_images%'
+            uri_prefix:         '%app.path.img.user%'
+            upload_destination: '%kernel.project_dir%/public_html%app.path.img.user%'
             namer: Vich\UploaderBundle\Naming\UniqidNamer

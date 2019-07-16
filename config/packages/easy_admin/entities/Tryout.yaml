@@ -10,14 +10,14 @@ easy_admin:
     entities:
         Tryout:
             class: App\Entity\Tryout
-            label: 'Testmoment'
+            label: 'Testmomenten'
             list:
                 fields:
                     #- { property: 'id', label: 'Id' }
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'startTime', label: 'Wanneer' }
                     - { property: 'duration', label: 'Duur', template: 'easy_admin/date_interval_template_duration.html.twig' }
-                    - { property: 'enrolments', label: 'Inschrijvingen' }
+                    - { property: 'nofEnrolments', label: 'Inschrijvingen' }
                     - { property: 'maxEnrolments', label: 'Max' }
                     - { property: 'publishAt', label: 'Gepubliceerd op' }
                     - { property: 'enrolFrom', label: 'Inschrijven vanaf' }
@@ -33,3 +33,31 @@ easy_admin:
                     - { property: 'enrolFrom', label: 'Inschrijven vanaf' }
             edit:
                 actions: ['delete']
+
+        TryoutEnrolment:
+            class: App\Entity\TryoutEnrolment
+            label: 'Testmoment inschrijvingen'
+            list:
+                fields:
+                    #- { property: 'id', label: 'Id' }
+                    - { property: 'firstname', label: 'Voornaam' }
+                    - { property: 'lastname', label: 'Naam' }
+                    - { property: 'tryout', label: 'Testmoment' }
+                    - { property: 'category', label: 'Groep' }
+                    #- { property: 'address', label: 'Postcode' }
+                    - { property: 'enrolledAt', label: 'Ingeschreven' }
+                    - { property: 'withdrawn', label: 'Geannuleerd', type: 'boolean' }
+                    #- { property: 'withdrawnAt', label: 'Geannuleerd' }
+                #sort: ['lastname', 'ASC']
+                sort: ['tryout', 'DESC', 'lastname', 'ASC']
+                max_results: 10
+            search:
+                fields: ['firstname','lastname','tryout','category','withdrawn']
+            form:
+                fields:
+                    - { property: 'firstname', label: 'Voornaam' }
+                    - { property: 'lastname', label: 'Naam' }
+                    - { property: 'address', label: 'Postcode' }
+                    - { property: 'tryout', label: 'Testmoment' }
+                    - { property: 'category', label: 'Groep' }
+                    - { property: 'withdrawn', label: 'Geannuleerd' }

@@ -13,31 +13,21 @@
 {% endblock %}
 
 {% block side %}
-  <div id="api_load_module_tyr"></div>
-  <div id="api_load_module_competition_programs"></div>
-  <div id="api_load_module_competition_results"></div>
-  <div id="api_load_module_training_today"></div>
-  <div id="api_load_module_training_tomorrow"></div>
-  {% if currentPath starts with '/kalender' %}{% else %}<div id="api_load_module_calendar_upcoming"></div>{% endif %}
+  <div data-load="tyr" id="api_load_module_tyr"></div>
+  <div data-load="competition_programs" id="api_load_module_competition_programs"></div>
+  <div data-load="competition_results" id="api_load_module_competition_results"></div>
+  <div data-load="training_today" id="api_load_module_training_today"></div>
+  <div data-load="training_tomorrow" id="api_load_module_training_tomorrow"></div>
+  {% if currentPath starts with '/kalender' %}{% else %}<div data-load="calendar_upcoming" id="api_load_module_calendar_upcoming"></div>{% endif %}
 {% endblock %}
 
 {% block footer %}
   {% include 'modules/footer.html.twig' %}
 {% endblock %}
 
+{% block js_global_data %}data-nofteams={{ base.nofteams }} data-nofcoaches={{ base.nofcoaches }} data-nofswimmers=124{% endblock %}
+
 {% block javascripts %}
   {{ parent() }}
-  <script>
-    var nofteams = {{ base.nofteams }};
-    var nofcoaches = {{ base.nofcoaches }};
-    var nofswimmers = 124;
-  </script>
-  <script src="{{ asset('assets/js/countUp.js') }}"></script>
-  <script src="{{ asset('assets/js/hozt-v20190520T2129.js') }}"></script>
-  <script src="{{ asset('assets/js/api_load_module_tyr.js') }}"></script>
-  <script src="{{ asset('assets/js/api_load_module_training_today.js') }}"></script>
-  <script src="{{ asset('assets/js/api_load_module_training_tomorrow.js') }}"></script>
-  <script src="{{ asset('assets/js/api_load_module_calendar_upcoming.js') }}"></script>
-  <script src="{{ asset('assets/js/api_load_module_competiton_programs.js') }}"></script>
-  <script src="{{ asset('assets/js/api_load_module_competiton_results.js') }}"></script>
+  {{ encore_entry_script_tags('hozt') }}
 {% endblock %}

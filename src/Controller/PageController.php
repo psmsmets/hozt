@@ -526,7 +526,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/contact/faq", name="contact_faq")
+     * @Route("/faq", name="contact_faq")
      */
     public function contact_faq()
     {
@@ -540,7 +540,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/contact/formulier", name="contact_form")
+     * @Route("/contact", name="contact_form")
      */
     public function contact_form(Request $request, \Swift_Mailer $mailer)
     {
@@ -672,7 +672,7 @@ class PageController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
 
         $this->initTemplateData();
-        $this->addToTemplateData( 'tryouts', $tryoutRep->findTryouts() );
+        $this->addToTemplateData( 'tryouts', $tryoutRep->findTryouts(21) );
 
         return $this->render('tryout/enrolled.html.twig', $this->template_data );
     }

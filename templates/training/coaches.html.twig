@@ -6,7 +6,7 @@
 
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <h1 class="text-red">Trainers</h1>
+    <h1 class="text-primary">Trainers</h1>
     <p class="lead mb-4">De HoZT-trainers en hun groepen</p>
 
     <div class="row">
@@ -20,7 +20,7 @@
                         <h6 class="card-subtitle mb-2 font-weight-light">hoofdtrainer</h6>
                         <p class="card-text">
                             {% for team in coach.teams %}
-                            <span class="badge badge-secondary">{{ team }}</span>
+                            <span class="badge badge-medium">{{ team }}</span>
                             {% endfor %}
                         </p>
                     </div>
@@ -37,7 +37,7 @@
                         <h4 class="card-title">{{ coach.name }}</h4>
                         <p class="card-text">
                             {% for team in coach.teams %}
-                            <span class="badge badge-secondary">{{ team }}</span>
+                            <span class="badge badge-medium">{{ team }}</span>
                             {% endfor %}
                         </p>
                     </div>
