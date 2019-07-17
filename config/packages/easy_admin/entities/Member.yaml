@@ -1,0 +1,32 @@
+# This file sets the configuration of the 'Category' entity.
+#
+# NOTE: this demo application splits the backend configuration into several
+# small files for educational purposes. In your application you can put the
+# entire backend configuration in just one file.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    entities:
+        Member:
+            class: App\Entity\Member
+            label: 'Leden'
+            list:
+                fields:
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'memberid', label: 'Lidnr' }
+                    - { property: 'firstname', label: 'Voornaam' }
+                    - { property: 'lastname', label: 'Achternaam' }
+                    - { property: 'team', label: 'Groep' }
+                    - { property: 'user', label: 'Beheerder' }
+                sort: ['memberid', 'ASC']
+            form:
+                fields:
+                    - { property: 'memberid', label: 'Lidnummer' }
+                    - { property: 'firstname', label: 'Voornaam' }
+                    - { property: 'lastname', label: 'Achternaam' }
+                    - { property: 'birthdate', label: 'Geboortedatum', type: 'birthday' }
+                    - { property: 'team', label: 'Groep' }
+                    - { property: 'user', label: 'Beheerder' }
+                    - { property: 'memberSince', label: 'Lid sinds' }
+                    - { property: 'enabled', label: 'Actief' }

@@ -4,7 +4,7 @@
 
 <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-white shadow-sm d-print-none">
   <div class="container">
-  <a class="navbar-brand mr-auto mr-lg-0 text-primary pr-3" href="#" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false"><img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="Hoogstratens Zwem Team" height="40"> <div class="d-none d-xl-inline-block">Hoogstratens Zwem Team</div></a>
+  <a class="navbar-brand mr-auto mr-lg-0 text-primary pr-3" href="#" data-toggle="modal" data-target="#discoverModal"><img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="Hoogstratens Zwem Team" height="40"> <div class="d-none d-xl-inline-block">Hoogstratens Zwem Team</div></a>
   <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -30,9 +30,9 @@
         <a class="nav-link btn btn-outline-medium p-2" href="{{path('enrol_tryout')}}"><i class="far fa-hand-point-right"></i> Testmoment</a>
       </li>
     </ul>
-    <ul class="navbar-nav flex-row ml-md-auto d-flex justify-content-around">
-      <li class="nav-item {% if currentPath in ['/contact','/faq','/bestuur','/zwembad'] %}active{% endif%}">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false">Contact</a>
+    <ul class="navbar-nav flex-row ml-md-auto d-flex justify-content-around lead">
+      <li class="nav-item mr-lg-2">
+        <a class="nav-link btn btn-medium text-light p-2" href="#" data-toggle="modal" data-target="#discoverModal"><i class="fas fa-bars"></i> Ontdek</a>
       </li>
       <li class="nav-item">
         <a class="nav-link p-2" href="https://nl-nl.facebook.com/hoogstratensZT/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
@@ -41,7 +41,7 @@
         <a class="nav-link p-2" href="https://www.instagram.com/hozt16/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
       </li>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-      <li class="nav-item d-flex align-items-center ml-lg-3">
+      <li class="nav-item d-flex align-items-center ml-lg-2">
         <a class="btn btn-outline-primary" href="{{ path('security_logout') }}" data-toggle="tooltip" data-placement="auto" title="" data-original-title="uitloggen"><i class="fas fa-sign-out-alt"></i></a>
       </li>
     {% endif %}

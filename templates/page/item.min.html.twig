@@ -15,12 +15,13 @@
         <p><img src="{{ vich_uploader_asset(item, 'imageFile') }}" class="img-fluid rounded" style="max-height:800px;"></p>
     {% endif %}
 
-    <div class="small text-muted">
+    <div class="small text-muted d-flex justify-content-between">
       <ul class="list-inline mb-0">
         <li class="list-inline-item"><i class="far fa-newspaper"></i> <a class="text-muted text-decoration-none" href="{{ path('blog_category', {'slug': item.category.slug}) }}">{{ item.category }}</a></li>
-        <li class="list-inline-item">{{ item.publishAt|localizeddate('medium','none')|replace({'.':''}) }} <i class="far fa-clock"></i> {{ item.createdAt|localizeddate('none','short') }}</li>
+        <li class="list-inline-item">{{ item.publishAt|localizeddate('full','none') }}</li>
         <li class="list-inline-item"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ item.Author.firstName }}"></i></li>
       </ul>
+      <a href="{{ path('blog_post', {'id': item.id, 'slug': item.slug}) }}"><i class="fas fa-link"></i></a>
     </div>
 
   </div>

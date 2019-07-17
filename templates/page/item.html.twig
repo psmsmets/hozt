@@ -67,17 +67,17 @@
     <div class="small text-muted d-flex justify-content-between">
       <ul class="list-inline mb-0">
         <li class="list-inline-item"><i class="far fa-newspaper"></i> <a class="text-muted text-decoration-none" href="{{ path('blog_category', {'slug': item.category.slug}) }}">{{ item.category }}</a></li>
-        <li class="list-inline-item">{{ item.publishAt|localizeddate('medium','none')|replace({'.':''}) }} <i class="far fa-clock"></i> {{ item.publishAt|localizeddate('none','short') }}</li>
+        <li class="list-inline-item">{{ item.publishAt|localizeddate('full','none') }}</li>
         <li class="list-inline-item"><i class="far fa-user" data-toggle="tooltip" data-placement="right" title="" data-original-title="{{ item.Author.firstName }}"></i></li>
       </ul>
       <ul class="list-inline mb-0">
         {% if item.event is not empty %}
           <li class="list-inline-item">
-            <a href="{{ path('calendar_event', {'uuid': item.event.uuid}) }}" class="text-muted"><i class="far fa-calendar-alt"></i></a>
+            <a href="{{ path('calendar_event', {'uuid': item.event.uuid}) }}"><i class="far fa-calendar-alt"></i></a>
           </li>
         {% endif %}
         <li class="list-inline-item">
-          <a href="{{ path('blog_post', {'id': item.id, 'slug': item.slug}) }}" class="text-muted"><i class="fas fa-link"></i></a>
+          <a href="{{ path('blog_post', {'id': item.id, 'slug': item.slug}) }}"><i class="fas fa-link"></i></a>
         </li>
       </ul>
     </div>

@@ -1,0 +1,38 @@
+{% set urlfmt = 'text-dark text-decoration-none' %}
+
+<div class="col-12 col-md mt-2 mt-md-0 mb-4 text-center">
+  <h3><small class="pb-2"><i class="fas fa-swimmer"></i></small><br>Aanbod</h3>
+  <ul class="list-unstyled">
+  {% for category in base.training_team_categories %}
+    <li><a class="{{urlfmt}}" href="{{ path('training_category', {'slug': category.slug}) }}">{{ category.name }}</a></li>
+  {% endfor %}
+  </ul>
+</div>
+<div class="col-12 col-md mt-2 mt-md-0 mb-4 text-center">
+  <h3><small class="pb-2"><i class="fas fa-fish"></i></small><br>Praktisch</h3>
+  <ul class="list-unstyled">
+    <li><a class="{{urlfmt}}" href="/lid-worden">Lid worden</a></li>
+    <li><a class="{{urlfmt}}" href="{{ path('enrol_tryout') }}">Testmoment</a></li>
+    <li><a class="{{urlfmt}}" href="{{ path('training_schedule_teams') }}">Trainingsuren</a></li>
+    <li><a class="{{urlfmt}}" href="{{ path('calendar') }}">Kalender</a></li>
+    <li><a class="{{urlfmt}}" href="/clubkledij">Clubkledij</a></li>
+    <li><a class="{{urlfmt}}" href="{{ path('blog') }}">Nieuwsberichten</a></li>
+<!--<li><a class="{{urlfmt}}" href="#">Clubrecords</a></li> -->
+    <li><a class="{{urlfmt}}" href="{{ path('enrol_list') }}">Inschrijven</a></li>
+    <li><a class="{{urlfmt}}" href="/interscholen">Interscholen Zwemwedstrijd</a></li>
+  </ul>
+</div>
+<div class="col-12 col-md mt-2 mt-md-0 mb-4 text-center">
+  <h3><small class="pb-2"><i class="fas fa-swimming-pool"></i></small><br>Algemeen</h3>
+  <ul class="list-unstyled">
+    <li><a class="{{urlfmt}}" href="{{ path('training_coaches') }}">Trainers</a></li>
+    <li><a class="{{urlfmt}}" href="/bestuur">Bestuur</a></li>
+    <li><a class="{{urlfmt}}" href="/vacatures">Vacatures</a></li>
+    <li><a class="{{urlfmt}}" href="/zwembad">Zwembad</a></li>
+    <li><a class="{{urlfmt}}" href="{{ path('sponsors') }}">Sponsors</a></li>
+    <li><a class="{{urlfmt}}" href="/gedragsregels">Gedragsregels</a></li>
+    <li><a class="{{urlfmt}}" href="{{ path('contact_faq') }}">Veelgestelde vragen</a></li>
+    <li><a class="{{urlfmt}}" href="{{ path('contact_form') }}">Contact</a></li>
+    <li><a class="{{urlfmt}}" href="http://www.zwemfed.be" target="_Blank">Vlaamse Zwemfederatie</a></li>
+  </ul>
+</div>

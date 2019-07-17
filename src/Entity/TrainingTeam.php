@@ -94,6 +94,11 @@ class TrainingTeam
      */
     private $requirements = [];
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Member", mappedBy="team")
+     */
+    private $members;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -103,6 +108,7 @@ class TrainingTeam
         $this->competitions = new ArrayCollection();
         $this->schedule = new ArrayCollection();
         $this->exceptions = new ArrayCollection();
+        $this->members = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -348,6 +354,37 @@ class TrainingTeam
     public function setRequirements(array $requirements): self
     {
         $this->requirements = $requirements;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Member[]
+     */
+    public function getMembers(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addMember(Member $member): self
+    {
+        if (!$this->members->contains($member)) {
+            $this->members[] = $member;
+            $member->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMember(Member $member): self
+    {
+        if ($this->members->contains($member)) {
+            $this->members->removeElement($member);
+            // set the owning side to null (unless already changed)
+            if ($member->getTeam() === $this) {
+                $member->setTeam(null);
+            }
+        }
 
         return $this;
     }
