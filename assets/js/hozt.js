@@ -83,7 +83,7 @@ $(document).ready(function(){
         $.scrollTo(0, 700); 
     })
 
-    $('#navbarHeader').on('shown.bs.collapse', function(e){
+    $('#discoverModal').on('shown.bs.modal', function(e){
         var options = {
             useEasing: true, 
             useGrouping: true, 

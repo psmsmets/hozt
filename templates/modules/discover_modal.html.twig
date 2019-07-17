@@ -1,0 +1,42 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="discoverModal" aria-labelledby="discoverModal" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title text-primary"><img class="mb-2 d-md-inline d-none" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="Hoogstratens Zwem Team" height="40"> Hoogstratens Zwem Team</h4>
+        <button type="button" class="close text-primary" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12 col-md-6 py-4 text-muted text-center">
+            <blockquote class="blockquote">
+              <p class="mb-0">Dé zwemploeg van Hoogstraten en omstreken!</p>
+              <footer class="blockquote-footer">Sinds <cite>2016</cite></footer>
+            </blockquote>
+            <div class="row lead">
+              <div class="col"><span class="badge badge-dark" id="count-groepen">9</span><br>groepen</div>
+              <div class="col"><span class="badge badge-dark" id="count-trainers">10</span><br>trainers</div>
+              <div class="col"><span class="badge badge-dark" id="count-zwemmers">124</span><br>zwemmers</div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4 offset-md-1 py-4">
+            <h4 class="text-primary">Contact</h4>
+            <div class="small">{% include 'contact/description.html.twig' %}
+              <p class="text-muted">Voor alle andere vragen vul je het <a href="{{ path('contact_form') }}" class="text-primary">contactformulier</a> in.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer d-block">
+        <div class="row mt-2">
+          {% include 'modules/menu.html.twig' %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
