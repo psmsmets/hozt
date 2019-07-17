@@ -16,13 +16,22 @@ easy_admin:
                - { entity: 'BlogCategory', label: 'Categorieën', icon: 'bookmark' }
            - { entity: 'StaticPage', label: "Statische pagina's", icon: 'briefcase' }
            - { entity: 'CarouselSlide', label: 'Carousel', icon: 'star' }
+           - label: "Clubbeheer"
+           - label: 'Structuur'
+             icon: 'sitemap'
+             children:
+               - { entity: 'TrainingCoach', label: 'Coaches', icon: 'graduation-cap' }
+               - { entity: 'TrainingTeam', label: 'Groepen', icon: 'users' }
+               - { entity: 'TrainingTeamCategory', label: 'Categoriën', icon: 'bookmark' }
+           - label: 'Leden'
+             icon: 'users'
+             children:
+               - { entity: 'Member', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
+               - { entity: 'Member', label: 'Lijst', icon: 'list' }
            - label: "Training & Wedstrijden"
            - label: 'Trainingen'
              icon: 'tasks'
              children:
-               - { entity: 'TrainingCoach', label: 'Coaches', icon: 'graduation-cap' }
-               - { entity: 'TrainingTeam', label: 'Groepen', icon: 'users' }
-               - { entity: 'TrainingTeamCategory', label: 'Categorie', icon: 'bookmark' }
                - { entity: 'TrainingSchedule', label: 'Uurrooster', icon: 'table' }
                - { entity: 'TrainingException', label: 'Uitzondering', icon: 'times-circle' }
                - { entity: 'TrainingTime', label: 'Tijdstippen' }
@@ -57,7 +66,7 @@ easy_admin:
                - { entity: 'Sponsor', label: 'Lijst', icon: 'list' }
                - { entity: 'SponsorCategory', label: 'Categorieën', icon: 'bookmark' }
            - label: "Toegang"
-           - { entity: 'User', label: 'Gebruikers', icon: 'user' }
+           - { entity: 'User', label: 'Gebruikers', icon: 'user-lock' }
 
     list:
         title: '%%entity_label%%'

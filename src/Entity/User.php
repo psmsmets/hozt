@@ -115,6 +115,11 @@ class User implements UserInterface
      */
     private $blogPosts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Member", mappedBy="user")
+     */
+    private $members;
+
     public function __construct()
     {
       $this->createdAt = new \DateTime("now");
@@ -127,6 +132,7 @@ class User implements UserInterface
       $this->secret = null;
       $this->secretExpiration = $this->createdAt;
       $this->blogPosts = new ArrayCollection();
+      $this->members = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -406,6 +412,37 @@ class User implements UserInterface
     public function getEmailVerificationToken(): ?string
     {
         return $this->getToken(self::EMAIL_VERIFICATION);
+    }
+
+    /**
+     * @return Collection|Member[]
+     */
+    public function getMembers(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addMember(Member $member): self
+    {
+        if (!$this->members->contains($member)) {
+            $this->members[] = $member;
+            $member->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMember(Member $member): self
+    {
+        if ($this->members->contains($member)) {
+            $this->members->removeElement($member);
+            // set the owning side to null (unless already changed)
+            if ($member->getUser() === $this) {
+                $member->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 /*
