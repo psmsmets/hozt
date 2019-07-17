@@ -91,23 +91,23 @@ $(document).ready(function(){
             decimal: '.',
             duration: 3,
         };
-        var cntGroup = new CountUp('count-groepen', $(document.body).data('nofteams'), options);
-        if (!cntGroup.error){
-            cntGroup.start();
+        var cntupTeams = new CountUp('countupTeams', $('#countupTeams').data('value'), options);
+        if (!cntupTeams.error){
+            cntupTeams.start();
         } else {
-            console.error(cntGroup.error);
+            console.error(cntupTeams.error);
         }
-        var cntCoach = new CountUp('count-trainers', $(document.body).data('nofcoaches'),options);
-        if (!cntCoach.error){
-            cntCoach.start();
+        var cntupCoaches = new CountUp('countupCoaches', $('#countupCoaches').data('value'),options);
+        if (!cntupCoaches.error){
+            cntupCoaches.start();
         } else {
-            console.error(cntCoach.error);
+            console.error(cntupCoaches.error);
         } 
-        var cntSwimmer = new CountUp('count-zwemmers', $(document.body).data('nofswimmers'), options);
-        if (!cntSwimmer.error){
-            cntSwimmer.start();
+        var cntupMembers = new CountUp('countupMembers', $('#countupMembers').data('value'), options);
+        if (!cntupMembers.error){
+            cntupMembers.start();
         } else {
-            console.error(cntSwimmer.error);
+            console.error(cntupMembers.error);
         }
     });
 
