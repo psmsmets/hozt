@@ -301,7 +301,7 @@ class TrainingSchedule
         return (
                 $this->getStartDate() <= $start and
                 ( $this->getEndDate() >= $end or is_null($this->getEndDate()) ) and
-                in_array( $this->getDay()->getId(), $days )
+                in_array( $this->getDayNumber(), $days )
              );
     }
 

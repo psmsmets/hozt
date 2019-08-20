@@ -54,9 +54,10 @@ class EasyAdminRepository
     }
     public static function getTrainingSchedule(EntityRepository $er) {
         return $er->createQueryBuilder('c')
+            ->innerJoin('c.time','t')
             ->andwhere('c.persistent = :persistent')
             ->setParameter('persistent', false)
-            ->orderBy('c.startTime', 'ASC')
+            ->orderBy('c.dayNumber, t.startTime', 'ASC')
         ;
     }
     public static function getMemberGrouping(EntityRepository $er) {
