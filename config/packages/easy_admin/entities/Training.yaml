@@ -136,7 +136,6 @@ easy_admin:
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot' }
-                    - { property: 'enabled', label: 'Actief' }
                     - { property: 'persistent', label: 'Extra', help: 'bijkomstige training(en) met een einddatum' }
             edit:
                 actions: ['delete']

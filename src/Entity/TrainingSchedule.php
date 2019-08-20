@@ -44,9 +44,14 @@ class TrainingSchedule
     private $comment;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $enabled;
+    private $description;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $dressingRoom;
 
     /**
      * @ORM\Column(type="smallint")
@@ -65,11 +70,6 @@ class TrainingSchedule
     private $teams;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $dressingRoom;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\TrainingException", mappedBy="schedule")
      */
     private $exceptions;
@@ -79,18 +79,12 @@ class TrainingSchedule
      */
     private $persistent;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $description;
-
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->startDate = $this->createdAt;
         $this->endDate = $this->createdAt;
-        $this->enabled = true;
         $this->persistent = true;
         $this->teams = new ArrayCollection();
         $this->exceptions = new ArrayCollection();
@@ -128,18 +122,6 @@ class TrainingSchedule
         return $this;
     }
 
-    public function getEnabled(): ?bool
-    {
-        return $this->enabled;
-    }
-
-    public function setEnabled(bool $enabled): self
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
     public function getComment(): ?string
     {
         return $this->comment;
@@ -148,6 +130,30 @@ class TrainingSchedule
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getDressingRoom(): ?string
+    {
+        return $this->dressingRoom;
+    }
+
+    public function setDressingRoom(?string $dressingRoom): self
+    {
+        $this->dressingRoom = $dressingRoom;
 
         return $this;
     }
@@ -232,18 +238,6 @@ class TrainingSchedule
         return $this;
     }
 
-    public function getDressingRoom(): ?int
-    {
-        return $this->dressingRoom;
-    }
-
-    public function setDressingRoom(?int $dressingRoom): self
-    {
-        $this->dressingRoom = $dressingRoom;
-
-        return $this;
-    }
-
     /**
      * @return Collection|TrainingException[]
      */
@@ -303,18 +297,6 @@ class TrainingSchedule
                 ( $this->getEndDate() >= $end or is_null($this->getEndDate()) ) and
                 in_array( $this->getDayNumber(), $days )
              );
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
     }
 
 }
