@@ -49,17 +49,20 @@ class EasyAdminRepository
     }
     public static function getTrainingTime(EntityRepository $er) {
         return $er->createQueryBuilder('time')
-            ->where('time.enabled = :enabled')
-            ->setParameter('enabled', true)
             ->orderBy('time.startTime', 'ASC')
         ;
     }
     public static function getTrainingSchedule(EntityRepository $er) {
         return $er->createQueryBuilder('c')
-            ->where('c.enabled = :enabled')
             ->andwhere('c.persistent = :persistent')
-            ->setParameter('enabled', true)
             ->setParameter('persistent', false)
+            ->orderBy('c.startTime', 'ASC')
+        ;
+    }
+    public static function getMemberGrouping(EntityRepository $er) {
+        return $er->createQueryBuilder('g')
+            ->where('g.parent is not null')
+            ->orderBy('g.fullname', 'ASC')
         ;
     }
 }

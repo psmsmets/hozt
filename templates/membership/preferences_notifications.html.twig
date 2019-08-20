@@ -1,0 +1,13 @@
+{% set details = app.user.details %}
+<dl class="row">
+
+  <dt class="col-sm-4">Nieuwe wedstrijden</dt>
+  <dd class="col-sm-8">{% for d in details.notificationDaynames %}{{d|trans|slice(0,2)}} {% endfor %}</dd>
+
+  <dt class="col-sm-4">Herinnering</dt>
+  <dd class="col-sm-8">{{details.reminderOffset}} dag{% if details.reminderOffset != 1%}en{% endif %} vooraf</dd>
+
+  <dt class="col-sm-4">Extra email</dt>
+  <dd class="col-sm-8">{{details.secondaryEmail}}</dd>
+
+</dl>

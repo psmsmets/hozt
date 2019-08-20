@@ -19,9 +19,14 @@ class TrainingException
     private $id;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="datetime")
      */
-    private $enabled;
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="date")
@@ -32,16 +37,6 @@ class TrainingException
      * @ORM\Column(type="date")
      */
     private $endDate;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -62,9 +57,8 @@ class TrainingException
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->startDate = $this->createdAt;
-        $this->endDate = $this->createdAt;
-        $this->enabled = true;
+        $this->startDate = new \DateTime("now +14 days");
+        $this->endDate = $this->startDate;
         $this->schedule = new ArrayCollection();
         $this->teams = new ArrayCollection();
     }
@@ -74,14 +68,19 @@ class TrainingException
         return $this->id;
     }
 
-    public function getEnabled(): ?bool
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->enabled;
+        return $this->createdAt;
     }
 
-    public function setEnabled(bool $enabled): self
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        $this->enabled = $enabled;
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(): self
+    {
+        $this->updatedAt = new \DateTime("now");
 
         return $this;
     }
@@ -110,23 +109,6 @@ class TrainingException
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(): self
-    {
-        $this->updatedAt = new \DateTime("now");
-
-        return $this;
-    }
-
     public function getComment(): ?string
     {
         return $this->comment;
@@ -137,6 +119,11 @@ class TrainingException
         $this->comment = $comment;
 
         return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->calcEndDate() > new \DateTime("now");
     }
 
     /**
@@ -193,9 +180,7 @@ class TrainingException
 
     public function calcEndDate(): \DateTime
     {
-        $end = clone $this->getEndDate();
-
-        return $end->setTime(23,59,59);
+        return (clone $this->endDate)->setTime(23,59,59);
     }
 
     public function getInterval(): \DateInterval

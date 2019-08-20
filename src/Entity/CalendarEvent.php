@@ -290,6 +290,28 @@ class CalendarEvent
         }
     }
 
+    public function isFuture(): ?bool
+    {
+        return new \DateTime("now") < $this->startTime;
+    }
+
+    public function isPast(): ?bool
+    {
+        return new \DateTime("now") > $this->trueEndTime();
+    }
+
+    public function isOngoing(): ?bool
+    {
+        return !$this->isFuture() && !$this->isPast();
+    }
+
+    public function getStatus(): ?string
+    {
+        if ($this->isFuture()) return 'future';
+        if ($this->isPast()) return 'past';
+        return 'ongoing';
+    }
+
     public function isSameDay(): ?bool
     {
         return is_null($this->endTime)? true : $this->startTime->format('Y-m-d') == $this->endTime->format('Y-m-d');

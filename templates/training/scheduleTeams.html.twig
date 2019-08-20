@@ -32,7 +32,7 @@
         {% for schedule in team.schedule %}
 
           <dt class="col-12 col-sm-2 col-lg-3 text-md-right mb-1">
-            {% if previous == false or previous.day.name != schedule.day.name %}{{schedule.day}}{% endif %}
+            {% if previous == false or previous.daynumber != schedule.daynumber %}{{schedule.dayName|trans()}}{% endif %}
           </dt>
           <dd class="col-5 col-sm-3 col-lg-2 p-0 text-right mb-1 {% if schedule.persistent %}text-info{% endif %}">{{schedule.time}}</dd>
           <dd class="col-7 col-sm-7 mb-1">

@@ -24,24 +24,9 @@ class TrainingTime
     private $startTime;
 
     /**
-     * @ORM\Column(type="time")
+     * @ORM\Column(type="dateinterval")
      */
-    private $endTime;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $enabled;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
+    private $duration;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\TrainingSchedule", mappedBy="time")
@@ -50,15 +35,14 @@ class TrainingTime
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime("now");
-        $this->updatedAt = $this->createdAt;
-        $this->enabled = true;
+        $this->startTime = new \DateTime("today noon");
+        $this->duration = new \DateInterval("+P00Y00M00DT01H00M00S");
         $this->schedule = new ArrayCollection();
     }
 
     public function __toString(): ?string
     {
-        return $this->startTime->format('H:i')." tot ".$this->endTime->format('H:i');
+        return $this->getFormattedPeriod();
     }
 
     public function getId(): ?int
@@ -78,52 +62,26 @@ class TrainingTime
         return $this;
     }
 
+    public function getDuration(): ?\DateInterval
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(\DateInterval $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
     public function getEndTime(): ?\DateTimeInterface
     {
-        return $this->endTime;
+        return (clone $this->getStartTime())->add($this->duration);
     }
 
-    public function setEndTime(\DateTimeInterface $endTime): self
+    public function getFormattedPeriod(string $separator = '-'): ?string
     {
-        $this->endTime = $endTime;
-
-        return $this;
-    }
-
-    public function getEnabled(): ?bool
-    {
-        return $this->enabled;
-    }
-
-    public function setEnabled(bool $enabled): self
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(): self
-    {
-        $this->updatedAt = new \DateTime("now");
-
-        return $this;
+        return $this->getStartTime()->format('H:i')." $separator ".$this->getEndTime()->format('H:i');
     }
 
     /**

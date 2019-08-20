@@ -19,9 +19,14 @@ class TrainingSchedule
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="datetime")
      */
-    private $comment;
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updatedAt;
 
     /**
      * @ORM\Column(type="date")
@@ -34,14 +39,9 @@ class TrainingSchedule
     private $endDate;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $updatedAt;
+    private $comment;
 
     /**
      * @ORM\Column(type="boolean")
@@ -49,10 +49,9 @@ class TrainingSchedule
     private $enabled;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrainingDay", inversedBy="schedule")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="smallint")
      */
-    private $day;
+    private $dayNumber;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TrainingTime", inversedBy="schedule")
@@ -92,7 +91,7 @@ class TrainingSchedule
         $this->startDate = $this->createdAt;
         $this->endDate = $this->createdAt;
         $this->enabled = true;
-        $this->persistent = false;
+        $this->persistent = true;
         $this->teams = new ArrayCollection();
         $this->exceptions = new ArrayCollection();
     }
@@ -105,6 +104,35 @@ class TrainingSchedule
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(): self
+    {
+        $this->updatedAt = new \DateTime("now");
+
+        return $this;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
     }
 
     public function getComment(): ?string
@@ -143,45 +171,22 @@ class TrainingSchedule
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getDayNumber(): ?int
     {
-        return $this->createdAt;
+        return $this->dayNumber;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function setDayNumber(integer $dayNumber): self
     {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(): self
-    {
-        $this->updatedAt = new \DateTime("now");
+        $this->dayNumber = $dayNumber;
 
         return $this;
     }
 
-    public function getEnabled(): ?bool
+    public function getDayName(int $trim = null): ?string
     {
-        return $this->enabled;
-    }
-
-    public function setEnabled(bool $enabled): self
-    {
-        $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    public function getDay(): ?TrainingDay
-    {
-        return $this->day;
-    }
-
-    public function setDay(?TrainingDay $day): self
-    {
-        $this->day = $day;
-
-        return $this;
+        $dayName = jddayofweek($this->dayNumber-1,$mode=1);
+        return $trim ? substr($dayName,0,$trim) : $dayName;
     }
 
     public function getTime(): ?TrainingTime
@@ -274,6 +279,17 @@ class TrainingSchedule
         return $this;
     }
 
+    public function getRegular(): ?bool
+    {
+        return !$this->persistent;
+    }
+
+    public function setRegular(bool $regular): self
+    {
+        $this->persistent = !$regular;
+
+        return $this;
+    }
 
     public function isActive(\DateTime $start, \DateTime $end, array $days): bool
     {

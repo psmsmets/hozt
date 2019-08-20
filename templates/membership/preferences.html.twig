@@ -1,0 +1,43 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Mijn account{% endblock %}
+
+{% block main %}
+
+  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
+
+    <h2 class="text-primary d-flex justify-content-between">{{'preferences.title'|trans}}</h2>
+
+    <div class="row">
+      <div class="col-md-3">
+        <div class="nav flex-column nav-pills" id="preferences-tab" role="tablist" aria-orientation="vertical">
+        {% for tab in page.tabs %}
+          <a class="nav-link{% if loop.first %} active{% endif %}" id="preferences-{{tab}}-tab" data-toggle="pill" href="#preferences-{{tab}}" role="tab"  aria-controls="preferences-{{tab}}" area-selected="false" data-tab="{{tab}}">{{'preferences.%s'|format(tab)|trans}}</a>
+        {% endfor %}
+        </div>
+      </div>
+      <div class="col-md-9 mt-3 mt-md-0 mx-2 mx-md-0">
+        <div class="tab-content" id="preferences-tabContent">
+        {% for tab in page.tabs %}
+          <div class="tab-pane fade{% if loop.first %}show active{% endif %}" id="preferences-{{tab}}" role="tabpanel" aria-labelledby="preferences-{{tab}}-tab">
+            {% include 'membership/preferences_%s.html.twig'|format(tab) with {'tab': tab } %}
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal fade" id="preferencesModal" tabindex="-1" role="dialog" aria-labelledby="preferencesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('form_default') }}
+{{ encore_entry_script_tags('membership_preferences') }}
+{% endblock %}

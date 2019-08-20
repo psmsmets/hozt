@@ -28,14 +28,15 @@ easy_admin:
              children:
                - { entity: 'Member', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'Member', label: 'Lijst', icon: 'list' }
+               - { entity: 'MemberAddress', label: 'Addressen', icon: 'address-book' }
+               - { entity: 'MemberGrouping', label: 'Groepen', icon: 'bookmark' }
            - label: "Training & Wedstrijden"
            - label: 'Trainingen'
              icon: 'tasks'
              children:
                - { entity: 'TrainingSchedule', label: 'Uurrooster', icon: 'table' }
                - { entity: 'TrainingException', label: 'Uitzondering', icon: 'times-circle' }
-               - { entity: 'TrainingTime', label: 'Tijdstippen' }
-               - { entity: 'TrainingDay', label: 'Dag' }
+               - { entity: 'TrainingTime', label: 'Tijdstippen', icon: 'clock' }
            - label: 'Kalender'
              icon: 'calendar'
              children:

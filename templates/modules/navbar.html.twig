@@ -4,51 +4,42 @@
 
 <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-white shadow-sm d-print-none">
   <div class="container">
-  <a class="navbar-brand mr-auto mr-lg-0 text-primary pr-3" href="#" data-toggle="modal" data-target="#discoverModal"><img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="Hoogstratens Zwem Team" height="40"> <div class="d-none d-xl-inline-block">Hoogstratens Zwem Team</div></a>
+  <a class="navbar-brand mr-auto mr-lg-0 text-primary pr-3" href="/"><img class="mb-2" src="{{ asset('assets/img/logo/Hozt.svg') }}" alt="Hoogstratens Zwem Team" height="40"> <div class="d-none d-xl-inline-block">Hoogstratens Zwem Team</div></a>
   <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="navbar-collapse offcanvas-collapse bg-white" id="navbarOffcanvas">
-    <ul class="navbar-nav mr-auto text-center text-lg-left mb-4 mb-lg-0"><!-- container d-flex flex-column flex-md-row justify-content-between -->
-      <li class="nav-item {% if currentPath == "/" %}active{% endif%}">
+    <ul class="navbar-nav text-center text-lg-left mb-2 mb-md-0 mr-md-auto">
+      <li class="nav-item mx-md-1">
+        <a class="{% if currentPath == "/" %}btn btn-medium{% else %}nav-link{% endif %}" href="#" data-toggle="modal" data-target="#discoverModal"><i class="fas fa-water"></i> Ontdek</a>
+      </li>
+      <li class="nav-item d-md-none {% if currentPath == "/" %}active{% endif%}">
         <a class="nav-link" href="/"><i class="fas fa-swimming-pool"></i> Home<span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item {% if currentPath starts with path('calendar') %}active{% endif%}">
-        <a class="nav-link" href="{{ path('calendar') }}"><i class="far fa-calendar-alt d-lg-none"></i> Kalender</a>
+      <li class="nav-item mx-md-1 {% if currentPath starts with path('calendar') %}active{% endif%}">
+        <a class="nav-link" href="{{ path('calendar') }}"><i class="far fa-calendar-alt"></i> Kalender</a>
       </li>
-<!--      <li class="nav-item <?echo $page->isActive('news');?>">
-        <a class="nav-link" href="#"><i class="fas fa-newspaper d-md-none"></i> Nieuws</a>
-      </li> -->
-      <li class="nav-item {% if currentPath starts with path('training_categories') %}active{% endif%}">
-        <a class="nav-link" href="{{ path('training_categories') }}"><i class="fas fa-swimmer d-lg-none"></i> Aanbod</a>
+      <li class="nav-item mx-md-1 {% if currentPath starts with path('training_categories') %}active{% endif%}">
+        <a class="nav-link" href="{{ path('training_categories') }}"><i class="fas fa-swimmer"></i> Aanbod</a>
       </li>
-      <li class="nav-item {% if currentPath == '/lid-worden' %}active{% endif%}">
-        <a class="nav-link" href="/lid-worden"><i class="fas fa-users d-lg-none"></i> Lid worden</a>
-      </li>
-      <li class="nav-item {% if currentPath starts with path('enrol_tryout') %}active{% endif%} d-inline-flex justify-content-center">
-        <a class="nav-link btn btn-outline-medium p-2" href="{{path('enrol_tryout')}}"><i class="far fa-hand-point-right"></i> Testmoment</a>
+      <li class="nav-item mx-md-1 mr-md-auto {% if currentPath == '/lid-worden' %}active{% endif%}">
+        <a class="nav-link" href="/lid-worden"><i class="fas fa-users"></i> Lid worden</a>
       </li>
     </ul>
-    <ul class="navbar-nav flex-row ml-md-auto d-flex justify-content-around">
+    <ul class="navbar-nav text-center text-lg-left mb-2 mb-md-0 ml-md-auto">
+      <li class="nav-item mx-md-1 dropdown">
+        {% include 'membership/dropdown.html.twig' %}
+      </li>
+    </ul>
+    <ul class="navbar-nav flex-row d-flex justify-content-center">
       <li class="nav-item d-flex align-items-center">
         <a class="nav-link" href="https://nl-nl.facebook.com/hoogstratensZT/" target="_blank" rel="noopener" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
       </li>
       <li class="nav-item d-flex align-items-center">
         <a class="nav-link" href="https://www.instagram.com/hozt16/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
       </li>
-      <li class="nav-item ml-lg-2">
-        <a class="btn btn-medium" href="#" data-toggle="modal" data-target="#discoverModal"><i class="fas fa-bars"></i> Ontdek</a>
-      </li>
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-      <li class="nav-item d-flex align-items-center ml-lg-2">
-        <a class="btn btn-outline-primary" href="{{ path('security_logout') }}" data-toggle="tooltip" data-placement="auto" title="" data-original-title="uitloggen"><i class="fas fa-sign-out-alt"></i></a>
-      </li>
-    {% endif %}
     </ul>
-<!--
-        <button class="btn btn-outline-medium d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3" type="submit" disabled>Inloggen</button>
--->
   </div>
 </div>
 </nav>

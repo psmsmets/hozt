@@ -65,6 +65,11 @@ class Competition
      */
     private $documents;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competition")
+     */
+    private $enrolments;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -73,6 +78,7 @@ class Competition
         $this->teams = new ArrayCollection();
         $this->teamCategories = new ArrayCollection();
         $this->documents = new ArrayCollection();
+        $this->enrolments = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -260,6 +266,37 @@ class Competition
         return $this->getDocuments()->filter(function(CompetitionDocument $document) use($slug) {
             return $document->getCategory()->getSlug() == $slug;
         });
+    }
+
+    /**
+     * @return Collection|CompetitionEnrolment[]
+     */
+    public function getEnrolments(): Collection
+    {
+        return $this->enrolments;
+    }
+
+    public function addEnrolment(CompetitionEnrolment $enrolment): self
+    {
+        if (!$this->enrolments->contains($enrolment)) {
+            $this->enrolments[] = $enrolment;
+            $enrolment->setCompetition($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnrolment(CompetitionEnrolment $enrolment): self
+    {
+        if ($this->enrolments->contains($enrolment)) {
+            $this->enrolments->removeElement($enrolment);
+            // set the owning side to null (unless already changed)
+            if ($enrolment->getCompetition() === $this) {
+                $enrolment->setCompetition(null);
+            }
+        }
+
+        return $this;
     }
 
 }

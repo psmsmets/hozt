@@ -51,17 +51,17 @@
         <title>{% block title %}{% endblock %} - Hoogstratens Zwem Team</title>
 
         <!-- Core CSS -->
-        <link href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" rel="stylesheet" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/15f9aa584c.js"></script>
+<!--        <link href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" rel="stylesheet" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">-->
         {{ encore_entry_link_tags('animate') }}
         {{ encore_entry_link_tags('bootstrap') }}
         {{ encore_entry_link_tags('hozt') }}
-        <!--<link href="{{ asset('assets/css/hozt-v20190520T2129.css') }}" rel="stylesheet" />-->
         <!-- Custom styles for this template -->
         {% block stylesheets %}{% endblock %}
 
     </head>
 
-    <body class="bg-light">
+    <body class="bg-light" data-session-timeout="{% if app.user is not null %}true{% else %}false{% endif %}">
 
         {% block nav %}{% endblock %}
         {% block top %}{% endblock %}

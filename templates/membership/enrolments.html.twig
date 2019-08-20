@@ -1,0 +1,49 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Mijn account{% endblock %}
+
+{% block main %}
+
+  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
+
+    <h2 class="text-primary d-flex justify-content-between">Mijn wedstrijden</h2>
+
+<div class="row">
+  <div class="col-12 col-md-3">
+    <div class="nav flex-column nav-pills" id="enrolments-tab" role="tablist" aria-orientation="vertical">
+      <div class="mb-3 d-none d-md-block text-right">Filter:</div>
+      <a class="nav-link active" id="enrolments-messages-tab" data-toggle="pill" href="#enrolments-upcoming" role="tab" aria-controls="enrolments-upcoming" aria-selected="false">Aanstaande</a>
+      <a class="nav-link" id="enrolments-new-tab" data-toggle="pill" href="#enrolments-new" role="tab" aria-controls="enrolments-new" aria-selected="false">Nieuw <span class="badge badge-light">0</span></a>
+      <a class="nav-link" id="enrolments-members-tab" data-toggle="pill" href="#enrolments-all" role="tab" aria-controls="enrolments-all" aria-selected="true">Alles</a>
+      <a class="nav-link" id="enrolments-settings-tab" data-toggle="pill" href="#enrolments-archive" role="tab" aria-controls="enrolments-archive" aria-selected="false">Archief</a>
+    </div>
+  </div>
+  <div class="col-12 col-md-9 mt-3 mt-md-0 mx-2 mx-md-0">
+
+    <ul class="list-inline mb-3">
+      <li class="list-inline-item d-md-none">Filter: </li>
+    {% for member in app.user.getMembers() %}
+      <li class="list-inline-item"><a class="text-dark" href="#" data-filter="{{member.uuid}}"><u>{{member.firstname}}</u></a></li>
+    {% endfor %}
+    </ul>
+
+    <div class="tab-content" id="enrolments-tabContent">
+      <div class="tab-pane fade show active" id="enrolments-upcoming" role="tabpanel" aria-labelledby="enrolments-upcoming-tab">
+        Aanstaande in 30 dagen...
+      </div>
+      <div class="tab-pane fade" id="enrolments-new" role="tabpanel" aria-labelledby="enrolments-new-tab">
+        Nieuwe inschrijvingen...
+      </div>
+      <div class="tab-pane fade" id="enrolments-all" role="tabpanel" aria-labelledby="enrolments-members-tab">
+        Alles wat nog moet komen...
+      </div>
+      <div class="tab-pane fade" id="enrolments-archive" role="tabpanel" aria-labelledby="enrolments-archive-tab">
+        Oude inschrijvingen...
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </div>
+{% endblock %}

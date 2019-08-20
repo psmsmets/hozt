@@ -64,6 +64,7 @@ easy_admin:
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'abbr', label: 'Afkorting' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'defaultEnrolled', label: 'Standaard aangemeld', help: 'bij zwemwedstrijden' }
                     - { property: 'description', label: 'Omschrijving', type: 'textarea' }
         TrainingTeamCategory:
             class: App\Entity\TrainingTeamCategory
@@ -99,10 +100,10 @@ easy_admin:
             list:
                 fields:
                     #- { property: 'id', label: 'id' }
-                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'schedule', label: 'Uren' }
                     - { property: 'startTime', label: 'Startuur' }
-                    - { property: 'endTime', label: 'Einduur' }
-                    - { property: 'updatedAt', label: 'Laatst aangepast' }
+                    - { property: 'endTime', label: 'Einduur', template: 'easy_admin/date_interval_template_time.html.twig' }
+                    - { property: 'duration', label: 'Duur', template: 'easy_admin/date_interval_template_duration.html.twig' }
                 sort: ['startTime', 'ASC']
                 actions: ['-show','edit']
             edit:
@@ -110,59 +111,43 @@ easy_admin:
             form:
                 fields:
                     - { property: 'startTime', label: 'Startuur' }
-                    - { property: 'endTime', label: 'Einduur' }
-                    - { property: 'enabled', label: 'Actief' }
-        TrainingDay:
-            class: App\Entity\TrainingDay
-            label: 'Trainingen :: dag'
-            list:
-                fields:
-                    - { property: 'id', label: 'id' }
-                    - { property: 'name', label: 'Naam' }
-                    - { property: 'abbr', label: 'Afkorting' }
-                sort: ['id', 'ASC']
-                actions: ['-edit','-show','-new','-search']
-            form:
-                fields:
-                    - { property: 'name', label: 'Naam' }
-                    - { property: 'abbr', label: 'Afkorting' }
+                    - { property: 'duration', label: 'Duur', type_options: { with_years: false, with_months: false, with_days: false, with_hours: true, with_minutes: true } }
         TrainingSchedule:
             class: App\Entity\TrainingSchedule
             label: 'Trainingen :: uurrooster'
             list:
                 fields:
                     #- { property: 'id', label: 'Id' }
-                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'regular', label: 'Regulier', type: 'boolean' }
                     - { property: 'teams', label: 'Groepen' }
-                    - { property: 'day', label: 'Dag' }
+                    - { property: 'dayName', label: 'Dag', template: 'easy_admin/trans.html.twig' }
                     - { property: 'time', label: 'Tijdstip' }
                     - { property: 'comment', label: 'Opmerking' }
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot' }
-                    - { property: 'persistent', label: 'Uitzondering', type: 'boolean' }
                     #- { property: 'updatedAt', label: 'Aangepast' }
-                sort: ['day', 'ASC']
+                sort: ['dayNumber', 'ASC']
             form:
                 fields:
                     - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
-                    - { property: 'day', label: 'Dag' }
+                    - { property: 'dayNumber', label: 'Dag', type: 'choice', type_options: { multiple: false, choices: { 'Monday':1, 'Tuesday':2, 'Wednesday':3, 'Thursday':4, 'Friday':5, 'Saturday':6, 'Sunday':7 } } }
                     - { property: 'time', label: 'Tijdstip', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getTrainingTime'] } }
                     - { property: 'comment', label: 'Opmerking' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot' }
                     - { property: 'enabled', label: 'Actief' }
-                    - { property: 'persistent', label: 'Uitzondering' }
+                    - { property: 'persistent', label: 'Extra', help: 'bijkomstige training(en) met een einddatum' }
             edit:
                 actions: ['delete']
             search:
-                fields: ['teams.abbr','day.name','time.startTime','time.endTime']
+                fields: ['teams.abbr','dayName','time.startTime','time.endTime']
         TrainingException:
             class: App\Entity\TrainingException
             label: 'Trainingen :: uurrooster uitzonderingen'
             list:
                 fields:
-                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'active', label: 'Actief', type: 'boolean' }
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot' }
                     - { property: 'teams', label: 'Groepen' }
@@ -176,6 +161,5 @@ easy_admin:
                     - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'schedule', label: 'Uurrooster', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getTrainingSchedule'] } }
                     - { property: 'comment', label: 'Opmerking' }
-                    - { property: 'enabled', label: 'Actief' }
             edit:
                 actions: ['delete']

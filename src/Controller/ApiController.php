@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,6 +44,18 @@ class ApiController extends AbstractController
         $this->security = $security;
         $this->em = $em;
         $this->now = new \DateTime('now');
+    }
+
+    /**
+     * @Route("/api/keep-alive", name="api_session_timeout")
+     */
+    public function api_session_timeout(Request $request)
+    {
+        $time = $request->query->get('time', null);
+        return $this->json(array(
+            'result' => !is_null($time), 
+            'time' => date('r', $time ) 
+        ));
     }
 
     /**
@@ -105,6 +118,8 @@ class ApiController extends AbstractController
             ->getRepository(TrainingSchedule::class)
             ->findAllByDayJoinedToTeam($day_id,$date)
             ;
+
+dd($schedule);
 
         $exceptions = $this->getDoctrine()
             ->getRepository(TrainingException::class)

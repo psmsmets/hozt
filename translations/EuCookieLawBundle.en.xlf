@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="nl" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="SJOq3UN" resname="cookie.title">
+        <source>cookie.title</source>
+        <target>__cookie.title</target>
+      </trans-unit>
+      <trans-unit id="nLQ._F." resname="cookie.message">
+        <source>cookie.message</source>
+        <target>__cookie.message</target>
+      </trans-unit>
+      <trans-unit id="FuUeytp" resname="cookie.readmore">
+        <source>cookie.readmore</source>
+        <target>__cookie.readmore</target>
+      </trans-unit>
+      <trans-unit id="prjKeTl" resname="cookie.message.accept">
+        <source>cookie.message.accept</source>
+        <target>__cookie.message.accept</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -35,6 +35,7 @@ Encore
     .addEntry('form_extended', './assets/js/form_extended.js')
     .addEntry('eu_cookie', './assets/js/eu_cookie.js')
     .addEntry('training_category', './assets/js/training_category.js')
+    .addEntry('membership_preferences', './assets/js/membership_preferences.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

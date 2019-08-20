@@ -112,10 +112,14 @@
         <p class="text-right small"><i>Tijdelijke <u>extra trainingsuren</u> zijn aangegeven in <a href="https://en.wikipedia.org/wiki/Aqua_(color)" class="text-info" target="_Blank"><strong>aqua</strong></a>.<br>Klik op <i class="fas fa-comment"></i> voor de juiste datum of periode.</i></p>
         {% endif %}
 
-        {% for day in page.training_days %}
-          <dl class="row mb-md-2"> 
-            {% for schedule in day.schedule %}
-              <dt class="col-12 col-sm-2 col-lg-3 text-md-right mb-1">{% if loop.index0 == 0%}{{day}}{% endif %}</dt>
+        {% for day in 1..7 %}
+
+           {% set schedules = page.training_schedule|filter(s => s.dayNumber == day) %}
+           {% if schedules is not empty %}
+
+           <dl class="row mb-md-2"> 
+             {% for schedule in schedules %}
+             <dt class="col-12 col-sm-2 col-lg-3 text-md-right mb-1">{% if loop.index0 == 0%}{{schedule.dayName|trans()}}{% endif %}</dt>
               <dd class="col-5 col-sm-3 col-lg-2 p-0 text-right mb-1 {% if schedule.persistent %}text-info{% endif %}">{{schedule.time}}</dd>
               <dd class="col-7 col-sm-7 mb-1">
                 {% for team in schedule.teams %}<span class="badge badge-secondary badge-team mr-1 mr-md-2">{{team}}</span>{% endfor %}
@@ -125,7 +129,10 @@
                 {% endif %}
             </dd>
             {% endfor %}
-          </dl>
+           </dl>
+
+           {% endif %}
+
         {% endfor %}
 
       </div><!-- end tab trainingsuren -->

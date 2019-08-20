@@ -16,14 +16,12 @@ easy_admin:
                     - { property: 'id', label: 'Id' }
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'verified', label: 'Geverifieerd', type: 'boolean' }
-                    #- { property: 'email', label: 'Email' }
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
-                    #- { property: 'mobilePhone', label: 'Mobiel nr' }
-                    - { property: 'is_active', label: 'Ingelogd', type: 'boolean' }
+                    - { property: 'is_active', label: 'Online', type: 'boolean' }
+                    - { property: 'lastActiveAt', label: 'Laatst online' }
                     - { property: 'roles' }
                     - { property: 'members', label: 'Leden' }
-                    - { property: 'lastLoginAt', label: 'Laatst ingelogd' }
                 sort: ['id', 'ASC']
             form:
                 fields:
@@ -34,4 +32,4 @@ easy_admin:
                     - { property: 'enabled', label: 'Actief' }
                     - { property: 'verified', label: 'Geverifieerd' }
                     - { property: 'members', label: 'Ledenbeheer' }
-                    - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'Lid':'ROLE_USER', '- Lid (volw)': 'ROLE_ADULT', 'Trainer': 'ROLE_COACH', '- Hoofdtrainer':'ROLE_HEADCOACH' ,'Bestuurslid':'ROLE_BOARD', 'Beheerder': 'ROLE_ADMIN', '- Superbeheerder': 'ROLE_SUPERADMIN' } } }
+                    - { property: 'roles', type: 'choice', type_options: { multiple: true, choices: { 'Lid':'ROLE_USER', '- Gebruiker (volw/voogd)': 'ROLE_ADULT', 'Trainer': 'ROLE_COACH', '- Hoofdtrainer':'ROLE_HEADCOACH' ,'Bestuurslid':'ROLE_BOARD', 'Beheerder': 'ROLE_ADMIN', '- Superbeheerder': 'ROLE_SUPERADMIN' } } }

@@ -21,6 +21,30 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         parent::__construct($registry, TrainingSchedule::class);
     }
 
+
+    // /**
+    //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
+    //  */
+    public function findAllJoinedToTeam(int $days=28 )
+    {
+        $today = new \DateTime('today');
+        return $this->createQueryBuilder('schedule')
+            //->andWhere('schedule.enabled = :enabled')
+            ->innerJoin('schedule.teams', 'teams')
+            ->innerJoin('schedule.time', 'time')
+            ->addSelect('teams')
+            ->addSelect('time')
+            ->andWhere('schedule.startDate <= :start')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
+            ->setParameter('now', $today->format('Y-m-d'))
+            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->orderBy('schedule.dayNumber, time.startTime, time.duration, teams.abbr', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;     
+    }
+
+
     // /**
     //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
     //  */
@@ -29,7 +53,6 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('schedule')
             ->innerJoin('schedule.teams', 'teams')
-            ->innerJoin('schedule.day', 'day')
             ->innerJoin('schedule.time', 'time')
             ->leftJoin('schedule.exceptions', 'exception')
             ->leftJoin('exception.teams', 'ex_teams')
@@ -37,14 +60,14 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->addSelect('time')
             ->addSelect('exception')
             ->addSelect('ex_teams')
-            ->andWhere('schedule.enabled = :enabled')
-            ->andWhere('day.id = :day')
+            //->andWhere('schedule.enabled = :enabled')
+            ->andWhere('schedule.dayNumber = :day')
             ->andWhere('schedule.startDate <= :now')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
-            ->setParameter('enabled', true)
+            //->setParameter('enabled', true)
             ->setParameter('day', $day)
             ->setParameter('now', $refdate->format("Y-m-d"))
-            ->orderBy('time.startTime, time.endTime, teams.abbr', 'ASC')
+            ->orderBy('time.startTime, time.duration, teams.abbr', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
@@ -54,19 +77,16 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('schedule')
             ->innerJoin('schedule.teams', 'teams')
-            ->innerJoin('schedule.day', 'day')
             ->innerJoin('schedule.time', 'time')
-            //->addSelect('t')
-            ->addSelect('day')
             ->addSelect('time')
-            ->andWhere('schedule.enabled = :enabled')
+            //->andWhere('schedule.enabled = :enabled')
             ->andWhere('teams.abbr = :abbr')
             ->andWhere('schedule.startDate <= :now')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
-            ->setParameter('enabled', true)
+            //->setParameter('enabled', true)
             ->setParameter('abbr', $team_abbr)
             ->setParameter('now', date("Y-m-d"))
-            ->orderBy('day.id, time.startTime, time.endTime', 'ASC')
+            ->orderBy('schedule.dayNumber, time.startTime, time.duration', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
@@ -77,17 +97,15 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('schedule')
             ->innerJoin('schedule.teams', 'teams')
             ->innerJoin('teams.category', 'teamsCat')
-            ->innerJoin('schedule.day', 'day')
             ->innerJoin('schedule.time', 'time')
-            ->addSelect('day')
             ->addSelect('time')
-            ->andWhere('schedule.enabled = :enabled')
+            //->andWhere('schedule.enabled = :enabled')
             ->andWhere('teamsCat.id = :id')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
-            ->setParameter('enabled', true)
+            //->setParameter('enabled', true)
             ->setParameter('id', $teamCategory->getId())
             ->setParameter('now', date("Y-m-d"))
-            ->orderBy('day.id, time.startTime, time.endTime', 'ASC')
+            ->orderBy('schedule.dayNumber, time.startTime, time.duration', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
@@ -100,12 +118,12 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->select('count(schedule.id)')
             ->innerJoin('schedule.teams', 'teams')
             ->innerJoin('teams.category', 'teamsCat')
-            ->andWhere('schedule.enabled = :enabled')
+            //->andWhere('schedule.enabled = :enabled')
             ->andWhere('schedule.persistent = :persistent')
             ->andWhere('schedule.startDate <= :start')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->andWhere('teamsCat.id = :id')
-            ->setParameter('enabled', true)
+            //->setParameter('enabled', true)
             ->setParameter('persistent', true)
             ->setParameter('now', $today->format('Y-m-d'))
             ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
@@ -119,11 +137,11 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         $today = new \DateTime('today');
         return $this->createQueryBuilder('schedule')
             ->select('count(schedule.id)')
-            ->andWhere('schedule.enabled = :enabled')
+            //->andWhere('schedule.enabled = :enabled')
             ->andWhere('schedule.persistent = :persistent')
             ->andWhere('schedule.startDate <= :start')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
-            ->setParameter('enabled', true)
+            //->setParameter('enabled', true)
             ->setParameter('persistent', true)
             ->setParameter('now', $today->format('Y-m-d'))
             ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
@@ -176,20 +194,16 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     public function findAllJoinedToTeams()
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.enabled = :enabled')
-            ->innerJoin('s.day', 'd')
+            //->andWhere('s.enabled = :enabled')
             ->innerJoin('s.time', 'h')
             ->innerJoin('s.teams', 't')
-            ->addSelect('d')
             ->addSelect('h')
             ->addSelect('t')
-            ->andWhere('h.enabled = :enabled')
-            ->andWhere('t.enabled = :enabled')
             ->andWhere('s.startDate <= :now')
             ->andWhere('(s.endDate > :now or s.endDate is null)')
-            ->setParameter('enabled', true)
+            //->setParameter('enabled', true)
             ->setParameter('now', date("Y-m-d"))
-            ->orderBy('d.id, h.startTime', 'ASC')
+            ->orderBy('s.dayNumber, h.startTime', 'ASC')
             ->getQuery()
             ->getResult()
         ;     

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="nl" target-language="en" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="agDfwdy" resname="Monday">
+        <source>Monday</source>
+        <target>Monday</target>
+      </trans-unit>
+      <trans-unit id="fYrx3hJ" resname="Tuesday">
+        <source>Tuesday</source>
+        <target>Tuesday</target>
+      </trans-unit>
+      <trans-unit id="wKbMgpz" resname="Wednesday">
+        <source>Wednesday</source>
+        <target>Wednesday</target>
+      </trans-unit>
+      <trans-unit id=".CZiBi." resname="Thursday">
+        <source>Thursday</source>
+        <target>Thursday</target>
+      </trans-unit>
+      <trans-unit id="4h8.Nyp" resname="Friday">
+        <source>Friday</source>
+        <target>Friday</target>
+      </trans-unit>
+      <trans-unit id="2_Ncc2P" resname="Saturday">
+        <source>Saturday</source>
+        <target>Saturday</target>
+      </trans-unit>
+      <trans-unit id="hz.vdg5" resname="Sunday">
+        <source>Sunday</source>
+        <target>Sunday</target>
+      </trans-unit>
+      <trans-unit id="VJLEtLO" resname="preferences.title">
+        <source>preferences.title</source>
+        <target>Preferences...</target>
+      </trans-unit>
+      <trans-unit id="DIUMcQV" resname="preferences.account">
+        <source>preferences.account</source>
+        <target>Edit your account</target>
+      </trans-unit>
+      <trans-unit id="frd_hDB" resname="preferences.address">
+        <source>preferences.address</source>
+        <target>Addressbook</target>
+      </trans-unit>
+      <trans-unit id="M7ze_7f" resname="preferences.members">
+        <source>preferences.members</source>
+        <target>Members</target>
+      </trans-unit>
+      <trans-unit id="OLVQQZA" resname="preferences.notifications">
+        <source>preferences.notifications</source>
+        <target>Notifications</target>
+      </trans-unit>
+      <trans-unit id="Ci3qibM" resname="form.save">
+        <source>form.save</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="ZUFsRe8" resname="form.close">
+        <source>form.close</source>
+        <target>Close</target>
+      </trans-unit>
+      <trans-unit id="KCdoxAM" resname="address.new">
+        <source>address.new</source>
+        <target>New address</target>
+      </trans-unit>
+      <trans-unit id="ds5xdN6" resname="address.edit">
+        <source>address.edit</source>
+        <target>Edit address</target>
+      </trans-unit>
+      <trans-unit id="wiAs9Zf" resname="address.remove">
+        <source>address.remove</source>
+        <target>Remove address</target>
+      </trans-unit>
+      <trans-unit id="ZdtD8qf" resname="address.streetnumber">
+        <source>address.streetnumber</source>
+        <target>Street and number</target>
+      </trans-unit>
+      <trans-unit id="LDw8l5J" resname="address.zip">
+        <source>address.zip</source>
+        <target>Zip</target>
+      </trans-unit>
+      <trans-unit id="CbHLk8q" resname="address.town">
+        <source>address.town</source>
+        <target>Town</target>
+      </trans-unit>
+      <trans-unit id="3f.5umz" resname="address.nation">
+        <source>address.nation</source>
+        <target>Nation</target>
+      </trans-unit>
+      <trans-unit id="lRHCpKK" resname="address.member">
+        <source>address.member</source>
+        <target>Member</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

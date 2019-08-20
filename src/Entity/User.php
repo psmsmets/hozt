@@ -6,8 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 //use Ambta\DoctrineEncryptBundle\Configuration\Encrypted;
 
@@ -96,6 +96,11 @@ class User implements UserInterface
     private $lastLoginAt;
 
     /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $lastActiveAt;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $passwordUpdatedAt;
@@ -120,24 +125,35 @@ class User implements UserInterface
      */
     private $members;
 
-    public function __construct()
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\MemberAddress", mappedBy="user")
+     */
+    private $memberAddresses;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\UserDetails", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $details;
+
+    public function __construct(bool $verified = false)
     {
       $this->createdAt = new \DateTime("now");
       $this->passwordUpdatedAt = $this->createdAt;
       $this->password = bin2hex(random_bytes(64));
       $this->enabled = true;
-      $this->verified = false;
+      $this->verified = $verified;
       $this->isActive = false;
       $this->roles = array();
       $this->secret = null;
       $this->secretExpiration = $this->createdAt;
       $this->blogPosts = new ArrayCollection();
       $this->members = new ArrayCollection();
+      $this->memberAddresses = new ArrayCollection();
     }
 
     public function __toString(): ?string
     {
-        return "$this->firstname $this->lastname";
+        return $this->getName();
     }
 
     public function getId(): ?int
@@ -164,6 +180,11 @@ class User implements UserInterface
     public function getUsername(): string
     {
         return (string) $this->email;
+    }
+
+    public function getName(bool $reverse=false): string
+    {
+        return $reverse ? "$this->lastname $this->firstname" : "$this->firstname $this->lastname";
     }
 
     /**
@@ -286,15 +307,15 @@ class User implements UserInterface
         return $this->lastLoginAt;
     }
 
-    public function updateLastLoginAt(): self
+    public function updateLastActivity(): self
     {
-        $this->lastLoginAt = new \DateTime("now");
+        $this->lastActiveAt = new \DateTimeImmutable("now");
         return $this;
     }
 
     public function getIsActive(): ?bool
     {
-        return $this->isActive;
+        return $this->isActive();
     }
 
     public function setIsActive(bool $isActive): self
@@ -305,7 +326,19 @@ class User implements UserInterface
 
     public function isActive(): ?bool
     {
-        return $this->isActive ? true : false;
+        return is_null($this->lastActiveAt) ? false : $this->lastActiveAt->modify('+1800 seconds') > new \DateTime('now');
+    }
+
+    public function getLastActiveAt(): ?\DateTimeImmutable
+    {
+        return $this->lastActiveAt;
+    }
+
+    public function setLastActiveAt(?\DateTimeImmutable $lastActiveAt): self
+    {
+        $this->lastActiveAt = $lastActiveAt;
+
+        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -440,6 +473,63 @@ class User implements UserInterface
             if ($member->getUser() === $this) {
                 $member->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MemberAddress[]
+     */
+    public function getMemberAddresses(): Collection
+    {
+        return $this->memberAddresses;
+    }
+
+    public function addMemberAddress(MemberAddress $memberAddress): self
+    {
+        if (!$this->memberAddresses->contains($memberAddress)) {
+            $this->memberAddresses[] = $memberAddress;
+            $memberAddress->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMemberAddress(MemberAddress $memberAddress): self
+    {
+        if ($this->memberAddresses->contains($memberAddress)) {
+            $this->memberAddresses->removeElement($memberAddress);
+            // set the owning side to null (unless already changed)
+            if ($memberAddress->getUser() === $this) {
+                $memberAddress->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMemberAddress(int $id): ?MemberAddress
+    {
+        foreach ($this->getMemberAddresses() as $address) {
+            if ($address->getId() == $id) return $address;
+        }
+        return null;
+    }
+
+    public function getDetails(): ?UserDetails
+    {
+        return $this->details;
+    }
+
+    public function setDetails(?UserDetails $details): self
+    {
+        $this->details = $details;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = $details === null ? null : $this;
+        if ($newUser !== $details->getUser()) {
+            $details->setUser($newUser);
         }
 
         return $this;
