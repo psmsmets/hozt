@@ -359,13 +359,6 @@ class PageController extends AbstractController
      */
     public function training_schedule_days()
     {
-
-dd(
-	$this->getDoctrine()
-            ->getRepository(TrainingSchedule::class)
-            ->findAllJoinedToTeam($this->getParameter('app.defaults.scheduleNotice.days'))
-);
-
         $this->initTemplateData();
         $this->addToTemplateData( 'training_schedule',  $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
