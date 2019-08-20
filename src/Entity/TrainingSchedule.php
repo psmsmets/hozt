@@ -98,7 +98,12 @@ class TrainingSchedule
 
     public function __toString(): ?string
     {
-        return strval($this->getDayName()) . " " . strval($this->getTime());
+        return $this->getDayName()." ".strval($this->getTime());
+    }
+
+    public function getFormat(): ?string
+    {
+        return $this->dayNumber." ".$this->getDayName()." ".strval($this->getTime());
     }
 
     public function getId(): ?int

@@ -119,8 +119,6 @@ class ApiController extends AbstractController
             ->findAllByDayJoinedToTeam($day_id,$date)
             ;
 
-dd($schedule);
-
         $exceptions = $this->getDoctrine()
             ->getRepository(TrainingException::class)
             ->findAllOnDate($date)
