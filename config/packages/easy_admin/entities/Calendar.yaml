@@ -46,7 +46,6 @@ easy_admin:
                     - { property: 'cancelled', label: 'Annul.', type: 'boolean' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['startTime', 'DESC']
-                filters: [{property: 'status', mapped: false, type: 'text'}, 'startTime']
             form:
                 fields:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
