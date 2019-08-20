@@ -7,14 +7,18 @@ parameters:
     locale: 'nl'
     app_locales: nl|en
     timezone: 'Europe/Brussels'
-    session_max_idle_time: 1800
+    session_max_idle_time: 1500
     app.mailer.from: 'webmaster@hozt.be'
     app.mailer.name: 'Webmaster HoZT'
     app.about.abbr: 'HoZT'
     app.about.name: 'Hoogstratens Zwem Team'
+    app.about.code: '%app.about.abbr%'
     app.about.org.name: '%app.about.name% vzw'
     app.about.org.number: 'BE0644916871'
     app.about.bank_account: 'BE88 0689 0449 7341'
+    app.memberGrouping.board: 1
+    app.memberGrouping.coaches: 2
+    app.memberGrouping.officials: 3
     app.defaults.blogPost.items_home: 3
     app.defaults.blogPost.items_page: 10
     app.defaults.blogCategory.id: 1
@@ -23,7 +27,7 @@ parameters:
     app.defaults.sponsorCategory.id: 1
     app.defaults.scheduleNotice.days: 21
     app.regex.telephone: '^(\+|00)(324|316)([1-9]\d{7})$' # enkel Belgie en Nederland
-    app.regex.postalcode: '^([1-9]{1}\d{3})(|[A-Z]{2})$'
+    app.regex.zip: '^([1-9]{1}\d{3})(|[A-Z]{2})$'
     app.regex.datestring: '^((0[1-9]|[12]\d|3[01]|[1-9])[/.-](0[1-9]|1[0-2]|[1-9])[/.-][12]\d{3})$'
 
     app.path.doc.blogPost: /uploads/files/blog
@@ -61,8 +65,6 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    app.logout.listener:
-        class: App\Listener\LogoutListener
 
 #    app.blogPost.listener:
 #        class: App\Listener\BlogPostListener

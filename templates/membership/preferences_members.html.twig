@@ -1,0 +1,12 @@
+{% for member in app.user.getMembers() %}
+<div class="mb-3">
+  <h5 class="d-flex justify-content-between mb-0">{{member}} <button class="btn btn-sm btn-light" data-member="{{member.uuid}}">bewerk</button></h5>
+  <ul class="list-unstyled text-muted">
+    <li><span class="badge badge-primary">{{member.team.name}}</span></li>
+    <li class="small">{% if member.gender == 'M' %}<i class="fas fa-male"></i>{% else %}<i class="fas fa-female"></i>{% endif %} {{member.birthdate|localizeddate('short','none')}}</li>
+    {% if member.registrationId is not empty %}<li class="small">{{member.registrationId}}</li>{% endif %}
+    {% set elapsed = date().diff(member.memberSince) %}
+    <li class="small">{{elapsed|date('%a')}} dagen lid (sinds {{member.memberSince|localizeddate('short','none')}})</li>
+  </ul>
+</div>
+{% endfor %}

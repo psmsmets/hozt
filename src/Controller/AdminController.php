@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
-//use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
+
+# form
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 # entities
 use App\Entity\StaticPage;
@@ -14,7 +16,6 @@ use App\Entity\BlogPost;
 use App\Entity\BlogCategory;
 use App\Entity\CarouselSlide;
 use App\Entity\TrainingCoach;
-use App\Entity\TrainingDay;
 use App\Entity\TrainingTime;
 use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
@@ -31,6 +32,11 @@ use App\Entity\SponsorCategory;
 use App\Entity\Clubfeest;
 use App\Entity\TryoutEnrolment;
 use App\Entity\Tryout;
+use App\Entity\User;
+use App\Entity\UserDetails;
+use App\Entity\Member;
+use App\Entity\MemberAddress;
+use App\Entity\MemberGrouping;
 
 # repositories
 use App\Repository\TryoutEnrolmentRepository;
@@ -39,12 +45,34 @@ use App\Repository\TryoutRepository;
 class AdminController extends EasyAdminController
 {
 
-    // Customizes the instantiation of specific entities
-    public function createNewUserEntity()
+    public function createMemberGroupingEntityFormBuilder($entity, $view)
     {
-        return new User(array('ROLE_USER'));
+        $formBuilder = parent::createEntityFormBuilder($entity, $view);
+
+        // get the list of choices from your application and add the form field for them
+//        $formBuilder->add('parent',TextType::class, ['disabled' => true]);
+        $formBuilder->add(
+            'parent', EntityType::class, array(
+                'class' => MemberGrouping::class,
+                'choice_label' => 'fullname',
+                'choice_value' => 'id',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('memberGrouping')
+                        ->where('memberGrouping.parent is null')
+                        ;
+                },
+                'label'    => 'Parent',
+                'attr' => ['class'=>'custom-select'],
+                'required' => false,
+                //'placeholder' => '-- Maak een keuze --',
+            )
+        );
+
+        return $formBuilder;
     }
 
+
+    // Customizes the instantiation of specific entities
     public function createNewBlogPostEntity()
     {
         $post = new BlogPost();
@@ -173,6 +201,14 @@ class AdminController extends EasyAdminController
     }
 
     // special persist
+    public function persistUserEntity($user)
+    {
+        $details = new UserDetails();
+        $user->setDetails($details);
+        $this->em->persist($details);
+        parent::persistEntity($user);
+    }
+
     public function persistBlogPostEntity($entity)
     {
         $entity->setUpdatedAt();
@@ -446,18 +482,6 @@ class AdminController extends EasyAdminController
         parent::persistEntity($entity);
     }
 
-    public function updateTrainingTimeEntity($entity)
-    {
-        $entity->setUpdatedAt();
-        if (!$entity->getEnabled()) {
-            if (count($entity->getSchedule())>0) {
-                $entity->setEnabled(true);
-                $this->addFlash('danger', 'Fout: Training tijdstip heeft gerelateerde data. Deactiveren niet toegestaan.');
-            }
-        }
-        parent::persistEntity($entity);
-    }
-
     public function updateTryoutEntity($entity)
     {
     // todo: get tryout from database and check that date. Inject repository!!
@@ -524,6 +548,15 @@ class AdminController extends EasyAdminController
             return;
         }
         parent::removeEntity($entity);
+    }
+
+    public function removeTrainingTimeEntity($entity)
+    {
+        if (count($entity->getSchedule())>0) {
+            $this->addFlash('danger', 'Fout: Training tijdstip heeft gerelateerde data. Verwijderen niet toegestaan.');
+            return;
+        }
+        parent::persistEntity($entity);
     }
 
     public function removeTryoutEntity($entity)

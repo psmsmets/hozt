@@ -85,7 +85,7 @@ class TrainingTeam
     private $goal;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=40)
      */
     private $age;
 
@@ -99,6 +99,16 @@ class TrainingTeam
      */
     private $members;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="team")
+     */
+    private $competitionEnrolments;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $defaultEnrolled;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
@@ -109,6 +119,8 @@ class TrainingTeam
         $this->schedule = new ArrayCollection();
         $this->exceptions = new ArrayCollection();
         $this->members = new ArrayCollection();
+        $this->competitionEnrolments = new ArrayCollection();
+        $this->defaultEnrolled = false;
     }
 
     public function __toString(): ?string
@@ -385,6 +397,49 @@ class TrainingTeam
                 $member->setTeam(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompetitionEnrolment[]
+     */
+    public function getCompetitionEnrolments(): Collection
+    {
+        return $this->competitionEnrolments;
+    }
+
+    public function addCompetitionEnrolment(CompetitionEnrolment $competitionEnrolment): self
+    {
+        if (!$this->competitionEnrolments->contains($competitionEnrolment)) {
+            $this->competitionEnrolments[] = $competitionEnrolment;
+            $competitionEnrolment->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetitionEnrolment(CompetitionEnrolment $competitionEnrolment): self
+    {
+        if ($this->competitionEnrolments->contains($competitionEnrolment)) {
+            $this->competitionEnrolments->removeElement($competitionEnrolment);
+            // set the owning side to null (unless already changed)
+            if ($competitionEnrolment->getTeam() === $this) {
+                $competitionEnrolment->setTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDefaultEnrolled(): ?bool
+    {
+        return $this->defaultEnrolled;
+    }
+
+    public function setDefaultEnrolled(bool $defaultEnrolled): self
+    {
+        $this->defaultEnrolled = $defaultEnrolled;
 
         return $this;
     }

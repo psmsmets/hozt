@@ -44,7 +44,7 @@ security:
             logout:
                 path: security_logout
                 target: /
-                handlers: [app.logout.listener]
+                #handlers: [app.logout.listener]
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
@@ -53,7 +53,7 @@ security:
          - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/wachtwoord-vergeten, role: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/beheer, roles: ROLE_SUPERADMIN }
-         - { path: ^/profiel, roles: ROLE_USER }
+         - { path: ^/mijn-account, roles: ROLE_USER }
 
     role_hierarchy:
       ROLE_ADULT:        ROLE_USER

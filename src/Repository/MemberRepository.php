@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Member;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -22,19 +23,16 @@ class MemberRepository extends ServiceEntityRepository
     // /**
     //  * @return Member[] Returns an array of Member objects
     //  */
-    /*
-    public function findByExampleField($value)
+    public function findByUser(User $user)
     {
         return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('m.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('m.firstname', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?Member
@@ -47,4 +45,9 @@ class MemberRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
 }

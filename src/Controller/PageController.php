@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 # entities
 use App\Entity\StaticPage;
@@ -18,7 +19,6 @@ use App\Entity\BlogPost;
 use App\Entity\BlogCategory;
 use App\Entity\CarouselSlide;
 use App\Entity\TrainingCoach;
-use App\Entity\TrainingDay;
 use App\Entity\TrainingTime;
 use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
@@ -35,15 +35,21 @@ use App\Entity\SponsorCategory;
 use App\Entity\Clubfeest;
 use App\Entity\TryoutEnrolment;
 use App\Entity\Tryout;
+use App\Entity\Member;
+use App\Entity\MemberAddress;
+use App\Entity\MemberGrouping;
 
 # repositories
 use App\Repository\TryoutEnrolmentRepository;
 use App\Repository\TryoutRepository;
+use App\Repository\MemberRepository;
+use App\Repository\MemberGroupingRepository;
 
 # forms
 use App\Form\ContactFormType;
 use App\Form\ClubfeestType;
 use App\Form\TryoutEnrolmentForm;
+use App\Form\MemberAddressForm;
 
 class PageController extends AbstractController
 {
@@ -52,12 +58,14 @@ class PageController extends AbstractController
     private $security;
     private $now;
     private $em;
+    private $translator;
 
-    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em)
+    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator)
     {
         $this->requestStack = $requestStack;
         $this->security = $security;
         $this->em = $em;
+        $this->translator = $translator;
         $this->now = new \DateTime('now');
     }
 
@@ -342,7 +350,6 @@ class PageController extends AbstractController
             ->getRepository(TrainingSchedule::class)
             ->countPersistent($this->getParameter('app.defaults.scheduleNotice.days'))
         );
-
         return $this->render('training/scheduleTeams.html.twig', $this->template_data );
     }
 
@@ -352,10 +359,10 @@ class PageController extends AbstractController
     public function training_schedule_days()
     {
         $this->initTemplateData();
-        $this->addToTemplateData( 'training_days', $this->getDoctrine()
-                ->getRepository(TrainingDay::class)
-                ->findAllJoinedToScheduleTeams($this->getParameter('app.defaults.scheduleNotice.days'))
-            );
+        $this->addToTemplateData( 'training_schedule',  $this->getDoctrine()
+            ->getRepository(TrainingSchedule::class)
+            ->findAllJoinedToTeam($this->getParameter('app.defaults.scheduleNotice.days') )
+        );
         $this->addToTemplateData( 'training_persistent', $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
             ->countPersistent($this->getParameter('app.defaults.scheduleNotice.days'))
@@ -414,9 +421,9 @@ class PageController extends AbstractController
             $this->pageReturnCookie('training_category', $request)
         );
         $this->addToTemplateData( 'training_category', $category );
-        $this->addToTemplateData( 'training_days', $this->getDoctrine()
-            ->getRepository(TrainingDay::class)
-            ->findAllByTeamCategoryJoinedToSchedule($category, $this->getParameter('app.defaults.scheduleNotice.days') )
+        $this->addToTemplateData( 'training_schedule',  $this->getDoctrine()
+            ->getRepository(TrainingSchedule::class)
+            ->findAllByTeamCategory($category, $this->getParameter('app.defaults.scheduleNotice.days') )
         );
         $this->addToTemplateData( 'training_team_persistent', $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
@@ -448,7 +455,7 @@ class PageController extends AbstractController
 
     private function getCurrentCalendarYear(): ?int
     {
-        if ((int)date("m")>8) {
+        if ($this->now > (new \DateTime('first day of august'))->modify('+ 14 days')) {
             return (int) date('Y');
         } else {
             return (int) date('Y', strtotime(date('Y').' -1 year'));
@@ -790,8 +797,147 @@ class PageController extends AbstractController
     }
 
     /**
+     * @Route("/bestuur", name="membergrouping_board")
+     */
+/*
+    public function membergrouping_board( MemberGroupingRepository $MemberGroupingRep )
+    {
+        $this->initTemplateData();
+        $this->addToTemplateData( 'board', $MemberGroupingRep->getGroupingById($this->getParameter('app.memberGrouping.board')) );
+
+        return $this->render('membergrouping/board.html.twig', $this->template_data );
+    }
+*/
+
+    /**
+     * @Route("/mijn-account", name="membership")
+     */
+    public function membership()
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+
+        $this->initTemplateData();
+        $this->addToTemplateData( 'controller_name', 'PageController::my_membership');
+
+        return $this->render('membership/overview.html.twig', $this->template_data );
+    }
+
+    /**
+     * @Route("/mijn-account/inschrijvingen", name="membership_enrolments")
+     */
+    public function membership_enrolments()
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+
+        $this->initTemplateData();
+        $this->addToTemplateData( 'controller_name', 'PageController::my_membership');
+
+        return $this->render('membership/enrolments.html.twig', $this->template_data );
+    }
+
+    /**
+     * @Route("/mijn-account/instellingen", name="membership_preferences")
+     */
+    public function membership_preferences(Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+
+        $tabs = ['members','address','notifications','account'];
+        $tab = (string) $request->query->get('tab', null);
+        if (!in_array($tab,$tabs)) $tab = $tabs[0];
+
+        $json = $request->query->get('format', null) == 'json';
+        $action = $request->query->get('action', null);
+        $remove = $action == 'remove';
+        $edit = $action == 'edit';
+        $new = $action == 'new';
+        $form = null;
+
+        if ($json && $action == 'load' )
+        {
+            return $this->json([
+                'success' => true,
+                'html' => $this->render(sprintf('membership/preferences_%s.html.twig', $tab), ['tab' => $tab])->getContent(),
+            ]);
+        }
+        elseif ($json && ($edit or $new or $remove))
+        {
+            $id = (int) $request->query->get('id', null);
+            $user = $this->security->getUser();
+
+            if ( $tab == 'address' )
+            {
+                $address = $new ? new MemberAddress($user) : $user->getMemberAddress($id);
+
+                if (!$address instanceof MemberAddress) return $this->json(['success' => false]);
+
+                if ($remove)
+                {
+                    if (empty($address->getMembers())) {
+                        $this->remove($address);
+                        $this->em->flush();
+                        return $this->json([
+                            'success' => true,
+                            'message' => $this->translator->trans(sprintf('preferences.address.%s.success', $action )),
+                        ]);
+                    } else {
+                        return $this->json([
+                            'success' => false,
+                            'message' => $this->translator->trans(sprintf('preferences.address.%s.inuse', $action )),
+                        ]);
+                    }
+                }
+                else
+                {
+                    $form = $this->createForm(MemberAddressForm::class, $address);
+                    $form->handleRequest($request);
+
+                    if ($form->isSubmitted() && $form->isValid())
+                    {
+                        if ($new)
+                        {
+                            $address = $form->getData();
+                            $address->setUser($this->security->getUser());
+                            $this->em->persist($address);
+                        }
+                        $this->em->flush();
+                        return $this->json([
+                            'success' => true,
+                            'message' => $this->translator->trans(sprintf('preferences.address.%s.success', $action )),
+                        ]);
+                    }
+                }
+
+            }
+
+            if ($form) {
+                return $this->json([
+                    'success' => true,
+                    'html' => $this->render('membership/preferences_form.html.twig', [
+                        'tab' => $tab,
+                        'action' => $action,
+                        'url' => $this->generateUrl('membership_preferences',
+                               [ 'tab' => $tab, 'format' => 'json', 'action' => $action, 'id' => $id ]),
+                        'form' => $form->createView(),
+                    ])->getContent(),
+                ]);
+            } else {
+                return $this->json([ 'success' => false, 'html' => null ]);
+            }
+
+        }
+        $this->initTemplateData();
+        $this->addToTemplateData( 'tabs', $tabs);
+        $this->addToTemplateData( 'tab', $tab);
+
+        return $this->render(sprintf('membership/preferences.html.twig'), $this->template_data );
+    }
+
+
+    /**
      * @Route("/inschrijven", name="enrol_list")
      */
+/*
     public function enrol_list()
     {
         $this->initTemplateData();
@@ -799,10 +945,12 @@ class PageController extends AbstractController
 
         return $this->render('enrol/list.html.twig', $this->template_data );
     }
+*/
 
     /**
      * @Route("/inschrijven/{slug}", name="enrol_item")
      */
+/*
     public function enrol_item()
     {
         $this->initTemplateData();
@@ -810,10 +958,12 @@ class PageController extends AbstractController
 
         return $this->render('enrol/list.html.twig', $this->template_data );
     }
+*/
 
     /**
      * @Route("/inschrijven/{slug}/details", name="enrol_details")
      */
+/*
     public function enrol_details()
     {
         $this->initTemplateData();
@@ -821,10 +971,12 @@ class PageController extends AbstractController
 
         return $this->render('enrol/list.html.twig', $this->template_data );
     }
+*/
 
     /**
      * @Route("/inschrijven/{slug}/formulier", name="enrol_form")
      */
+/*
     public function enrol_form()
     {
         $this->initTemplateData();
@@ -832,5 +984,6 @@ class PageController extends AbstractController
 
         return $this->render('enrol/list.html.twig', $this->template_data );
     }
+*/
 
 }

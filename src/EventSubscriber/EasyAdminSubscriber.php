@@ -3,16 +3,16 @@
 namespace App\EventSubscriber;
 
 use Doctrine\ORM\EntityManagerInterface;
-//use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
+
 use App\Entity\BlogPost;
 use App\Entity\BlogCategory;
 use App\Entity\Tryout;
 use App\Entity\TryoutEnrolment;
+use App\Entity\MemberGrouping;
 
-# repositories
 use App\Repository\TryoutRepository;
 use App\Repository\TryoutEnrolmentRepository;
 
@@ -42,15 +42,30 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public function setSlug(GenericEvent $event)
     {
         $entity = $event->getSubject();
-        $force = $entity instanceof BlogPost;
 
-        if (method_exists($entity, 'setSlug') and method_exists($entity, 'getTitle')) {
-            if (is_null($entity->getSlug()) or $force) {
-                $entity->setSlug($this->slugger->slugify($entity->getTitle()));
-            } else {
-                $entity->setSlug($this->slugger->slugify($entity->getSlug()));
+        if (method_exists($entity, 'setSlug'))
+        {
+            if ($entity instanceof MemberGrouping)
+            {
+                $entity->setSlug($this->slugger->slugify($entity->getFullname()));
             }
-        } else {
+            elseif (is_null($entity->getSlug()) or $entity instanceof BlogPost)
+            {
+                if (method_exists($entity, 'getTitle')) {
+                    $entity->setSlug($this->slugger->slugify($entity->getTitle()));
+                }
+                elseif (method_exists($entity, 'getName'))
+                {
+                    $entity->setSlug($this->slugger->slugify($entity->getName()));
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
             return;
         }
         $event['entity'] = $entity;

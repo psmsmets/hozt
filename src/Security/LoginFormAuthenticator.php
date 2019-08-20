@@ -3,7 +3,10 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Service\UserManager;
+
 use Doctrine\ORM\EntityManagerInterface;
+
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -23,13 +26,16 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
+    private $userManager;
     private $entityManager;
     private $router;
     private $csrfTokenManager;
     private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, RouterInterface $router, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserManager $userManager, EntityManagerInterface $entityManager, RouterInterface $router, 
+        CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $this->userManager = $userManager;
         $this->entityManager = $entityManager;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -71,6 +77,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
+        $user->eraseCredentials();
 
         return $user;
     }
@@ -84,16 +91,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         $user = $token->getUser();
 
-        if ($user instanceof User) {
-
-            $user->eraseCredentials();        
-            $user->updateLastLoginAt();
-            $user->setIsActive(true);
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-
-        }
+        if ($user instanceof User) $this->userManager->setActivity($user);
 
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);

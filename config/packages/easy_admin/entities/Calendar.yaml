@@ -35,18 +35,18 @@ easy_admin:
             class: App\Entity\CalendarEvent
             label: 'Kalender :: events'
             list:
-                dql_filter: ""
                 fields:
                     #- { property: 'id', label: 'Id' }
-                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'status', label: 'Status', template: 'easy_admin/trans.html.twig' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'startTime', label: 'Van' }
-                    - { property: 'endTime', label: 'Tot' }
+                    - { property: 'trueEndTime', label: 'Tot', template: 'easy_admin/date_interval_template_datetime.html.twig', css_class: 'small' }
                     - { property: 'allDay', label: 'Hele dag', type: 'boolean' }
                     - { property: 'category', label: 'Categorie' }
                     - { property: 'cancelled', label: 'Annul.', type: 'boolean' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['startTime', 'DESC']
+                filters: [{property: 'status', mapped: false, type: 'text'}, 'startTime']
             form:
                 fields:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }

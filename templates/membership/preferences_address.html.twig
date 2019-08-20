@@ -1,0 +1,20 @@
+{% for address in app.user.getMemberAddresses() %}
+
+{% set members = address.getMembers %}
+
+<div class="mb-2">{{address}}
+  <span class="float-right">
+    <button class="btn btn-sm btn-light ml-2" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{address.id}}">bewerk</button> 
+    <button class="btn btn-sm btn-light ml-2" {% if members is empty %}data-tab="{{tab}}" data-action="remove" data-id="{{address.id}}"{% else %}disabled{% endif %}>verwijder</button>
+  </span>
+  <ul class="small text-muted list-inline">
+    {% for member in members %}
+      <li class="list-inline-item">{{member}}</li>
+    {% endfor %}
+  </ul>
+  </div>
+{% endfor %}
+
+<div class="mt-5">
+  <button class="btn btn-sm btn-light float-right" data-toggle="modal" data-target="#preferencesModal" data-action="new" data-tab="{{tab}}" data-id="1">Nieuw</button>
+</div>

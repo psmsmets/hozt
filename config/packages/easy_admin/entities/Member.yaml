@@ -14,19 +14,62 @@ easy_admin:
             list:
                 fields:
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
-                    - { property: 'memberid', label: 'Lidnr' }
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
-                    - { property: 'team', label: 'Groep' }
+                    - { property: 'team', label: 'Zwemgroep' }
                     - { property: 'user', label: 'Beheerder' }
-                sort: ['memberid', 'ASC']
+                sort: ['firstname', 'ASC']
             form:
                 fields:
-                    - { property: 'memberid', label: 'Lidnummer' }
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
+                    - { property: 'gender', label: 'Geslacht', type: 'choice', type_options: { choices: {'Man': 'M', 'Vrouw': 'F'} } }
                     - { property: 'birthdate', label: 'Geboortedatum', type: 'birthday' }
-                    - { property: 'team', label: 'Groep' }
-                    - { property: 'user', label: 'Beheerder' }
+                    - { property: 'address', label: 'Address' }
                     - { property: 'memberSince', label: 'Lid sinds' }
+                    - { property: 'registrationId', label: 'Licentienummer' }
+                    - { property: 'team', label: 'Zwemt bij', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }  }
+                    - { property: 'grouping', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getMemberGrouping'] }  }
+                    - { property: 'user', label: 'Beheerder', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }  }
                     - { property: 'enabled', label: 'Actief' }
+
+        MemberAddress:
+            class: App\Entity\MemberAddress
+            label: 'Adres'
+            list:
+                fields:
+                    - { property: 'street', label: 'Straat en nummer' }
+                    - { property: 'zip', label: 'Postcode' }
+                    - { property: 'town', label: 'Plaats' }
+                    - { property: 'nation', label: 'Land' }
+                    - { property: 'members', label: 'Leden' }
+                sort: ['zip', 'ASC']
+            form:
+                fields:
+                    #- { property: 'member', label: 'Leden' }
+                    - { property: 'street', label: 'Straat en nr' }
+                    - { property: 'zip', label: 'Postcode' }
+                    - { property: 'town', label: 'Plaats' }
+                    - { property: 'nation', label: 'Land', type: 'country', with_flag: true }
+                    - { property: 'members', label: 'Leden' }
+                    - { property: 'user', label: 'Eigenaar' }
+
+
+        MemberGrouping:
+            class: App\Entity\MemberGrouping
+            label: 'Groep'
+            list:
+                fields:
+                    - { property: 'fullname', label: 'Volledige naam' }
+                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'members', label: 'Leden' }
+                    - { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'public', label: 'Zoekbaar', type: 'boolean' }
+                    - { property: 'slug', label: 'Slug' }
+                sort: ['sequence', 'ASC']
+            form:
+                fields:
+                    - { property: 'name', label: 'Naam/functie' }
+                    - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
+                    - { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'public', label: 'Publiek zoekbaar' }

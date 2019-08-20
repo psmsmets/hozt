@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'Monday' => 'Monday',
+    'Tuesday' => 'Tuesday',
+    'Wednesday' => 'Wednesday',
+    'Thursday' => 'Thursday',
+    'Friday' => 'Friday',
+    'Saturday' => 'Saturday',
+    'Sunday' => 'Sunday',
+    'preferences.title' => 'Preferences...',
+    'preferences.account' => 'Edit your account',
+    'preferences.address' => 'Addressbook',
+    'preferences.members' => 'Members',
+    'preferences.notifications' => 'Notifications',
+    'form.save' => 'Save',
+    'form.close' => 'Close',
+    'address.new' => 'New address',
+    'address.edit' => 'Edit address',
+    'address.remove' => 'Remove address',
+    'address.streetnumber' => 'Street and number',
+    'address.zip' => 'Zip',
+    'address.town' => 'Town',
+    'address.nation' => 'Nation',
+    'address.member' => 'Member',
+];

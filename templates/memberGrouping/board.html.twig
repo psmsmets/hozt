@@ -1,0 +1,22 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Mijn account{% endblock %}
+
+{% block main %}
+
+  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
+
+    <h2 class="text-primary d-flex justify-content-between">Bestuur</h2>
+    <p>Naast onze trainers en de vele vrijwilligers zijn&nbsp;in onze clubwerking&nbsp;ook de sterke schouders van het bestuur onmisbaar. Je vindt hun namen en verantwoordelijkheden hieronder, samen met hun contactgegevens.</p>
+
+    <dl class="row">
+    {% for fun in page.board.children %}
+      {% for member in fun.getMembers() %}
+      <dt class="col-sm-3 text-md-right">{{fun.name}}</dt>
+      <dd class="col-sm-9">{{member}}, <span class="text-muted">{{member.user.email|replace({'@':'<i class="fas fa-at text-primary"></i>','.':'<i class="text-primary">•</i>'})|raw}}</span></dd>
+     {% endfor %}
+   {% endfor %}
+    </dl>
+
+  </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+  <a class="btn btn-outline-{% if currentPath starts with path('membership') %}dark{%else%}medium{%endif%} dropdown-toggle" href="#" id="navbarDropdownMembership" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-user-shield"></i> Mijn account
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdownMembership">
+    <div class="dropdown-item">Hallo {{app.user.firstname}}.<br><u><a class="small text-dark" href="{{path('security_logout')}}">Loguit</a></u></div>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{{path('membership')}}">Overzicht</a>
+    <a class="dropdown-item" href="{{path('membership_enrolments')}}">Wedstrijden</a>
+    <a class="dropdown-item" href="{{path('membership_preferences')}}">Voorkeuren...</a>
+    <a class="dropdown-item" href="{{path('security_change_password')}}">Wachtwoord veranderen</a>
+    {% if is_granted('ROLE_SUPERADMIN') %}
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="/beheer">Beheer</a>
+    {% endif %}
+  </div>
+{% else %}
+  <a class="btn btn-medium" href="{{path('membership')}}"><i class="far fa-user-lock"></i> Login</a>
+{% endif %}
+</li>

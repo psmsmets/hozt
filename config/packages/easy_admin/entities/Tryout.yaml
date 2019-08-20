@@ -17,6 +17,7 @@ easy_admin:
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'startTime', label: 'Wanneer' }
                     - { property: 'duration', label: 'Duur', template: 'easy_admin/date_interval_template_duration.html.twig' }
+                    # - { property: 'endTime', label: 'Einduur', template: 'easy_admin/date_interval_template_time.html.twig' }
                     - { property: 'nofEnrolments', label: 'Inschrijvingen' }
                     - { property: 'maxEnrolments', label: 'Max' }
                     - { property: 'publishAt', label: 'Gepubliceerd op' }

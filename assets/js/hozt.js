@@ -3,6 +3,7 @@ require('../css/hozt.scss');
 require('bootstrap');
 require('jquery.scrollTo');
 import { CountUp } from 'countup.js';
+import sessionTimeout from '@travishorn/session-timeout';
 
 
 // Hide Header on on scroll down
@@ -63,6 +64,20 @@ function toClipboard(id){
 
 
 $(document).ready(function(){
+
+    if ( $(document.body).data('session-timeout') ) {
+        // todo: integrate bootstrap 4 styling: modal with buttons
+        sessionTimeout({
+            //warnAfter: 6000, // test
+            appendTimestamp: true,
+            keepAliveUrl: '/api/keep-alive',
+            message: 'Ben je er nog?',
+            timeOutUrl: '/loguit',
+            logOutUrl: '/loguit',
+            logOutBtnText: 'Uitloggen',
+            stayConnectedBtnText: 'Verder doen',
+        });
+    }
 
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
@@ -227,7 +242,6 @@ function api_load_module_training_today() {
    $('#'+module).html("<div class=\"pt-3 pb-3 pl-3 pr-0\"><h5 class=\"pb-2 mb-0\">Trainingsuren <span class=\"badge badge-primary font-weight-light\">vandaag</span></h5><div id=\""+module+"_items\"></div></div>");
 
     $.getJSON( hoztAPI, {
-        tagmode: "any",
         format: "json"
     })
     .done(function( training ) {
@@ -260,7 +274,6 @@ function api_load_module_training_tomorrow() {
    $('#'+module).html("<div class=\"pt-3 pb-3 pl-3 pr-0\"><h5 class=\"pb-2 mb-0\">Trainingsuren <span class=\"badge badge-medium font-weight-light\">morgen</span></h5><div id=\""+module+"_items\"></div></div>");
 
     $.getJSON( hoztAPI, {
-        tagmode: "any",
         format: "json"
     })
     .done(function( training ) {
@@ -293,7 +306,6 @@ function api_load_module_competition_results() {
     $('#'+module).html("<div class=\"p-3\"><h5 class=\"pb-2 mb-0\">Uitslagen</h5><div id=\""+module+"_items\"></div></div>"); 
 
     $.getJSON( hoztAPI, {
-        tagmode: "any",
         format: "json"
     })
     .done(function( files ) {
@@ -318,7 +330,6 @@ function api_load_module_competition_programs() {
     $('#'+module).html("<div class=\"p-3\"><h5 class=\"pb-2 mb-0\">Programma's</h5><div id=\""+module+"_items\"></div></div>"); 
 
     $.getJSON( hoztAPI, {
-        tagmode: "any",
         format: "json"
     })
     .done(function( files ) {
@@ -344,7 +355,6 @@ function api_load_module_calendar_upcoming() {
     var itemsId  = "#api_load_module_calendar_upcoming_items"; 
 
     $.getJSON( hoztAPI, {
-        tagmode: "any",
         format: "json"
     })
     .done(function( calendar ) {
