@@ -98,7 +98,7 @@ class TrainingSchedule
 
     public function __toString(): ?string
     {
-        return strval($this->getDay()) . " " . strval($this->getTime());
+        return strval($this->getDayName()) . " " . strval($this->getTime());
     }
 
     public function getId(): ?int
@@ -176,7 +176,7 @@ class TrainingSchedule
         return $this->dayNumber;
     }
 
-    public function setDayNumber(integer $dayNumber): self
+    public function setDayNumber(int $dayNumber): self
     {
         $this->dayNumber = $dayNumber;
 
