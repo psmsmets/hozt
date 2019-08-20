@@ -64,7 +64,6 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->addSelect('teams')
             ->addSelect('schedule')
             ->addSelect('time')
-            ->addSelect('day')
             ->addSelect('coaches')
             ->andWhere('category.slug = :slug')
             ->andWhere('category.enabled = :enabled')
@@ -107,37 +106,37 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
     public function findAllJoinedToTeamsCoachesSchedule(int $days=28)
     {
         $today = new \DateTime('today');
-        return $this->createQueryBuilder('c')
-            ->innerJoin('c.teams', 't')
-            ->innerJoin('t.schedule', 's')
-            ->innerJoin('s.time', 'h')
+        return $this->createQueryBuilder('category')
+            ->innerJoin('category.teams', 'teams')
+            ->leftJoin('teams.schedule', 'schedule')
+            ->leftJoin('schedule.time', 'time')
             // selects all the team data to avoid the query
-            ->addSelect('t')
-            ->addSelect('s')
-            ->addSelect('h')
-            ->andWhere('c.enabled = :enabled')
-            ->andWhere('s.startDate <= :start')
-            ->andWhere('(s.endDate >= :now or s.endDate is null)')
+            ->addSelect('teams')
+            ->addSelect('schedule')
+            ->addSelect('time')
+            ->andWhere('category.enabled = :enabled')
+            ->andWhere('schedule.startDate <= :start')
+            ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('enabled', true)
             ->setParameter('now', $today->format('Y-m-d'))
             ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
-            ->orderBy('c.sequence, t.abbr, s.dayNumber, h.startTime', 'ASC')
+            ->orderBy('category.sequence, teams.abbr, schedule.dayNumber, time.startTime', 'ASC')
             ->getQuery()
             ->getResult();
     }
 
     public function findAllJoinedToTeamsCoaches()
     {
-        return $this->createQueryBuilder('c')
-            ->innerJoin('c.teams', 't')
-            ->innerJoin('t.coaches', 'o')
+        return $this->createQueryBuilder('cats')
+            ->innerJoin('cats.teams', 'teams')
+            ->innerJoin('teams.coaches', 'coaches')
             // selects all the team data to avoid the query
-            ->addSelect('t')
-            ->addSelect('o')
-            ->andWhere('c.enabled = :enabled')
-            ->andWhere('t.enabled = :enabled')
+            ->addSelect('teams')
+            ->addSelect('coaches')
+            ->andWhere('coaches.enabled = :enabled')
+            ->andWhere('teams.enabled = :enabled')
             ->setParameter('enabled', true)
-            ->orderBy('c.sequence', 'ASC')
+            ->orderBy('cats.sequence', 'ASC')
             ->getQuery()
             ->getResult();
     }
@@ -145,9 +144,12 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
     public function findAllWithPersistentTraining(int $days=28)
     {
         $today = new \DateTime('today');
-        return $this->createQueryBuilder('teamsCat')
-            ->innerJoin('teamsCat.teams', 'teams')
+        return $this->createQueryBuilder('cat')
+            ->innerJoin('cat.teams', 'teams')
             ->leftJoin('teams.schedule', 'schedule')
+            ->addSelect('cat')
+            ->addSelect('teams')
+            //->addSelect('schedule')
             ->andWhere('schedule.persistent = :persistent')
             ->andWhere('schedule.startDate <= :start')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
@@ -162,9 +164,11 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
     public function findAllWithTrainingException(int $days=28)
     {
         $today = new \DateTime('today');
-        return $this->createQueryBuilder('teamsCat')
-            ->innerJoin('teamsCat.teams', 'teams')
+        return $this->createQueryBuilder('cat')
+            ->innerJoin('cat.teams', 'teams')
             ->leftJoin('teams.exceptions', 'exceptions')
+            ->addSelect('cat')
+            ->addSelect('teams')
             ->andWhere('exceptions.startDate <= :start')
             ->andWhere('exceptions.endDate >= :now')
             ->setParameter('now', $today->format('Y-m-d'))
