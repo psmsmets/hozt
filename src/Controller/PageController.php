@@ -53,7 +53,7 @@ use App\Form\MemberAddressForm;
 
 class PageController extends AbstractController
 {
-    private $template_data = [];
+    private $template_data;
     protected $requestStack;
     private $security;
     private $now;
@@ -62,6 +62,7 @@ class PageController extends AbstractController
 
     public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator)
     {
+        $this->template_data = [];
         $this->requestStack = $requestStack;
         $this->security = $security;
         $this->em = $em;
@@ -253,7 +254,7 @@ class PageController extends AbstractController
     /**
      * @Route("/{slug}", name="static_page")
      */
-    public function static_page($slug)
+    public function static_page($slug) // page
     {
         $static = $this->getDoctrine()
             ->getRepository(StaticPage::class)
@@ -271,7 +272,7 @@ class PageController extends AbstractController
     /**
      * @Route("/blog/{id}/{slug}", name="blog_post")
      */
-    public function blog_post(int $id, string $slug = null)
+    public function blog_post(int $id, string $slug = null) // article
     {
         $blogPost = $this->getDoctrine()
             ->getRepository(BlogPost::class)
@@ -292,7 +293,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/blog/{slug}", name="blog_category")
+     * @Route("/blog/{slug}", name="blog_category") // article_category
      */
     public function blog_category(string $slug = null)
     {
@@ -358,6 +359,13 @@ class PageController extends AbstractController
      */
     public function training_schedule_days()
     {
+
+dd(
+	$this->getDoctrine()
+            ->getRepository(TrainingSchedule::class)
+            ->findAllJoinedToTeam($this->getParameter('app.defaults.scheduleNotice.days'))
+);
+
         $this->initTemplateData();
         $this->addToTemplateData( 'training_schedule',  $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)

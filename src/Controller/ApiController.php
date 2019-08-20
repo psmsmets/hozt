@@ -111,6 +111,7 @@ class ApiController extends AbstractController
      */
     public function training_today()
     {
+            return $this->json(array('result'=>false,'error'=>'Error.'));
         $date = new \DateTime('today midnight');
         $day_id = date('N', $date->getTimestamp());
 
@@ -139,6 +140,7 @@ class ApiController extends AbstractController
      */
     public function training_tomorrow()
     {
+            return $this->json(array('result'=>false,'error'=>'Error.'));
         $date = new \DateTime('today midnight');
         $date->modify('+1 day');
         $day_id = date('N', $date->getTimestamp());

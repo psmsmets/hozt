@@ -378,12 +378,6 @@ class AdminController extends EasyAdminController
     public function checkTrainingScheduleEntity($entity)
     {
         $entity->setUpdatedAt();
-        if (!$entity->getEnabled()) {
-            if (count($entity->getTeams())>0) {
-                $entity->setEnabled(true);
-                $this->addFlash('danger', 'Fout: Training schedule heeft gerelateerde groepen. Deactiveren niet toegestaan.');
-            }
-        }
         if ($entity->getPersistent() and is_null($entity->getEndDate())) {
             $entity->setPersistent(false);
             $this->addFlash('danger', 'Fout: Uitzondering enkel toegestaan met einddatum.');
