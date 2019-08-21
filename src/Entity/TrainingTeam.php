@@ -314,6 +314,16 @@ class TrainingTeam
         return $this->exceptions;
     }
 
+    public function getActiveExceptions(\DateTime $refdate = null, bool $allDay = true): Collection
+    {
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
+        return $this->getExceptions()->filter(
+            function(TrainingException $ex) use ($refdate,$allDay) { 
+                return $ex->isActive($refdate) && ( $allDay == (count($ex->getSchedule()) == 0) ); 
+            }
+        );
+    }
+
     public function addException(TrainingException $exception): self
     {
         if (!$this->exceptions->contains($exception)) {

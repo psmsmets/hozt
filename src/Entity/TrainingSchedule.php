@@ -246,6 +246,16 @@ class TrainingSchedule
         return $this->exceptions;
     }
 
+    public function getActiveExceptions(\DateTime $refdate = null): Collection
+    {
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
+        return $this->getExceptions()->filter(
+            function(TrainingException $ex) use ($refdate) { 
+                return $ex->isActive($refdate); 
+            }
+        );
+    }
+
     public function addException(TrainingException $exception): self
     {
         if (!$this->exceptions->contains($exception)) {
@@ -288,6 +298,16 @@ class TrainingSchedule
         $this->persistent = !$regular;
 
         return $this;
+    }
+
+    public function isActiveOnDay(\DateTime $refdate): bool
+    {
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
+        return (
+                $this->getStartDate() <= $reftime and
+                ( $this->getEndDate() >= $reftime or is_null($this->getEndDate()) ) and
+                $this->getDayNumber() == date('N', $refdate->getTimestamp())
+             );
     }
 
     public function isActive(\DateTime $start, \DateTime $end, array $days): bool
