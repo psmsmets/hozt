@@ -111,21 +111,19 @@ class ApiController extends AbstractController
      */
     public function training_today()
     {
-            return $this->json(array('result'=>false,'error'=>'Error.'));
-        $date = new \DateTime('today midnight');
-        $day_id = date('N', $date->getTimestamp());
+        $refdate = (new \DateTime('today midnight'));
 
         $schedule = $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
-            ->findAllByDayJoinedToTeam($day_id,$date)
+            ->findAllOnDate($refdate)
             ;
 
         $exceptions = $this->getDoctrine()
             ->getRepository(TrainingException::class)
-            ->findAllOnDate($date)
+            ->findAllOnDate($refdate)
             ;
 
-        $data = $this->serialize_training_schedule($schedule, $exceptions);
+        $data = $this->serialize_training_schedule($schedule, $exceptions, $refdate);
 
         if (!$data) {
             return $this->json(array('result'=>false,'error'=>'Er is vandaag geen training.'));
@@ -140,22 +138,19 @@ class ApiController extends AbstractController
      */
     public function training_tomorrow()
     {
-            return $this->json(array('result'=>false,'error'=>'Error.'));
-        $date = new \DateTime('today midnight');
-        $date->modify('+1 day');
-        $day_id = date('N', $date->getTimestamp());
+        $refdate = (new \DateTime('today midnight'))->modify('+1 day');
 
         $schedule = $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
-            ->findAllByDayJoinedToTeam($day_id,$date)
+            ->findAllOnDate($refdate)
             ;
 
         $exceptions = $this->getDoctrine()
             ->getRepository(TrainingException::class)
-            ->findAllOnDate($date)
+            ->findAllOnDate($refdate)
             ;
 
-        $data = $this->serialize_training_schedule($schedule, $exceptions);
+        $data = $this->serialize_training_schedule($schedule, $exceptions, $refdate);
 
         if (!$data) {
             return $this->json(array('result'=>false,'error'=>'Er is morgen geen training.'));
@@ -165,43 +160,48 @@ class ApiController extends AbstractController
 
     }
 
-    private function serialize_training_schedule($schedule, $exceptions)
+    private function serialize_training_schedule(array $schedule, array $exceptions, \DateTime $refdate): array
     {
         $data = array();
+
         foreach ($schedule as $training) {
-            // all day exception
-            if (!empty($exceptions)) {
-                foreach( $exceptions as $ex ) {
-                    $exSchedule = $ex->getSchedule();
-                    if (count($exSchedule)>0) {
-                        // remove teams specific training
-                        foreach( $exSchedule as $exS ) {
-                            if ($exS == $training) {
-                                foreach( $ex->getTeams() as $team ) {
-                                    $training->removeTeam($team);
-                                }
-                            }
+
+            $teams = $training->getTeams();
+
+            $exceptions = $training->getActiveExceptions($refdate);
+
+            if (count($exceptions)>0) {
+
+                $teams = $teams->filter(
+                    function(TrainingTeam $team) use ($exceptions) {
+                        $teamExs = $team->getExceptions();
+                        foreach ($exceptions as $ex) {
+                            if ($teamsExs->contains($ex)) return false;
                         }
-                    } else {
-                        // remove teams all trainings
-                        foreach( $ex->getTeams() as $team ) {
-                            $training->removeTeam($team);
-                        }
+                        return true;
                     }
-                }
+                );
+
             }
 
-            $teams = array();
-            foreach ( $training->getTeams() as $team ) {
-                $teams[] = array ('abbr' => $team->getAbbr(), 'name' => $team->getName() );
-            }
-            if (!empty($teams)) {
+            $teams = $teams->filter(
+                function(TrainingTeam $team) use ($refdate, $exceptions, $schedule) {
+                    return count($team->getActiveExceptions($refdate, true)) == 0; // keep if no exceptions
+                }
+            );
+
+            if (count($teams)>0) {
+                $teamData = [];
+                foreach ( $teams as $team ) {
+                    $teamData[] = array ('abbr' => $team->getAbbr(), 'name' => $team->getName() );
+                }
                 $data[] = array( 
                     'time' => strval($training->getTime()),
                     'comment' => $training->getComment(), 
-                    'teams' => $teams,
+                    'teams' => $teamData,
                 );
             }
+
         }
         return $data;
     }

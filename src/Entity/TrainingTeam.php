@@ -34,11 +34,6 @@ class TrainingTeam
     private $description;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $category_id;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -165,18 +160,6 @@ class TrainingTeam
     public function setDescription(?string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getCategoryId(): ?int
-    {
-        return $this->category_id;
-    }
-
-    public function setCategoryId(int $category_id): self
-    {
-        $this->category_id = $category_id;
 
         return $this;
     }
@@ -312,6 +295,16 @@ class TrainingTeam
     public function getExceptions(): Collection
     {
         return $this->exceptions;
+    }
+
+    public function getActiveExceptions(\DateTime $refdate = null, bool $allDay = true): Collection
+    {
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
+        return $this->getExceptions()->filter(
+            function(TrainingException $ex) use ($refdate,$allDay) { 
+                return $ex->isActive($refdate) && ( $allDay == (count($ex->getSchedule()) == 0) ); 
+            }
+        );
     }
 
     public function addException(TrainingException $exception): self

@@ -48,7 +48,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     // /**
     //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
     //  */
-    public function findAllByDayJoinedToTeam(int $day, \DateTime $refdate = null  )
+    public function findAllOnDate(\DateTime $refdate = null )
     {
         if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('schedule')
@@ -65,7 +65,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('schedule.startDate <= :now')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             //->setParameter('enabled', true)
-            ->setParameter('day', $day)
+            ->setParameter('day', date('N', $refdate->getTimestamp()))
             ->setParameter('now', $refdate->format("Y-m-d"))
             ->orderBy('time.startTime, time.duration, teams.abbr', 'ASC')
             ->getQuery()
