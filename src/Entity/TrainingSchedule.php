@@ -215,9 +215,15 @@ class TrainingSchedule
     /**
      * @return Collection|TrainingTeam[]
      */
-    public function getTeams(): Collection
+    public function getTeams(TrainingTeamCategory $category = null): Collection
     {
-        return $this->teams;
+        if (is_null($category)) return $this->teams;
+        return $this->teams->filter(
+            function(TrainingTeam $team) use ($category) {
+                return $team->getCategory() === $category;
+                //return $team->getCategory() == $category;
+            }
+        );
     }
 
     public function addTeam(TrainingTeam $team): self
