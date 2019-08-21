@@ -26,7 +26,7 @@ use App\Entity\ContactForm;
 use App\Entity\CalendarCategory;
 use App\Entity\CalendarEvent;
 use App\Entity\Competition;
-use App\Entity\CompetitionState;
+use App\Entity\CompetitionPool;
 use App\Entity\Sponsor;
 use App\Entity\SponsorCategory;
 use App\Entity\Clubfeest;
