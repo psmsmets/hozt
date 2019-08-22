@@ -338,7 +338,15 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/trainingsuren", name="training_schedule_teams")
+     * @Route("/trainingsuren", name="training_schedule")
+     */
+    public function training_schedule()
+    {
+        return $this->redirectToRoute('training_schedule_days');
+    }
+
+    /**
+     * @Route("/trainingsuren/per-groep", name="training_schedule_teams")
      */
     public function training_schedule_teams()
     {
