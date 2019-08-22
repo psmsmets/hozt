@@ -472,8 +472,8 @@ class PageController extends AbstractController
             return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
         }
 
-        $start = strval($year).'-09-01 00:00';
-        $end   = date('Y-m-d H:i', strtotime(strval($year).'-09-01 +1 year'));
+        $start = strval($year).'-08-15 00:00';
+        $end   = date('Y-m-d H:i', strtotime(strval($year).'-08-15 +1 year'));
 
         $this->initTemplateData();
         $this->addToTemplateData( 'lastvisit',
