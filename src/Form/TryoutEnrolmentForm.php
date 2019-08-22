@@ -61,7 +61,7 @@ class TryoutEnrolmentForm extends AbstractType
             ->add('telephone', TextType::class, array(
                 'label'    => 'Mobiele telefoon',
                 'help'    => 'Enkel een Belgisch of Nederlands telefoonnummer beginnende met de landcode',
-                'attr' => ['placeholder'=>'+324...','pattern'=>$this->params->get('app.regex.zip')],
+                'attr' => ['placeholder'=>'+324...','pattern'=>$this->params->get('app.regex.mobile')],
                 'required' => true,
                 ))
             ->add('birthdate', DateType::class, array(
