@@ -36,7 +36,7 @@ class TrainingTime
     public function __construct()
     {
         $this->startTime = new \DateTime("today noon");
-        $this->duration = new \DateInterval("+P00Y00M00DT01H00M00S");
+        $this->duration = new \DateInterval("PT1H");
         $this->schedule = new ArrayCollection();
     }
 

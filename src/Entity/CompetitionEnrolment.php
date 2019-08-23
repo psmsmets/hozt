@@ -17,19 +17,9 @@ class CompetitionEnrolment
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $uuid;
-
-    /**
      * @ORM\Column(type="datetime_immutable")
      */
     private $createdAt;
-
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
-    private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean")
@@ -58,22 +48,15 @@ class CompetitionEnrolment
     private $member;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrainingTeam", inversedBy="competitionEnrolments")
-     */
-    private $team;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Competition", inversedBy="enrolments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $competition;
 
-    public function __construct(Member $member = null)
+    public function __construct(bool $enrolled = true, Member $member = null)
     {
-        $this->uuid = bin2hex(random_bytes(8));
         $this->createdAt = new \DateTimeImmutable('now');
-        $this->updatedAt = null;
-        $this->enrolled = true;
+        $this->enrolled = $enrolled;
         $this->enrolledAt = null;
         $this->notified = false;
         $this->notifiedAt = null;
@@ -85,26 +68,9 @@ class CompetitionEnrolment
         return $this->id;
     }
 
-    public function getUuid(): ?string
-    {
-        return $this->uuid;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(): self
-    {
-        $this->updatedAt = new \DateTimeImmutable('now');
-
-        return $this;
     }
 
     public function getEnrolled(): ?bool
@@ -168,11 +134,6 @@ class CompetitionEnrolment
         $this->team = $member->getTeam();
 
         return $this;
-    }
-
-    public function getTeam(): ?TrainingTeam
-    {
-        return $this->team;
     }
 
     public function getCompetition(): ?Competition
