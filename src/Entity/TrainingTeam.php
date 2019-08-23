@@ -95,11 +95,6 @@ class TrainingTeam
     private $members;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="team")
-     */
-    private $competitionEnrolments;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $defaultEnrolled;
@@ -114,7 +109,6 @@ class TrainingTeam
         $this->schedule = new ArrayCollection();
         $this->exceptions = new ArrayCollection();
         $this->members = new ArrayCollection();
-        $this->competitionEnrolments = new ArrayCollection();
         $this->defaultEnrolled = false;
     }
 
@@ -394,37 +388,6 @@ class TrainingTeam
         return $this;
     }
 
-    /**
-     * @return Collection|CompetitionEnrolment[]
-     */
-    public function getCompetitionEnrolments(): Collection
-    {
-        return $this->competitionEnrolments;
-    }
-
-    public function addCompetitionEnrolment(CompetitionEnrolment $competitionEnrolment): self
-    {
-        if (!$this->competitionEnrolments->contains($competitionEnrolment)) {
-            $this->competitionEnrolments[] = $competitionEnrolment;
-            $competitionEnrolment->setTeam($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCompetitionEnrolment(CompetitionEnrolment $competitionEnrolment): self
-    {
-        if ($this->competitionEnrolments->contains($competitionEnrolment)) {
-            $this->competitionEnrolments->removeElement($competitionEnrolment);
-            // set the owning side to null (unless already changed)
-            if ($competitionEnrolment->getTeam() === $this) {
-                $competitionEnrolment->setTeam(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getDefaultEnrolled(): ?bool
     {
         return $this->defaultEnrolled;
@@ -436,14 +399,5 @@ class TrainingTeam
 
         return $this;
     }
-
-/*
-    public function setCategory(?TrainingTeamCategory $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-*/
 
 }

@@ -338,7 +338,15 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/trainingsuren", name="training_schedule_teams")
+     * @Route("/trainingsuren", name="training_schedule")
+     */
+    public function training_schedule()
+    {
+        return $this->redirectToRoute('training_schedule_days');
+    }
+
+    /**
+     * @Route("/trainingsuren/per-groep", name="training_schedule_teams")
      */
     public function training_schedule_teams()
     {
@@ -472,8 +480,8 @@ class PageController extends AbstractController
             return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
         }
 
-        $start = strval($year).'-09-01 00:00';
-        $end   = date('Y-m-d H:i', strtotime(strval($year).'-09-01 +1 year'));
+        $start = strval($year).'-08-15 00:00';
+        $end   = date('Y-m-d H:i', strtotime(strval($year).'-08-15 +1 year'));
 
         $this->initTemplateData();
         $this->addToTemplateData( 'lastvisit',
