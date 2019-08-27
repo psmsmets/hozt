@@ -41,6 +41,7 @@ use App\Entity\MemberGrouping;
 # repositories
 use App\Repository\TryoutEnrolmentRepository;
 use App\Repository\TryoutRepository;
+use App\Repository\TrainingTeamRepository;
 
 class AdminController extends EasyAdminController
 {
@@ -113,13 +114,21 @@ class AdminController extends EasyAdminController
 
     public function createNewCompetitionEntity()
     {
+        $new = new Competition();
+
         $pool = $this->getDoctrine()
             ->getRepository(CompetitionPool::class)
             ->findOneBy(
               ['enabled'=>true,'id'=>$this->getParameter('app.defaults.competitionPool.id')]
             );
-        $new = new Competition();
-        return $new->setPool($pool);
+        $new->setPool($pool);
+
+        $teams = $this->getDoctrine()->getRepository(TrainingTeam::class)->getDefaultEnrolled();
+        foreach ($teams as $team) {
+            $new->addTeam($team);
+        }
+
+        return $new;
     }
 
     public function createNewCompetitionDocumentCategoryEntity()

@@ -54,6 +54,16 @@ class CompetitionDocumentCategory
     private $enabled;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $autoCleanup;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $cleanupDelay;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\CompetitionDocument", mappedBy="category")
      */
     private $documents;
@@ -63,6 +73,8 @@ class CompetitionDocumentCategory
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enabled = true;
+        $this->autoCleanup = false;
+        $this->cleanupDelay = 999;
         $this->documents = new ArrayCollection();
     }
 
@@ -149,6 +161,30 @@ class CompetitionDocumentCategory
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getAutoCleanup(): ?bool
+    {
+        return $this->autoCleanup;
+    }
+
+    public function setAutoCleanup(bool $autoCleanup): self
+    {
+        $this->autoCleanup = $autoCleanup;
+
+        return $this;
+    }
+
+    public function getCleanupDelay(): ?int
+    {
+        return $this->cleanupDelay;
+    }
+
+    public function setCleanupDelay(int $cleanupDelay): self
+    {
+        $this->cleanupDelay = abs($cleanupDelay);
 
         return $this;
     }

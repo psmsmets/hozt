@@ -39,15 +39,16 @@ class Competition
      */
     private $teams;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\TrainingTeamCategory", inversedBy="competitions")
-     */
-    private $teamCategories;
 
     /**
      * @ORM\Column(type="boolean")
      */
     private $multiDay;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    //private $splitEnrollments;
 
     /**
      * @ORM\Column(type="boolean")
@@ -76,7 +77,6 @@ class Competition
         $this->updatedAt = $this->createdAt;
         $this->multiDay = false;
         $this->teams = new ArrayCollection();
-        $this->teamCategories = new ArrayCollection();
         $this->documents = new ArrayCollection();
         $this->enrolments = new ArrayCollection();
     }
@@ -141,32 +141,6 @@ class Competition
     {
         if ($this->teams->contains($team)) {
             $this->teams->removeElement($team);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|TrainingTeamCategory[]
-     */
-    public function getTeamCategories(): Collection
-    {
-        return $this->teamCategories;
-    }
-
-    public function addTeamCategory(TrainingTeamCategory $teamCategory): self
-    {
-        if (!$this->teamCategories->contains($teamCategory)) {
-            $this->teamCategories[] = $teamCategory;
-        }
-
-        return $this;
-    }
-
-    public function removeTeamCategory(TrainingTeamCategory $teamCategory): self
-    {
-        if ($this->teamCategories->contains($teamCategory)) {
-            $this->teamCategories->removeElement($teamCategory);
         }
 
         return $this;

@@ -29,10 +29,8 @@ class CompetitionDocumentRepository extends ServiceEntityRepository
             ->addSelect('comp')
             ->addSelect('event')
             ->andWhere('COALESCE(doc.document, doc.url) is not null')
-            ->andWhere('event.enabled = :enabled')
             ->andWhere('event.cancelled = :cancelled')
             ->andWhere('cat.slug = :slug')
-            ->setParameter('enabled', true)
             ->setParameter('cancelled', false)
             ->setParameter('slug', $slug)
             ->orderBy('event.startTime', 'DESC')
@@ -51,12 +49,10 @@ class CompetitionDocumentRepository extends ServiceEntityRepository
             ->addSelect('cat')
             ->addSelect('comp')
             ->addSelect('event')
-            ->andWhere('event.enabled = :enabled')
             ->andWhere('event.cancelled = :cancelled')
             ->andWhere('( event.endTime >= :today_start or (event.startTime >= :today_start and event.endTime is null) )')
             ->andWhere('cat.slug = :slug')
             ->andWhere('COALESCE(doc.document, doc.url) is not null')
-            ->setParameter('enabled', true)
             ->setParameter('cancelled', false)
             ->setParameter('today_start', date("Y-m-d").' 00:00')
             ->setParameter('slug', $slug)
@@ -65,5 +61,29 @@ class CompetitionDocumentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    public function findPastCompetitionDocuments()
+    {
+        $reftime = new \DateTime('today midnight');
+        return $this->createQueryBuilder('doc')
+            ->innerJoin('doc.category','cat')
+            ->innerJoin('doc.competition','comp')
+            ->innerJoin('comp.calendar','event')
+            ->addSelect('cat')
+            ->addSelect('comp')
+            ->addSelect('event')
+            ->andWhere('cat.autoCleanup = :autoCleanup')
+            ->andWhere('( event.endTime < :reftime or (event.startTime < :reftime and event.endTime is null) )')
+            ->setParameter('autoCleanup', true)
+            ->setParameter('reftime', $reftime->format('Y-m-d H:i'))
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
     }
 }
