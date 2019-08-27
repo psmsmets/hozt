@@ -49,7 +49,19 @@ class TrainingTeamRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('team')
             ->andWhere('team.enabled = :enabled')
             ->setParameter('enabled', true)
-            //->orderBy('t.abbr', 'ASC')
+            //->orderBy('team.abbr', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getDefaultEnrolled()
+    {
+        return $this->createQueryBuilder('team')
+            ->andWhere('team.enabled = :enabled')
+            ->andWhere('team.defaultEnrolled = :enabled')
+            ->setParameter('enabled', true)
+            ->orderBy('team.abbr', 'ASC')
             ->getQuery()
             ->getResult()
         ;

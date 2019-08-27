@@ -110,4 +110,22 @@ class CalendarEventRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findPastCalendarEvents(int $days = 21, \DateTime $reftime = null)
+    {
+        $reftime = new \DateTime("today midnight - $days days");
+        return $this->createQueryBuilder('event')
+            ->andWhere('event.archived = :archived')
+            ->andWhere('( event.endTime < :reftime or (event.startTime < :reftime and event.endTime is null) )')
+            ->setParameter('archived', false)
+            ->setParameter('reftime', $reftime->format("Y-m-d"))
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function flush()
+    {
+        $this->_em->flush();
+    }
+
 }

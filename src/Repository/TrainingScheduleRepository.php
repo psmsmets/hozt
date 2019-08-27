@@ -25,9 +25,9 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     // /**
     //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
     //  */
-    public function findAllJoinedToTeam(int $days=28 )
+    public function findAllJoinedToTeam(int $days=28, \DateTime $refdate = null)
     {
-        $today = new \DateTime('today');
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('schedule')
             //->andWhere('schedule.enabled = :enabled')
             ->innerJoin('schedule.teams', 'teams')
@@ -36,8 +36,8 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->addSelect('time')
             ->andWhere('schedule.startDate <= :start')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
-            ->setParameter('now', $today->format('Y-m-d'))
-            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('now', $refdate->format('Y-m-d'))
+            ->setParameter('start', $refdate->modify('+'.$days.' days')->format('Y-m-d'))
             ->orderBy('schedule.dayNumber, time.startTime, time.duration, teams.abbr', 'ASC')
             ->getQuery()
             ->getResult()
@@ -48,7 +48,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     // /**
     //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
     //  */
-    public function findAllOnDate(\DateTime $refdate = null )
+    public function findAllOnDate(\DateTime $refdate = null)
     {
         if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('schedule')
@@ -73,8 +73,9 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         ;     
     }
 
-    public function findAllByTeamJoinedToTeam(string $team_abbr)
+    public function findAllByTeamJoinedToTeam(string $team_abbr, \DateTime $refdate = null)
     {
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('schedule')
             ->innerJoin('schedule.teams', 'teams')
             ->innerJoin('schedule.time', 'time')
@@ -85,15 +86,16 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             //->setParameter('enabled', true)
             ->setParameter('abbr', $team_abbr)
-            ->setParameter('now', date("Y-m-d"))
+            ->setParameter('now', $refdate->format("Y-m-d"))
             ->orderBy('schedule.dayNumber, time.startTime, time.duration', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
     }
 
-    public function findAllByTeamCategory(TrainingTeamCategory $teamCategory)
+    public function findAllByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28, \DateTime $refdate = null)
     {
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('schedule')
             ->innerJoin('schedule.teams', 'teams')
             ->innerJoin('teams.category', 'teamsCat')
@@ -104,16 +106,16 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             //->setParameter('enabled', true)
             ->setParameter('id', $teamCategory->getId())
-            ->setParameter('now', date("Y-m-d"))
+            ->setParameter('now', $refdate->format("Y-m-d"))
             ->orderBy('schedule.dayNumber, time.startTime, time.duration', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
     }
 
-    public function countPersistentByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28)
+    public function countPersistentByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28, \DateTime $refdate = null)
     {
-        $today = new \DateTime('today');
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('schedule')
             ->select('count(schedule.id)')
             ->innerJoin('schedule.teams', 'teams')
@@ -125,16 +127,16 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('teamsCat.id = :id')
             //->setParameter('enabled', true)
             ->setParameter('persistent', true)
-            ->setParameter('now', $today->format('Y-m-d'))
-            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('now', $refdate->format('Y-m-d'))
+            ->setParameter('start', $refdate->modify('+'.$days.' days')->format('Y-m-d'))
             ->setParameter('id', $teamCategory->getId())
             ->getQuery()
             ->getSingleScalarResult()
         ;     
     }
-    public function countPersistent(int $days=28)
+    public function countPersistent(int $days=28, \DateTime $refdate = null)
     {
-        $today = new \DateTime('today');
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('schedule')
             ->select('count(schedule.id)')
             //->andWhere('schedule.enabled = :enabled')
@@ -143,16 +145,16 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             //->setParameter('enabled', true)
             ->setParameter('persistent', true)
-            ->setParameter('now', $today->format('Y-m-d'))
-            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('now', $refdate->format('Y-m-d'))
+            ->setParameter('start', $refdate->modify('+'.$days.' days')->format('Y-m-d'))
             ->getQuery()
             ->getSingleScalarResult()
         ;     
     }
 
-    public function findAllPersistent(int $days=28)
+    public function findAllPersistent(int $days=28, \DateTime $refdate = null)
     {
-        $today = new \DateTime('today');
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('schedule')
             ->andWhere('schedule.enabled = :enabled')
             ->andWhere('schedule.persistent = :persistent')
@@ -160,8 +162,8 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('enabled', true)
             ->setParameter('persistent', true)
-            ->setParameter('now', $today->format('Y-m-d'))
-            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('now', $refdate->format('Y-m-d'))
+            ->setParameter('start', $refdate->modify('+'.$days.' days')->format('Y-m-d'))
             ->getQuery()
             ->getResult()
         ;     
@@ -191,8 +193,9 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     }
 */
 
-    public function findAllJoinedToTeams()
+    public function findAllJoinedToTeams(\DateTime $refdate = null)
     {
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->createQueryBuilder('s')
             //->andWhere('s.enabled = :enabled')
             ->innerJoin('s.time', 'h')
@@ -202,7 +205,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('s.startDate <= :now')
             ->andWhere('(s.endDate > :now or s.endDate is null)')
             //->setParameter('enabled', true)
-            ->setParameter('now', date("Y-m-d"))
+            ->setParameter('now', $refdate->format('Y-m-d'))
             ->orderBy('s.dayNumber, h.startTime', 'ASC')
             ->getQuery()
             ->getResult()

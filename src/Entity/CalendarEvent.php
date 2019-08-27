@@ -290,6 +290,11 @@ class CalendarEvent
         }
     }
 
+    public function calcEndTime(): \DateTimeInterface
+    {
+        return $this->trueEndTime();
+    }
+
     public function isFuture(): ?bool
     {
         return new \DateTime("now") < $this->startTime;

@@ -14,7 +14,7 @@ easy_admin:
             list:
                 fields:
                     #- { property: 'id', label: 'Id' }
-                    - { property: 'calendar.enabled', label: 'Actief', type: 'boolean' }
+                    #- { property: 'calendar.enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'calendar', label: 'Kalender event' }
                     - { property: 'calendar.location', label: 'Locatie' }
                     - { property: 'pool', label: 'Zwembad' }
@@ -22,6 +22,7 @@ easy_admin:
                     - { property: 'calendar.cancelled', label: 'Annul.', type: 'boolean' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['calendar.startTime', 'DESC']
+                dql_filter: 'calendar.archived = false'
             edit:
                 fields: ['-calendar']
             form:
@@ -39,6 +40,9 @@ easy_admin:
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
             search:
                 fields: ['calendar.title','calendar.startTime','calendar.endTime','calendar.location','teams.name','teamCategories.name','teams.abbr','teamCategories.abbr']
+                # using an empty value to not apply any condition when searching
+                # elements (this prevents inheriting the 'dql_filter' value defined in 'list')
+                dql_filter: ''
 
         CompetitionPool:
             class: App\Entity\CompetitionPool
@@ -91,6 +95,8 @@ easy_admin:
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'slug', label: 'Slug' }
+                    - { property: 'autoCleanup', label: 'Automatisch verwijderen', type: 'boolean' }
+                    - { property: 'cleanupDelay', label: 'Timeout (dagen)' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['sequence', 'ASC']
             form:
@@ -99,3 +105,5 @@ easy_admin:
                     - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'enabled', label: 'Actief' }
+                    - { property: 'autoCleanup', label: 'Automatisch verwijderen' }
+                    - { property: 'cleanupDelay', label: 'Verwijder timeout (dagen)' }

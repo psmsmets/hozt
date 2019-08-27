@@ -12,7 +12,7 @@ class UserManager
 {
     private $entityManager;
     private $userRepository;
-    private $status;
+    private $exitMessage;
 
     public function __construct(EntityManagerInterface $entityManager, UserRepository $userRepository, UserPasswordEncoderInterface $encoder)
     {
@@ -65,7 +65,7 @@ class UserManager
 
     }
 
-    public function getExitMessage(): ?bool
+    public function getExitMessage(): ?string
     {
         return $this->exitMessage;
     }

@@ -90,11 +90,7 @@
                 {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|ucwords}}</li>{% endif %}
               {% else %}
                 <li class="mb-1"><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}{% if event.location %}, {{event.location|ucwords}}{% endif %}</li>
-                {% if event.competition.teamCategories|length > 0 %}
-                  <li class="mb-1"><i class="fas fa-swimmer"></i>
-                    {% for category in event.competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}
-                  </li>
-                {% elseif event.competition.teams|length > 0%}
+                {% if event.competition.teams|length > 0 %}
                   <li class="mb-1"><i class="fas fa-swimmer"></i>
                     {% for team in event.competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
                   </li>

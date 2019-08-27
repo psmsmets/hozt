@@ -37,7 +37,7 @@ easy_admin:
             list:
                 fields:
                     #- { property: 'id', label: 'Id' }
-                    - { property: 'status', label: 'Status', template: 'easy_admin/trans.html.twig' }
+                    #- { property: 'status', label: 'Status', template: 'easy_admin/trans.html.twig' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'startTime', label: 'Van' }
                     - { property: 'trueEndTime', label: 'Tot', template: 'easy_admin/date_interval_template_datetime.html.twig', css_class: 'small' }
@@ -46,6 +46,7 @@ easy_admin:
                     - { property: 'cancelled', label: 'Annul.', type: 'boolean' }
                     - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['startTime', 'DESC']
+                dql_filter: 'entity.archived = false'
             form:
                 fields:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
@@ -57,7 +58,6 @@ easy_admin:
                     - { property: 'cancelled', label: 'Geannuleerd' }
                     - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
                     - { property: 'enabled', label: 'Actief' }
-                    #- { property: 'archived', label: 'Gearchiveerd' }
                     - { property: 'isCompetition', label: 'Zwemwedstrijd' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
                     - { property: 'description', label: 'Omschrijving', type: 'textarea' }
