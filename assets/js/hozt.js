@@ -335,7 +335,7 @@ function api_load_module_competition_programs() {
     .done(function( files ) {
         if ( files.result ){
             $.each( files.data, function( i, item ) {
-                var t = "<div class=\"ml-3 small\"><a class=\"text-dark\" href=\"" + item.doc + "\"><span class=\"text-muted mr-2\">" + item.datestr +"</span>"+ item.title + "</a></div>";
+                var t = "<div class=\"ml-3 small\"><a class=\"text-dark\" href=\"" + item.doc + "\" target=\"_Blank\"><span class=\"text-muted mr-2\">" + item.datestr +"</span>"+ item.title + "</a></div>";
                 $( t ).appendTo( "#"+module+"_items" );
             });
         } else {
