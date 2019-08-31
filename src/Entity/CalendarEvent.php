@@ -285,7 +285,7 @@ class CalendarEvent
 
             }
 
-            return $this->allDay ? $end->setTime(23, 59, 59) : $end;
+            return $end->setTime(23, 59, 59);
 
         }
     }

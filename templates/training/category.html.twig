@@ -180,7 +180,7 @@
                     {% for team in competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
                   </li>
                 {% endif %}
-                {% if competition.multiDay %}
+                {% if competition.overnight %}
                   <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> overnachting</li>
                 {% endif %}
                 {% if competition.restrictions %}
