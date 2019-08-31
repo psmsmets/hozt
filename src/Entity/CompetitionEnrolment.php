@@ -47,12 +47,6 @@ class CompetitionEnrolment
      */
     private $member;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionPart", inversedBy="enrolments")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $competitionPart;
-
     public function __construct(bool $enrolled = true, Member $member = null)
     {
         $this->createdAt = new \DateTimeImmutable('now');
@@ -132,18 +126,6 @@ class CompetitionEnrolment
     {
         $this->member = $member;
         $this->team = $member->getTeam();
-
-        return $this;
-    }
-
-    public function getCompetitionPart(): ?CompetitionPart
-    {
-        return $this->competitionPart;
-    }
-
-    public function setCompetitionPart(?CompetitionPart $competitionPart): self
-    {
-        $this->competitionPart = $competitionPart;
 
         return $this;
     }
