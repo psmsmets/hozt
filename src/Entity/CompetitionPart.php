@@ -46,6 +46,7 @@ class CompetitionPart
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competitionPart")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $enrolments;
 
@@ -124,7 +125,7 @@ class CompetitionPart
     {
         if (!$this->enrolments->contains($enrolment)) {
             $this->enrolments[] = $enrolment;
-            $enrolment->setCompetition($this);
+            $enrolment->setCompetitionPart($this);
         }
 
         return $this;
