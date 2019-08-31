@@ -45,12 +45,6 @@ class CompetitionPart
     private $competition;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competitionPart")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $enrolments;
-
-    /**
      * @ORM\Column(type="date_immutable")
      */
     private $date;
@@ -59,7 +53,6 @@ class CompetitionPart
     {
         $this->createdAt = new \DateTimeImmutable("now");
         $this->updatedAt = $this->createdAt;
-        $this->enrolments = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -109,37 +102,6 @@ class CompetitionPart
     public function setDate(\DateTimeImmutable $date): self
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|CompetitionEnrolment[]
-     */
-    public function getEnrolments(): Collection
-    {
-        return $this->enrolments;
-    }
-
-    public function addEnrolment(CompetitionEnrolment $enrolment): self
-    {
-        if (!$this->enrolments->contains($enrolment)) {
-            $this->enrolments[] = $enrolment;
-            $enrolment->setCompetitionPart($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEnrolment(CompetitionEnrolment $enrolment): self
-    {
-        if ($this->enrolments->contains($enrolment)) {
-            $this->enrolments->removeElement($enrolment);
-            // set the owning side to null (unless already changed)
-            if ($enrolment->getCompetitionPart() === $this) {
-                $enrolment->setCompetitionPart(null);
-            }
-        }
 
         return $this;
     }
