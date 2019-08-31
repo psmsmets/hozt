@@ -39,16 +39,10 @@ class Competition
      */
     private $teams;
 
-
     /**
      * @ORM\Column(type="boolean")
      */
-    private $multiDay;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    //private $splitEnrollments;
+    private $overnight;
 
     /**
      * @ORM\Column(type="boolean")
@@ -67,18 +61,18 @@ class Competition
     private $documents;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competition")
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionPart", mappedBy="competition")
      */
-    private $enrolments;
+    private $competitionParts;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->multiDay = false;
+        $this->overnight = false;
         $this->teams = new ArrayCollection();
         $this->documents = new ArrayCollection();
-        $this->enrolments = new ArrayCollection();
+        $this->competitionParts = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -146,14 +140,14 @@ class Competition
         return $this;
     }
 
-    public function getMultiDay(): ?bool
+    public function getOvernight(): ?bool
     {
-        return $this->multiDay;
+        return $this->overnight;
     }
 
-    public function setMultiDay(bool $multiDay): self
+    public function setOvernight(bool $overnight): self
     {
-        $this->multiDay = $multiDay;
+        $this->overnight = $overnight;
 
         return $this;
     }
@@ -243,30 +237,30 @@ class Competition
     }
 
     /**
-     * @return Collection|CompetitionEnrolment[]
+     * @return Collection|CompetitionPart[]
      */
-    public function getEnrolments(): Collection
+    public function getCompetitionParts(): Collection
     {
-        return $this->enrolments;
+        return $this->competitionParts;
     }
 
-    public function addEnrolment(CompetitionEnrolment $enrolment): self
+    public function addCompetitionPart(CompetitionPart $competitionPart): self
     {
-        if (!$this->enrolments->contains($enrolment)) {
-            $this->enrolments[] = $enrolment;
-            $enrolment->setCompetition($this);
+        if (!$this->competitionParts->contains($competitionPart)) {
+            $this->competitionParts[] = $competitionPart;
+            $competitionPart->setCompetition($this);
         }
 
         return $this;
     }
 
-    public function removeEnrolment(CompetitionEnrolment $enrolment): self
+    public function removeCompetitionPart(CompetitionPart $competitionPart): self
     {
-        if ($this->enrolments->contains($enrolment)) {
-            $this->enrolments->removeElement($enrolment);
+        if ($this->competitionParts->contains($competitionPart)) {
+            $this->competitionParts->removeElement($competitionPart);
             // set the owning side to null (unless already changed)
-            if ($enrolment->getCompetition() === $this) {
-                $enrolment->setCompetition(null);
+            if ($competitionPart->getCompetition() === $this) {
+                $competitionPart->setCompetition(null);
             }
         }
 

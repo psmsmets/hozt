@@ -43,8 +43,9 @@ easy_admin:
                     - { property: 'trueEndTime', label: 'Tot', template: 'easy_admin/date_interval_template_datetime.html.twig', css_class: 'small' }
                     - { property: 'allDay', label: 'Hele dag', type: 'boolean' }
                     - { property: 'category', label: 'Categorie' }
+                    #- { property: 'updatedAt', label: 'Laatst aangepast' }
+                    - { property: 'location', label: 'Locatie' }
                     - { property: 'cancelled', label: 'Annul.', type: 'boolean' }
-                    - { property: 'updatedAt', label: 'Laatst aangepast' }
                 sort: ['startTime', 'DESC']
                 dql_filter: 'entity.archived = false'
             form:

@@ -48,10 +48,10 @@ class CompetitionEnrolment
     private $member;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Competition", inversedBy="enrolments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionPart", inversedBy="enrolments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $competition;
+    private $competitionPart;
 
     public function __construct(bool $enrolled = true, Member $member = null)
     {
@@ -136,14 +136,14 @@ class CompetitionEnrolment
         return $this;
     }
 
-    public function getCompetition(): ?Competition
+    public function getCompetitionPart(): ?CompetitionPart
     {
-        return $this->competition;
+        return $this->competitionPart;
     }
 
-    public function setCompetition(?Competition $competition): self
+    public function setCompetitionPart(?CompetitionPart $competitionPart): self
     {
-        $this->competition = $competition;
+        $this->competitionPart = $competitionPart;
 
         return $this;
     }

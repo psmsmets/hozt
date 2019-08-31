@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 
 # form
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 # entities
 use App\Entity\StaticPage;
@@ -72,7 +73,6 @@ class AdminController extends EasyAdminController
         return $formBuilder;
     }
 
-
     // Customizes the instantiation of specific entities
     public function createNewBlogPostEntity()
     {
@@ -109,7 +109,8 @@ class AdminController extends EasyAdminController
               ['enabled'=>true,'id'=>$this->getParameter('app.defaults.calendarCategory.id')]
             );
         $new = new CalendarEvent();
-        return $new->setCategory($cat);
+        $new->setCategory($cat);
+        return $new;
     }
 
     public function createNewCompetitionEntity()
