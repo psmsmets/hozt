@@ -248,6 +248,17 @@ class AdminController extends EasyAdminController
         $this->checkTrainingExceptionEntity($entity);
     }
 
+
+    public function persistCompetitionEntity($entity)
+    {
+        if ($entity->getSimilarGenderAgeLimits()) {
+            $entity->setFemaleAgeMin($entity->getMaleAgeMin());
+            $entity->setFemaleAgeMax($entity->getMaleAgeMax());
+        }
+
+        parent::persistEntity($entity);
+    }
+
     public function persistCompetitionDocumentEntity($entity)
     {
         $comp = $entity->getCompetition();
@@ -327,6 +338,11 @@ class AdminController extends EasyAdminController
         $event = $entity->getCalendar();
         $event->setUpdatedAt();
         $this->em->flush();
+
+        if ($entity->getSimilarGenderAgeLimits()) {
+            $entity->setFemaleAgeMin($entity->getMaleAgeMin());
+            $entity->setFemaleAgeMax($entity->getMaleAgeMax());
+        }
 
         $entity->setUpdatedAt();
         parent::persistEntity($entity);

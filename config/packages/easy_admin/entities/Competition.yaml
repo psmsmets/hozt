@@ -27,20 +27,30 @@ easy_admin:
             edit:
                 fields:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
-                    - { property: 'calendar', label: 'Kalender event', type_options: { disabled: true } }
+                    - { property: 'calendar.title', label: 'Titel', type: 'text' }
+                    - { property: 'calendar.startTime', label: 'Van', type: 'datetime', type_options: { disabled: true } }
+                    - { property: 'calendar.trueEndTime', label: 'Tot', type: 'datetime', type_options: { disabled: true } }
+
+
                     - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'calendar.body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
                     #- { property: 'delegate', label: 'Afgevaardigde' }
                     #- { property: 'coaches', label: 'Trainers' }
                     #- { property: 'officials', label: 'Officials' }
                     - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
-                    - { property: 'restrictions', label: 'Limieten' }
-                    - { property: 'noregistrationid', label: 'Niet-vergunningshouder', type: 'checkbox' }
-                    - { property: 'overnight', label: 'Overnachting' }
+                    - { property: 'overnight', label: 'Met overnachting' }
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'calendar.location', label: 'Locatie', type: 'text' }
                     - { property: 'calendar.url', label: 'Website', type: 'text' }
-                    - { property: 'calendar.description', label: 'Omschrijving', type: 'textarea' }
+                    - { type: 'group', label: 'Filter leden', icon: 'filter', css_class: "col-xs-12 col-md-9" }
+                    - { property: 'noregistrationid', label: 'Niet-vergunningshouders', type: 'checkbox' }
+                    - { property: 'restrictions', label: 'Limieten' }
+                    - { property: 'similarGenderAgeLimits', label: 'Zelfde leeftijden voor jongens/meisjes', help: 'Geef bij gelijke leeftijdslimieten enkel de jongens in. Geen geboortejaren maar leeftijden invullen.' }
+                    - { property: 'maleAgeMin', label: 'Jongens vanaf', css_class: "col-xs-12 col-md-3", help: 'leeg is geen minimale leeftijd', type_options: { attr: { min: 5, max: 25 } } }
+                    - { property: 'maleAgeMax', label: 'Jongens tot en met', css_class: "col-xs-12 col-md-3", help: 'leeg is geen maximale leeftijd', type_options: { attr: { min: 9, max: 99 } } }
+                    - { property: 'femaleAgeMin', label: 'Meisjes vanaf', css_class: "col-xs-12 col-md-3", help: 'leeg is geen minimale leeftijd', type_options: { attr: { min: 5, max: 25 } } }
+                    - { property: 'femaleAgeMax', label: 'Meisjes tot en met', css_class: "col-xs-12 col-md-3", help: 'leeg is geen maximale leeftijd', type_options: { attr: { min: 9, max: 99 } } }
+
             new:
                 fields:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
@@ -50,10 +60,17 @@ easy_admin:
                     #- { property: 'coaches', label: 'Trainers' }
                     #- { property: 'officials', label: 'Officials' }
                     - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
-                    - { property: 'restrictions', label: 'Limieten' }
-                    - { property: 'noregistrationid', label: 'Niet-vergunningshouder', type: 'checkbox' }
-                    - { property: 'overnight', label: 'Overnachting' }
+                    - { property: 'overnight', label: 'Met overnachting' }
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { type: 'group', label: 'Filter leden', icon: 'filter', css_class: "col-xs-12 col-md-9" }
+                    - { property: 'noregistrationid', label: 'Niet-vergunningshouders', type: 'checkbox' }
+                    - { property: 'restrictions', label: 'Limieten' }
+                    - { property: 'similarGenderAgeLimits', label: 'Zelfde leeftijden voor jongens/meisjes', help: 'Geef bij gelijke leeftijdslimieten enkel de jongens in. Geen geboortejaren maar leeftijden invullen.' }
+                    - { property: 'maleAgeMin', label: 'Jongens vanaf', css_class: "col-xs-12 col-md-3", help: 'leeg is geen minimale leeftijd', type_options: { attr: { min: 5, max: 25 } } }
+                    - { property: 'maleAgeMax', label: 'Jongens tot en met', css_class: "col-xs-12 col-md-3", help: 'leeg is geen maximale leeftijd', type_options: { attr: { min: 9, max: 99 } } }
+                    - { property: 'femaleAgeMin', label: 'Meisjes vanaf', css_class: "col-xs-12 col-md-3", help: 'leeg is geen minimale leeftijd', type_options: { attr: { min: 5, max: 25 } } }
+                    - { property: 'femaleAgeMax', label: 'Meisjes tot en met', css_class: "col-xs-12 col-md-3", help: 'leeg is geen maximale leeftijd', type_options: { attr: { min: 9, max: 99 } } }
+                    - { type: 'group', label: 'Inschrijvingen (dagdelen)', icon: 'check', css_class: "col-xs-12 col-md-9" }
             search:
                 fields: ['calendar.title','calendar.startTime','calendar.endTime','calendar.location','teams.name','teams.abbr']
                 # using an empty value to not apply any condition when searching
