@@ -50,6 +50,36 @@ class Competition
     private $restrictions;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $registrationId;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $similarGenderAgeLimits;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $maleAgeMax;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $maleAgeMin;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $femaleAgeMin;
+
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $femaleAgeMax;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionPool", inversedBy="competitions")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -70,6 +100,8 @@ class Competition
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->overnight = false;
+        $this->registrationId = true;
+        $this->similarGenderAgeLimits = true;
         $this->teams = new ArrayCollection();
         $this->documents = new ArrayCollection();
         $this->competitionParts = new ArrayCollection();
@@ -160,6 +192,102 @@ class Competition
     public function setRestrictions(bool $restrictions): self
     {
         $this->restrictions = $restrictions;
+
+        return $this;
+    }
+
+    public function getRegistrationId(): ?bool
+    {
+        return $this->registrationId;
+    }
+
+    public function setRegistrationId(bool $registrationId): self
+    {
+        $this->registrationId = $registrationId;
+
+        return $this;
+    }
+
+    public function getNoRegistrationId(): ?bool
+    {
+        return !$this->registrationId;
+    }
+
+    public function setNoRegistrationId(bool $noRegistrationId): self
+    {
+        $this->registrationId = !$noRegistrationId;
+
+        return $this;
+    }
+
+    public function getSimilarGenderAgeLimits(): ?bool
+    {
+        return $this->similarGenderAgeLimits;
+    }
+
+    public function setSimilarGenderAgeLimits(bool $similarGenderAgeLimits): self
+    {
+        $this->similarGenderAgeLimits = $similarGenderAgeLimits;
+
+        return $this;
+    }
+
+    public function getSplitGenderAgeLimits(): ?bool
+    {
+        return !$this->similarGenderAgeLimits;
+    }
+
+    public function setSplitGenderAgeLimits(bool $splitGenderAgeLimits): self
+    {
+        $this->similarGenderAgeLimits = !$splitGenderAgeLimits;
+
+        return $this;
+    }
+
+    public function getMaleAgeMin(): ?int
+    {
+        return $this->maleAgeMin;
+    }
+
+    public function setMaleAgeMin(?int $maleAgeMin): self
+    {
+        $this->maleAgeMin = $maleAgeMin;
+
+        return $this;
+    }
+
+    public function getMaleAgeMax(): ?int
+    {
+        return $this->maleAgeMax;
+    }
+
+    public function setMaleAgeMax(?int $maleAgeMax): self
+    {
+        $this->maleAgeMax = $maleAgeMax;
+
+        return $this;
+    }
+
+    public function getFemaleAgeMin(): ?int
+    {
+        return $this->femaleAgeMin;
+    }
+
+    public function setFemaleAgeMin(?int $femaleAgeMin): self
+    {
+        $this->femaleAgeMin = $femaleAgeMin;
+
+        return $this;
+    }
+
+    public function getFemaleAgeMax(): ?int
+    {
+        return $this->femaleAgeMax;
+    }
+
+    public function setFemaleAgeMax(?int $femaleAgeMax): self
+    {
+        $this->femaleAgeMax = $femaleAgeMax;
 
         return $this;
     }
