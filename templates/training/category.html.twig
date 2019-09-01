@@ -171,11 +171,7 @@
 
               <ul class="list-unstyled text-muted small mb-1 cal">
                 <li><i class="fas fa-swimming-pool"></i> {{competition.pool}}{% if competition.calendar.location %}, {{competition.calendar.location|ucwords }}{% endif %}</li>
-                {% if competition.teamCategories|length > 0 %}
-                  <li><i class="fas fa-swimmer"></i>
-                    {% for category in competition.teamCategories %}<span class="mr-1">{{category.abbr}}</span>{% endfor %}
-                  </li>
-                {% elseif competition.teams|length > 0%}
+                {% if competition.teams|length > 0%}
                   <li><i class="fas fa-swimmer"></i>
                     {% for team in competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
                   </li>

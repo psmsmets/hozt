@@ -10,7 +10,7 @@ easy_admin:
     entities:
         Competition:
             class: App\Entity\Competition
-            label: 'Zwemwedstrijden'
+            label: 'Zwemwedstrijd'
             list:
                 fields:
                     #- { property: 'id', label: 'Id' }
@@ -19,13 +19,29 @@ easy_admin:
                     - { property: 'calendar.location', label: 'Locatie' }
                     - { property: 'pool', label: 'Zwembad' }
                     - { property: 'restrictions', label: 'Limiet', type: 'boolean' }
-                    - { property: 'calendar.cancelled', label: 'Annul.', type: 'boolean' }
-                    - { property: 'updatedAt', label: 'Laatst aangepast' }
-                sort: ['calendar.startTime', 'DESC']
-                dql_filter: 'calendar.archived = false'
+                    - { property: 'registrationid', label: 'Vergunning', type: 'boolean' }
+                    #- { property: 'calendar.cancelled', label: 'Annul.', type: 'boolean' }
+                    #- { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['calendar.startTime', 'ASC']
+                dql_filter: 'calendar.archived = false AND calendar.cancelled = false'
             edit:
-                fields: ['-calendar']
-            form:
+                fields:
+                    - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
+                    - { property: 'calendar', label: 'Kalender event', type_options: { disabled: true } }
+                    - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'calendar.body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
+                    #- { property: 'delegate', label: 'Afgevaardigde' }
+                    #- { property: 'coaches', label: 'Trainers' }
+                    #- { property: 'officials', label: 'Officials' }
+                    - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
+                    - { property: 'restrictions', label: 'Limieten' }
+                    - { property: 'noregistrationid', label: 'Niet-vergunningshouder', type: 'checkbox' }
+                    - { property: 'overnight', label: 'Overnachting' }
+                    - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'calendar.location', label: 'Locatie', type: 'text' }
+                    - { property: 'calendar.url', label: 'Website', type: 'text' }
+                    - { property: 'calendar.description', label: 'Omschrijving', type: 'textarea' }
+            new:
                 fields:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
                     - { property: 'calendar', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnassociatedCalendarEvents'] } }
@@ -35,10 +51,11 @@ easy_admin:
                     #- { property: 'officials', label: 'Officials' }
                     - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
                     - { property: 'restrictions', label: 'Limieten' }
+                    - { property: 'noregistrationid', label: 'Niet-vergunningshouder', type: 'checkbox' }
                     - { property: 'overnight', label: 'Overnachting' }
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
             search:
-                fields: ['calendar.title','calendar.startTime','calendar.endTime','calendar.location','teams.name','teamCategories.name','teams.abbr','teamCategories.abbr']
+                fields: ['calendar.title','calendar.startTime','calendar.endTime','calendar.location','teams.name','teams.abbr']
                 # using an empty value to not apply any condition when searching
                 # elements (this prevents inheriting the 'dql_filter' value defined in 'list')
                 dql_filter: ''
@@ -65,14 +82,14 @@ easy_admin:
             label: 'Zwemwedstrijd bijlage'
             list:
                 fields:
-                    - { property: 'id', label: 'Id' }
+                    #- { property: 'id', label: 'Id' }
                     - { property: 'competition', label: 'Wedstrijd' }
                     - { property: 'category', label: 'Categorie' }
                     - { property: 'document', type: 'file', label: 'Document', base_path: '%app.path.doc.competition%' }
                     #- { property: 'url', label: 'Url' }
                     - { property: 'description', label: 'Omschrijving' }
-                    - { property: 'updatedAt', label: 'Laatst aangepast' }
-                sort: ['id', 'ASC']
+                    #- { property: 'updatedAt', label: 'Laatst aangepast' }
+                sort: ['competition', 'DESC']
             form:
                 fields:
                     - { property: 'competition', label: 'Wedstrijd', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnarchivedCompetitionEvents'] } }

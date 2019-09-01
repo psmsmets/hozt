@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,6 +34,10 @@ class CompetitionPart
      */
     private $updatedAt;
 
+    /**
+     * @ORM\Column(type="date_immutable")
+     */
+    private $date;
 
     /**
      * @ORM\Column(type="smallint")
@@ -45,14 +51,15 @@ class CompetitionPart
     private $competition;
 
     /**
-     * @ORM\Column(type="date_immutable")
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competitionPart", orphanRemoval=true)
      */
-    private $date;
+    private $enrolments;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable("now");
         $this->updatedAt = $this->createdAt;
+        $this->enrolments = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -63,6 +70,18 @@ class CompetitionPart
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getDate(): ?\DateTimeImmutable
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeImmutable $date): self
+    {
+        $this->date = $date;
+
+        return $this;
     }
 
     public function getPart(): ?int
@@ -94,16 +113,34 @@ class CompetitionPart
         return $this;
     }
 
-    public function getDate(): ?\DateTimeImmutable
+    /**
+     * @return Collection|CompetitionEnrolment[]
+     */
+    public function getEnrolments(): Collection
     {
-        return $this->date;
+        return $this->enrolments;
     }
 
-    public function setDate(\DateTimeImmutable $date): self
+    public function addEnrolment(CompetitionEnrolment $enrolment): self
     {
-        $this->date = $date;
+        if (!$this->enrolments->contains($enrolment)) {
+            $this->enrolments[] = $enrolment;
+            $enrolment->setCompetitionPart($this);
+        }
 
         return $this;
     }
 
+    public function removeEnrolment(CompetitionEnrolment $enrolment): self
+    {
+        if ($this->enrolments->contains($enrolment)) {
+            $this->enrolments->removeElement($enrolment);
+            // set the owning side to null (unless already changed)
+            if ($enrolment->getCompetitionPart() === $this) {
+                $enrolment->setCompetitionPart(null);
+            }
+        }
+
+        return $this;
+    }
 }
