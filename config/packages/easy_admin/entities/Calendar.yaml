@@ -36,17 +36,15 @@ easy_admin:
             label: 'Kalender :: events'
             list:
                 fields:
-                    #- { property: 'id', label: 'Id' }
-                    #- { property: 'status', label: 'Status', template: 'easy_admin/trans.html.twig' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'startTime', label: 'Van' }
                     - { property: 'trueEndTime', label: 'Tot', template: 'easy_admin/date_interval_template_datetime.html.twig', css_class: 'small' }
                     - { property: 'allDay', label: 'Hele dag', type: 'boolean' }
                     - { property: 'category', label: 'Categorie' }
-                    #- { property: 'updatedAt', label: 'Laatst aangepast' }
                     - { property: 'location', label: 'Locatie' }
+                    - { property: 'competition', label: 'Wedstrijd', type: 'boolean' }
                     - { property: 'cancelled', label: 'Annul.', type: 'boolean' }
-                sort: ['startTime', 'DESC']
+                sort: ['startTime', 'ASC']
                 dql_filter: 'entity.archived = false'
             form:
                 fields:
@@ -67,6 +65,8 @@ easy_admin:
                     - { property: 'staticPage', label: 'Pagina' }
                     - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.img.calendar%' }
                     - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.doc.calendar%' }
+            edit:
+                actions: ['delete']
             search:
                 fields: ['title','startTime','endTime','location','category.title']
                 # using an empty value to not apply any condition when searching

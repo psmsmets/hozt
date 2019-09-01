@@ -530,6 +530,15 @@ class AdminController extends EasyAdminController
     }
 
     // Remove
+    public function removeCalendarEventEntity($entity)
+    {
+        if (!is_null($entity->getCompetition())) {
+            $this->addFlash('danger', 'Fout: Kalender evenement heeft gerelateerde data. Verwijderen niet toegestaan.');
+            return;
+        }
+        parent::persistEntity($entity);
+    }
+
     public function removeTrainingScheduleEntity($entity)
     {
         $now = new \DateTime("today midnight");
