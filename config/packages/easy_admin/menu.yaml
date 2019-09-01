@@ -35,7 +35,7 @@ easy_admin:
              icon: 'tasks'
              children:
                - { entity: 'TrainingSchedule', label: 'Uurrooster', icon: 'table' }
-               - { entity: 'TrainingException', label: 'Uitzondering', icon: 'times-circle' }
+               - { entity: 'TrainingException', label: 'Afgelastingen', icon: 'times-circle' }
                - { entity: 'TrainingTime', label: 'Tijdstippen', icon: 'clock' }
            - label: 'Kalender'
              icon: 'calendar'

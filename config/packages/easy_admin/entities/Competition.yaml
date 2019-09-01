@@ -15,9 +15,9 @@ easy_admin:
                 fields:
                     #- { property: 'id', label: 'Id' }
                     #- { property: 'calendar.enabled', label: 'Actief', type: 'boolean' }
-                    - { property: 'calendar', label: 'Kalender event' }
+                    - { property: 'calendar', label: 'Kalender event', type: 'text' }
                     - { property: 'calendar.location', label: 'Locatie' }
-                    - { property: 'pool', label: 'Zwembad' }
+                    - { property: 'pool', label: 'Zwembad', type: 'text' }
                     - { property: 'restrictions', label: 'Limiet', type: 'boolean' }
                     - { property: 'registrationid', label: 'Vergunning', type: 'boolean' }
                     #- { property: 'calendar.cancelled', label: 'Annul.', type: 'boolean' }

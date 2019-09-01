@@ -143,7 +143,7 @@ easy_admin:
                 fields: ['teams.abbr','dayName','time.startTime','time.endTime']
         TrainingException:
             class: App\Entity\TrainingException
-            label: 'Trainingen :: uurrooster uitzonderingen'
+            label: 'Trainingen ::  afgelasting'
             list:
                 fields:
                     - { property: 'active', label: 'Actief', type: 'boolean' }
