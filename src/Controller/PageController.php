@@ -145,7 +145,7 @@ class PageController extends AbstractController
                 $category_data[] = array( 
                     'name' => $cat->getName(),
                     'abbr' => $cat->getAbbr(),
-                    'url' => $this->get('router')->generate('training_category', array('slug' => $cat->getSlug())),
+                    'url' => $this->get('router')->generate('training_category', array('slug' => $cat->getSlug()))."#trainingsuren",
                 );
             }
             $this->get('session')->getFlashBag()->add(

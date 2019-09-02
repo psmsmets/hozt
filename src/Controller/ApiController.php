@@ -174,7 +174,7 @@ class ApiController extends AbstractController
 
                 $teams = $teams->filter(
                     function(TrainingTeam $team) use ($exceptions) {
-                        $teamExs = $team->getExceptions();
+                        $teamsExs = $team->getExceptions();
                         foreach ($exceptions as $ex) {
                             if ($teamsExs->contains($ex)) return false;
                         }
