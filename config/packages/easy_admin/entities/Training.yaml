@@ -132,11 +132,11 @@ easy_admin:
                     - { property: 'teams', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'dayNumber', label: 'Dag', type: 'choice', type_options: { multiple: false, choices: { 'Monday':1, 'Tuesday':2, 'Wednesday':3, 'Thursday':4, 'Friday':5, 'Saturday':6, 'Sunday':7 } } }
                     - { property: 'time', label: 'Tijdstip', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getTrainingTime'] } }
-                    - { property: 'comment', label: 'Opmerking' }
-                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'comment', label: 'Opmerking', type_options: { attr: { maxlength: 40 } }, help: 'bv. locatie, weergegeven in het schema naast de uren/groepen' }
                     - { property: 'startDate', label: 'Vanaf' }
                     - { property: 'endDate', label: 'Tot' }
                     - { property: 'persistent', label: 'Extra', help: 'bijkomstige training(en) met een einddatum' }
+                    - { property: 'description', label: 'Omschrijving extra training', type_options: { attr: { maxlength: 40 } }, help: 'bv. periode, weergegeven naast tekstbalon met datum/periode' }
             edit:
                 actions: ['delete']
             search:
