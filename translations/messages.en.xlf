@@ -33,6 +33,18 @@
         <source>Sunday</source>
         <target>Sunday</target>
       </trans-unit>
+      <trans-unit id="xD1bqsX" resname="competition.morning">
+        <source>competition.morning</source>
+        <target>morning</target>
+      </trans-unit>
+      <trans-unit id="6WBplAN" resname="competition.afternoon">
+        <source>competition.afternoon</source>
+        <target>afternoon</target>
+      </trans-unit>
+      <trans-unit id="ZdoWYLu" resname="competition.evening">
+        <source>competition.evening</source>
+        <target>evening</target>
+      </trans-unit>
       <trans-unit id="VJLEtLO" resname="preferences.title">
         <source>preferences.title</source>
         <target>Preferences...</target>

@@ -44,8 +44,17 @@ use App\Repository\TryoutEnrolmentRepository;
 use App\Repository\TryoutRepository;
 use App\Repository\TrainingTeamRepository;
 
+# Services
+use App\Service\CompetitionManager;
+
 class AdminController extends EasyAdminController
 {
+    private $competitionManager;
+
+    public function __construct(CompetitionManager $competitionManager)
+    {
+        $this->competitionManager = $competitionManager;
+    }
 
     public function createMemberGroupingEntityFormBuilder($entity, $view)
     {
@@ -339,10 +348,8 @@ class AdminController extends EasyAdminController
         $event->setUpdatedAt();
         $this->em->flush();
 
-        if ($entity->getSimilarGenderAgeLimits()) {
-            $entity->setFemaleAgeMin($entity->getMaleAgeMin());
-            $entity->setFemaleAgeMax($entity->getMaleAgeMax());
-        }
+        if ($entity->getSimilarGenderAgeLimits()) $entity->duplicateGenderAgeLimits();
+        if ($entity->getUpdatePartList()) $this->competitionManager->addDayParts($entity);
 
         $entity->setUpdatedAt();
         parent::persistEntity($entity);
@@ -546,6 +553,15 @@ class AdminController extends EasyAdminController
     }
 
     // Remove
+    public function removeCompetitionPartEntity($entity)
+    {
+        if (count($entity->getEnrollments())>0 or $entity->getEnabled()) {
+            $this->addFlash('danger', 'Fout: Wedstrijd dagdeel heeft gerelateerde data. Verwijderen niet toegestaan.');
+            return;
+        }
+        parent::persistEntity($entity);
+    }
+
     public function removeCalendarEventEntity($entity)
     {
         if (!is_null($entity->getCompetition())) {
@@ -596,6 +612,23 @@ class AdminController extends EasyAdminController
             return;
         }
         parent::removeEntity($entity);
+    }
+
+
+    public function enableBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        $em = $this->getDoctrine()->getManagerForClass($class);
+
+        foreach ($ids as $id) {
+            $entities = $em->find($id);
+            $entities->setEnabled(true);
+        }
+
+        $this->em->flush();
+
+        // don't return anything or redirect to any URL because it will be ignored
+        // when a batch action finishes, user is redirected to the original page
     }
 
 

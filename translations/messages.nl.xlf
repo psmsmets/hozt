@@ -33,6 +33,30 @@
         <source>Sunday</source>
         <target>Zondag</target>
       </trans-unit>
+      <trans-unit id="xD1bqsX" resname="competition.morning">
+        <source>competition.morning</source>
+        <target>voormiddag</target>
+      </trans-unit>
+      <trans-unit id="6WBplAN" resname="competition.afternoon">
+        <source>competition.afternoon</source>
+        <target>namiddag</target>
+      </trans-unit>
+      <trans-unit id="ZdoWYLu" resname="competition.evening">
+        <source>competition.evening</source>
+        <target>avond</target>
+      </trans-unit>
+      <trans-unit id="hMzfioS" resname="past">
+        <source>past</source>
+        <target>voorbij</target>
+      </trans-unit>
+      <trans-unit id="67Peij2" resname="future">
+        <source>future</source>
+        <target>toekomstig</target>
+      </trans-unit>
+      <trans-unit id="Lg2bcIb" resname="ongoing">
+        <source>ongoing</source>
+        <target>lopend</target>
+      </trans-unit>
       <trans-unit id="VJLEtLO" resname="preferences.title">
         <source>preferences.title</source>
         <target>Voorkeuren...</target>
@@ -92,6 +116,18 @@
       <trans-unit id="lRHCpKK" resname="address.member">
         <source>address.member</source>
         <target>Leden</target>
+      </trans-unit>
+      <trans-unit id="wjsxoBe" resname="morning">
+        <source>morning</source>
+        <target>voormiddag</target>
+      </trans-unit>
+      <trans-unit id="yOB8GsJ" resname="afternoon">
+        <source>afternoon</source>
+        <target>namiddag</target>
+      </trans-unit>
+      <trans-unit id="5b0IAdE" resname="evening">
+        <source>evening</source>
+        <target>avond</target>
       </trans-unit>
     </body>
   </file>
