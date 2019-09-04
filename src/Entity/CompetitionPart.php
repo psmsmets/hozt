@@ -34,6 +34,21 @@ class CompetitionPart
     private $enabledAt;
 
     /**
+     * Virtual variable
+     */
+    private $cancelled;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $cancelledAt;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $archived;
+
+    /**
      * @ORM\Column(type="date")
      */
     private $day;
@@ -62,6 +77,8 @@ class CompetitionPart
     public function __construct(Competition $competition, \DateTime $day, int $part)
     {
         $this->enabledAt = null;
+        $this->cancelledAt = null;
+        $this->archived = false;
         $this->competition = $competition;
         $this->day = $day;
         if (array_key_exists($part,CompetitionPart::dayParts)) $this->part = $part;
@@ -76,7 +93,19 @@ class CompetitionPart
 
     public function getName(): string
     {
-        return sprintf('%s %s %s', $this->day->format('Y-m-d'), $this->competition->getCalendar()->getLocation(), $this->getDaypart());
+        return sprintf('%s | %s | %s', $this->day->format('Y-m-d'), $this->competition->getCalendar()->getLocation(), $this->getDaypart());
+    }
+
+    public function getFullName(): string
+    {
+        $calendar = $this->competition->getCalendar();
+        return sprintf('%s %s %s %s', $this->day->format('Y-m-d'), $calendar->getTitle(), $calendar->getLocation(), $this->getDaypart());
+    }
+
+    public function getLongName(): string
+    {
+        $calendar = $this->competition->getCalendar();
+        return sprintf('%s | %s | %s', $this->day->format('Y-m-d'), $calendar->getTitle(), $calendar->getLocation());
     }
 
     public function getId(): ?int
@@ -105,6 +134,38 @@ class CompetitionPart
             $this->enabled = true;
             $this->enabledAt = new \DateTime('now');
         }
+
+        return $this;
+    }
+
+    public function getCancelledAt(): ?\DateTime
+    {
+        return $this->cancelledAt;
+    }
+
+    public function getCancelled(): ?bool
+    {
+        return !is_null($this->cancelledAt);
+    }
+
+    public function setCancelled(bool $cancelled): self
+    {
+        if (is_null($this->cancelledAt) && $cancelled) {
+            $this->cancelled = true;
+            $this->cancelledAt = new \DateTime('now');
+        }
+
+        return $this;
+    }
+
+    public function getArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): self
+    {
+        $this->archived = $archived;
 
         return $this;
     }

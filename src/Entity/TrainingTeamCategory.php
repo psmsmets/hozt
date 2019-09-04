@@ -80,11 +80,6 @@ class TrainingTeamCategory
     private $teams;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Competition", mappedBy="teamCategories")
-     */
-    private $competitions;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\TryoutEnrolment", mappedBy="category")
      */
     private $tryoutEnrolments;
@@ -94,7 +89,6 @@ class TrainingTeamCategory
         $this->createdAt = new \DateTime("now");
         $this->enabled = true;
         $this->teams = new ArrayCollection();
-        $this->competitions = new ArrayCollection();
         $this->tryoutEnrolments = new ArrayCollection();
     }
 
@@ -236,37 +230,14 @@ class TrainingTeamCategory
     /**
      * @return Collection|TrainingTeam[]
      */
-    public function getTeams(): Collection
+    public function getTeams(bool $enabled = null): Collection
     {
-        return $this->teams;
-    }
-
-    /**
-     * @return Collection|Competition[]
-     */
-    public function getCompetitions(): Collection
-    {
-        return $this->competitions;
-    }
-
-    public function addCompetition(Competition $competition): self
-    {
-        if (!$this->competitions->contains($competition)) {
-            $this->competitions[] = $competition;
-            $competition->addTeamCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCompetition(Competition $competition): self
-    {
-        if ($this->competitions->contains($competition)) {
-            $this->competitions->removeElement($competition);
-            $competition->removeTeamCategory($this);
-        }
-
-        return $this;
+        if (is_null($enabled)) return $this->teams;
+        return $this->teams->filter(
+            function(TrainingTeam $team) use ($enabled) {
+                return $team->getEnabled() === $enabled;
+            }
+        );
     }
 
     /**
