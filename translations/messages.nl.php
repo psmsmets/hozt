@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'Enable' => 'Activeer',
+    'Disable' => 'Deactiveer',
+    'Select' => 'Selecteer',
+    'Deselect' => 'Deselecteer',
     'Monday' => 'Maandag',
     'Tuesday' => 'Dinsdag',
     'Wednesday' => 'Woensdag',
@@ -8,6 +12,9 @@ return [
     'Friday' => 'Vrijdag',
     'Saturday' => 'Zaterdag',
     'Sunday' => 'Zondag',
+    'morning' => 'voormiddag',
+    'afternoon' => 'namiddag',
+    'evening' => "avond",
     'past' => 'voorbij',
     'future' => 'toekomstig',
     'ongoing' => 'lopend',

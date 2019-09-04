@@ -14,8 +14,7 @@ class CompetitionPart
     /**
      * Parameters
      */
-    const dayParts = array(1 => 'morning', 2 => 'afternoon', 3 => 'evening');
-    const dayPartsInv = array('morning' => 1, 'afternoon' => 2, 'evening' => 3);
+    const dayParts = array('morning', 'afternoon', 'evening');
 
     /**
      * @ORM\Id()
@@ -25,24 +24,44 @@ class CompetitionPart
     private $id;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * Virtual variable
      */
-    private $createdAt;
+    private $enabled;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    private $updatedAt;
+    private $enabledAt;
 
     /**
-     * @ORM\Column(type="date_immutable")
+     * Virtual variable
      */
-    private $date;
+    private $cancelled;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $cancelledAt;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $archived;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $day;
 
     /**
      * @ORM\Column(type="smallint")
      */
     private $part;
+
+    /**
+     * @ORM\Column(type="string", length=32)
+     */
+    private $hash;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Competition", inversedBy="competitionParts")
@@ -51,20 +70,42 @@ class CompetitionPart
     private $competition;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competitionPart", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competitionPart")
      */
     private $enrolments;
 
-    public function __construct()
+    public function __construct(Competition $competition, \DateTime $day, int $part)
     {
-        $this->createdAt = new \DateTimeImmutable("now");
-        $this->updatedAt = $this->createdAt;
+        $this->enabledAt = null;
+        $this->cancelledAt = null;
+        $this->archived = false;
+        $this->competition = $competition;
+        $this->day = $day;
+        if (array_key_exists($part,CompetitionPart::dayParts)) $this->part = $part;
+        $this->hash = md5(sprintf('%d;%d;%d', $this->competition->getCalendar()->getId(), $this->day->getTimestamp(), $this->part ));
         $this->enrolments = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return strval($this->competition)." ".$this->getDaypart();
+        return $this->getName();
+    }
+
+    public function getName(): string
+    {
+        return sprintf('%s | %s | %s', $this->day->format('Y-m-d'), $this->competition->getCalendar()->getLocation(), $this->getDaypart());
+    }
+
+    public function getFullName(): string
+    {
+        $calendar = $this->competition->getCalendar();
+        return sprintf('%s %s %s %s', $this->day->format('Y-m-d'), $calendar->getTitle(), $calendar->getLocation(), $this->getDaypart());
+    }
+
+    public function getLongName(): string
+    {
+        $calendar = $this->competition->getCalendar();
+        return sprintf('%s | %s | %s', $this->day->format('Y-m-d'), $calendar->getTitle(), $calendar->getLocation());
     }
 
     public function getId(): ?int
@@ -72,28 +113,71 @@ class CompetitionPart
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeImmutable
+    public function getHash(): ?string
     {
-        return $this->date;
+        return $this->hash;
     }
 
-    public function setDate(\DateTimeImmutable $date): self
+    public function getEnabledAt(): ?\DateTime
     {
-        $this->date = $date;
+        return $this->enabledAt;
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return !is_null($this->enabledAt);
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        if (is_null($this->enabledAt) && $enabled) {
+            $this->enabled = true;
+            $this->enabledAt = new \DateTime('now');
+        }
 
         return $this;
+    }
+
+    public function getCancelledAt(): ?\DateTime
+    {
+        return $this->cancelledAt;
+    }
+
+    public function getCancelled(): ?bool
+    {
+        return !is_null($this->cancelledAt);
+    }
+
+    public function setCancelled(bool $cancelled): self
+    {
+        if (is_null($this->cancelledAt) && $cancelled) {
+            $this->cancelled = true;
+            $this->cancelledAt = new \DateTime('now');
+        }
+
+        return $this;
+    }
+
+    public function getArchived(): ?bool
+    {
+        return $this->archived;
+    }
+
+    public function setArchived(bool $archived): self
+    {
+        $this->archived = $archived;
+
+        return $this;
+    }
+
+    public function getDay(): ?\DateTime
+    {
+        return $this->day;
     }
 
     public function getPart(): ?int
     {
         return $this->part;
-    }
-
-    public function setPart(int $part): self
-    {
-        $this->part = $part;
-
-        return $this;
     }
 
     public function getDaypart(): ?string
@@ -104,13 +188,6 @@ class CompetitionPart
     public function getCompetition(): ?Competition
     {
         return $this->competition;
-    }
-
-    public function setCompetition(?Competition $competition): self
-    {
-        $this->competition = $competition;
-
-        return $this;
     }
 
     /**

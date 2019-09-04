@@ -15,6 +15,7 @@ class CronCommand extends Command
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:cron';
     private $calendarManager;
+    private $competitionManager;
 
     public function __construct(CalendarManager $calendarManager, CompetitionManager $competitionManager)
     {

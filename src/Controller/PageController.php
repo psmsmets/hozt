@@ -944,6 +944,14 @@ class PageController extends AbstractController
 
 
     /**
+     * @Route("/zwemschool", name="zwemschool")
+     */
+    public function zwemschool()
+    {
+        return $this->redirect('https://www.assistonline.eu/publiek/#/app/wachtlijst/8224e3f0-ebec-4fb3-8c99-238b1d961e9a/preview');
+    }
+
+    /**
      * @Route("/inschrijven", name="enrol_list")
      */
 /*

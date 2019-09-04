@@ -45,6 +45,27 @@ class Competition
     private $overnight;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionPool", inversedBy="competitions")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $pool;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $organization;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionDocument", mappedBy="competition")
+     */
+    private $documents;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $filtersUpToDate;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $restrictions;
@@ -62,12 +83,12 @@ class Competition
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $maleAgeMax;
+    private $maleAgeMin;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
      */
-    private $maleAgeMin;
+    private $maleAgeMax;
 
     /**
      * @ORM\Column(type="smallint", nullable=true)
@@ -80,25 +101,38 @@ class Competition
     private $femaleAgeMax;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionPool", inversedBy="competitions")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $pool;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionDocument", mappedBy="competition")
-     */
-    private $documents;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionPart", mappedBy="competition")
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionPart", mappedBy="competition", orphanRemoval=true)
      */
     private $competitionParts;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $enrolBeforeDays;
+
+    /**
+     * Virtual variable
+     */
+    private $enrolBefore;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $enrolFrom;
+
+    /**
+     * Virtual variables
+     */
+    private $reapplyFilters = false;
+    private $partList = [];
+    private $updatePartList = false;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
+        $this->enrolFrom = null;
+        $this->filtersUpToDate = true;
         $this->overnight = false;
         $this->registrationId = true;
         $this->similarGenderAgeLimits = true;
@@ -109,7 +143,17 @@ class Competition
 
     public function __toString(): string
     {
-        return strval($this->calendar);
+        return sprintf('%s %s', $this->calendar->getStartTime()->format('Y-m-d'), $this->calendar->getLocation());
+    }
+
+    public function getName(): string
+    {
+        return $this->calendar->getTitle();
+    }
+
+    public function getLocation(): string
+    {
+        return $this->calendar->getLocation();
     }
 
     public function getId(): ?int
@@ -144,6 +188,16 @@ class Competition
         $this->calendar = $calendar;
 
         return $this;
+    }
+
+    public function getCancelled(): bool
+    {
+        return $this->calendar->getCancelled();
+    }
+
+    public function getArchived(): bool
+    {
+        return $this->calendar->getArchived();
     }
 
     /**
@@ -184,114 +238,6 @@ class Competition
         return $this;
     }
 
-    public function getRestrictions(): ?bool
-    {
-        return $this->restrictions;
-    }
-
-    public function setRestrictions(bool $restrictions): self
-    {
-        $this->restrictions = $restrictions;
-
-        return $this;
-    }
-
-    public function getRegistrationId(): ?bool
-    {
-        return $this->registrationId;
-    }
-
-    public function setRegistrationId(bool $registrationId): self
-    {
-        $this->registrationId = $registrationId;
-
-        return $this;
-    }
-
-    public function getNoRegistrationId(): ?bool
-    {
-        return !$this->registrationId;
-    }
-
-    public function setNoRegistrationId(bool $noRegistrationId): self
-    {
-        $this->registrationId = !$noRegistrationId;
-
-        return $this;
-    }
-
-    public function getSimilarGenderAgeLimits(): ?bool
-    {
-        return $this->similarGenderAgeLimits;
-    }
-
-    public function setSimilarGenderAgeLimits(bool $similarGenderAgeLimits): self
-    {
-        $this->similarGenderAgeLimits = $similarGenderAgeLimits;
-
-        return $this;
-    }
-
-    public function getSplitGenderAgeLimits(): ?bool
-    {
-        return !$this->similarGenderAgeLimits;
-    }
-
-    public function setSplitGenderAgeLimits(bool $splitGenderAgeLimits): self
-    {
-        $this->similarGenderAgeLimits = !$splitGenderAgeLimits;
-
-        return $this;
-    }
-
-    public function getMaleAgeMin(): ?int
-    {
-        return $this->maleAgeMin;
-    }
-
-    public function setMaleAgeMin(?int $maleAgeMin): self
-    {
-        $this->maleAgeMin = $maleAgeMin;
-
-        return $this;
-    }
-
-    public function getMaleAgeMax(): ?int
-    {
-        return $this->maleAgeMax;
-    }
-
-    public function setMaleAgeMax(?int $maleAgeMax): self
-    {
-        $this->maleAgeMax = $maleAgeMax;
-
-        return $this;
-    }
-
-    public function getFemaleAgeMin(): ?int
-    {
-        return $this->femaleAgeMin;
-    }
-
-    public function setFemaleAgeMin(?int $femaleAgeMin): self
-    {
-        $this->femaleAgeMin = $femaleAgeMin;
-
-        return $this;
-    }
-
-    public function getFemaleAgeMax(): ?int
-    {
-        return $this->femaleAgeMax;
-    }
-
-    public function setFemaleAgeMax(?int $femaleAgeMax): self
-    {
-        $this->femaleAgeMax = $femaleAgeMax;
-
-        return $this;
-    }
-
     public function getPool(): ?CompetitionPool
     {
         return $this->pool;
@@ -300,6 +246,18 @@ class Competition
     public function setPool(?CompetitionPool $pool): self
     {
         $this->pool = $pool;
+
+        return $this;
+    }
+
+    public function getOrganization(): ?string
+    {
+        return $this->organization;
+    }
+
+    public function setOrganization(?string $organization): self
+    {
+        $this->organization = $organization;
 
         return $this;
     }
@@ -364,6 +322,141 @@ class Competition
         });
     }
 
+    public function getFiltersUpToDate(): ?bool
+    {
+        return $this->filtersUpToDate;
+    }
+
+    public function setFiltersUpToDate(bool $filtersUpToDate): self
+    {
+        $this->filtersUpToDate = $filtersUpToDate;
+
+        return $this;
+    }
+
+    public function getRestrictions(): ?bool
+    {
+        return $this->restrictions;
+    }
+
+    public function setRestrictions(bool $restrictions): self
+    {
+        if ($restrictions != $this->restrictions) $this->filtersUpToDate = false;
+        $this->restrictions = $restrictions;
+
+        return $this;
+    }
+
+    public function getRegistrationId(): ?bool
+    {
+        return $this->registrationId;
+    }
+
+    public function setRegistrationId(bool $registrationId): self
+    {
+        if ($registrationId != $this->registrationId) $this->filtersUpToDate = false;
+        $this->registrationId = $registrationId;
+
+        return $this;
+    }
+
+    public function getNoRegistrationId(): ?bool
+    {
+        return !$this->registrationId;
+    }
+
+    public function setNoRegistrationId(bool $noRegistrationId): self
+    {
+        $this->setRegistrationId(!$noRegistrationId);
+
+        return $this;
+    }
+
+    public function getSimilarGenderAgeLimits(): ?bool
+    {
+        return $this->similarGenderAgeLimits;
+    }
+
+    public function setSimilarGenderAgeLimits(bool $similarGenderAgeLimits): self
+    {
+        if ($similarGenderAgeLimits != $this->similarGenderAgeLimits) $this->filtersUpToDate = false;
+        $this->similarGenderAgeLimits = $similarGenderAgeLimits;
+
+        return $this;
+    }
+
+    public function duplicateGenderAgeLimits(): self
+    {
+        $this->femaleAgeMin = $this->maleAgeMin;
+        $this->femaleAgeMax = $this->maleAgeMax;
+
+        return $this;
+    }
+
+    public function getSplitGenderAgeLimits(): ?bool
+    {
+        return !$this->similarGenderAgeLimits;
+    }
+
+    public function setSplitGenderAgeLimits(bool $splitGenderAgeLimits): self
+    {
+        $this->setSimilarGenderAgeLimits(!$splitGenderAgeLimits);
+
+        return $this;
+    }
+
+    public function getMaleAgeMin(): ?int
+    {
+        return $this->maleAgeMin;
+    }
+
+    public function setMaleAgeMin(?int $maleAgeMin): self
+    {
+        if ($maleAgeMin != $this->maleAgeMin) $this->filtersUpToDate = false;
+        $this->maleAgeMin = $maleAgeMin;
+
+        return $this;
+    }
+
+    public function getMaleAgeMax(): ?int
+    {
+        return $this->maleAgeMax;
+    }
+
+    public function setMaleAgeMax(?int $maleAgeMax): self
+    {
+        if ($maleAgeMax != $this->maleAgeMax) $this->filtersUpToDate = false;
+        $this->maleAgeMax = $maleAgeMax;
+
+        return $this;
+    }
+
+    public function getFemaleAgeMin(): ?int
+    {
+        return $this->femaleAgeMin;
+    }
+
+    public function setFemaleAgeMin(?int $femaleAgeMin): self
+    {
+        if ($femaleAgeMin != $this->femaleAgeMin) $this->filtersUpToDate = false;
+        $this->femaleAgeMin = $femaleAgeMin;
+
+        return $this;
+    }
+
+    public function getFemaleAgeMax(): ?int
+    {
+        return $this->femaleAgeMax;
+    }
+
+    public function setFemaleAgeMax(?int $femaleAgeMax): self
+    {
+        if ($femaleAgeMax != $this->femaleAgeMax) $this->filtersUpToDate = false;
+        $this->femaleAgeMax = $femaleAgeMax;
+
+        return $this;
+    }
+
     /**
      * @return Collection|CompetitionPart[]
      */
@@ -390,6 +483,86 @@ class Competition
             if ($competitionPart->getCompetition() === $this) {
                 $competitionPart->setCompetition(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getReapplyFilters(): bool
+    {
+        return $this->reapplyFilters;
+    }
+
+    public function setReapplyFilters(bool $reapply): self
+    {
+        $this->reapplyFilters = $reapply;
+        return $this;
+    }
+
+    public function getUpdatePartList(): bool
+    {
+        return $this->updatePartList;
+    }
+
+    public function setUpdatePartList(bool $update): self
+    {
+        $this->updatePartList = $update;
+        return $this;
+    }
+
+    public function getPartList(): array
+    {
+        if (count($this->competitionParts) == 0 && count($this->partList) == 0 ) {
+            $this->partList = [1]; // afternoon
+        }
+        return $this->partList;
+    }
+
+    public function setPartList(array $partList): self
+    {
+        $this->partList = $partList;
+        return $this;
+    }
+
+    public function competitionPartExists(\DateTime $day, int $part): bool
+    {
+        foreach ($this->competitionParts as $competitionPart) {
+            if ($competitionPart->getDay() == $day && $competitionPart->getPart() == $part) return true;
+        }
+        return false;
+    }
+
+    public function getEnrolBeforeDays(): int
+    {
+        return $this->enrolBeforeDays;
+    }
+
+    public function setEnrolBeforeDays(int $enrolBeforeDays): self
+    {
+        if ($enrolBeforeDays>7) $this->enrolBeforeDays = $enrolBeforeDays;
+
+        return $this;
+    }
+
+    public function getEnrolBefore(): \DateTime
+    {
+        return (clone $this->calendar->getStartTime)->modify('midnight')->modify(sprintf("-%ddays", $this->enrolbeforedays));
+    }
+
+    public function getEnrolFrom(): \DateTime
+    {
+        return $this->enrolFrom;
+    }
+
+    public function getEnrol(): bool
+    {
+        return !is_null($this->enrolFrom);
+    }
+
+    public function setEnrol(bool $enrol): self
+    {
+        if (is_null($this->enrolFrom) && $enrol) {
+            $this->enrolFrom = new \DateTime('now');
         }
 
         return $this;

@@ -145,7 +145,7 @@ class BlogPost
         $this->createdAt = new \DateTime("now");
         $this->publishAt = $this->createdAt;
         $this->updatedAt = $this->createdAt;
-        $this->enabled = true;
+        $this->enabled = false;
         $this->special = true;
         $this->pinned = false;
     }
@@ -215,7 +215,7 @@ class BlogPost
 
     public function setEnabled(bool $enabled): self
     {
-        $this->enabled = $enabled;
+        $this->enabled = $enabled; // or $this->enabled;
 
         return $this;
     }

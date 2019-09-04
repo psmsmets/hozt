@@ -46,9 +46,11 @@ easy_admin:
            - label: 'Wedstrijden'
              icon: 'trophy'
              children:
-               - { entity: 'Competition', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
+               #- { entity: 'Competition', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'Competition', label: 'Lijst', icon: 'list' }
-               - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'bookmark' }
+               - { entity: 'CompetitionPartActive', label: 'Actieve Dagdelen', icon: 'star' }
+               - { entity: 'CompetitionPartNew', label: 'Nieuwe Dagdelen', icon: 'check' }
+               - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'home' }
                - { entity: 'CompetitionDocument', label: 'Bijlagen', icon: 'file' }
                - { entity: 'CompetitionDocumentCategory', label: 'Bijlage categorie', icon: 'folder-open' }
            - label: "Varia"

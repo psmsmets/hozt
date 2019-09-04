@@ -236,6 +236,11 @@ class CalendarEvent
 
     public function setStartTime(\DateTimeInterface $startTime): self
     {
+        if (!is_null($this->getCompetition())) {
+            dd($this->startTime);
+// check if competition parts are set. New start date should not exclude this day.
+            return $this;
+        }
         $this->startTime = $startTime;
 
         return $this;
@@ -360,6 +365,19 @@ class CalendarEvent
         $this->allDay = $allDay;
 
         return $this;
+    }
+
+    public function getListOfDays(): ?array
+    {
+        $daylist = array();
+        $day = (clone $this->startTime)->modify('midnight');
+        $end = $this->calcEndTime();
+
+        while ($day < $end) {
+            $daylist[] = clone $day;
+            $day->modify('+1 day');
+        }
+        return $daylist;
     }
 
     public function getLocation(): ?string
