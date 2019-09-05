@@ -111,7 +111,7 @@ class Competition
     private $enrolBeforeDays;
 
     /**
-     * Virtual variable
+     * @ORM\Column(type="datetime_immutable")
      */
     private $enrolBefore;
 
@@ -187,6 +187,7 @@ class Competition
     public function setCalendar(CalendarEvent $calendar): self
     {
         $this->calendar = $calendar;
+        $this->setEnrolBefore();
 
         return $this;
     }
@@ -572,16 +573,28 @@ class Competition
     public function setEnrolBeforeDays(int $enrolBeforeDays): self
     {
         if ($enrolBeforeDays>7) $this->enrolBeforeDays = $enrolBeforeDays;
+        $this->setEnrolBefore();
 
         return $this;
     }
 
-    public function getEnrolBefore(): \DateTime
+    private function setEnrolBefore(): self
     {
-        return (clone $this->calendar->getStartTime)->modify('midnight')->modify(sprintf("-%ddays", $this->enrolbeforedays));
+        $di = new \DateInterval(sprintf("P%dD", $this->enrolBeforeDays));
+        $di->invert = 1;
+
+        $this->enrolBefore = \DateTimeImmutable::createFromMutable($this->calendar->getStartTime());
+        $this->enrolBefore = $this->enrolBefore->setTime(0,0)->add($di);
+
+        return $this;
     }
 
-    public function getEnrolFrom(): \DateTime
+    public function getEnrolBefore(): \DateTimeInterface
+    {
+        return $this->enrolBefore;
+    }
+
+    public function getEnrolFrom(): \DateTimeInterface
     {
         return $this->enrolFrom;
     }
