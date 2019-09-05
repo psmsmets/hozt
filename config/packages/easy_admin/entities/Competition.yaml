@@ -41,7 +41,7 @@ easy_admin:
                     - { property: 'overnight', label: 'Met overnachting' }
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'organization', label: 'Organisatie', type_options: { attr: { maxlength: 20 }, required: true } }
-                    - { property: 'calendar.location', label: 'Locatie', type: 'text' }
+                    - { property: 'calendar.location', label: 'Locatie', type: 'text', type_options: { required: true } }
                     - { property: 'calendar.url', label: 'Website', type: 'text' }
                     - { type: 'group', label: 'Filter leden', icon: 'filter', css_class: "col-xs-12 col-md-9" }
                     - { property: 'filtersUpToDate', label: 'Filters zijn up-to-date', type: 'checkbox', type_options: { disabled: true } }
