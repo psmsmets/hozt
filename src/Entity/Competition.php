@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Competition
 {
     /**
+     * Parameters
+     */
+    const minAge = 5;
+    const maxAge = 130;
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -91,6 +97,16 @@ class Competition
     private $maleAgeMax;
 
     /**
+     * @ORM\Column(type="smallint")
+     */
+    private $maleBirthyearMin;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $maleBirthyearMax;
+
+    /**
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $femaleAgeMin;
@@ -99,6 +115,16 @@ class Competition
      * @ORM\Column(type="smallint", nullable=true)
      */
     private $femaleAgeMax;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $femaleBirthyearMin;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $femaleBirthyearMax;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\CompetitionPart", mappedBy="competition", orphanRemoval=true)
@@ -187,7 +213,14 @@ class Competition
     public function setCalendar(CalendarEvent $calendar): self
     {
         $this->calendar = $calendar;
+
         $this->setEnrolBefore();
+
+        $this->setMaleBirthyearMin();
+        $this->setMaleBirthyearMax();
+
+        $this->setFemaleBirthyearMin();
+        $this->setFemaleBirthyearMax();
 
         return $this;
     }
@@ -233,7 +266,7 @@ class Competition
 
     public function setOrganization(?string $organization): self
     {
-        $this->organization = $organization;
+        $this->organization = strtoupper($organization);
 
         return $this;
     }
@@ -394,6 +427,9 @@ class Competition
         $this->femaleAgeMin = $this->maleAgeMin;
         $this->femaleAgeMax = $this->maleAgeMax;
 
+        $this->femaleBirthyearMin = $this->maleBirthyearMin;
+        $this->femaleBirthyearMax = $this->maleBirthyearMax;
+
         return $this;
     }
 
@@ -418,6 +454,7 @@ class Competition
     {
         if ($maleAgeMin != $this->maleAgeMin) $this->filtersUpToDate = false;
         $this->maleAgeMin = $maleAgeMin;
+        $this->setMaleBirthyearMax();
 
         return $this;
     }
@@ -431,8 +468,49 @@ class Competition
     {
         if ($maleAgeMax != $this->maleAgeMax) $this->filtersUpToDate = false;
         $this->maleAgeMax = $maleAgeMax;
+        $this->setMaleBirthyearMin();
 
         return $this;
+    }
+
+    private function setMaleBirthyearMin(): self
+    {
+        if (is_null($this->calendar)) return $this;
+
+        $this->maleBirthyearMin = (int) $this->calendar->getStartTime()->format('Y');
+
+        if (is_null($this->maleAgeMax)) {
+            $this->maleBirthyearMin -= self::maxAge;
+        } else {
+            $this->maleBirthyearMin -= $this->maleAgeMax;
+        }
+
+        return $this;
+    }
+
+    public function getMaleBirthyearMin(): ?int
+    {
+        return $this->maleBirthyearMin;
+    }
+
+    private function setMaleBirthyearMax(): self
+    {
+        if (is_null($this->calendar)) return $this;
+
+        $this->maleBirthyearMax = (int) $this->calendar->getStartTime()->format('Y');
+
+        if (is_null($this->maleAgeMin)) {
+            $this->maleBirthyearMax -= self::minAge;
+        } else {
+            $this->maleBirthyearMax -= $this->maleAgeMin;
+        }
+
+        return $this;
+    }
+
+    public function getMaleBirthyearMax(): ?int
+    {
+        return $this->maleBirthyearMax;
     }
 
     public function getFemaleAgeMin(): ?int
@@ -444,6 +522,7 @@ class Competition
     {
         if ($femaleAgeMin != $this->femaleAgeMin) $this->filtersUpToDate = false;
         $this->femaleAgeMin = $femaleAgeMin;
+        $this->setFemaleBirthyearMax();
 
         return $this;
     }
@@ -457,8 +536,49 @@ class Competition
     {
         if ($femaleAgeMax != $this->femaleAgeMax) $this->filtersUpToDate = false;
         $this->femaleAgeMax = $femaleAgeMax;
+        $this->setFemaleBirthyearMin();
 
         return $this;
+    }
+
+    private function setFemaleBirthyearMin(): self
+    {
+        if (is_null($this->calendar)) return $this;
+
+        $this->femaleBirthyearMin = (int) $this->calendar->getStartTime()->format('Y');
+
+        if (is_null($this->femaleAgeMax)) {
+            $this->femaleBirthyearMin -= self::maxAge;
+        } else {
+            $this->femaleBirthyearMin -= $this->femaleAgeMax;
+        }
+
+        return $this;
+    }
+
+    public function getFemaleBirthyearMin(): ?int
+    {
+        return $this->femaleBirthyearMin;
+    }
+
+    private function setFemaleBirthyearMax(): self
+    {
+        if (is_null($this->calendar)) return $this;
+
+        $this->femaleBirthyearMax = (int) $this->calendar->getStartTime()->format('Y');
+
+        if (is_null($this->femaleAgeMin)) {
+            $this->femaleBirthyearMax -= self::minAge;
+        } else {
+            $this->femaleBirthyearMax -= $this->femaleAgeMin;
+        }
+
+        return $this;
+    }
+
+    public function getFemaleBirthyearMax(): ?int
+    {
+        return $this->femaleBirthyearMax;
     }
 
     /**
@@ -581,10 +701,9 @@ class Competition
     private function setEnrolBefore(): self
     {
         $di = new \DateInterval(sprintf("P%dD", $this->enrolBeforeDays));
-        $di->invert = 1;
 
         $this->enrolBefore = \DateTimeImmutable::createFromMutable($this->calendar->getStartTime());
-        $this->enrolBefore = $this->enrolBefore->setTime(0,0)->add($di);
+        $this->enrolBefore = $this->enrolBefore->setTime(0,0)->sub($di);
 
         return $this;
     }
