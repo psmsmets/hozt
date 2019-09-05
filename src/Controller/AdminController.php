@@ -564,6 +564,10 @@ class AdminController extends EasyAdminController
 
     public function removeCalendarEventEntity($entity)
     {
+        if ($entity->getEnabled()) {
+            $this->addFlash('danger', 'Fout: Kalender evenement is gepubliceerd. Verwijderen niet toegestaan.');
+            return;
+        }
         if (!is_null($entity->getCompetition())) {
             $this->addFlash('danger', 'Fout: Kalender evenement heeft gerelateerde data. Verwijderen niet toegestaan.');
             return;

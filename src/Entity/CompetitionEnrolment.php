@@ -26,17 +26,17 @@ class CompetitionEnrolment
     /**
      * @ORM\Column(type="boolean")
      */
+    private $disabled;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
     private $enrolled;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $enrolledAt;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $notified;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
@@ -55,14 +55,15 @@ class CompetitionEnrolment
      */
     private $competitionPart;
 
-    public function __construct(bool $enrolled = true, Member $member = null)
+    public function __construct(CompetitionPart $competitionPart, Member $member, bool $enrolled = true, bool $disabled = false)
     {
         $this->createdAt = new \DateTimeImmutable('now');
         $this->enrolled = $enrolled;
+        $this->enrolled = $disabled;
         $this->enrolledAt = null;
-        $this->notified = false;
         $this->notifiedAt = null;
-        if (!is_null($member)) $this->setMember($member);
+        $this->setCompetitionPart($competitionPart);
+        $this->setMember($member);
     }
 
     public function getId(): ?int
@@ -75,6 +76,11 @@ class CompetitionEnrolment
         return $this->createdAt;
     }
 
+    public function getEnrolledAt(): ?\DateTimeImmutable
+    {
+        return $this->enrolledAt;
+    }
+
     public function getEnrolled(): ?bool
     {
         return $this->enrolled;
@@ -82,33 +88,32 @@ class CompetitionEnrolment
 
     public function setEnrolled(bool $enrolled): self
     {
-        $this->enrolled = $enrolled;
-        $this->setEnrolledAt();
+        if ($enrolled) {
+            $this->enrolled = $enrolled;
+            $this->enrolledAt = new \DateTimeImmutable('now');
+        }
 
         return $this;
     }
 
-    public function getEnrolledAt(): ?\DateTimeImmutable
+    public function getDisabled(): ?bool
     {
-        return $this->enrolledAt;
+        return $this->disabled;
     }
 
-    public function setEnrolledAt(): self
+    public function getBtnDisabled(): ?bool
     {
-        $this->enrolledAt = new \DateTimeImmutable('now');
-
-        return $this;
+        return $this->disabled or $this->competitionPart->isInactive();
     }
 
-    public function getNotified(): ?bool
+    public function getBtnDisabledString(): string
     {
-        return $this->notified;
+        return $this->getBtnDisabled() ? 'disabled' : '';
     }
 
-    public function setNotified(bool $notified): self
+    public function setDisabled(bool $disabled): self
     {
-        $this->notified = $notified;
-        $this->setNotifiedAt();
+        $this->enrolled = $disabled;
 
         return $this;
     }
@@ -118,9 +123,14 @@ class CompetitionEnrolment
         return $this->notifiedAt;
     }
 
-    public function setNotifiedAt(): self
+    public function getNotified(): ?bool
     {
-        $this->notifiedAt = new \DateTimeImmutable('now');
+        return !is_null($this->notifiedAt);
+    }
+
+    public function setNotified(bool $notified): self
+    {
+        if ($notified) $this->notifiedAt = new \DateTimeImmutable('now');
 
         return $this;
     }

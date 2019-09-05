@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190823081547 extends AbstractMigration
+final class Version20190905064501 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,9 +22,7 @@ final class Version20190823081547 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE competition_enrolment DROP FOREIGN KEY FK_6BAD1D76296CD8AE');
-        $this->addSql('DROP INDEX IDX_6BAD1D76296CD8AE ON competition_enrolment');
-        $this->addSql('ALTER TABLE competition_enrolment DROP team_id, DROP uuid, DROP updated_at');
+        $this->addSql('ALTER TABLE competition_part CHANGE day daypart DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\'');
     }
 
     public function down(Schema $schema) : void
@@ -32,8 +30,6 @@ final class Version20190823081547 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE competition_enrolment ADD team_id INT DEFAULT NULL, ADD uuid VARCHAR(255) NOT NULL COLLATE utf8mb4_unicode_ci, ADD updated_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('ALTER TABLE competition_enrolment ADD CONSTRAINT FK_6BAD1D76296CD8AE FOREIGN KEY (team_id) REFERENCES training_team (id)');
-        $this->addSql('CREATE INDEX IDX_6BAD1D76296CD8AE ON competition_enrolment (team_id)');
+        $this->addSql('ALTER TABLE competition_part CHANGE daypart day DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\'');
     }
 }

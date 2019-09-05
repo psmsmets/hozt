@@ -32,7 +32,6 @@ easy_admin:
                     - { property: 'calendar.trueEndTime', label: 'Tot', type: 'datetime', type_options: { disabled: true } }
 
 
-                    - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'calendar.body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
                     #- { property: 'delegate', label: 'Afgevaardigde' }
                     #- { property: 'coaches', label: 'Trainers' }
@@ -45,6 +44,7 @@ easy_admin:
                     - { property: 'calendar.url', label: 'Website', type: 'text' }
                     - { type: 'group', label: 'Filter leden', icon: 'filter', css_class: "col-xs-12 col-md-9" }
                     - { property: 'filtersUpToDate', label: 'Filters zijn up-to-date', type: 'checkbox', type_options: { disabled: true } }
+                    - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, css_class: 'mb-4' }
                     - { property: 'noregistrationid', label: 'Niet-vergunningshouders', type: 'checkbox' }
                     - { property: 'restrictions', label: 'Limieten' }
                     - { property: 'similarGenderAgeLimits', label: 'Zelfde leeftijden voor jongens/meisjes', help: 'Geef bij gelijke leeftijdslimieten enkel de jongens in. Geen geboortejaren maar leeftijden invullen.' }
@@ -131,18 +131,16 @@ easy_admin:
                     - { property: 'cleanupDelay', label: 'Verwijder timeout (dagen)' }
 
 
-        CompetitionPartNew:
+        CompetitionPartDraft:
             class: App\Entity\CompetitionPart
-            label: 'Nieuwe dagdelen'
+            label: 'Draft dagdelen'
             list:
                 fields:
                     - { property: 'competition.name', label: 'Wedstrijd', type: 'text' }
                     - { property: 'competition.organization', label: 'Org.', type: 'text' }
-                    - { property: 'day', label: 'Datum', template: 'easy_admin/localizeddate.html.twig' }
-                    - { property: 'dayPart', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
-                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
-                    - { property: 'enrolments', label: 'Inschrijvingen' }
-                sort: ['day', 'ASC']
+                    - { property: 'daypart', label: 'Datum', template: 'easy_admin/localizeddate.html.twig' }
+                    - { property: 'partname', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
+                sort: ['daypart', 'ASC']
                 dql_filter: 'entity.enabledAt is null'
                 actions: ['-new','-edit','delete']
                 batch_actions: ['enable']
@@ -154,11 +152,28 @@ easy_admin:
                 fields:
                     - { property: 'competition.name', label: 'Wedstrijd', type: 'text' }
                     - { property: 'competition.organization', label: 'Org.', type: 'text' }
-                    - { property: 'day', label: 'Datum', template: 'easy_admin/localizeddate.html.twig' }
-                    - { property: 'dayPart', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
+                    - { property: 'daypart', label: 'Datum', template: 'easy_admin/localizeddate.html.twig' }
+                    - { property: 'partname', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
                     - { property: 'cancelled', label: 'Geannul.', type: 'boolean' }
                     - { property: 'enrolments', label: 'Inschrijvingen' }
-                sort: ['day', 'ASC']
+                sort: ['daypart', 'ASC']
                 dql_filter: 'entity.archived = false AND entity.enabledAt is not null'
                 actions: ['-new','-edit','-delete']
                 batch_actions: ['enable']
+
+        CompetitionEnrolments:
+            class: App\Entity\CompetitionEnrolment
+            label: 'Inschrijvingen'
+            list:
+                fields:
+                    - { property: 'member', label: 'Naam', type: 'text' }
+                    - { property: 'competitionPart.day', label: 'Datum', template: 'easy_admin/localizeddate.html.twig' }
+                    - { property: 'competitionPart.dayPart', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
+                    #- { property: 'competition.name', label: 'Wedstrijd', type: 'text' }
+                    #- { property: 'competition.organization', label: 'Org.', type: 'text' }
+                    #- { property: 'cancelled', label: 'Geannul.', type: 'boolean' }
+                    #- { property: 'enrolments', label: 'Inschrijvingen' }
+                #sort: ['day', 'ASC']
+                #dql_filter: 'entity.archived = false AND entity.enabledAt is not null'
+                actions: ['-new','-edit','-delete']
+                #batch_actions: ['enable']

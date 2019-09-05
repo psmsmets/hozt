@@ -116,7 +116,7 @@ class Competition
     private $enrolBefore;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $enrolFrom;
 
@@ -132,6 +132,7 @@ class Competition
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
         $this->enrolFrom = null;
+        $this->enrolBeforeDays = 21;
         $this->filtersUpToDate = true;
         $this->overnight = false;
         $this->registrationId = true;
@@ -198,32 +199,6 @@ class Competition
     public function getArchived(): bool
     {
         return $this->calendar->getArchived();
-    }
-
-    /**
-     * @return Collection|TrainingTeam[]
-     */
-    public function getTeams(): Collection
-    {
-        return $this->teams;
-    }
-
-    public function addTeam(TrainingTeam $team): self
-    {
-        if (!$this->teams->contains($team)) {
-            $this->teams[] = $team;
-        }
-
-        return $this;
-    }
-
-    public function removeTeam(TrainingTeam $team): self
-    {
-        if ($this->teams->contains($team)) {
-            $this->teams->removeElement($team);
-        }
-
-        return $this;
     }
 
     public function getOvernight(): ?bool
@@ -330,6 +305,34 @@ class Competition
     public function setFiltersUpToDate(bool $filtersUpToDate): self
     {
         $this->filtersUpToDate = $filtersUpToDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TrainingTeam[]
+     */
+    public function getTeams(): Collection
+    {
+        return $this->teams;
+    }
+
+    public function addTeam(TrainingTeam $team): self
+    {
+        if (!$this->teams->contains($team)) {
+            $this->teams[] = $team;
+            $this->filtersUpToDate = false;
+        }
+
+        return $this;
+    }
+
+    public function removeTeam(TrainingTeam $team): self
+    {
+        if ($this->teams->contains($team)) {
+            $this->teams->removeElement($team);
+            $this->filtersUpToDate = false;
+        }
 
         return $this;
     }
@@ -465,6 +468,13 @@ class Competition
         return $this->competitionParts;
     }
 
+    public function getActiveCompetitionParts(): Collection
+    {
+        return $this->competitionParts->filter(function(CompetitionPart $competitionPart) {
+            return $competitionPart->isActive();
+        });
+    }
+
     public function addCompetitionPart(CompetitionPart $competitionPart): self
     {
         if (!$this->competitionParts->contains($competitionPart)) {
@@ -486,6 +496,28 @@ class Competition
         }
 
         return $this;
+    }
+
+    public function getFirstDayCompetitionParts(): ?\DateTimeInterface
+    {
+        $nofCompetitionParts = count($this->competitionParts);
+        if ($nofCompetitionParts==0) return null;
+        $day = $this->competitionParts[0]->getDay();
+        for ($i=1; $i < $nofCompetitionParts; $i++) {
+            if ($this->competitionParts[$i]->getDay() < $day) $day = $this->competitionParts[$i]->getDay();
+        }
+        return $day;
+    }
+
+    public function getLastDayCompetitionParts(): ?\DateTimeInterface
+    {
+        $nofCompetitionParts = count($this->competitionParts);
+        if ($nofCompetitionParts==0) return null;
+        $day = $this->competitionParts[0]->getDay();
+        for ($i=1; $i < $nofCompetitionParts; $i++) {
+            if ($this->competitionParts[$i]->getDay() > $day) $day = $this->competitionParts[$i]->getDay();
+        }
+        return $day;
     }
 
     public function getReapplyFilters(): bool
@@ -524,10 +556,10 @@ class Competition
         return $this;
     }
 
-    public function competitionPartExists(\DateTime $day, int $part): bool
+    public function competitionPartExists(\DateTimeImmutable $day, int $part): bool
     {
         foreach ($this->competitionParts as $competitionPart) {
-            if ($competitionPart->getDay() == $day && $competitionPart->getPart() == $part) return true;
+            if ($competitionPart->getDay() === $day && $competitionPart->getPart() === $part) return true;
         }
         return false;
     }
@@ -562,7 +594,7 @@ class Competition
     public function setEnrol(bool $enrol): self
     {
         if (is_null($this->enrolFrom) && $enrol) {
-            $this->enrolFrom = new \DateTime('now');
+            $this->enrolFrom = new \DateTimeImmutable('now');
         }
 
         return $this;
