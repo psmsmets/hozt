@@ -147,7 +147,7 @@ class CalendarEvent
         $this->startTime = new \DateTime("today noon"); 
         $this->endTime = new \DateTime("today noon");
         $this->allDay = true;
-        $this->enabled = true;
+        $this->enabled = false;
         $this->archived = false;
         $this->cancelled = false;
         $this->isCompetition = true;
@@ -188,9 +188,19 @@ class CalendarEvent
 
     public function setEnabled(bool $enabled): self
     {
-        $this->enabled = $enabled;
+        $this->enabled = $this->enabled or $enabled; // keep activated
 
         return $this;
+    }
+
+    public function getDraft(): ?bool
+    {
+        return !$this->enabled;
+    }
+
+    public function setDraft(bool $draft): ?bool
+    {
+        return $this->setEnabled(!$draft);
     }
 
     public function getArchived(): ?bool
@@ -236,10 +246,11 @@ class CalendarEvent
 
     public function setStartTime(\DateTimeInterface $startTime): self
     {
-        if (!is_null($this->getCompetition())) {
-            dd($this->startTime);
-// check if competition parts are set. New start date should not exclude this day.
-            return $this;
+        if ($this->hasCompetition()) {
+            $start = $this->competition->getFirstDayCompetitionParts();
+            if (!is_null($start)) {
+                if ($startTime > $start->modify('+1day -1sec')) return $this;
+            }    
         }
         $this->startTime = $startTime;
 
@@ -267,6 +278,12 @@ class CalendarEvent
 
     public function setEndTime(?\DateTimeInterface $endTime): self
     {
+        if ($this->hasCompetition()) {
+            $end = $this->competition->getLastDayCompetitionParts();
+            if (!is_null($end)) {
+                if ($endTime < $end) return $this;
+            }    
+        }
         $this->endTime = $endTime;
 
         return $this;
@@ -374,7 +391,7 @@ class CalendarEvent
         $end = $this->calcEndTime();
 
         while ($day < $end) {
-            $daylist[] = clone $day;
+            $daylist[] = \DateTimeImmutable::createFromMutable($day);
             $day->modify('+1 day');
         }
         return $daylist;
@@ -537,6 +554,10 @@ class CalendarEvent
         }
 
         return $this;
+    }
+    public function hasCompetition(): ?bool
+    {
+        return !is_null($this->competition);
     }
 
     /**

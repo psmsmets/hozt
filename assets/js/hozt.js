@@ -5,6 +5,10 @@ require('jquery.scrollTo');
 import { CountUp } from 'countup.js';
 import sessionTimeout from '@travishorn/session-timeout';
 
+var $ = require('jquery');
+window.$ = $;
+window.jQuery = $;
+
 
 // Hide Header on on scroll down
 var didScroll;

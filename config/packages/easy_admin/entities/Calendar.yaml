@@ -33,9 +33,10 @@ easy_admin:
 
         CalendarEvent:
             class: App\Entity\CalendarEvent
-            label: 'Kalender :: events'
+            label: 'Kalender :: event'
             list:
                 fields:
+                    - { property: 'draft', label: 'Draft', type: 'boolean' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'startTime', label: 'Van' }
                     - { property: 'trueEndTime', label: 'Tot', template: 'easy_admin/date_interval_template_datetime.html.twig', css_class: 'small' }
@@ -49,6 +50,7 @@ easy_admin:
             form:
                 fields:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
+                    - { property: 'enabled', label: 'Actief', help: 'Eens actief/gepubliceerd kan je het event niet meer verwijderen.' }
                     - { property: 'title', label: 'Titel' }
                     - { property: 'startTime', label: 'Van' }
                     - { property: 'endTime', label: 'Tot' }
@@ -56,7 +58,6 @@ easy_admin:
                     - { property: 'body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
                     - { property: 'cancelled', label: 'Geannuleerd' }
                     - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
-                    - { property: 'enabled', label: 'Actief' }
                     - { property: 'isCompetition', label: 'Zwemwedstrijd' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
                     - { property: 'description', label: 'Omschrijving', type: 'textarea' }

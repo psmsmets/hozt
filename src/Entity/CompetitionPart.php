@@ -49,9 +49,9 @@ class CompetitionPart
     private $archived;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime_immutable")
      */
-    private $day;
+    private $daypart;
 
     /**
      * @ORM\Column(type="smallint")
@@ -59,7 +59,7 @@ class CompetitionPart
     private $part;
 
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=32, unique=true)
      */
     private $hash;
 
@@ -74,15 +74,17 @@ class CompetitionPart
      */
     private $enrolments;
 
-    public function __construct(Competition $competition, \DateTime $day, int $part)
+    public function __construct(Competition $competition, \DateTimeImmutable $day, int $part)
     {
         $this->enabledAt = null;
         $this->cancelledAt = null;
         $this->archived = false;
         $this->competition = $competition;
-        $this->day = $day;
-        if (array_key_exists($part,CompetitionPart::dayParts)) $this->part = $part;
-        $this->hash = md5(sprintf('%d;%d;%d', $this->competition->getCalendar()->getId(), $this->day->getTimestamp(), $this->part ));
+        if (array_key_exists($part,CompetitionPart::dayParts)) {
+            $this->part = $part;
+            $this->daypart = $day->setTime(0,$this->part);
+            $this->hash = md5(sprintf('%d;%d;%d', $this->competition->getCalendar()->getId(), $this->daypart->getTimestamp(), $this->part ));
+        }
         $this->enrolments = new ArrayCollection();
     }
 
@@ -93,19 +95,19 @@ class CompetitionPart
 
     public function getName(): string
     {
-        return sprintf('%s | %s | %s', $this->day->format('Y-m-d'), $this->competition->getCalendar()->getLocation(), $this->getDaypart());
+        return sprintf('%s | %s | %s', $this->daypart->format('Y-m-d'), $this->competition->getCalendar()->getLocation(), $this->getPartName());
     }
 
     public function getFullName(): string
     {
         $calendar = $this->competition->getCalendar();
-        return sprintf('%s %s %s %s', $this->day->format('Y-m-d'), $calendar->getTitle(), $calendar->getLocation(), $this->getDaypart());
+        return sprintf('%s %s %s %s', $this->daypart->format('Y-m-d'), $calendar->getTitle(), $calendar->getLocation(), $this->getPartName());
     }
 
     public function getLongName(): string
     {
         $calendar = $this->competition->getCalendar();
-        return sprintf('%s | %s | %s', $this->day->format('Y-m-d'), $calendar->getTitle(), $calendar->getLocation());
+        return sprintf('%s | %s | %s', $this->daypart->format('Y-m-d'), $calendar->getTitle(), $calendar->getLocation());
     }
 
     public function getId(): ?int
@@ -118,7 +120,7 @@ class CompetitionPart
         return $this->hash;
     }
 
-    public function getEnabledAt(): ?\DateTime
+    public function getEnabledAt(): ?\DateTimeInterface
     {
         return $this->enabledAt;
     }
@@ -128,17 +130,32 @@ class CompetitionPart
         return !is_null($this->enabledAt);
     }
 
+    public function isDraft(): ?bool
+    {
+        return !$this->getEnabled();
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->getEnabled() and !$this->getCancelled();
+    }
+
+    public function isInactive(): ?bool
+    {
+        return $this->isDraft() or $this->getCancelled();
+    }
+
     public function setEnabled(bool $enabled): self
     {
-        if (is_null($this->enabledAt) && $enabled) {
+        if (is_null($this->enabledAt) and $enabled) {
             $this->enabled = true;
-            $this->enabledAt = new \DateTime('now');
+            $this->enabledAt = new \DateTimeImmutable('now');
         }
 
         return $this;
     }
 
-    public function getCancelledAt(): ?\DateTime
+    public function getCancelledAt(): ?\DateTimeInterface
     {
         return $this->cancelledAt;
     }
@@ -152,7 +169,7 @@ class CompetitionPart
     {
         if (is_null($this->cancelledAt) && $cancelled) {
             $this->cancelled = true;
-            $this->cancelledAt = new \DateTime('now');
+            $this->cancelledAt = new \DateTimeImmutable('now');
         }
 
         return $this;
@@ -170,17 +187,22 @@ class CompetitionPart
         return $this;
     }
 
-    public function getDay(): ?\DateTime
+    public function getDay(): ?\DateTimeImmutable
     {
-        return $this->day;
+        return $this->daypart->modify('midnight');
     }
 
-    public function getPart(): ?int
+    public function getDayPart(): ?\DateTimeInterface
+    {
+        return $this->daypart;
+    }
+
+    public function getPartId(): ?int
     {
         return $this->part;
     }
 
-    public function getDaypart(): ?string
+    public function getPartName(): ?string
     {
         return CompetitionPart::dayParts[$this->part];
     }
