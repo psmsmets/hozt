@@ -18,6 +18,7 @@ easy_admin:
                     - { property: 'organization', label: 'Org.' }
                     - { property: 'pool', label: 'Bad', type: 'text' }
                     - { property: 'enrol', label: 'Inschr.', type: 'boolean' }
+                    - { property: 'enrolBefore', label: 'Tot', template: 'easy_admin/localizeddate_medium.html.twig' }
                     - { property: 'competitionParts', label: 'Delen' }
                     - { property: 'restrictions', label: 'Limiet', type: 'boolean' }
                     - { property: 'registrationid', label: 'Vergunning', type: 'boolean' }
@@ -138,7 +139,7 @@ easy_admin:
                 fields:
                     - { property: 'competition.name', label: 'Wedstrijd', type: 'text' }
                     - { property: 'competition.organization', label: 'Org.', type: 'text' }
-                    - { property: 'daypart', label: 'Datum', template: 'easy_admin/localizeddate.html.twig' }
+                    - { property: 'daypart', label: 'Datum', template: 'easy_admin/localizeddate_full.html.twig' }
                     - { property: 'partname', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
                 sort: ['daypart', 'ASC']
                 dql_filter: 'entity.enabledAt is null'
