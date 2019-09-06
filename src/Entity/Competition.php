@@ -170,7 +170,11 @@ class Competition
 
     public function __toString(): string
     {
-        return sprintf('%s %s', $this->calendar->getStartTime()->format('Y-m-d'), $this->calendar->getLocation());
+        return sprintf('%s %s (%s)', 
+                $this->calendar->getStartTime()->format('Y-m-d'), 
+                $this->calendar->getTitle(),
+                $this->calendar->getLocation()
+            );
     }
 
     public function getName(): string
@@ -677,7 +681,7 @@ class Competition
         return $this;
     }
 
-    public function competitionPartExists(\DateTimeImmutable $day, int $part): bool
+    public function competitionPartExists(\DateTimeInterface $day, int $part): bool
     {
         foreach ($this->competitionParts as $competitionPart) {
             if ($competitionPart->getDay() === $day && $competitionPart->getPart() === $part) return true;
