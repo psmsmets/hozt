@@ -625,8 +625,9 @@ class AdminController extends EasyAdminController
         $em = $this->getDoctrine()->getManagerForClass($class);
 
         foreach ($ids as $id) {
-            $entities = $em->find($id);
-            $entities->setEnabled(true);
+            $entities = $em->find($class,$id);
+            if (method_exists($entities, 'setEnabled')) $entities->setEnabled(true);
+            if ($class === 'App\Entity\CompetitionPart' and $entities->getEnabled()) $this->competitionManager->addCompetitionPartEnrolments($entities);
         }
 
         $this->em->flush();
@@ -635,6 +636,20 @@ class AdminController extends EasyAdminController
         // when a batch action finishes, user is redirected to the original page
     }
 
+    public function addEnrolmentsBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        if ($class !== 'App\Entity\Competition') return;
+
+        $em = $this->getDoctrine()->getManagerForClass($class);
+
+        foreach ($ids as $id) {
+            $entities = $em->find($class,$id);
+            $this->competitionManager->addEnrolments($entities);
+        }
+
+        $this->em->flush();
+    }
 
 /*
     public function createTrainingCoachEntityFormBuilder($entity, $view)

@@ -220,6 +220,23 @@ class CompetitionPart
         return $this->enrolments;
     }
 
+    public function hasEnrolments(): bool
+    {
+        return count($this->enrolments)>0;
+    }
+
+    public function getMemberEnrolment(Member $member): bool
+    {
+        return $this->enrolments->filter(function(CompetitionEnrolment $enrolment) use($member) {
+            return $enrolment->getMember() === $member;
+        });
+    }
+
+    public function hasMemberEnrolment(Member $member): bool
+    {
+        return count($this->getMemberEnrolment($member)) == 1;
+    }
+
     public function addEnrolment(CompetitionEnrolment $enrolment): self
     {
         if (!$this->enrolments->contains($enrolment)) {

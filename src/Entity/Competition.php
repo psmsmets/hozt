@@ -35,6 +35,11 @@ class Competition
     private $updatedAt;
 
     /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $enabledAt;
+
+    /**
      * @ORM\OneToOne(targetEntity="App\Entity\CalendarEvent", inversedBy="competition", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
@@ -142,11 +147,6 @@ class Competition
     private $enrolBefore;
 
     /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
-    private $enrolFrom;
-
-    /**
      * Virtual variables
      */
     private $reapplyFilters = false;
@@ -157,7 +157,7 @@ class Competition
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->enrolFrom = null;
+        $this->enabledAt = null;
         $this->enrolBeforeDays = 21;
         $this->filtersUpToDate = true;
         $this->overnight = false;
@@ -593,10 +593,10 @@ class Competition
         return $this->competitionParts;
     }
 
-    public function getActiveCompetitionParts(): Collection
+    public function getEnabledCompetitionParts(): Collection
     {
         return $this->competitionParts->filter(function(CompetitionPart $competitionPart) {
-            return $competitionPart->isActive();
+            return $competitionPart->isActive() and $competitionPart->hasEnrolments();
         });
     }
 
@@ -621,6 +621,16 @@ class Competition
         }
 
         return $this;
+    }
+
+    public function hasCompetitionParts(): bool
+    {
+        return count($this->getCompetitionParts())>0;
+    }
+
+    public function hasActiveCompetitionParts(): bool
+    {
+        return count($this->getActiveCompetitionParts())>0;
     }
 
     public function getFirstDayCompetitionParts(): ?\DateTimeInterface
@@ -719,21 +729,37 @@ class Competition
 
     public function getEnrolFrom(): \DateTimeInterface
     {
-        return $this->enrolFrom;
+        return $this->enabledAt;
+    }
+
+    public function getEnabledAt(): \DateTimeInterface
+    {
+        return $this->enabledAt;
     }
 
     public function getEnrol(): bool
     {
-        return !is_null($this->enrolFrom);
+        return !is_null($this->enabledAt);
     }
 
-    public function setEnrol(bool $enrol): self
+    public function getEnabled(): bool
     {
-        if (is_null($this->enrolFrom) && $enrol) {
-            $this->enrolFrom = new \DateTimeImmutable('now');
+        return !is_null($this->enabledAt);
+    }
+
+    public function setEnabled(bool $enabled): self
+    {
+        if (is_null($this->enabledAt) and $enabled) {
+            if (!$this->hasActiveCompetitionParts()) return $this;
+            $this->enabledAt = new \DateTimeImmutable('now');
         }
 
         return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->getEnabled();
     }
 
 }

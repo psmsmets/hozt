@@ -13,6 +13,7 @@ easy_admin:
             label: 'Zwemwedstrijd'
             list:
                 fields:
+                    #- { property: 'id', label: 'id' }
                     - { property: 'calendar', label: 'Kalender event', type: 'text' }
                     - { property: 'calendar.location', label: 'Locatie' }
                     - { property: 'organization', label: 'Org.' }
@@ -24,6 +25,7 @@ easy_admin:
                     - { property: 'registrationid', label: 'Vergunning', type: 'boolean' }
                 sort: ['calendar.startTime', 'ASC']
                 dql_filter: 'calendar.archived = false AND calendar.cancelled = false'
+                batch_actions: ['enable','updateEnrolments']
             form:
                 fields:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
@@ -45,15 +47,15 @@ easy_admin:
                     - { property: 'calendar.url', label: 'Website', type: 'text' }
                     - { type: 'group', label: 'Filter leden', icon: 'filter', css_class: "col-xs-12 col-md-9" }
                     - { property: 'filtersUpToDate', label: 'Filters zijn up-to-date', type: 'checkbox', type_options: { disabled: true } }
-                    - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, css_class: 'mb-4' }
+                    - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, css_class: 'mb-4', help: 'Selecteer de trainingsgroep die deelneemt aan de wedstrijd. Enkel geselecteerde groepen kunnen inschrijven.' }
                     - { property: 'noregistrationid', label: 'Niet-vergunningshouders', type: 'checkbox' }
                     - { property: 'restrictions', label: 'Limieten' }
-                    - { property: 'similarGenderAgeLimits', label: 'Zelfde leeftijden voor jongens/meisjes', help: 'Geef bij gelijke leeftijdslimieten enkel de jongens in. Geen geboortejaren maar leeftijden invullen.' }
+                    - { property: 'similarGenderAgeLimits', label: 'Zelfde leeftijden voor jongens/meisjes', help: 'Geef bij gelijke leeftijdslimieten enkel de jongens in. Geen geboortejaren maar leeftijden invullen. Het geboortejaar wordt nadien bepaald met de datum van de wedstrijd.' }
                     - { property: 'maleAgeMin', label: 'Jongens vanaf', css_class: "col-xs-12 col-md-3", help: 'leeg is geen minimale leeftijd', type_options: { attr: { min: 5, max: 25 } } }
                     - { property: 'maleAgeMax', label: 'Jongens tot en met', css_class: "col-xs-12 col-md-3", help: 'leeg is geen maximale leeftijd', type_options: { attr: { min: 9, max: 99 } } }
                     - { property: 'femaleAgeMin', label: 'Meisjes vanaf', css_class: "col-xs-12 col-md-3", help: 'leeg is geen minimale leeftijd', type_options: { attr: { min: 5, max: 25 } } }
                     - { property: 'femaleAgeMax', label: 'Meisjes tot en met', css_class: "col-xs-12 col-md-3", help: 'leeg is geen maximale leeftijd', type_options: { attr: { min: 9, max: 99 } } }
-                    - { property: 'reapplyFilters', label: 'Filters opnieuw toepassen op inschrijvingen', type: 'checkbox', help: 'Opgelet. Manuele wijzigingen van inschrijvingen worden overschreven.', css_class: 'mt-4' }
+                    - { property: 'reapplyFilters', label: 'Filters opnieuw toepassen op inschrijvingen', type: 'checkbox', help: 'Opgelet. Aanpassingen aan de status van de inschrijvingen worden overschreven.', css_class: 'mt-4' }
                     - { type: 'group', label: 'Inschrijvingen (dagdelen)', icon: 'check', css_class: "col-xs-12 col-md-9" }
                     - { property: 'enrolBeforeDays', label: 'Inschrijftermijn (dagen voor aanvang wedstrijd)', css_class: "", type_options: { attr: { min: 7, max: 30 } } }
                     - { property: 'competitionParts', label: 'Dagdelen', type_options: { multiple: true, disabled: true }, template: 'easy_admin/trans.html.twig' }
@@ -153,7 +155,7 @@ easy_admin:
                 fields:
                     - { property: 'competition.name', label: 'Wedstrijd', type: 'text' }
                     - { property: 'competition.organization', label: 'Org.', type: 'text' }
-                    - { property: 'daypart', label: 'Datum', template: 'easy_admin/localizeddate.html.twig' }
+                    - { property: 'daypart', label: 'Datum', template: 'easy_admin/localizeddate_full.html.twig' }
                     - { property: 'partname', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
                     - { property: 'cancelled', label: 'Geannul.', type: 'boolean' }
                     - { property: 'enrolments', label: 'Inschrijvingen' }

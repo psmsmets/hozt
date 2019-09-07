@@ -194,6 +194,16 @@ class Member
         return $this;
     }
 
+    public function isMale(): ?bool
+    {
+        return $this->gender === 'M';
+    }
+
+    public function isFemale(): ?bool
+    {
+        return $this->gender === 'F';
+    }
+
     public function getBirthdate(): ?\DateTimeInterface
     {
         return $this->birthdate;
@@ -204,6 +214,11 @@ class Member
         $this->birthdate = $birthdate;
 
         return $this;
+    }
+
+    public function getBirthyear(): ?int
+    {
+        return (int) $this->birthdate->format('Y');
     }
 
     public function getAddress(): ?MemberAddress

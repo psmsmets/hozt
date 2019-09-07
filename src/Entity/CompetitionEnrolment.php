@@ -59,7 +59,7 @@ class CompetitionEnrolment
     {
         $this->createdAt = new \DateTimeImmutable('now');
         $this->enrolled = $enrolled;
-        $this->enrolled = $disabled;
+        $this->disabled = $disabled;
         $this->enrolledAt = null;
         $this->notifiedAt = null;
         $this->setCompetitionPart($competitionPart);
