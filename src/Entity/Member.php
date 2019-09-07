@@ -293,7 +293,7 @@ class Member
 
     public function setTeam(?TrainingTeam $team): self
     {
-        $this->teamChanged = $this->team !== $team;
+        if (!is_null($team)) $this->teamChanged = $this->team !== $team;
         $this->team = $team;
 
         return $this;

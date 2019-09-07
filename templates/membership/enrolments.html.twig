@@ -4,6 +4,11 @@
 
 {% block main %}
 
+{% set members = app.user.getMembers() %}
+{% set class_true = 'fas fa-check-square text-success' %}
+{% set class_false = 'fas fa-minus-square text-warning' %}
+{% set class_disabled = 'fas fa-square text-medium' %}
+
   <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
 
     <h2 class="text-primary d-flex justify-content-between">Mijn wedstrijden</h2>
@@ -11,72 +16,54 @@
 <div class="row">
   <div class="col-12 col-md-3">
     <div class="nav flex-column nav-pills" id="enrolments-tab" role="tablist" aria-orientation="vertical">
-      <div class="mb-3 d-none d-md-block text-right">Filter:</div>
       <a class="nav-link active" id="enrolments-messages-tab" data-toggle="pill" href="#enrolments-upcoming" role="tab" aria-controls="enrolments-upcoming" aria-selected="false">Aanstaande</a>
       <a class="nav-link" id="enrolments-new-tab" data-toggle="pill" href="#enrolments-new" role="tab" aria-controls="enrolments-new" aria-selected="false">Nieuw <span class="badge badge-light">0</span></a>
-      <a class="nav-link" id="enrolments-members-tab" data-toggle="pill" href="#enrolments-all" role="tab" aria-controls="enrolments-all" aria-selected="true">Alles</a>
+      <a class="nav-link" id="enrolments-members-tab" data-toggle="pill" href="#enrolments-all" role="tab" aria-controls="enrolments-all" aria-selected="true">Dit seizoen</a>
       <a class="nav-link" id="enrolments-settings-tab" data-toggle="pill" href="#enrolments-archive" role="tab" aria-controls="enrolments-archive" aria-selected="false">Archief</a>
     </div>
   </div>
   <div class="col-12 col-md-9 mt-3 mt-md-0 mx-2 mx-md-0">
 
-    <ul class="list-inline mb-3">
-      <li class="list-inline-item d-md-none">Filter: </li>
-    {% for member in app.user.getMembers() %}
-      <li class="list-inline-item"><a class="text-dark" href="#" data-filter="{{member.uuid}}"><u>{{member.firstname}}</u></a></li>
-    {% endfor %}
-    </ul>
-
     <div class="tab-content" id="enrolments-tabContent">
-      <div class="tab-pane fade show active" id="enrolments-upcoming" role="tabpanel" aria-labelledby="enrolments-upcoming-tab">
-        Alle aanstaande (waarvoor ingeschreven?)
 
-<p>Meerdaagse wedstrijden : optie opslitsen inschrijving.</p>
-
-<ul class="list-inline">
-      <li class="list-inline-item"><i class="fas fa-check-square text-success"></i> aangemeld</li>
-      <li class="list-inline-item"><i class="fas fa-minus-square text-danger"></i> afgemeld</li>
-      <li class="list-inline-item"><i class="fas fa-square text-medium"></i> niet beschikbaar</li>
-</ul>
-
-<table class="table table-sm text-center">
+<div class="table-responsive">
+<table class="table table-hover text-center">
   <thead>
     <tr>
       <th scope="col" class="text-right">Datum/locatie</th>
-      <th scope="col">Zwemmer 1</th>
-      <th scope="col">Zwemmer 2</th>
-      <th scope="col">Zwemmer 3</th>
+      {% for member in members %}
+      <th scope="col">{{member.team.abbr}}<br/>{{member.firstname}}</th>
+      {% endfor %}
     </tr>
   </thead>
   <tbody>
+    {% for competition in page.competitions %}
     <tr>
-      <th scope="row" class="text-right"><a href="/kalender" target="_Blank" class="text-dark">1 sep 19 | Antwerpen</a></th>
-      <td><i class="fas fa-check-square text-success"></i></td>
-      <td><i class="fas fa-minus-square text-danger"></i></td>
-      <td><i class="fas fa-minus-square text-danger"></i></td>
+      <th scope="row" class="text-right" colspan={{1+members|length}}><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}}</a></th>
     </tr>
+      {% for cpart in competition.competitionParts %}
     <tr>
-      <th scope="row" class="text-right"><a href="/kalender/9339985b68f3a240" target="_Blank" class="text-dark">23 nov 19 | Hoogstraten</a></th>
-      <td><i class="fas fa-square text-medium"></i></td>
-      <td><i class="fas fa-check-square text-success"></i></td>
-      <td><i class="fas fa-minus-square text-danger"></i></td>
+      <td scope="row" class="text-right">{{cpart.daypart|localizeddate('full','none')}} | {{cpart.partname|trans}}</td>
+        {% for enrolment in cpart.enrolments %}
+        <td><i class="{% if enrolment.disabled %}{{class_disabled}}{%else%}{%if enrolment.enrolled%}{{class_true}}{%else%}{{class_false}}{%endif%}{%endif%}"></i></td>
+        {% endfor %}
+      {% endfor %}
     </tr>
-    <tr>
-      <th scope="row" class="text-right"><a href="/kalender/bd7c9c76e7968913" target="_Blank" class="text-dark">1 feb 20 | Hoogstraten</a></th>
-      <td><i class="fas fa-check-square text-success"></i></td>
-      <td><i class="fas fa-check-square text-success"></i></td>
-      <td><i class="fas fa-check-square text-success"></i></td>
-    </tr>
+    {% endfor %}
   </tbody>
 </table>
+</div>
 
 
+      <div class="tab-pane fade show active" id="enrolments-upcoming" role="tabpanel" aria-labelledby="enrolments-upcoming-tab">
+        Todo: check volgorder inschrijvingen bij meerdere members. Sorteren om zeker te zijn dat kolommen nooit wisselen?
       </div>
       <div class="tab-pane fade" id="enrolments-new" role="tabpanel" aria-labelledby="enrolments-new-tab">
         Nieuwe inschrijvingen...
       </div>
-      <div class="tab-pane fade" id="enrolments-all" role="tabpanel" aria-labelledby="enrolments-members-tab">
-        Alles wat nog moet komen... (ook niet ingeschreven)
+      <div class="tab-pane fade" id="enrolments-all" role="tabpanel" aria-labelledby="enrolments-all-tab">
+      Alles van dit seizoen...
+
       </div>
       <div class="tab-pane fade" id="enrolments-archive" role="tabpanel" aria-labelledby="enrolments-archive-tab">
         Oude inschrijvingen...

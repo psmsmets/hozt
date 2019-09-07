@@ -56,9 +56,11 @@ class PageController extends AbstractController
     private $template_data;
     protected $requestStack;
     private $security;
-    private $now;
     private $em;
     private $translator;
+    private $now;
+    private $calendarPeriodStart;
+    private $calendarPeriodEnd;
 
     public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator)
     {
@@ -68,6 +70,18 @@ class PageController extends AbstractController
         $this->em = $em;
         $this->translator = $translator;
         $this->now = new \DateTime('now');
+    }
+
+    private function calcCalendarPeriod(): self
+    {
+        if (!is_null($this->calendarPeriodStart) and !is_null($this->calendarPeriodEnd)) return $this;
+
+        $di = new \DateInterval('P1Y');
+        $this->calendarPeriodStart = new \DateTimeImmutable('15 august this year');
+        if ($this->now < $this->calendarPeriodStart) $this->calendarPeriodStart = $this->calendarPeriodStart->sub($di);
+        $this->calendarPeriodEnd = $this->calendarPeriodStart->add($di);
+
+        return $this;
     }
 
     private function initTemplateData()
@@ -464,11 +478,8 @@ class PageController extends AbstractController
 
     private function getCurrentCalendarYear(): ?int
     {
-        if ($this->now > (new \DateTime('first day of august'))->modify('+ 14 days')) {
-            return (int) date('Y');
-        } else {
-            return (int) date('Y', strtotime(date('Y').' -1 year'));
-        }
+        $this->calcCalendarPeriod();
+        return (int) $this->calendarPeriodStart->format('Y');
     }
 
     /**
@@ -476,12 +487,11 @@ class PageController extends AbstractController
      */
     public function calendar_list(int $year = null, Request $request)
     {
+        $this->calcCalendarPeriod();
+
         if (is_null($year) or $year < 2016 or $year > 2050 ) {
             return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
         }
-
-        $start = strval($year).'-08-15 00:00';
-        $end   = date('Y-m-d H:i', strtotime(strval($year).'-08-15 +1 year'));
 
         $this->initTemplateData();
         $this->addToTemplateData( 'lastvisit',
@@ -493,9 +503,9 @@ class PageController extends AbstractController
         );
         $this->addToTemplateData( 'calendar_events', $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
-            ->findCalendarEvents($start,$end)
+            ->findCalendarEvents($this->calendarPeriodStart,$this->calendarPeriodEnd)
         );
-        $this->addToTemplateData( 'calendar_period', ['start'=>new \DateTime($start),'end'=>new \DateTime($end)]);
+        $this->addToTemplateData( 'calendar_period', ['start'=>$this->calendarPeriodStart,'end'=>$this->calendarPeriodEnd]);
 
         return $this->render('calendar/list.html.twig', $this->template_data );
     }
@@ -837,9 +847,16 @@ class PageController extends AbstractController
     public function membership_enrolments()
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+        $this->calcCalendarPeriod();
 
         $this->initTemplateData();
         $this->addToTemplateData( 'controller_name', 'PageController::my_membership');
+        $this->addToTemplateData( 
+            'competitions',
+            $this->getDoctrine()
+                ->getRepository(Competition::class)
+                ->findCompetitionsByUser( $this->security->getUser(), $this->calendarPeriodStart, $this->calendarPeriodEnd)
+        );
 
         return $this->render('membership/enrolments.html.twig', $this->template_data );
     }
