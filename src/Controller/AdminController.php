@@ -348,9 +348,8 @@ dd('test');
         $entity->setUpdatedAt();
         if ($entity->getSimilarGenderAgeLimits()) $entity->duplicateGenderAgeLimits();
         if ($entity->getUpdatePartList()) $this->competitionManager->addDayParts($entity);
-        if ($entity->getUpdateFilter()) dd('Need to update the filter');
+        if ($entity->hasEnabledCompetitionParts()) $this->competitionManager->filterCompetitionEnrolments($entity);
 
-dd('catch');
         $event = $entity->getCalendar();
         $event->setUpdatedAt();
         $this->em->flush();
@@ -649,6 +648,36 @@ dd('catch');
         foreach ($ids as $id) {
             $entities = $em->find($class,$id);
             $this->competitionManager->addEnrolments($entities);
+        }
+
+        $this->em->flush();
+    }
+
+    public function qualifiedBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        if ($class !== 'App\Entity\CompetitionEnrolment') return;
+
+        $em = $this->getDoctrine()->getManagerForClass($class);
+
+        foreach ($ids as $id) {
+            $entities = $em->find($class,$id);
+            $entities->setQualified(true);
+        }
+
+        $this->em->flush();
+    }
+
+    public function unqualifiedBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        if ($class !== 'App\Entity\CompetitionEnrolment') return;
+
+        $em = $this->getDoctrine()->getManagerForClass($class);
+
+        foreach ($ids as $id) {
+            $entities = $em->find($class,$id);
+            $entities->setQualified(false);
         }
 
         $this->em->flush();

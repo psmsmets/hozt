@@ -106,6 +106,11 @@ class Member
      */
     private $grouping;
 
+    /**
+     * Virtual variables
+     */
+    private $teamChanged = false;
+
     public function __construct()
     {
         $this->uuid = bin2hex(random_bytes(8));
@@ -288,9 +293,15 @@ class Member
 
     public function setTeam(?TrainingTeam $team): self
     {
+        $this->teamChanged = $this->team !== $team;
         $this->team = $team;
 
         return $this;
+    }
+
+    public function getTeamChanged(): bool
+    {
+        return $this->teamChanged;
     }
 
     public function getUser(): ?User

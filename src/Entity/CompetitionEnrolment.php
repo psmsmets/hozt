@@ -33,7 +33,12 @@ class CompetitionEnrolment
     private $filtered;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean")
+     */
+    private $restrictions;
+
+    /**
+     * @ORM\Column(type="boolean")
      */
     private $qualified;
 
@@ -64,11 +69,12 @@ class CompetitionEnrolment
         $this->createdAt = new \DateTimeImmutable('now');
         $this->enrolled = $enrolled;
         $this->filtered = $filtered;
+        $this->restrictions = $restrictions;
+        $this->qualified = false;
         $this->enrolledAt = null;
         $this->notifiedAt = null;
-        $this->setRestrictions($restrictions);
-        $this->setCompetitionPart($competitionPart);
         $this->member = $member;
+        $this->setCompetitionPart($competitionPart);
     }
 
     public function getId(): ?int
@@ -113,20 +119,21 @@ class CompetitionEnrolment
         return $this;
     }
 
+    public function getRestrictions(): bool
+    {
+        return is_null($this->qualified);
+    }
+
     public function setRestrictions(bool $restrictions): self
     {
-        if ($restrictions) {
-            if (!is_null($self->qualified)) $self->qualified = false;
-        } else {
-            $self->qualified = null;
-        }
+        $this->restrictions = $restrictions;
 
         return $this;
     }
 
     public function getQualified(): ?bool
     {
-        return $this->qualified;
+        return !$this->restrictions ? null : $this->qualified;
     }
 
     public function setQualified(bool $qualified): self
@@ -140,11 +147,19 @@ class CompetitionEnrolment
     {
         $this->filtered = $filtered;
         $this->setRestrictions($restrictions);
+
+        return $this;
+    }
+
+    public function getEnabled(): bool
+    {
+        if (!$this->filtered) return false;
+        return $this->restrictions ? $this->qualified : true;
     }
 
     public function getDisabled(): bool
     {
-        return !$this->filtered;
+        return !$this->getEnabled();
     }
 
     public function getBtnDisabled(): string
