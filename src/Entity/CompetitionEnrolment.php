@@ -22,16 +22,20 @@ class CompetitionEnrolment
      * @ORM\Column(type="datetime_immutable")
      */
     private $createdAt;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $disabled;
-
     /**
      * @ORM\Column(type="boolean")
      */
     private $enrolled;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $filtered;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $qualified;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
@@ -55,15 +59,16 @@ class CompetitionEnrolment
      */
     private $competitionPart;
 
-    public function __construct(CompetitionPart $competitionPart, Member $member, bool $enrolled = true, bool $disabled = false)
+    public function __construct(CompetitionPart $competitionPart, Member $member, bool $enrolled, bool $filtered, bool $restrictions)
     {
         $this->createdAt = new \DateTimeImmutable('now');
         $this->enrolled = $enrolled;
-        $this->disabled = $disabled;
+        $this->filtered = $filtered;
         $this->enrolledAt = null;
         $this->notifiedAt = null;
+        $this->setRestrictions($restrictions);
         $this->setCompetitionPart($competitionPart);
-        $this->setMember($member);
+        $this->member = $member;
     }
 
     public function getId(): ?int
@@ -96,26 +101,55 @@ class CompetitionEnrolment
         return $this;
     }
 
-    public function getDisabled(): ?bool
+    public function getFiltered(): bool
     {
-        return $this->disabled;
+        return $this->filtered;
     }
 
-    public function getBtnDisabled(): ?bool
+    public function setFiltered(bool $filtered): self
     {
-        return $this->disabled or $this->competitionPart->isInactive();
-    }
-
-    public function getBtnDisabledString(): string
-    {
-        return $this->getBtnDisabled() ? 'disabled' : '';
-    }
-
-    public function setDisabled(bool $disabled): self
-    {
-        $this->enrolled = $disabled;
+        $this->filtered = $filtered;
 
         return $this;
+    }
+
+    public function setRestrictions(bool $restrictions): self
+    {
+        if ($restrictions) {
+            if (!is_null($self->qualified)) $self->qualified = false;
+        } else {
+            $self->qualified = null;
+        }
+
+        return $this;
+    }
+
+    public function getQualified(): ?bool
+    {
+        return $this->qualified;
+    }
+
+    public function setQualified(bool $qualified): self
+    {
+        $this->qualified = $qualified;
+
+        return $this;
+    }
+
+    public function updateEnrolment(bool $filtered, bool $restrictions): self
+    {
+        $this->filtered = $filtered;
+        $this->setRestrictions($restrictions);
+    }
+
+    public function getDisabled(): bool
+    {
+        return !$this->filtered;
+    }
+
+    public function getBtnDisabled(): string
+    {
+        return $this->getDisabled() ? 'disabled' : '';
     }
 
     public function getNotifiedAt(): ?\DateTimeImmutable
@@ -123,7 +157,7 @@ class CompetitionEnrolment
         return $this->notifiedAt;
     }
 
-    public function getNotified(): ?bool
+    public function getNotified(): bool
     {
         return !is_null($this->notifiedAt);
     }
@@ -138,14 +172,6 @@ class CompetitionEnrolment
     public function getMember(): ?Member
     {
         return $this->member;
-    }
-
-    public function setMember(?Member $member): self
-    {
-        $this->member = $member;
-        $this->team = $member->getTeam();
-
-        return $this;
     }
 
     public function getCompetitionPart(): ?CompetitionPart

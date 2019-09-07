@@ -74,11 +74,6 @@ class Competition
     /**
      * @ORM\Column(type="boolean")
      */
-    private $filtersUpToDate;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
     private $restrictions;
 
     /**
@@ -149,7 +144,7 @@ class Competition
     /**
      * Virtual variables
      */
-    private $reapplyFilters = false;
+    private $updateFilter = false;
     private $partList = [];
     private $updatePartList = false;
 
@@ -159,7 +154,6 @@ class Competition
         $this->updatedAt = $this->createdAt;
         $this->enabledAt = null;
         $this->enrolBeforeDays = 21;
-        $this->filtersUpToDate = true;
         $this->overnight = false;
         $this->registrationId = true;
         $this->similarGenderAgeLimits = true;
@@ -335,18 +329,6 @@ class Competition
         });
     }
 
-    public function getFiltersUpToDate(): ?bool
-    {
-        return $this->filtersUpToDate;
-    }
-
-    public function setFiltersUpToDate(bool $filtersUpToDate): self
-    {
-        $this->filtersUpToDate = $filtersUpToDate;
-
-        return $this;
-    }
-
     /**
      * @return Collection|TrainingTeam[]
      */
@@ -357,9 +339,10 @@ class Competition
 
     public function addTeam(TrainingTeam $team): self
     {
+dd('remove');
         if (!$this->teams->contains($team)) {
             $this->teams[] = $team;
-            $this->filtersUpToDate = false;
+            $this->updateFilter = true;
         }
 
         return $this;
@@ -367,9 +350,10 @@ class Competition
 
     public function removeTeam(TrainingTeam $team): self
     {
+dd('remove');
         if ($this->teams->contains($team)) {
             $this->teams->removeElement($team);
-            $this->filtersUpToDate = false;
+            $this->updateFilter = true;
         }
 
         return $this;
@@ -382,7 +366,7 @@ class Competition
 
     public function setRestrictions(bool $restrictions): self
     {
-        if ($restrictions != $this->restrictions) $this->filtersUpToDate = false;
+        if ($restrictions != $this->restrictions) $this->updateFilter = true;
         $this->restrictions = $restrictions;
 
         return $this;
@@ -395,7 +379,7 @@ class Competition
 
     public function setRegistrationId(bool $registrationId): self
     {
-        if ($registrationId != $this->registrationId) $this->filtersUpToDate = false;
+        if ($registrationId != $this->registrationId) $this->updateFilter = true;
         $this->registrationId = $registrationId;
 
         return $this;
@@ -420,7 +404,7 @@ class Competition
 
     public function setSimilarGenderAgeLimits(bool $similarGenderAgeLimits): self
     {
-        if ($similarGenderAgeLimits != $this->similarGenderAgeLimits) $this->filtersUpToDate = false;
+        if ($similarGenderAgeLimits != $this->similarGenderAgeLimits) $this->updateFilter = true;
         $this->similarGenderAgeLimits = $similarGenderAgeLimits;
 
         return $this;
@@ -456,7 +440,7 @@ class Competition
 
     public function setMaleAgeMin(?int $maleAgeMin): self
     {
-        if ($maleAgeMin != $this->maleAgeMin) $this->filtersUpToDate = false;
+        if ($maleAgeMin != $this->maleAgeMin) $this->updateFilter = true;
         $this->maleAgeMin = $maleAgeMin;
         $this->setMaleBirthyearMax();
 
@@ -470,7 +454,7 @@ class Competition
 
     public function setMaleAgeMax(?int $maleAgeMax): self
     {
-        if ($maleAgeMax != $this->maleAgeMax) $this->filtersUpToDate = false;
+        if ($maleAgeMax != $this->maleAgeMax) $this->updateFilter = true;
         $this->maleAgeMax = $maleAgeMax;
         $this->setMaleBirthyearMin();
 
@@ -524,7 +508,7 @@ class Competition
 
     public function setFemaleAgeMin(?int $femaleAgeMin): self
     {
-        if ($femaleAgeMin != $this->femaleAgeMin) $this->filtersUpToDate = false;
+        if ($femaleAgeMin != $this->femaleAgeMin) $this->updateFilter = true;
         $this->femaleAgeMin = $femaleAgeMin;
         $this->setFemaleBirthyearMax();
 
@@ -538,7 +522,7 @@ class Competition
 
     public function setFemaleAgeMax(?int $femaleAgeMax): self
     {
-        if ($femaleAgeMax != $this->femaleAgeMax) $this->filtersUpToDate = false;
+        if ($femaleAgeMax != $this->femaleAgeMax) $this->updateFilter = true;
         $this->femaleAgeMax = $femaleAgeMax;
         $this->setFemaleBirthyearMin();
 
@@ -655,14 +639,14 @@ class Competition
         return $day;
     }
 
-    public function getReapplyFilters(): bool
+    public function getUpdateFilter(): bool
     {
-        return $this->reapplyFilters;
+        return $this->updateFilter;
     }
 
-    public function setReapplyFilters(bool $reapply): self
+    public function setUpdateFilter(bool $update): self
     {
-        $this->reapplyFilters = $reapply;
+        $this->updateFilter = $update;
         return $this;
     }
 

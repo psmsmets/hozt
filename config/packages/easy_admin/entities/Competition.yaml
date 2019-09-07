@@ -46,7 +46,6 @@ easy_admin:
                     - { property: 'calendar.location', label: 'Locatie', type: 'text', type_options: { required: true } }
                     - { property: 'calendar.url', label: 'Website', type: 'text' }
                     - { type: 'group', label: 'Filter leden', icon: 'filter', css_class: "col-xs-12 col-md-9" }
-                    - { property: 'filtersUpToDate', label: 'Filters zijn up-to-date', type: 'checkbox', type_options: { disabled: true } }
                     - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, css_class: 'mb-4', help: 'Selecteer de trainingsgroep die deelneemt aan de wedstrijd. Enkel geselecteerde groepen kunnen inschrijven.' }
                     - { property: 'noregistrationid', label: 'Niet-vergunningshouders', type: 'checkbox' }
                     - { property: 'restrictions', label: 'Limieten' }
@@ -55,7 +54,6 @@ easy_admin:
                     - { property: 'maleAgeMax', label: 'Jongens tot en met', css_class: "col-xs-12 col-md-3", help: 'leeg is geen maximale leeftijd', type_options: { attr: { min: 9, max: 99 } } }
                     - { property: 'femaleAgeMin', label: 'Meisjes vanaf', css_class: "col-xs-12 col-md-3", help: 'leeg is geen minimale leeftijd', type_options: { attr: { min: 5, max: 25 } } }
                     - { property: 'femaleAgeMax', label: 'Meisjes tot en met', css_class: "col-xs-12 col-md-3", help: 'leeg is geen maximale leeftijd', type_options: { attr: { min: 9, max: 99 } } }
-                    - { property: 'reapplyFilters', label: 'Filters opnieuw toepassen op inschrijvingen', type: 'checkbox', help: 'Opgelet. Aanpassingen aan de status van de inschrijvingen worden overschreven.', css_class: 'mt-4' }
                     - { type: 'group', label: 'Inschrijvingen (dagdelen)', icon: 'check', css_class: "col-xs-12 col-md-9" }
                     - { property: 'enrolBeforeDays', label: 'Inschrijftermijn (dagen voor aanvang wedstrijd)', css_class: "", type_options: { attr: { min: 7, max: 30 } } }
                     - { property: 'competitionParts', label: 'Dagdelen', type_options: { multiple: true, disabled: true }, template: 'easy_admin/trans.html.twig' }

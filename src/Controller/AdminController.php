@@ -260,6 +260,7 @@ class AdminController extends EasyAdminController
 
     public function persistCompetitionEntity($entity)
     {
+dd('test');
         if ($entity->getSimilarGenderAgeLimits()) {
             $entity->setFemaleAgeMin($entity->getMaleAgeMin());
             $entity->setFemaleAgeMax($entity->getMaleAgeMax());
@@ -344,14 +345,16 @@ class AdminController extends EasyAdminController
 
     public function updateCompetitionEntity($entity)
     {
+        $entity->setUpdatedAt();
+        if ($entity->getSimilarGenderAgeLimits()) $entity->duplicateGenderAgeLimits();
+        if ($entity->getUpdatePartList()) $this->competitionManager->addDayParts($entity);
+        if ($entity->getUpdateFilter()) dd('Need to update the filter');
+
+dd('catch');
         $event = $entity->getCalendar();
         $event->setUpdatedAt();
         $this->em->flush();
 
-        if ($entity->getSimilarGenderAgeLimits()) $entity->duplicateGenderAgeLimits();
-        if ($entity->getUpdatePartList()) $this->competitionManager->addDayParts($entity);
-
-        $entity->setUpdatedAt();
         parent::persistEntity($entity);
     }
 
