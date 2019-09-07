@@ -339,7 +339,6 @@ class Competition
 
     public function addTeam(TrainingTeam $team): self
     {
-dd('remove');
         if (!$this->teams->contains($team)) {
             $this->teams[] = $team;
             $this->updateFilter = true;
@@ -350,7 +349,6 @@ dd('remove');
 
     public function removeTeam(TrainingTeam $team): self
     {
-dd('remove');
         if ($this->teams->contains($team)) {
             $this->teams->removeElement($team);
             $this->updateFilter = true;
@@ -582,6 +580,11 @@ dd('remove');
         return $this->competitionParts->filter(function(CompetitionPart $competitionPart) {
             return $competitionPart->isActive() and $competitionPart->hasEnrolments();
         });
+    }
+
+    public function hasEnabledCompetitionParts(): bool
+    {
+        return count($this->getEnabledCompetitionParts())>0;
     }
 
     public function addCompetitionPart(CompetitionPart $competitionPart): self
