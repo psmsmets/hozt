@@ -384,16 +384,27 @@ class CalendarEvent
         return $this;
     }
 
+    public function getNumberOfDays(): int
+    {
+        $start = (clone $this->startTime)->modify('midnight');
+        $end = (clone $this->calcEndTime())->modify('midnight');
+
+        return (int) $start->diff($end)->format('%d') + 1;
+    }
+
     public function getListOfDays(): ?array
     {
         $daylist = array();
-        $day = (clone $this->startTime)->modify('midnight');
-        $end = $this->calcEndTime();
+        $day = \DateTimeImmutable::createFromMutable($this->startTime)->modify('midnight');
 
-        while ($day < $end) {
-            $daylist[] = \DateTimeImmutable::createFromMutable($day);
-            $day->modify('+1 day');
+        $numberOfDays = $this->getNumberOfDays();
+        if ($numberOfDays > 30) $numberOfDays = 30;
+
+        for ($d=0; $d<$numberOfDays; $d++)
+        {
+            $daylist[] = $day->modify("+$d days");
         }
+
         return $daylist;
     }
 

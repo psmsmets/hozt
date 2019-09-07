@@ -263,6 +263,22 @@ class TrainingTeam
         return $this->competitions;
     }
 
+    public function getEnabledCompetitions(): Collection
+    {
+        return $this->competitions->filter(function(Competition $competition) {
+            return $competition->isEnabled();
+        });
+    }
+
+    public function getEnabledCompetitionsFromDate(\DateTimeInterface $refdate = null): Collection
+    {
+        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
+        return $this->competitions->filter(function(Competition $competition) use ($refdate) {
+            return $competition->isEnabled() and $competition->getCalendar->getStartTime() > $refdate;
+        });
+    }
+
+
     public function addCompetition(Competition $competition): self
     {
         if (!$this->competitions->contains($competition)) {
@@ -360,9 +376,17 @@ class TrainingTeam
     /**
      * @return Collection|Member[]
      */
-    public function getMembers(): Collection
+    public function getMembers(bool $enabled = true): Collection
     {
-        return $this->members;
+        if (is_null($enabled)) return $this->members;
+        return $this->members->filter(function(Member $member) use ($enabled) {
+            return $member->isEnabled() === $enabled;
+        });
+    }
+
+    public function hasMembers(bool $enabled = true): bool
+    {
+        return count($this->getMembers($enabled));
     }
 
     public function addMember(Member $member): self
