@@ -274,10 +274,9 @@ class TrainingTeam
     {
         if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->competitions->filter(function(Competition $competition) use ($refdate) {
-            return $competition->isEnabled() and $competition->getCalendar->getStartTime() > $refdate;
+            return $competition->isEnabled() and $competition->getCalendar()->getStartTime() > $refdate;
         });
     }
-
 
     public function addCompetition(Competition $competition): self
     {

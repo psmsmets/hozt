@@ -313,6 +313,21 @@ class Member
         return $this->competitionEnrolments;
     }
 
+    public function getActiveCompetitionEnrolments(): Collection
+    {
+        return $this->competitionEnrolments->filter(function(CompetitionEnrolment $enrolment) {
+            return $enrolment->isActive();
+        });
+    }
+
+    public function getActiveCompetitionEnrolmentsFromDate(\DateTimeInterface $refdate = null): Collection
+    {
+        if (is_null($refdate)) $refdate = new \DateTime('today');
+        return $this->competitionEnrolments->filter(function(CompetitionEnrolment $enrolment) use ($refdate) {
+            return $enrolment->isActive() and $enrolment->getCompetition()->getCalendar()->getStartTime() > $refdate;
+        });
+    }
+
     public function addCompetitionEnrolment(CompetitionEnrolment $competitionEnrolment): self
     {
         if (!$this->competitionEnrolments->contains($competitionEnrolment)) {

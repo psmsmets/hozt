@@ -350,6 +350,7 @@ class AdminController extends EasyAdminController
 
         if ($entity->getSimilarGenderAgeLimits()) $entity->duplicateGenderAgeLimits();
         if ($entity->getUpdatePartList()) $this->competitionManager->addDayParts($entity);
+        if ($entity->getUpdateFilter()) dd('Need to update the filter');
 
         $entity->setUpdatedAt();
         parent::persistEntity($entity);

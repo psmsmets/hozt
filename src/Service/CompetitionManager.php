@@ -101,8 +101,9 @@ class CompetitionManager
                 $enrolment = new CompetitionEnrolment(
                     $competitionPart,
                     $member, 
-                    $competition->getRestrictions() ? false : $team->getDefaultEnrolled(),
-                    !$this->memberCompliantWithCompetition($member,$competition)
+                    $team->getDefaultEnrolled(),
+                    $this->memberCompliantWithCompetition($member,$competition),
+                    $competition->getRestrictions()
                 );
                 $this->entityManager->persist($enrolment);
                 $add++;
@@ -110,27 +111,31 @@ class CompetitionManager
         }
 
         if ($flush) $this->entityManager->flush();
-        $this->exitMessage[] = sprintf('Added %d/%d enrolments.', $add, $all);
+        $this->exitMessage[] = sprintf('Added %d of %d enrolments.', $add, $all);
 
         return true;
     }
 
-    public function verifyCompetitionEnrolments(Competition $competition, bool $remove=false, bool $flush=true): ?bool
+    public function filterCompetitionEnrolments(Competition $competition, bool $flush=true, bool $remove=false): ?bool
     {
         $all=0; $upd=0; $rem=0;
 
         foreach ($competition->getEnabledCompetitionParts() as $competitionPart) {
             foreach( $competitionPart->getEnrolments() as $enrolment ) {
                 $all++;
-                if ($enrolment->getTeam() === $member->getTeam()) {
-                    $enrolment->setDisabled(!$this->memberCompliantWithCompetition($member,$competition));
+                $member = $enrolment->getMember();
+                if ($competition->getTeams()->contains($member->getTeam())) {
+                    $enrolment->updateEnrolment(
+                        $this->memberCompliantWithCompetition($member,$competition),
+                        $competition->getRestrictions()
+                    );
                     $upd++;
                 } else {
                     if ($remove) {
                         $this->entityManager->remove($enrolment);
                         $rem++;
                     } else {
-                        $enrolment->setDisabled(true);
+                        $enrolment->setFiltered(false);
                         $upd++;
                     }
                 }
@@ -143,29 +148,34 @@ class CompetitionManager
         return true;
     }
 
-    public function verifyMemberEnrolments(Member $member, bool $update=true, bool $flush=true): ?bool
+    public function verifyMemberEnrolments(Member $member, bool $flush=true): ?bool
     {
-        $all=0; $add=0; $upd=0;
-        foreach ($member->getTeam()->getEnabledCompetitionsFromDate() as $competition) {
-            $enrolled = $competition->getRestrictions() ? false : $team->getDefaultEnrolled();
-            $disabled = !$this->memberCompliantWithCompetition($member,$competition);
-            foreach ($competition->getEnabledCompetitionParts() as $competitionPart) {
-                $all++;
-                if ($enrolment = $competitionPart->getMemberEnrolment($member)) {
-                    if (!$update) continue;
-                    $enrolment->setDisabled($disabled);
-                    $enrolment->setMember($member); // update team
-                    $upd++;
-                } else {
-                    $enrolment = new CompetitionEnrolment( $competitionPart, $member, $enabled, $disabled );
-                    $this->entityManager->persist($enrolment);
-                    $add++;
-                }
+        $add=0; $upd=0;
+
+        $team = $member->getTeam();
+        foreach ($member->getActiveCompetitionEnrolmentsFromDate() as $enrolment)
+        {
+            if (!$enrolment->getCompetition()->getTeams()->contains($team)) {
+                $enrolment->setFiltered(false);
+                $upd++;
+            }
+        }
+
+        $enrolled = $team()->getDefaultEnrolled();
+        foreach ($team->getEnabledCompetitionsFromDate() as $competition)
+        {
+            $filtered = $this->memberCompliantWithCompetition($member,$competition);
+            foreach ($competition->getEnabledCompetitionParts() as $competitionPart)
+            {
+                if ($enrolment = $competitionPart->getMemberEnrolment($member)) continue;
+                $enrolment = new CompetitionEnrolment( $competitionPart, $member, $enrolled, $filtered, $competition->getRestrictions() );
+                $this->entityManager->persist($enrolment);
+                $add++;
             }
         }
 
         if ($flush) $this->entityManager->flush();
-        $this->exitMessage[] = sprintf('Verified %d enrolments for member %s: %d added %d updated.', $all, $member->getName(), $add, $upd);
+        $this->exitMessage[] = sprintf('Verified enrolments for member %s: %d added %d updated.', $member->getName(), $add, $upd);
         return true;
     }
 
