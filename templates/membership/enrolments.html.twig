@@ -39,13 +39,14 @@
   <tbody>
     {% for competition in page.competitions %}
     <tr>
-      <th scope="row" class="text-right" colspan={{1+members|length}}><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}}</a></th>
+      <th scope="row" class="text-right" colspan={{2+members|length}}><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}}</a></th>
     </tr>
       {% for cpart in competition.competitionParts %}
     <tr>
       <td scope="row" class="text-right">{{cpart.daypart|localizeddate('full','none')}} | {{cpart.partname|trans}}</td>
         {% for enrolment in cpart.enrolments %}
         <td><i class="{% if enrolment.disabled %}{{class_disabled}}{%else%}{%if enrolment.enrolled%}{{class_true}}{%else%}{{class_false}}{%endif%}{%endif%}"></i></td>
+        <td><a href="">bevestig</a></td>
         {% endfor %}
       {% endfor %}
     </tr>
