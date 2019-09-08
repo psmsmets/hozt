@@ -22,7 +22,7 @@ class CalendarEventRepository extends ServiceEntityRepository
     // /**
     //  * @return CalendarEvent[] Returns an array of CalendarEvent objects
     //  */
-    public function findCalendarEvents(string $start_time, string $end_time)
+    public function findCalendarEvents(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd)
     {
         return $this->createQueryBuilder('event')
             ->innerJoin('event.category','cat')
@@ -40,8 +40,8 @@ class CalendarEventRepository extends ServiceEntityRepository
             ->andWhere('event.startTime >= :startTime')
             ->andWhere('(event.endTime < :endTime or (event.endTime is null and event.startTime < :endTime))')
             ->setParameter('enabled', true)
-            ->setParameter('startTime', $start_time)
-            ->setParameter('endTime', $end_time)
+            ->setParameter('startTime', $periodStart->format('Y-m-d'))
+            ->setParameter('endTime', $periodEnd->format('Y-m-d'))
             ->orderBy('event.startTime', 'ASC')
             ->getQuery()
             ->getResult()
