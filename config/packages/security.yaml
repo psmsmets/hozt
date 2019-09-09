@@ -52,13 +52,14 @@ security:
         # require ROLE_ADMIN for /admin*
          - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/wachtwoord-vergeten, role: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/beheer, roles: ROLE_SUPERADMIN }
+         - { path: ^/beheer, roles: ROLE_SUPERADMIN } #should become admin, add superadmin restrictions in backend
          - { path: ^/mijn-account, roles: ROLE_USER }
+         - { path: ^/api/private, roles: ROLE_USER }
 
     role_hierarchy:
       ROLE_ADULT:        ROLE_USER
       ROLE_COACH:        ROLE_USER
-      ROLE_HEADCOACH:    ROLE_COACH
       ROLE_BOARD:        ROLE_USER
-      ROLE_ADMIN:        ROLE_USER 
-      ROLE_SUPERADMIN:   [ROLE_ADMIN,ROLE_BOARD,ROLE_HEADCOACH]
+      ROLE_MANAGER:      ROLE_USER 
+      ROLE_ADMIN:        ROLE_MANAGER
+      ROLE_SUPERADMIN:   [ROLE_ADMIN,ROLE_BOARD,ROLE_COACH]
