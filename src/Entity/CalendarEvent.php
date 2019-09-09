@@ -188,7 +188,7 @@ class CalendarEvent
 
     public function setEnabled(bool $enabled): self
     {
-        $this->enabled = $this->enabled or $enabled; // keep activated
+        if (!$this->enabled) $this->enabled = $enabled;
 
         return $this;
     }
@@ -196,11 +196,6 @@ class CalendarEvent
     public function getDraft(): ?bool
     {
         return !$this->enabled;
-    }
-
-    public function setDraft(bool $draft): ?bool
-    {
-        return $this->setEnabled(!$draft);
     }
 
     public function getArchived(): ?bool
