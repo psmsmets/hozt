@@ -340,8 +340,8 @@ class Competition
     public function addTeam(TrainingTeam $team): self
     {
         if (!$this->teams->contains($team)) {
-            $this->teams[] = $team;
             $this->updateFilter = true;
+            $this->teams[] = $team;
         }
 
         return $this;
@@ -350,8 +350,8 @@ class Competition
     public function removeTeam(TrainingTeam $team): self
     {
         if ($this->teams->contains($team)) {
-            $this->teams->removeElement($team);
             $this->updateFilter = true;
+            $this->teams->removeElement($team);
         }
 
         return $this;
