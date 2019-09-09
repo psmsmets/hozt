@@ -40,11 +40,11 @@ easy_admin:
                     #- { property: 'coaches', label: 'Trainers' }
                     #- { property: 'officials', label: 'Officials' }
                     - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
-                    - { property: 'overnight', label: 'Met overnachting' }
                     - { property: 'pool', label: 'Zwembad type', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
                     - { property: 'organization', label: 'Organisatie', type_options: { attr: { maxlength: 20 }, required: true } }
                     - { property: 'calendar.location', label: 'Locatie', type: 'text', type_options: { required: true } }
                     - { property: 'calendar.url', label: 'Website', type: 'text' }
+                    - { property: 'overnight', label: 'Met overnachting' }
                     - { type: 'group', label: 'Filter leden', icon: 'filter', css_class: "col-xs-12 col-md-9" }
                     - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, css_class: 'mb-4', help: 'Selecteer de trainingsgroep die deelneemt aan de wedstrijd. Enkel geselecteerde groepen kunnen inschrijven.' }
                     - { property: 'noregistrationid', label: 'Niet-vergunningshouders', type: 'checkbox' }
