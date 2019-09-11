@@ -215,7 +215,7 @@ class CompetitionManager
             );
         if (is_null($enrolment)) return false;
         $enrolment->setEnrolled($enrolled);
-        $this->entityManager->flush();
+        $this->competitionEnrolmentRepository->flush();
 
         return true;
     }

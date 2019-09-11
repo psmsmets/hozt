@@ -61,4 +61,9 @@ class CompetitionEnrolmentRepository extends ServiceEntityRepository
         ;
     }
 
+    public function flush()
+    {
+        $this->_em->flush();
+    }
+
 }
