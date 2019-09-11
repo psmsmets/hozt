@@ -4,30 +4,43 @@
 
 {% block main %}
 
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb border-none rounded-0 mb-0">
+        <li class="breadcrumb-item active" aria-current="page">Mijn account</li>
+      </ol>
+    </nav>
+
   <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
 
     <h2 class="text-primary d-flex justify-content-between">Overzicht</h2>
 
     <p>Hallo {{app.user.firstname}}. [user message from flashbox]Er zijn momenteel geen meldingen.[/usesmessage]</p>
 
-    <div class="card col-12 col-md-6">
+    <div class="card col-12 col-md-6 my-3">
       <div class="card-body">
-        <h5 class="card-title text-muted d-flex">Leden <small><span class="badge badge-medium ml-2">1</span></small></h5>
+        <h5 class="card-title text-primary d-flex">Leden <small><span class="badge badge-primary ml-2">1</span></small></h5>
       {% for member in app.user.getMembers() %}
         <p class="card-text">{{member}}, {{member.team.name}}{% if member.registrationId is not empty %}, <span class="text-muted">{{member.registrationId}}</span>{% endif %}</p>
       {% endfor %}
-
-        <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>
+        <div class="small text-right"><a href="{{path('membership_preferences')}}" class="text-muted"><i class="fas fa-caret-right"></i> Voorkeuren</a></div>
       </div>
     </div>
 
-    <nav class="nav">
-      <a class="nav-link disabled" href="{{path('membership')}}">Overzicht</a>
-      <a class="nav-link" href="{{path('membership_competitions')}}">Wedstrijden</a>
-      <a class="nav-link" href="{{path('membership_preferences')}}">Voorkeuren...</a>
-    </nav>
+    <div class="card col-12 col-md-6 my-3">
+      <div class="card-body">
+        <h5 class="card-title text-primary d-flex">Komende wedstrijden <small><span class="badge badge-primary ml-2">??</span></small></h5>
+        ...
+        <div class="small text-right"><a href="{{path('membership_competitions')}}" class="text-muted"><i class="fas fa-caret-right"></i> Alle wedstrijden</a></div>
+      </div>
+    </div>
 
+    <div class="card col-12 col-md-6 my-3">
+      <div class="card-body">
+        <h5 class="card-title text-primary d-flex">Nieuwe wedstrijden <small><span class="badge badge-primary ml-2">??</span></small></h5>
+        ...
+        <div class="small text-right"><a href="{{path('membership_competitions')}}" class="text-muted"><i class="fas fa-caret-right"></i> Alle wedstrijden</a></div>
+      </div>
+    </div>
 
   </div>
 {% endblock %}

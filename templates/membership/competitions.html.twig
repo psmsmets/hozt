@@ -6,6 +6,13 @@
 
 {% set members = app.user.getMembers() %}
 
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb border-none rounded-0 mb-0">
+      <li class="breadcrumb-item"><a href="{{path('membership')}}">Mijn account</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Wedstrijden</li>
+    </ol>
+  </nav>
+
   <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
 
     <h2 class="text-primary d-flex justify-content-between">Mijn wedstrijden</h2>
