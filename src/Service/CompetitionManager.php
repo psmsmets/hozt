@@ -198,6 +198,18 @@ class CompetitionManager
         return $this->competitionEnrolmentRepository->findCompetitionEnrolmentsByUser( $user, $start, $end);
     }
 
+    public function toggleCompetition(User $user, int $competitionPartId, int $memberId, bool $enrolled): bool 
+    {
+        $enrolment = $this->competitionEnrolmentRepository->findUserCompetitionEnrolment( 
+                $user, $competitionPartId, $memberId
+            );
+        if (is_null($enrolment)) return false;
+        $enrolment->setEnrolled($enrolled);
+        $this->entityManager->flush();
+
+        return true;
+    }
+
     public function getExitMessage(): ?array
     {
         return $this->exitMessage;

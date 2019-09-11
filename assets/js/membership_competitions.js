@@ -8,8 +8,8 @@ var statusFalse = '<i class="fas fa-minus-square text-warning" data-value="false
 
 function loadCompetitions() {
     $.getJSON( "/api/private/membership/competitions", {
-        action: 'load',
         format: "json",
+        action: 'load',
     })
     .done(function( data ) {
         if (data.success) {
@@ -30,28 +30,42 @@ function loadCompetitions() {
     });
 }
 
+function editCompetition(element) {
+    if ($(element).hasClass('editing')) return;
+    $(element).addClass('editing');
+
+    var [competition, part, competitionPart, member] = element.id.split('-');
+    var enrolled = !$('i',element).data('value');
+
+    $.getJSON( "/api/private/membership/competitions", {
+        format: "json",
+        action: 'edit',
+        competitionpart: competitionPart,
+        member: member,
+        enrolled: enrolled,
+    })
+    .done(function( data ) {
+        if (enrolled) {
+            $(element).html(statusTrue);
+        } else {
+            $(element).html(statusFalse);
+        }
+        $(element).removeClass('editing');
+    });
+}
+
+
 function editCompetitions(edit=false) {
     $("tr:not(.d-none) td[id^='competition-enrolment-']").each( function() {
         if ($('i',this).attr('data-value')!==undefined) {
             if (edit) {
                 $(this).click( function() {
-                    if ($('i',this).data('value')) {
-                        $(this).html(statusFalse);
-                    } else {
-                        $(this).html(statusTrue);
-                    }
+                    editCompetition(this);
                 });
             } else {
                 $(this).unbind();
             }
         }
-/*
-        if ($(this).hasClass('competition-editable')) {
-            $(this).html(statusTrue);
-        } else {
-            $(this).html(statusNull);
-        }
-*/
     });
 }
 

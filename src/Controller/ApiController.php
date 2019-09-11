@@ -557,6 +557,17 @@ class ApiController extends AbstractController
         }
         elseif ($json and $edit)
         {
+            $competitionpart = (int) $request->query->get('competitionpart', null);
+            $member = (int) $request->query->get('member', null);
+            $enrolled = $request->query->get('enrolled', null);
+
+            if (!is_null($enrolled) and $competitionpart > 0 and $member > 0) {
+                return $this->json([
+                    'success' => $this->competitionManager->toggleCompetition(
+                        $this->security->getUser(), $competitionpart, $member, (bool) $enrolled
+                    )
+                ]); 
+            }
         }
         return $this->json([ 'success' => false ]); //catch
     }

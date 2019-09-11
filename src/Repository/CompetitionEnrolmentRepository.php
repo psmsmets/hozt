@@ -43,4 +43,22 @@ class CompetitionEnrolmentRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    public function findUserCompetitionEnrolment(User $user, int $competitionPartId, int $memberId)
+    {
+        return $this->createQueryBuilder('enrolment')
+            ->innerJoin('enrolment.competitionPart','competitionPart')
+            ->innerJoin('enrolment.member', 'members')
+            ->innerJoin('members.user', 'user')
+            ->andWhere('user = :user')
+            ->andWhere('competitionPart.id = :competitionPartId')
+            ->andWhere('members.id = :memberId')
+            ->setParameter('user', $user)
+            ->setParameter('competitionPartId', $competitionPartId)
+            ->setParameter('memberId', $memberId)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
 }
