@@ -5,7 +5,7 @@
 {% block main %}
 
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb border-none rounded-0 mb-0">
+      <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
         <li class="breadcrumb-item active" aria-current="page">Mijn account</li>
       </ol>
     </nav>
@@ -14,32 +14,57 @@
 
     <h2 class="text-primary d-flex justify-content-between">Overzicht</h2>
 
-    <p>Hallo {{app.user.firstname}}. [user message from flashbox]Er zijn momenteel geen meldingen.[/usesmessage]</p>
+    <p>Hallo {{app.user.firstname}}.
+<!--[user message from flashbox]Er zijn momenteel geen meldingen.[/usesmessage]-->
+</p>
 
-    <div class="card col-12 col-md-6 my-3">
-      <div class="card-body">
-        <h5 class="card-title text-primary d-flex">Leden <small><span class="badge badge-primary ml-2">1</span></small></h5>
-      {% for member in app.user.getMembers() %}
-        <p class="card-text">{{member}}, {{member.team.name}}{% if member.registrationId is not empty %}, <span class="text-muted">{{member.registrationId}}</span>{% endif %}</p>
-      {% endfor %}
-        <div class="small text-right"><a href="{{path('membership_preferences')}}" class="text-muted"><i class="fas fa-caret-right"></i> Voorkeuren</a></div>
-      </div>
-    </div>
 
-    <div class="card col-12 col-md-6 my-3">
-      <div class="card-body">
-        <h5 class="card-title text-primary d-flex">Komende wedstrijden <small><span class="badge badge-primary ml-2">??</span></small></h5>
-        ...
-        <div class="small text-right"><a href="{{path('membership_competitions')}}" class="text-muted"><i class="fas fa-caret-right"></i> Alle wedstrijden</a></div>
-      </div>
-    </div>
+    <div class="row">
 
-    <div class="card col-12 col-md-6 my-3">
-      <div class="card-body">
-        <h5 class="card-title text-primary d-flex">Nieuwe wedstrijden <small><span class="badge badge-primary ml-2">??</span></small></h5>
-        ...
-        <div class="small text-right"><a href="{{path('membership_competitions')}}" class="text-muted"><i class="fas fa-caret-right"></i> Alle wedstrijden</a></div>
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-primary d-flex">Leden <small><span class="badge badge-primary ml-2">1</span></small></h5>
+            {% for member in app.user.getMembers() %}
+            <p class="card-text">{{member}}, {{member.team.name}}{% if member.registrationId is not empty %}, <span class="text-muted">{{member.registrationId}}</span>{% endif %}</p>
+            {% endfor %}
+            <a href="{{path('membership_preferences')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Voorkeuren</a>
+          </div>
+        </div>
       </div>
+
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-primary d-flex">Komende wedstrijden <small><span class="badge badge-primary ml-2">{{page.upcoming_competitions|length}}</span></small></h5>
+            <ul class="list-unstyled">
+            {% for competition in page.upcoming_competitions|slice(0, 5) %}
+              <li class="list-unstyled-item"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition}}</a></li>
+            {% else %}
+              <li class="list-unstyled-item">Geen komende wedstrijden gevonden.</li>
+            {% endfor%}
+            </ul>
+            <a href="{{path('membership_competitions')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Alle wedstrijden</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-primary d-flex">Nieuwe wedstrijden <small><span class="badge badge-primary ml-2">{{page.new_competitions|length}}</span></small></h5>
+            <ul class="list-unstyled">
+            {% for competition in page.new_competitions|slice(0, 5) %}
+              <li class="list-unstyled-item"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition}}</a></li>
+            {% else %}
+              <li class="list-unstyled-item">Geen nieuwe wedstrijden gevonden.</li>
+            {% endfor%}
+            </ul>
+            <a href="{{path('membership_competitions')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Alle wedstrijden</a>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>

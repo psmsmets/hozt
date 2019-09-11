@@ -80,8 +80,8 @@ class CompetitionRepository extends ServiceEntityRepository
             ->innerJoin('competition.pool','pool')
             ->innerJoin('competition.competitionParts','competitionParts')
             ->innerJoin('competitionParts.enrolments','enrolments')
-            ->innerJoin('enrolments.member', 'member')
-            ->innerJoin('member.user', 'user')
+            ->innerJoin('enrolments.member', 'members')
+            ->innerJoin('members.user', 'user')
             ->addSelect('competition')
             ->addSelect('competitionParts')
             ->addSelect('event')
@@ -91,6 +91,56 @@ class CompetitionRepository extends ServiceEntityRepository
             ->setParameter('start', $periodStart->format('Y-m-d'))
             ->setParameter('end', $periodEnd->format('Y-m-d'))
             ->setParameter('user', $user)
+            ->orderBy('event.startTime', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findNewCompetitionsByUser(User $user, \DateTimeInterface $reftime=null)
+    {
+        if (is_null($reftime)) $reftime = new \DateTime('today');
+
+        return $this->createQueryBuilder('competition')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('competition.competitionParts','competitionParts')
+            ->innerJoin('competitionParts.enrolments','enrolments')
+            ->innerJoin('enrolments.member', 'memb')
+            ->innerJoin('memb.user', 'user')
+            ->addSelect('competition')
+            //->addSelect('competitionParts')
+            ->addSelect('event')
+            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->andWhere('competition.enrolBefore > :reftime')
+            ->andWhere('user = :user')
+            ->andWhere('enrolments.enrolledAt is null')
+            ->setParameter('reftime', $reftime->format('Y-m-d'))
+            ->setParameter('user', $user)
+            ->orderBy('event.startTime', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findUpcomingCompetitionsByUser(User $user, \DateTimeInterface $reftime=null)
+    {
+        if (is_null($reftime)) $reftime = new \DateTime('today');
+
+        return $this->createQueryBuilder('competition')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('competition.competitionParts','competitionParts')
+            ->innerJoin('competitionParts.enrolments','enrolments')
+            ->innerJoin('enrolments.member', 'memb')
+            ->innerJoin('memb.user', 'user')
+            ->addSelect('competition')
+            //->addSelect('competitionParts')
+            ->addSelect('event')
+            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->andWhere('user = :user')
+            ->andWhere('enrolments.enrolled = :enrolled')
+            ->setParameter('reftime', $reftime->format('Y-m-d'))
+            ->setParameter('user', $user)
+            ->setParameter('enrolled', true)
             ->orderBy('event.startTime', 'ASC')
             ->getQuery()
             ->getResult()
