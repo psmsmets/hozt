@@ -1,10 +1,9 @@
 require('bootstrap');
 
 
-var statusNull = '<i class="fas fa-square text-medium"></i>';
-var statusTrue = '<i class="fas fa-check-square text-success" data-value="true"></i>';
-var statusFalse = '<i class="fas fa-minus-square text-warning" data-value="false"></i>';
-
+var statusNull = '<i class="fas fa-square text-medium h4"></i>';
+var statusTrue = '<button class="btn btn-success btn-sm"><i class="fas fa-check" data-value="true"></i></button>';
+var statusFalse = '<button class="btn btn-warning btn-sm text-light"><i class="fas fa-minus" data-value="false"></i></button>';
 
 function loadCompetitions() {
     $.getJSON( "/api/private/membership/competitions", {
@@ -42,7 +41,7 @@ function editCompetition(element) {
         action: 'edit',
         competitionpart: competitionPart,
         member: member,
-        enrolled: enrolled,
+        enrolled: enrolled ? 1 : 0,
     })
     .done(function( data ) {
         if (enrolled) {
@@ -75,7 +74,8 @@ function showTabCompetitions(tab) {
         case 'competitions-all-tab':
             break;
         case 'competitions-new-tab':
-            $('tr:not(.competition-new)').addClass('d-none');
+            $('tr.competition').addClass('d-none');
+            $('tr.competition-new').removeClass('d-none');
             break;
         case 'competitions-upcoming-tab':
             $('tr.competition-past').addClass('d-none');

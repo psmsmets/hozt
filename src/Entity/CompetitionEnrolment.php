@@ -99,10 +99,8 @@ class CompetitionEnrolment
 
     public function setEnrolled(bool $enrolled): self
     {
-        if ($enrolled) {
-            $this->enrolled = $enrolled;
-            $this->enrolledAt = new \DateTimeImmutable('now');
-        }
+        $this->enrolled = $enrolled;
+        $this->enrolledAt = new \DateTimeImmutable('now');
 
         return $this;
     }
