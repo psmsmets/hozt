@@ -13,7 +13,7 @@ $('#preferencesModal').on('show.bs.modal', function (event) {
 });
 
 function preferencesAction( tab, action = 'new', id = null, obj ) {
-    $.getJSON( "/mijn-account/instellingen", {
+    $.getJSON( "/api/private/membership/preferences", {
         tab: tab,
         action: action,
         id: id,
@@ -34,7 +34,7 @@ function loadPreferencesContent() {
     var tab = active.data('tab');
     var tabpanel = $('#preferences-'+tab);
     $(tabpanel).html('<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div></div>');
-    $.getJSON( "/mijn-account/instellingen", {
+    $.getJSON( "/api/private/membership/preferences", {
         tab: tab,
         action: 'load',
         format: "json",

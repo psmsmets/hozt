@@ -10,14 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
-
-
-/*
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-*/
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 # entities
 use App\Entity\TrainingTeam;
@@ -27,23 +20,44 @@ use App\Entity\TrainingException;
 use App\Entity\CalendarEvent;
 use App\Entity\CalendarCategory;
 use App\Entity\Competition;
+use App\Entity\CompetitionEnrolments;
 use App\Entity\CompetitionDocument;
 use App\Entity\CompetitionDocumentCategory;
 use App\Entity\Tryout;
+use App\Entity\Member;
+use App\Entity\MemberAddress;
+use App\Entity\MemberGrouping;
 
 # repositories
 use App\Repository\TryoutEnrolmentRepository;
 use App\Repository\TryoutRepository;
+use App\Repository\MemberRepository;
+use App\Repository\MemberGroupingRepository;
+
+# forms
+use App\Form\MemberAddressForm;
+
+# managers
+use App\Service\CalendarManager;
+use App\Service\CompetitionManager;
 
 class ApiController extends AbstractController
 {
+    protected $requestStack;
+    private $security;
+    private $em;
+    private $now;
+    private $translator;
 
-    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em)
+    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator, CalendarManager $calendarManager, CompetitionManager $competitionManager)
     {
         $this->requestStack = $requestStack;
         $this->security = $security;
         $this->em = $em;
         $this->now = new \DateTime('now');
+        $this->translator = $translator;
+        $this->calendarManager = $calendarManager;
+        $this->competitionManager = $competitionManager;
     }
 
     /**
@@ -413,36 +427,149 @@ class ApiController extends AbstractController
         }
     }
 
-/*
-    public function documents_competition_latest(string $slug, int $limit=5)
+    /**
+     * @Route("/api/private/membership/preferences", name="api_membership_preferences")
+     */
+    public function api_membership_preferences(Request $request)
     {
-        $docs = $this->getDoctrine()
-            ->getRepository(CompetitionDocuments::class)
-            ->findLatestCompetitionDocuments($slug,$limit)
-            ;
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
 
-        if (!$docs) {
-            return $this->json(array('result'=>false,'error'=>"Geen documenten gevonden."));
+        $tabs = ['members','address','notifications','account'];
+        $tab = (string) $request->query->get('tab', null);
+        if (!in_array($tab,$tabs)) $tab = $tabs[0];
+
+        $json = $request->query->get('format', null) == 'json';
+        $action = $request->query->get('action', null);
+        $remove = $action == 'remove';
+        $edit = $action == 'edit';
+        $new = $action == 'new';
+        $form = null;
+
+        if ($json && $action == 'load' )
+        {
+            return $this->json([
+                'success' => true,
+                'html' => $this->render(sprintf('membership/preferences_%s.html.twig', $tab), ['tab' => $tab])->getContent(),
+            ]);
         }
-        $data = array();
-        $base = $this->getParameter('app.path.doc.competition');
-        foreach ( $docs as $doc ) {
-           $event = $doc->getCompetition()->getCalendar();
-           $data[] = array(
-                   'title' => (is_null($doc->getDescription())) ? $event->getTitle() : $event->getTitle() . " - " . $doc->getDescription(),
-                   'date' => $event->getStartTime()->format('Y-m-d'),
-                   'datestr' =>  strftime("%e %b", $event->getStartTime()->getTimestamp()),
-                   'location' => $event->getLocation(),
-                   'doc' => (is_null($doc->getDocument())) ? $doc->getUrl() : $base.'/'.$doc->getDocument(),
-               );
+        elseif ($json && ($edit or $new or $remove))
+        {
+            $id = (int) $request->query->get('id', null);
+            $user = $this->security->getUser();
+
+            if ( $tab == 'address' )
+            {
+                $address = $new ? new MemberAddress($user) : $user->getMemberAddress($id);
+
+                if (!$address instanceof MemberAddress) return $this->json(['success' => false]);
+
+                if ($remove)
+                {
+                    if (count($address->getMembers())==0) {
+                        $this->em->remove($address);
+                        $this->em->flush();
+                        return $this->json([
+                            'success' => true,
+                            'message' => $this->translator->trans(sprintf('preferences.address.%s.success', $action )),
+                        ]);
+                    } else {
+                        return $this->json([
+                            'success' => false,
+                            'message' => $this->translator->trans(sprintf('preferences.address.%s.inuse', $action )),
+                        ]);
+                    }
+                }
+                else
+                {
+                    $form = $this->createForm(MemberAddressForm::class, $address);
+                    $form->handleRequest($request);
+
+                    if ($form->isSubmitted() && $form->isValid())
+                    {
+                        if ($new) {
+                            $address = $form->getData();
+                            $address->setUser($this->security->getUser());
+                            $this->em->persist($address);
+                        }
+                        $this->em->flush();
+                        return $this->json([
+                            'success' => true,
+                            'message' => $this->translator->trans(sprintf('preferences.address.%s.success', $action )),
+                        ]);
+                    }
+                }
+
+            }
+
+            if ($form) {
+                return $this->json([
+                    'success' => true,
+                    'html' => $this->render('membership/preferences_form.html.twig', [
+                        'tab' => $tab,
+                        'action' => $action,
+                        'url' => $this->generateUrl('api_membership_preferences',
+                               [ 'tab' => $tab, 'format' => 'json', 'action' => $action, 'id' => $id ]),
+                        'form' => $form->createView(),
+                    ])->getContent(),
+                ]);
+            } else {
+                return $this->json([ 'success' => false, 'html' => null ]);
+            }
+
         }
-        return $this->json(array( 
-                'result' => true, 
-                'category' => $doc->getCategory()->getTitle(), 
-                'type' => 'latest', 
-                'data' => $data,
-            ));
     }
-*/
+
+    /**
+     * @Route("/api/private/membership/competitions", name="api_membership_competitions")
+     */
+    public function api_membership_competitions(Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+
+        $json = $request->query->get('format', null) == 'json';
+        $action = $request->query->get('action', null);
+
+        $load = $action == 'load';
+        $edit = $action == 'edit';
+
+        if ($json and $load)
+        {
+            $enrolments = $this->competitionManager->getUserEnrolments( 
+                $this->security->getUser(), 
+                $this->calendarManager->getPeriodStart(), 
+                $this->calendarManager->getPeriodEnd()
+            );
+            $data = array();
+            foreach ($enrolments as $enrolment) {
+                if ($enrolment->getEnabled()) {
+                    $data[] = array(
+                        'member' => $enrolment->getMember()->getId(),
+                        'enrolment' => $enrolment->getId(),
+                        'competitionpart' => $enrolment->getCompetitionPart()->getId(),
+                        'disabled' => $enrolment->getDisabled(),
+                        'enrolled' => $enrolment->getEnrolled(),
+                        'enrolledAt' => $enrolment->getEnrolledAt(),
+                        'editable' => $enrolment->getCompetitionPart()->getCompetition()->getEnrolBefore() > $this->now,
+                    );
+                }
+            }
+            return $this->json([ 'success' => true, 'data' => $data ]);
+        }
+        elseif ($json and $edit)
+        {
+            $competitionpart = (int) $request->query->get('competitionpart', null);
+            $member = (int) $request->query->get('member', null);
+            $enrolled = $request->query->get('enrolled', null);
+
+            if (!is_null($enrolled) and $competitionpart > 0 and $member > 0) {
+                return $this->json([
+                    'success' => $this->competitionManager->toggleCompetition(
+                        $this->security->getUser(), $competitionpart, $member, (bool) $enrolled
+                    )
+                ]); 
+            }
+        }
+        return $this->json([ 'success' => false ]); //catch
+    }
 
 }

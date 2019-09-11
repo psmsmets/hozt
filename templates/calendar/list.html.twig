@@ -85,7 +85,7 @@
 
             <h6 class="mb-2">{{event.getFormattedPeriod|lower}}</h6>
 
-            <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} small mb-1 cal">
+            <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} small mb-1 cal-small">
               {% if event.competition is null %}
                 {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|ucwords}}</li>{% endif %}
               {% else %}

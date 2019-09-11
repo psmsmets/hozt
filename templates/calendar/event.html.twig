@@ -19,30 +19,68 @@
 
       <div class="media-body lh-125">
 
-        <h5 class="pb-0 mb-1 d-flex justify-content-between">{{event.title|ucfirst}}
+        <h4 class="p-0 mb-1 d-flex justify-content-between">
+          <span>{{event.title|ucfirst}}
+          {% if event.competition is not empty%}<small class="badge badge-medium">{{event.competition.organization}}</small>{%endif%}
+          </span>
           <small>
             {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
             {% if cookie not in app.request.cookies|keys and event.startTime>date() %}<span class="badge badge-secondary ml-1">Nieuw</span>{% endif %}
           </small>
-        </h5>
+        </h4>
 
-        <h6 class="d-flex justify-content-between mb-2">{{event.getFormattedPeriod|lower}}</h6>
+        <h6 class="mb-3">{{event.getFormattedPeriod|lower}}</h6>
 
-        <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} small cal">
+        <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} cal-smaller smaller font-weight-lighter">
           {% if event.competition is empty %}
             {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|ucwords}}</li>{% endif %}
           {% else %}
-            <li class="mb-1"><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}{% if event.location %}, {{event.location|ucwords}}{% endif %}</li>
-            {% if event.competition.teams|length > 0%}
-              <li class="mb-1"><i class="fas fa-swimmer"></i>
-                {% for team in event.competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
-              </li>
-            {% endif %}
+            <li class="mb-2"><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}, {{event.location|ucwords}}</li>
+            <li class="mb-2"><i class="fas fa-swimmer"></i>
+              {% for team in event.competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
+            </li>
             {% if event.competition.restrictions %}
-              <li class="mb-1 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
+              <li class="mb-2 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
             {% endif %}
             {% if event.competition.overnight %}
-              <li class="mb-1 text-warning"><i class="fas fa-info-circle"></i> met overnachting</li>
+              <li class="mb-2 text-warning"><i class="fas fa-info-circle"></i> met overnachting</li>
+            {% endif %}
+            <li class="mb-2"><i class="fas fa-filter"></i>
+            {% if event.competition.registrationId %}Licentiehouders{%else%}Iedereen{%endif%}
+            {% if event.competition.agelimits %}
+              {% if event.competition.similarGenderAgeLimits%}
+                {% if event.competition.maleagemin %}
+                  vanaf {{event.competition.maleagemin}}j (°{{event.competition.malebirthyearmax}})
+                {% endif %}
+                {% if event.competition.maleagemax %}
+                  tot {{event.competition.maleagemax}}j (°{{event.competition.malebirthyearmin}})
+                {% endif %}
+              {% else %}
+                <i class="fas fa-male" style="width:auto;"></i>
+                {% if event.competition.maleagemin %}
+                  vanaf {{event.competition.maleagemin}}j (°{{event.competition.malebirthyearmax}})
+                {% endif %}
+                {% if event.competition.maleagemax %}
+                  tot {{event.competition.maleagemax}}j (°{{event.competition.malebirthyearmin}})
+                {% endif %}
+                <i class="fas fa-female text-normal" style="width:auto;"></i>
+                {% if event.competition.femaleagemin %}
+                  vanaf {{event.competition.femaleagemin}}j (°{{event.competition.femalebirthyearmax}})
+                {% endif %}
+                {% if event.competition.femaleagemax %}
+                  tot {{event.competition.femaleagemax}}j (°{{event.competition.femalebirthyearmin}})
+                {% endif %}
+              {% endif %}
+            {% endif %}
+            </li>
+            {% if event.competition.hasenabledcompetitionparts %}
+            <li class="mb-1"><i class="fas fa-stream"></i> Dagdelen (#{{event.competition.enabledcompetitionparts|length}})</li>
+              <ul class="list-unstyled mb-2">
+              {% for part in event.competition.enabledcompetitionparts%}
+               <li class="list-unstyled-item" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}</li>
+              {% endfor %}
+              </ul>
+            <li class="mb-2"><i class="fas fa-edit"></i> Deadline {{event.competition.enrolBefore|localizeddate|localizeddate('full','none')}}</li>
             {% endif %}
           {% endif %}
         </ul>

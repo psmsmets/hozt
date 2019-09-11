@@ -1,10 +1,10 @@
 {
   "entrypoints": {
-    "eu_cookie": {
+    "training_category": {
       "js": [
         "/assets/build/runtime.66c6b310.js",
         "/assets/build/0.8c68423a.js",
-        "/assets/build/eu_cookie.b65d3b19.js"
+        "/assets/build/training_category.42ee4f70.js"
       ]
     },
     "hozt": {
@@ -15,7 +15,7 @@
         "/assets/build/hozt.02ba63c9.js"
       ],
       "css": [
-        "/assets/build/hozt.d52069fc.css"
+        "/assets/build/hozt.21bfa0ed.css"
       ]
     },
     "carousel": {
@@ -47,6 +47,13 @@
         "/assets/build/form_extended.15ebba48.js"
       ]
     },
+    "eu_cookie": {
+      "js": [
+        "/assets/build/runtime.66c6b310.js",
+        "/assets/build/0.8c68423a.js",
+        "/assets/build/eu_cookie.b65d3b19.js"
+      ]
+    },
     "calendar": {
       "js": [
         "/assets/build/runtime.66c6b310.js",
@@ -54,11 +61,12 @@
         "/assets/build/calendar.648bfc9e.js"
       ]
     },
-    "training_category": {
+    "membership_competitions": {
       "js": [
         "/assets/build/runtime.66c6b310.js",
         "/assets/build/0.8c68423a.js",
-        "/assets/build/training_category.42ee4f70.js"
+        "/assets/build/1.b287d5bd.js",
+        "/assets/build/membership_competitions.005191e1.js"
       ]
     },
     "membership_preferences": {
@@ -66,7 +74,7 @@
         "/assets/build/runtime.66c6b310.js",
         "/assets/build/0.8c68423a.js",
         "/assets/build/1.b287d5bd.js",
-        "/assets/build/membership_preferences.c12696c9.js"
+        "/assets/build/membership_preferences.ca2d8356.js"
       ]
     },
     "easy_admin": {
@@ -98,27 +106,28 @@
         "/assets/build/runtime.66c6b310.js"
       ],
       "css": [
-        "/assets/build/bootstrap.ba1ab673.css"
+        "/assets/build/bootstrap.b7ffed49.css"
       ]
     }
   },
   "integrity": {
     "/assets/build/runtime.66c6b310.js": "sha384-E16bFFlalcHY1sH9ZWBqdXFyCluqgBTzT0KMwZRnpGIjychjULgUOY7JhlnKpT1a",
     "/assets/build/0.8c68423a.js": "sha384-fI1PxzLbTs/3MR5uAfOZl5jsOeDBKOWZfQlXdB9v804jkuMRpc/S+ivcvNseNsVL",
-    "/assets/build/eu_cookie.b65d3b19.js": "sha384-GwzKe5BZtH2QPERqLHg758YJKgzQML0XzV1s0dHjWnkZAS7hbi8jxLCQtWmZfDht",
+    "/assets/build/training_category.42ee4f70.js": "sha384-XJ1piOrKkwGYeGnincXOcdfqSO1wLVmryw86mAPtJ1/EG9zTn4BWF8wbHqYuDwMV",
     "/assets/build/1.b287d5bd.js": "sha384-VmO05cR/CBWfJ8fNQpSTHmlJLxI4TF4L9cKP3m7Kc7xuteuOO8zu8oZMUNR2wXF8",
     "/assets/build/hozt.02ba63c9.js": "sha384-iqPicAJQhRzweRDna0EaGmtL5ozJYFu/y8ocbpN6pvr8bku6AohgXzZqIRrfk7gA",
-    "/assets/build/hozt.d52069fc.css": "sha384-YTGIkQocN/gseNJILFxhuIgejmPK6o6d9RE/2kw8lr3Rn6nK/WJ9dIzLW7EEvU0l",
+    "/assets/build/hozt.21bfa0ed.css": "sha384-JlqRJKu64BdGKHDe6icS3B8s7oXUEvydxcyBb3OwG+2KjH9JE8t+jzQiFrFfYbMl",
     "/assets/build/carousel.e465e46e.js": "sha384-H3xEfKNkKkpwd4iPQnUPquFV20uLB5Z4iVkewxTIPVkNzlaJZnclIPk2D421mdlQ",
     "/assets/build/tryout_enrolled.24bd8e84.js": "sha384-ZJA6CYaiuQaCyAFTcfjywZinFcJrLdVw1kZsDWntiMLr/mL7fbLwRgB+m/ErrmEY",
     "/assets/build/form_default.99b6140a.js": "sha384-uQg7t/kNgirwT1B6H+FBg9V5reDeQuZG22+dQZj2naFcCHdovY+W8W++Gdsw5k2d",
     "/assets/build/form_extended.15ebba48.js": "sha384-BUV7f9UULaWGj6iNBCRZIPM8+4KiS3bBPQVMsczXvnXGpD8p28+tdOQ37h4GbP7e",
+    "/assets/build/eu_cookie.b65d3b19.js": "sha384-GwzKe5BZtH2QPERqLHg758YJKgzQML0XzV1s0dHjWnkZAS7hbi8jxLCQtWmZfDht",
     "/assets/build/calendar.648bfc9e.js": "sha384-vqXc9rdqSTTyvHr1TVg+/VBMg0l/638dQIIVjdAfoPBdD6naiW0ugS4XaI9xUGKS",
-    "/assets/build/training_category.42ee4f70.js": "sha384-XJ1piOrKkwGYeGnincXOcdfqSO1wLVmryw86mAPtJ1/EG9zTn4BWF8wbHqYuDwMV",
-    "/assets/build/membership_preferences.c12696c9.js": "sha384-rN1VXDuh2SSyfvWsLDnZ+k09GerVqGaGM35bPlzZaPWZCf6I1vyr0sq0flJnn1Py",
+    "/assets/build/membership_competitions.005191e1.js": "sha384-GsP/t04kch7+kf/xTP95G7bGJz7Xy2UKgo2KDmUW6q6SN3Hd6cD4pzLw3vRe4Ent",
+    "/assets/build/membership_preferences.ca2d8356.js": "sha384-kY3O0GSpB7h28lJ4mQCW8qGhn6ZMbMLQBy8p87wUM0VhJaktI0e6zTs8KeUq63rs",
     "/assets/build/easy_admin.59221607.css": "sha384-1gQo4bGGOE8Ko2wLX5FbCcoc5xHCMDWofgakj3dimHH6Ejj3PbmkpCKMV69VJCmD",
     "/assets/build/security.ad574901.css": "sha384-mv76uPlVHTn8eslj3d4HaSG2hRCFB0rYoYSGGVddkhbE/DbNR57AH/JSaF2Kf+5z",
     "/assets/build/animate.4e5f5248.css": "sha384-sSOFuRlnwm+WQ2IVhHql8C5Nr9BGM6muQU1NVs1rYkjDzn6xWma81zPxYfrUxwqb",
-    "/assets/build/bootstrap.ba1ab673.css": "sha384-c7f7HCHrwGUSYtrYd3XOz1fYGc7OqE8/KNjynJRahcVBDjij4dc1D0QhDVapbPhO"
+    "/assets/build/bootstrap.b7ffed49.css": "sha384-lpkGeLcgci1pirHTfo2BKAde49s66l1tG8w/IwcsfdXTVuRfBXJS3yAivlvHYrqj"
   }
 }

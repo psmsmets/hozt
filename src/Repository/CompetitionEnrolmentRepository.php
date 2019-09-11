@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\CompetitionEnrolment;
+use App\Entity\User;
+use App\Entity\Member;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -19,32 +21,44 @@ class CompetitionEnrolmentRepository extends ServiceEntityRepository
         parent::__construct($registry, CompetitionEnrolment::class);
     }
 
-    // /**
-    //  * @return CompetitionEnrolment[] Returns an array of CompetitionEnrolment objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findCompetitionEnrolmentsByUser(User $user, \DateTimeInterface $periodStart, \DateTimeInterface $periodEnd)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('enrolments')
+            ->innerJoin('enrolments.competitionPart','competitionPart')
+            ->innerJoin('competitionPart.competition','competition')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('enrolments.member', 'members')
+            ->innerJoin('members.user', 'user')
+            ->addSelect('enrolments')
+            ->addSelect('members')
+            ->addSelect('competitionPart')
+            ->andWhere('( event.startTime >= :start and event.startTime < :end and (event.endTime < :end or event.endTime is null) )')
+            ->andWhere('user = :user')
+            ->setParameter('start', $periodStart->format('Y-m-d'))
+            ->setParameter('end', $periodEnd->format('Y-m-d'))
+            ->setParameter('user', $user)
+            ->orderBy('members.birthdate', 'DESC')
+            ->orderBy('competitionPart.daypart', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?CompetitionEnrolment
+    public function findUserCompetitionEnrolment(User $user, int $competitionPartId, int $memberId)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('enrolment')
+            ->innerJoin('enrolment.competitionPart','competitionPart')
+            ->innerJoin('enrolment.member', 'members')
+            ->innerJoin('members.user', 'user')
+            ->andWhere('user = :user')
+            ->andWhere('competitionPart.id = :competitionPartId')
+            ->andWhere('members.id = :memberId')
+            ->setParameter('user', $user)
+            ->setParameter('competitionPartId', $competitionPartId)
+            ->setParameter('memberId', $memberId)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }
