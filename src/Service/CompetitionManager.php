@@ -195,8 +195,18 @@ class CompetitionManager
 
     public function getUserEnrolments(User $user, \DateTimeInterface $start, \DateTimeInterface $end): array 
     {
-        return $this->competitionEnrolmentRepository->findCompetitionEnrolmentsByUser( $user, $start, $end);
+        return $this->competitionEnrolmentRepository->findCompetitionEnrolmentsByUser($user, $start, $end);
     }
+
+    public function getUpcomingUserCompetitions(User $user, \DateTimeInterface $reftime=null ): array 
+    {
+        return $this->competitionRepository->findUpcomingCompetitionsByUser($user, $reftime);
+    }
+
+    public function getNewUserCompetitions(User $user, \DateTimeInterface $reftime=null ): array 
+    {
+        return $this->competitionRepository->findNewCompetitionsByUser($user, $reftime);
+    } 
 
     public function toggleCompetition(User $user, int $competitionPartId, int $memberId, bool $enrolled): bool 
     {

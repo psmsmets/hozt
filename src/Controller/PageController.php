@@ -64,8 +64,10 @@ class PageController extends AbstractController
     private $translator;
     private $now;
     private $calendarManager;
+    private $competitionManager;
+    private $user;
 
-    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator, CalendarManager $calendarManager)
+    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator, CalendarManager $calendarManager, CompetitionManager $competitionManager)
     {
         $this->template_data = [];
         $this->requestStack = $requestStack;
@@ -73,7 +75,9 @@ class PageController extends AbstractController
         $this->em = $em;
         $this->translator = $translator;
         $this->calendarManager = $calendarManager;
+        $this->competitionManager = $competitionManager;
         $this->now = new \DateTime('now');
+        $this->user = $this->security->getUser();
     }
 
     private function initTemplateData()
@@ -825,7 +829,8 @@ class PageController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
 
         $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::my_membership');
+        $this->addToTemplateData( 'upcoming_competitions', $this->competitionManager->getUpcomingUserCompetitions($this->user));
+        $this->addToTemplateData( 'new_competitions', $this->competitionManager->getNewUserCompetitions($this->user));
 
         return $this->render('membership/overview.html.twig', $this->template_data );
     }
@@ -843,7 +848,7 @@ class PageController extends AbstractController
             $this->getDoctrine()
                 ->getRepository(Competition::class)
                 ->findCompetitionsByUser( 
-                    $this->security->getUser(), $this->calendarManager->getPeriodStart(),$this->calendarManager->getPeriodEnd()
+                    $this->user, $this->calendarManager->getPeriodStart(),$this->calendarManager->getPeriodEnd()
                 )
         );
 
