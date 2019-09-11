@@ -225,6 +225,18 @@ class CompetitionPart
         return count($this->enrolments)>0;
     }
 
+    public function getNewEnrolments(): Collection
+    {
+        return $this->enrolments->filter(function(CompetitionEnrolment $enrolment) {
+            return is_null($enrolment->getEnrolledAt());
+        });
+    }
+
+    public function hasNewEnrolments(): bool
+    {
+        return count($this->getNewEnrolments())>0;
+    }
+
     public function getMemberEnrolment(Member $member): ?CompetitionEnrolment
     {
         $enrolment = $this->enrolments->filter(function(CompetitionEnrolment $enrolment) use($member) {

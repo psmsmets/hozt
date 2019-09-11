@@ -436,6 +436,11 @@ class Competition
         return $this->maleAgeMin;
     }
 
+    public function hasMaleAgeMin(): bool
+    {
+        return !is_null($this->maleAgeMin);
+    }
+
     public function setMaleAgeMin(?int $maleAgeMin): self
     {
         if ($maleAgeMin != $this->maleAgeMin) $this->updateFilter = true;
@@ -448,6 +453,11 @@ class Competition
     public function getMaleAgeMax(): ?int
     {
         return $this->maleAgeMax;
+    }
+
+    public function hasMaleAgeMax(): bool
+    {
+        return !is_null($this->maleAgeMax);
     }
 
     public function setMaleAgeMax(?int $maleAgeMax): self
@@ -479,6 +489,11 @@ class Competition
         return $this->maleBirthyearMin;
     }
 
+    public function hasMaleBirthyearMin(): bool
+    {
+        return !is_null($this->maleAgeMax);
+    }
+
     private function setMaleBirthyearMax(): self
     {
         if (is_null($this->calendar)) return $this;
@@ -499,9 +514,19 @@ class Competition
         return $this->maleBirthyearMax;
     }
 
+    public function hasMaleBirthyearMax(): bool
+    {
+        return !is_null($this->maleAgeMin);
+    }
+
     public function getFemaleAgeMin(): ?int
     {
         return $this->femaleAgeMin;
+    }
+
+    public function hasFemaleAgeMin(): bool
+    {
+        return !is_null($this->femaleAgeMin);
     }
 
     public function setFemaleAgeMin(?int $femaleAgeMin): self
@@ -516,6 +541,11 @@ class Competition
     public function getFemaleAgeMax(): ?int
     {
         return $this->femaleAgeMax;
+    }
+
+    public function hasFemaleAgeMax(): bool
+    {
+        return !is_null($this->femaleAgeMax);
     }
 
     public function setFemaleAgeMax(?int $femaleAgeMax): self
@@ -547,6 +577,11 @@ class Competition
         return $this->femaleBirthyearMin;
     }
 
+    public function hasfemaleBirthyearMin(): bool
+    {
+        return !is_null($this->femaleAgeMax);
+    }
+
     private function setFemaleBirthyearMax(): self
     {
         if (is_null($this->calendar)) return $this;
@@ -567,6 +602,17 @@ class Competition
         return $this->femaleBirthyearMax;
     }
 
+    public function hasfemaleBirthyearMax(): bool
+    {
+        return !is_null($this->femaleAgeMin);
+    }
+
+    public function hasAgeLimits(): bool
+    {
+        return !is_null($this->maleBirthyearMin) or !is_null($this->femaleBirthyearMin) 
+            or !is_null($this->maleBirthyearMax) or !is_null($this->femaleBirthyearMax);
+    }
+
     /**
      * @return Collection|CompetitionPart[]
      */
@@ -585,6 +631,18 @@ class Competition
     public function hasEnabledCompetitionParts(): bool
     {
         return count($this->getEnabledCompetitionParts())>0;
+    }
+
+    public function getNewCompetitionEnrolments(): Collection
+    {
+        return $this->competitionParts->filter(function(CompetitionPart $competitionPart) {
+            return $competitionPart->isActive() and $competitionPart->hasNewEnrolments();
+        });
+    }
+
+    public function hasNewCompetitionEnrolments(): bool
+    {
+        return count($this->getNewCompetitionEnrolments())>0;
     }
 
     public function addCompetitionPart(CompetitionPart $competitionPart): self

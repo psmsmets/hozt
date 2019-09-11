@@ -7,8 +7,10 @@ use App\Entity\CompetitionDocument;
 use App\Entity\CompetitionPart;
 use App\Entity\CompetitionEnrolment;
 use App\Entity\Member;
+use App\Entity\User;
 use App\Repository\CompetitionRepository;
 use App\Repository\CompetitionPartRepository;
+use App\Repository\CompetitionEnrolmentRepository;
 use App\Repository\CompetitionDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
@@ -22,11 +24,12 @@ class CompetitionManager
     private $exitMessage;
     private $documentsBase;
 
-    public function __construct($publicDir, $competitionDocumentsDir, EntityManagerInterface $entityManager, CompetitionRepository $competitionRepository, CompetitionDocumentRepository $competitionDocumentRepository )
+    public function __construct($publicDir, $competitionDocumentsDir, EntityManagerInterface $entityManager, CompetitionRepository $competitionRepository, CompetitionDocumentRepository $competitionDocumentRepository, CompetitionEnrolmentRepository $competitionEnrolmentRepository )
     {
         $this->entityManager = $entityManager;
         $this->competitionRepository = $competitionRepository;
         $this->competitionDocumentRepository = $competitionDocumentRepository;
+        $this->competitionEnrolmentRepository = $competitionEnrolmentRepository;
         $this->dir = ltrim(rtrim($publicDir, '/'), '/') .'/'. ltrim(rtrim($competitionDocumentsDir, '/'), '/');
         $this->exitMessage = array();
     }
@@ -188,6 +191,11 @@ class CompetitionManager
         } else {
             return $birthyear >= $competition->getFemaleBirthyearMin() and $birthyear <= $competition->getFemaleBirthyearMax();
         }
+    }
+
+    public function getUserEnrolments(User $user, \DateTimeInterface $start, \DateTimeInterface $end): array 
+    {
+        return $this->competitionEnrolmentRepository->findCompetitionEnrolmentsByUser( $user, $start, $end);
     }
 
     public function getExitMessage(): ?array

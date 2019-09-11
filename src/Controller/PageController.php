@@ -51,6 +51,10 @@ use App\Form\ClubfeestType;
 use App\Form\TryoutEnrolmentForm;
 use App\Form\MemberAddressForm;
 
+# managers
+use App\Service\CalendarManager;
+use App\Service\CompetitionManager;
+
 class PageController extends AbstractController
 {
     private $template_data;
@@ -59,29 +63,17 @@ class PageController extends AbstractController
     private $em;
     private $translator;
     private $now;
-    private $calendarPeriodStart;
-    private $calendarPeriodEnd;
+    private $calendarManager;
 
-    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator)
+    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator, CalendarManager $calendarManager)
     {
         $this->template_data = [];
         $this->requestStack = $requestStack;
         $this->security = $security;
         $this->em = $em;
         $this->translator = $translator;
+        $this->calendarManager = $calendarManager;
         $this->now = new \DateTime('now');
-    }
-
-    private function calcCalendarPeriod(): self
-    {
-        if (!is_null($this->calendarPeriodStart) and !is_null($this->calendarPeriodEnd)) return $this;
-
-        $di = new \DateInterval('P1Y');
-        $this->calendarPeriodStart = new \DateTimeImmutable('15 august this year');
-        if ($this->now < $this->calendarPeriodStart) $this->calendarPeriodStart = $this->calendarPeriodStart->sub($di);
-        $this->calendarPeriodEnd = $this->calendarPeriodStart->add($di);
-
-        return $this;
     }
 
     private function initTemplateData()
@@ -478,8 +470,7 @@ class PageController extends AbstractController
 
     private function getCurrentCalendarYear(): ?int
     {
-        $this->calcCalendarPeriod();
-        return (int) $this->calendarPeriodStart->format('Y');
+        return (int) $this->calendarManager->getPeriodStart()->format('Y');
     }
 
     /**
@@ -487,8 +478,6 @@ class PageController extends AbstractController
      */
     public function calendar_list(int $year = null, Request $request)
     {
-        $this->calcCalendarPeriod();
-
         if (is_null($year) or $year < 2016 or $year > 2050 ) {
             return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
         }
@@ -503,9 +492,9 @@ class PageController extends AbstractController
         );
         $this->addToTemplateData( 'calendar_events', $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
-            ->findCalendarEvents($this->calendarPeriodStart,$this->calendarPeriodEnd)
+            ->findCalendarEvents($this->calendarManager->getPeriodStart(),$this->calendarManager->getPeriodEnd())
         );
-        $this->addToTemplateData( 'calendar_period', ['start'=>$this->calendarPeriodStart,'end'=>$this->calendarPeriodEnd]);
+        $this->addToTemplateData( 'calendar_period', ['start'=>$this->calendarManager->getPeriodStart(),'end'=>$this->calendarManager->getPeriodEnd()]);
 
         return $this->render('calendar/list.html.twig', $this->template_data );
     }
@@ -842,23 +831,23 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/mijn-account/inschrijvingen", name="membership_enrolments")
+     * @Route("/mijn-account/wedstrijden", name="membership_competitions")
      */
-    public function membership_enrolments()
+    public function membership_competitions()
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
-        $this->calcCalendarPeriod();
 
         $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::my_membership');
         $this->addToTemplateData( 
             'competitions',
             $this->getDoctrine()
                 ->getRepository(Competition::class)
-                ->findCompetitionsByUser( $this->security->getUser(), $this->calendarPeriodStart, $this->calendarPeriodEnd)
+                ->findCompetitionsByUser( 
+                    $this->security->getUser(), $this->calendarManager->getPeriodStart(),$this->calendarManager->getPeriodEnd()
+                )
         );
 
-        return $this->render('membership/enrolments.html.twig', $this->template_data );
+        return $this->render('membership/competitions.html.twig', $this->template_data );
     }
 
     /**
@@ -872,86 +861,6 @@ class PageController extends AbstractController
         $tab = (string) $request->query->get('tab', null);
         if (!in_array($tab,$tabs)) $tab = $tabs[0];
 
-        $json = $request->query->get('format', null) == 'json';
-        $action = $request->query->get('action', null);
-        $remove = $action == 'remove';
-        $edit = $action == 'edit';
-        $new = $action == 'new';
-        $form = null;
-
-        if ($json && $action == 'load' )
-        {
-            return $this->json([
-                'success' => true,
-                'html' => $this->render(sprintf('membership/preferences_%s.html.twig', $tab), ['tab' => $tab])->getContent(),
-            ]);
-        }
-        elseif ($json && ($edit or $new or $remove))
-        {
-            $id = (int) $request->query->get('id', null);
-            $user = $this->security->getUser();
-
-            if ( $tab == 'address' )
-            {
-                $address = $new ? new MemberAddress($user) : $user->getMemberAddress($id);
-
-                if (!$address instanceof MemberAddress) return $this->json(['success' => false]);
-
-                if ($remove)
-                {
-                    if (empty($address->getMembers())) {
-                        $this->remove($address);
-                        $this->em->flush();
-                        return $this->json([
-                            'success' => true,
-                            'message' => $this->translator->trans(sprintf('preferences.address.%s.success', $action )),
-                        ]);
-                    } else {
-                        return $this->json([
-                            'success' => false,
-                            'message' => $this->translator->trans(sprintf('preferences.address.%s.inuse', $action )),
-                        ]);
-                    }
-                }
-                else
-                {
-                    $form = $this->createForm(MemberAddressForm::class, $address);
-                    $form->handleRequest($request);
-
-                    if ($form->isSubmitted() && $form->isValid())
-                    {
-                        if ($new)
-                        {
-                            $address = $form->getData();
-                            $address->setUser($this->security->getUser());
-                            $this->em->persist($address);
-                        }
-                        $this->em->flush();
-                        return $this->json([
-                            'success' => true,
-                            'message' => $this->translator->trans(sprintf('preferences.address.%s.success', $action )),
-                        ]);
-                    }
-                }
-
-            }
-
-            if ($form) {
-                return $this->json([
-                    'success' => true,
-                    'html' => $this->render('membership/preferences_form.html.twig', [
-                        'tab' => $tab,
-                        'action' => $action,
-                        'url' => $this->generateUrl('membership_preferences',
-                               [ 'tab' => $tab, 'format' => 'json', 'action' => $action, 'id' => $id ]),
-                        'form' => $form->createView(),
-                    ])->getContent(),
-                ]);
-            } else {
-                return $this->json([ 'success' => false, 'html' => null ]);
-            }
-
-        }
         $this->initTemplateData();
         $this->addToTemplateData( 'tabs', $tabs);
         $this->addToTemplateData( 'tab', $tab);
