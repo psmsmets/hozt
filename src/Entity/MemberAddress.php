@@ -49,7 +49,7 @@ class MemberAddress
      */
     private $user;
 
-    public function __construct(User $user = null)
+    public function __construct(User $user=null)
     {
         $this->nation = 'BE';
         $this->members = new ArrayCollection();

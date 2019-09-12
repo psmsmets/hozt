@@ -56,7 +56,7 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-primary d-flex">Leden <small><span class="badge badge-primary ml-2">1</span></small></h5>
+            <h5 class="card-title text-primary d-flex">Leden <small><span class="badge badge-primary ml-2">{{app.user.getMembers()|length}}</span></small></h5>
             {% for member in app.user.getMembers() %}
             <p class="card-text">{{member}}, {{member.team.name}}{% if member.registrationId is not empty %}, <span class="text-muted">{{member.registrationId}}</span>{% endif %}</p>
             {% endfor %}

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Member;
+use App\Entity\MemberAddress;
 use App\Entity\User;
 use App\Entity\TrainingTeam;
 use App\Repository\MemberRepository;
@@ -19,9 +20,11 @@ class MemberManager
         $this->memberRepository = $memberRepository;
     }
 
-    public function create(string $firstname, string $lastname, TrainingTeam $team=null, int $memberId=null, User $user=null )
+    public function createMember(
+        int $memberId, string $firstname, string $lastname, string $gender, \DateTimeInterface $birthdate, 
+        string $registrationId=null, \DateTimeInterface $since=null, MemberAddress $address=null, TrainingTeam $team=null 
+    ): Member
     {
-        // create a new member
         if (!is_null($memberId)) {
             if ($this->memberRepository->findByMemberId($memberId)) $memberId = null;
         }
@@ -29,22 +32,47 @@ class MemberManager
 
         $member = new Member($memberId);
 
+        $member->setEnabled(false);
         $member->setFirstname($firstname);
         $member->setLastname($lastname);
-        $member->setUser($user);
-        $member->setTeam($team);
+        $member->setGender($gender);
+        $member->setBirthdate($birthdate);
+        $member->setRegistrationId($registrationId);
+        $member->setMemberSince($since);
 
-        $this->entityManager->persist($member);
-        $this->entityManager->flush();
+        if ($address) $member->setAddress($address);
+        if ($team) $member->setTeam($team);
 
+        return $member;
+    }
+
+    public function findMember(int $memberId, string $firstname, string $lastname, string $gender, \DateTimeInterface $birthdate): ?Member
+    {
+        if ($member = $this->memberRepository->findByMemberId($memberId)) return $member;
+        //if ($member = $this->memberRepository->findBySpecs($firstname,$lastname,$gender,$birthdate)) return $member;
+
+        return null;
+    }
+
+    public function createAddress(string $street, string $zip, string $town, string $nation, User $user=null): MemberAddress
+    {
+        $address = new MemberAddress($user);
+
+        $address->setStreet($street);
+        $address->setZip($zip);
+        $address->setTown($town);
+        $address->setNation($nation);
+
+        return $address;
     }
 
     public function getLastMemberId(): int
     {
-        return $this->memberRepository->getLastMemberId();
+        $memberId = $this->memberRepository->getLastMemberId();
+        return is_null($memberId) ? 0 : $memberId;
     }
 
-    public function export2assist( string $separator = ';', string $dateFormat = 'd-m-Y' )
+    public function export2assist(string $separator = ';', string $dateFormat = 'd-m-Y')
     {
             $fields = array( 
                 'FIRSTNAME' => 'member.firstname', 

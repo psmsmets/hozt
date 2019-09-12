@@ -603,6 +603,21 @@ class AdminController extends EasyAdminController
         parent::removeEntity($entity);
     }
 
+    public function disableBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        $em = $this->getDoctrine()->getManagerForClass($class);
+
+        foreach ($ids as $id) {
+            $entities = $em->find($class,$id);
+            if (method_exists($entities, 'setEnabled')) $entities->setEnabled(false);
+        }
+
+        $this->em->flush();
+
+        // don't return anything or redirect to any URL because it will be ignored
+        // when a batch action finishes, user is redirected to the original page
+    }
 
     public function enableBatchAction(array $ids)
     {
