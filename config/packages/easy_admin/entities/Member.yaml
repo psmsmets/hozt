@@ -29,7 +29,7 @@ easy_admin:
                     - { property: 'memberSince', label: 'Lid sinds' }
                     - { property: 'registrationId', label: 'Licentienummer' }
                     - { property: 'team', label: 'Zwemt bij', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }  }
-                    - { property: 'grouping', label: 'Groepen', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getMemberGrouping'] }  }
+                    - { property: 'grouping', label: 'Groepen' }
                     - { property: 'user', label: 'Beheerder', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }  }
                     - { property: 'enabled', label: 'Actief' }
 
@@ -60,16 +60,17 @@ easy_admin:
             label: 'Groep'
             list:
                 fields:
-                    - { property: 'fullname', label: 'Volledige naam' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'category', label: 'Categorie', template: 'easy_admin/trans.html.twig' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'members', label: 'Leden' }
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'public', label: 'Zoekbaar', type: 'boolean' }
-                    - { property: 'slug', label: 'Slug' }
                 sort: ['sequence', 'ASC']
             form:
                 fields:
                     - { property: 'name', label: 'Naam/functie' }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
+                    - { property: 'category', label: 'Categorie', type: 'choice', type_options: { multiple: false, choices: {'GROUPING_BOARD':'GROUPING_BOARD','GROUPING_DAILY_OPERATIONS':'GROUPING_DAILY_OPERATIONS','GROUPING_COACHES':'GROUPING_COACHES','GROUPING_OFFICIALS':'GROUPING_OFFICIALS'}, required: true  } }
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'public', label: 'Publiek zoekbaar' }
