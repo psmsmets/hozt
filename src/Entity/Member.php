@@ -114,7 +114,7 @@ class Member
     /**
      * Virtual variables
      */
-    private $teamChanged = false;
+    private $teamChanged = false; // or registrationId !!
 
     public function __construct(int $memberId)
     {
@@ -213,7 +213,7 @@ class Member
 
     public function setGender(string $gender): self
     {
-        $this->gender = $gender;
+        $this->gender = strtoupper(substr($gender,0,1)) === 'M' ? 'M' : 'F';
 
         return $this;
     }
@@ -225,7 +225,7 @@ class Member
 
     public function isFemale(): ?bool
     {
-        return $this->gender === 'F';
+        return $this->gender !== 'M';
     }
 
     public function getBirthdate(): ?\DateTimeInterface
