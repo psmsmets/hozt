@@ -16,8 +16,8 @@ easy_admin:
                     - { property: 'memberId', label: 'Lidnr' }
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
-                    - { property: 'team', label: 'Zwemgroep' }
-                    - { property: 'user', label: 'Beheerder' }
+                    - { property: 'team', label: 'Zwemgroep', type: 'text' }
+                    - { property: 'user', label: 'Beheerder', type: 'text' }
                     - { property: 'registrationId', label: 'Licentie' }
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                 sort: ['memberId', 'ASC']
@@ -36,6 +36,11 @@ easy_admin:
                     - { property: 'grouping', label: 'Tags' }
                     - { property: 'user', label: 'Beheerder', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }  }
                     - { property: 'enabled', label: 'Actief' }
+            search:
+                fields: ['firstname','lastname','team.name','team.abbr','user.lastname','user.firstname']
+                # using an empty value to not apply any condition when searching
+                # elements (this prevents inheriting the 'dql_filter' value defined in 'list')
+                dql_filter: ''
 
         MemberAddress:
             class: App\Entity\MemberAddress

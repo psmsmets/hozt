@@ -31,8 +31,8 @@ easy_admin:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
                     - { property: 'calendar', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnassociatedCalendarEvents'] } }
                     - { property: 'calendar.title', label: 'Titel', type: 'text' }
-                    - { property: 'calendar.startTime', label: 'Van', type: 'datetime', type_options: { disabled: true } }
-                    - { property: 'calendar.trueEndTime', label: 'Tot', type: 'datetime', type_options: { disabled: true } }
+                    - { property: 'calendar.startTime', label: 'Van', type: 'datetime', type_options: { disabled: true }, template: 'easy_admin/trans.html.twig' }
+                    - { property: 'calendar.trueEndTime', label: 'Tot', type: 'datetime', type_options: { disabled: true }, template: 'easy_admin/trans.html.twig' }
 
 
                     - { property: 'calendar.body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
