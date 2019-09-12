@@ -14,6 +14,7 @@ easy_admin:
             list:
                 fields:
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'memberId', label: 'Lidnr' }
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
                     - { property: 'team', label: 'Zwemgroep' }
@@ -21,6 +22,7 @@ easy_admin:
                 sort: ['firstname', 'ASC']
             form:
                 fields:
+                    - { property: 'memberId', label: 'Lid nummer', help: 'Lid nummer van Assist Online (uniek!).'}
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
                     - { property: 'gender', label: 'Geslacht', type: 'choice', type_options: { choices: {'Man': 'M', 'Vrouw': 'F'} } }

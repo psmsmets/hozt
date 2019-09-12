@@ -34,17 +34,23 @@ class MemberRepository extends ServiceEntityRepository
         ;
     }
 
-    /*
-    public function findOneBySomeField($value): ?Member
+    public function findByMemberId(int $memberId)
     {
         return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('m.memberId = :memberId')
+            ->setParameter('memberId', $memberId)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
+    public function getLastMemberId(): ?int
+    {
+        return $this->createQueryBuilder('m')
+            ->select('MAX(m.memberId) as memberId')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
     public function flush()
     {
