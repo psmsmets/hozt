@@ -33,7 +33,7 @@ easy_admin:
                     - { property: 'memberSince', label: 'Lid sinds' }
                     - { property: 'registrationId', label: 'Licentienummer' }
                     - { property: 'team', label: 'Zwemt bij', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }  }
-                    - { property: 'grouping', label: 'Groepen' }
+                    - { property: 'grouping', label: 'Tags' }
                     - { property: 'user', label: 'Beheerder', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }  }
                     - { property: 'enabled', label: 'Actief' }
 

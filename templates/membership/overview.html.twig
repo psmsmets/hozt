@@ -58,7 +58,7 @@
           <div class="card-body">
             <h5 class="card-title text-primary d-flex">Leden <small><span class="badge badge-primary ml-2">{{app.user.getMembers()|length}}</span></small></h5>
             {% for member in app.user.getMembers() %}
-            <p class="card-text">{{member}}, {{member.team.name}}{% if member.registrationId is not empty %}, <span class="text-muted">{{member.registrationId}}</span>{% endif %}</p>
+            <p class="card-text">{{member}}, {{member.team.name}}<br><span class="text-muted small">Lidnr. {{member.memberId}} {%if member.registrationId%}| Licentienr. {{member.registrationId}}{%endif%}</span></p>
             {% endfor %}
             <a href="{{path('membership_preferences')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Voorkeuren</a>
           </div>
