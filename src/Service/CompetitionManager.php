@@ -214,6 +214,10 @@ class CompetitionManager
                 $user, $competitionPartId, $memberId
             );
         if (is_null($enrolment)) return false;
+
+        $now = new \DateTime('now');
+        if ($now > $enrolment->getCompetitionPart()->getCompetition()->getEnrolBefore()) return false;
+
         $enrolment->setEnrolled($enrolled);
         $this->competitionEnrolmentRepository->flush();
 
