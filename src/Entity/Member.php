@@ -26,6 +26,11 @@ class Member
     private $uuid;
 
     /**
+     * @ORM\Column(type="integer", unique=true)
+     */
+    private $memberId;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $enabled;
@@ -111,9 +116,10 @@ class Member
      */
     private $teamChanged = false;
 
-    public function __construct()
+    public function __construct(int $memberId)
     {
         $this->uuid = bin2hex(random_bytes(8));
+        $this->memberId = $memberId;
         $this->enabled = true;
         $this->createdAt = new \DateTime('now');
         $this->updatedAt = $this->createdAt;
@@ -137,6 +143,18 @@ class Member
         return $this->uuid;
     }
 
+    public function getMemberId(): ?int
+    {
+        return $this->memberId;
+    }
+
+    public function setMemberId(int $memberId): self
+    {
+        $this->memberId = $memberId;
+
+        return $this;
+    }
+
     public function getEnabled(): ?bool
     {
         return $this->enabled;
@@ -145,6 +163,7 @@ class Member
     public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
+
         return $this;
     }
 

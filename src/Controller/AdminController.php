@@ -45,15 +45,19 @@ use App\Repository\TryoutRepository;
 use App\Repository\TrainingTeamRepository;
 
 # Services
+use App\Service\CalendarManager;
 use App\Service\CompetitionManager;
+use App\Service\MemberManager;
 
 class AdminController extends EasyAdminController
 {
     private $competitionManager;
 
-    public function __construct(CompetitionManager $competitionManager)
+    public function __construct(CalendarManager $calendarManager, CompetitionManager $competitionManager, MemberManager $memberManager)
     {
+        $this->calendarManager = $calendarManager;
         $this->competitionManager = $competitionManager;
+        $this->memberManager = $memberManager;
     }
 
     // Customizes the instantiation of specific entities
@@ -191,6 +195,11 @@ class AdminController extends EasyAdminController
             ;
         $new = new TrainingTeamCategory();
         return $new->setSequence($seq+1);
+    }
+
+    public function createNewMemberEntity()
+    {
+        return new Member($this->memberManager->getLastMemberId()+1);
     }
 
     // special persist

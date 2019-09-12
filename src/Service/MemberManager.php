@@ -19,10 +19,15 @@ class MemberManager
         $this->memberRepository = $memberRepository;
     }
 
-    public function create(string $firstname, string $lastname, TrainingTeam $team = null, User $user = null )
+    public function create(string $firstname, string $lastname, TrainingTeam $team=null, int $memberId=null, User $user=null )
     {
         // create a new member
-        $member = new Member();
+        if (!is_null($memberId)) {
+            if ($this->memberRepository->findByMemberId($memberId)) $memberId = null;
+        }
+        if (is_null($memberId)) $memberId = $this->memberRepository->getLastMemberId()+1;
+
+        $member = new Member($memberId);
 
         $member->setFirstname($firstname);
         $member->setLastname($lastname);
