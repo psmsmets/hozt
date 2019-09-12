@@ -13,6 +13,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  */
 class Member
 {
+
+    const registrationIdRegex = '/^HOZT\/\d+\/\d\d/';
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -296,12 +298,12 @@ class Member
 
     public function getRegistrationId(): ?string
     {
-        return $this->registrationId;
+        return preg_match(self::registrationIdRegex, $this->registrationId) ? $this->registrationId : null;
     }
 
     public function setRegistrationId(?string $registrationId): self
     {
-        $this->registrationId = $registrationId;
+        if (preg_match(self::registrationIdRegex, $registrationId)) $this->registrationId = $registrationId;
 
         return $this;
     }
@@ -313,7 +315,7 @@ class Member
 
     public function setTeam(?TrainingTeam $team): self
     {
-        if (!is_null($team)) $this->teamChanged = $this->team !== $team;
+        $this->teamChanged = $this->team !== $team;
         $this->team = $team;
 
         return $this;
