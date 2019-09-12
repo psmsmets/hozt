@@ -250,6 +250,14 @@ class CompetitionPart
         return !is_null($this->getMemberEnrolment($member));
     }
 
+
+    public function getUserEnrolments(User $user): Collection
+    {
+        return $this->enrolments->filter(function(CompetitionEnrolment $enrolment) use($user) {
+            return $enrolment->getMember()->getUser() === $user;
+        });
+    }
+
     public function addEnrolment(CompetitionEnrolment $enrolment): self
     {
         if (!$this->enrolments->contains($enrolment)) {

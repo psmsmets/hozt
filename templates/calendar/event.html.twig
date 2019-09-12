@@ -31,7 +31,7 @@
 
         <h6 class="mb-3">{{event.getFormattedPeriod|lower}}</h6>
 
-        <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} cal-smaller smaller font-weight-lighter">
+        <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} cal-smaller font-weight-lighter">
           {% if event.competition is empty %}
             {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|ucwords}}</li>{% endif %}
           {% else %}
@@ -77,7 +77,7 @@
             <li class="mb-1"><i class="fas fa-stream"></i> Dagdelen (#{{event.competition.enabledcompetitionparts|length}})</li>
               <ul class="list-unstyled mb-2">
               {% for part in event.competition.enabledcompetitionparts%}
-               <li class="list-unstyled-item" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}</li>
+               <li class="list-unstyled-item" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}{%if app.user%} |<span class="text-primary">{%for enrolment in part.getUserEnrolments(app.user)%} {{enrolment.member.firstname}}{%endfor%}</span>{%endif%}</li>
               {% endfor %}
               </ul>
             <li class="mb-2"><i class="fas fa-edit"></i> Deadline {{event.competition.enrolBefore|localizeddate|localizeddate('full','none')}}</li>

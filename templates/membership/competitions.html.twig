@@ -55,7 +55,7 @@
                   {% set edit = competition.enrolbefore > date() %}
                   {% set past = competition.calendar.calcendtime < date() %}
                   {% set new  = competition.hasnewcompetitionenrolments and edit %}
-                  <tr class="competition{%if past%} competition-past{%endif%} {%if new%}competition-new{%endif%}">
+                  <tr class="competition{%if past%} competition-past{%endif%} {%if new%}competition-new{%endif%} {%if not edit%}competition-locked{%endif%}">
                     <th scope="row" class="text-right" colspan={{1+members|length}}>
                       <a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}}</a>
                     </th>

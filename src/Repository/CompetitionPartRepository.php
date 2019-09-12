@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\CalendarEvent;
 use App\Entity\CompetitionPart;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,32 +21,26 @@ class CompetitionPartRepository extends ServiceEntityRepository
         parent::__construct($registry, CompetitionPart::class);
     }
 
-    // /**
-    //  * @return CompetitionPart[] Returns an array of CompetitionPart objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findUserCompetitionPartsByEvent(User $user, CalendarEvent $event)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('competitionPart')
+            ->leftJoin('competitionPart.enrolments','enrolments')
+            ->innerJoin('competitionPart.competition','competition')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('enrolments.member', 'members')
+            ->innerJoin('members.user', 'user')
+            ->addSelect('enrolments')
+            ->addSelect('members')
+            ->addSelect('competitionPart')
+            ->andWhere('event = :event')
+            ->andWhere('user = :user')
+            ->setParameter('event', $event)
+            ->setParameter('user', $user)
+            ->orderBy('members.birthdate', 'DESC')
+            ->orderBy('competitionPart.daypart', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?CompetitionPart
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
