@@ -25,7 +25,7 @@ class MemberManager
         if (!is_null($memberId)) {
             if ($this->memberRepository->findByMemberId($memberId)) $memberId = null;
         }
-        if (is_null($memberId)) $memberId = $this->memberRepository->getLastMemberId()+1;
+        if (is_null($memberId)) $memberId = $this->getLastMemberId()+1;
 
         $member = new Member($memberId);
 
@@ -37,6 +37,11 @@ class MemberManager
         $this->entityManager->persist($member);
         $this->entityManager->flush();
 
+    }
+
+    public function getLastMemberId(): int
+    {
+        return $this->memberRepository->getLastMemberId();
     }
 
     public function export2assist( string $separator = ';', string $dateFormat = 'd-m-Y' )
