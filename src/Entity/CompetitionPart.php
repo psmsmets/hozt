@@ -80,7 +80,7 @@ class CompetitionPart
         $this->cancelledAt = null;
         $this->archived = false;
         $this->competition = $competition;
-        if (array_key_exists($part,CompetitionPart::dayParts)) {
+        if (array_key_exists($part,self::dayParts)) {
             $this->part = $part;
             $this->daypart = $day->setTime(0,$this->part);
             $this->hash = md5(sprintf('%d;%d;%d', $this->competition->getCalendar()->getId(), $this->daypart->getTimestamp(), $this->part ));
@@ -204,7 +204,7 @@ class CompetitionPart
 
     public function getPartName(): ?string
     {
-        return CompetitionPart::dayParts[$this->part];
+        return self::dayParts[$this->part];
     }
 
     public function getCompetition(): ?Competition

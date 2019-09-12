@@ -33,4 +33,8 @@ return [
     'address.town' => 'Plaats',
     'address.nation' => 'Land',
     'address.member' => 'Leden',
+    'GROUPING_BOARD' => 'Bestuur',
+    'GROUPING_DAILY_OPERATIONS' => 'Dagelijkse werking',
+    'GROUPING_COACHES' => 'Trainers',
+    'GROUPING_OFFICIALS' => 'Officials',
 ];

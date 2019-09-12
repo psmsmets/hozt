@@ -60,10 +60,4 @@ class EasyAdminRepository
             ->orderBy('c.dayNumber, t.startTime', 'ASC')
         ;
     }
-    public static function getMemberGrouping(EntityRepository $er) {
-        return $er->createQueryBuilder('g')
-            ->where('g.parent is not null')
-            ->orderBy('g.fullname', 'ASC')
-        ;
-    }
 }

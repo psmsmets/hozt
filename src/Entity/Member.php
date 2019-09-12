@@ -234,6 +234,7 @@ class Member
     public function setAddress(?MemberAddress $address): self
     {
         $this->address = $address;
+        $this->address->setUser($this->user);
 
         return $this;
     }

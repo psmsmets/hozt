@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 class MemberGrouping
 {
     /**
+     * Parameters
+     */
+    const groupingCategories = array('GROUPING_BOARD','GROUPING_DAILY_OPERATIONS','GROUPING_COACHES','GROUPING_OFFICIALS');
+
+    /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -24,28 +29,14 @@ class MemberGrouping
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $fullname;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="smallint")
      */
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\MemberGrouping", inversedBy="children")
-     * @ORM\JoinColumn(name="parent", referencedColumnName="id")
-     */
-    private $parent;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\MemberGrouping", mappedBy="parent")
-     */
-    private $children;
+    private $categoryId;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Member", mappedBy="grouping")
@@ -62,20 +53,16 @@ class MemberGrouping
      */
     private $public;
 
-    /**
-     * @ORM\Column(type="string", length=50, unique=true)
-     */
-    private $slug;
-
     public function __construct( )
     {
         $this->members = new ArrayCollection();
+        $this->categoryId = 0;
         $this->public = false;
     }
 
     public function __toString()
     {
-        return "$this->fullname";
+        return "$this->name";
     }
 
     public function getId(): ?int
@@ -96,20 +83,6 @@ class MemberGrouping
         return $this;
     }
 
-    public function getFullname(): ?string
-    {
-        return $this->fullname;
-    }
-
-    public function setFullname(): self
-    {
-        $fullname = $this->name;
-        if ($parent = $this->getParent()) $fullname = $parent->getName()." - $fullname";
-        $this->fullname = $fullname;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -122,39 +95,20 @@ class MemberGrouping
         return $this;
     }
 
-    public function getParent(): ?MemberGrouping
+    public function getCategoryId(): ?int
     {
-        return $this->parent;
+        return $this->categoryId;
     }
 
-    public function setParent(?MemberGrouping $parent): self
+    public function getCategory(): ?string
     {
-        $this->parent = $parent;
-        $this->setFullname();
-
-        return $this;
+        return self::groupingCategories[$this->categoryId];
     }
 
-    /**
-     * @return Collection|MemberGrouping[]
-     */
-    public function getChildren(): Collection
+    public function setCategory(?string $category): self
     {
-        return $this->children;
-    }
-
-    public function addChild(MemberGrouping $child)
-    {
-       $this->children[] = $child;
-       $child->setParent($this);
-    }
-
-    public function removeChild(MemberGrouping $child)
-    {
-        if ($this->children->contains($child)) {
-            $this->children->removeElement($child);
-            $children->removeGrouping($this);
-        }
+        $categoryId = array_search(strtoupper($category),self::groupingCategories);
+        if ($categoryId !== false) $this->categoryId = $categoryId;
 
         return $this;
     }
@@ -207,18 +161,6 @@ class MemberGrouping
     public function setPublic(bool $public): self
     {
         $this->public = $public;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
 
         return $this;
     }

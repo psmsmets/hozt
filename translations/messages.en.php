@@ -26,4 +26,8 @@ return [
     'address.town' => 'Town',
     'address.nation' => 'Nation',
     'address.member' => 'Member',
+    'GROUPING_BOARD' => 'Board',
+    'GROUPING_DAILY_OPERATIONS' => 'Daily Operations',
+    'GROUPING_COACHES' => 'Coaches',
+    'GROUPING_OFFICIALS' => 'Officials',
 ];

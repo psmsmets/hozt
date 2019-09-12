@@ -56,32 +56,6 @@ class AdminController extends EasyAdminController
         $this->competitionManager = $competitionManager;
     }
 
-    public function createMemberGroupingEntityFormBuilder($entity, $view)
-    {
-        $formBuilder = parent::createEntityFormBuilder($entity, $view);
-
-        // get the list of choices from your application and add the form field for them
-//        $formBuilder->add('parent',TextType::class, ['disabled' => true]);
-        $formBuilder->add(
-            'parent', EntityType::class, array(
-                'class' => MemberGrouping::class,
-                'choice_label' => 'fullname',
-                'choice_value' => 'id',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('memberGrouping')
-                        ->where('memberGrouping.parent is null')
-                        ;
-                },
-                'label'    => 'Parent',
-                'attr' => ['class'=>'custom-select'],
-                'required' => false,
-                //'placeholder' => '-- Maak een keuze --',
-            )
-        );
-
-        return $formBuilder;
-    }
-
     // Customizes the instantiation of specific entities
     public function createNewBlogPostEntity()
     {
