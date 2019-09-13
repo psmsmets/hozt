@@ -1,6 +1,6 @@
 {% for address in app.user.getMemberAddresses() %}
 
-{% set members = address.getMembers %}
+{% set members = address.getMembers() %}
 
 <div class="mb-2">{{address}}
   <span class="float-right">

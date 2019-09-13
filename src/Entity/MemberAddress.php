@@ -117,9 +117,12 @@ class MemberAddress
     /**
      * @return Collection|Member[]
      */
-    public function getMembers(): Collection
+    public function getMembers(User $user=null): Collection
     {
-        return $this->members;
+        if (is_null($user)) return $this->members;
+        return $this->members->filter(function(Member $member) use ($user) {
+            return $member->getUser() === $user;
+        });
     }
 
     public function addMember(Member $member): self

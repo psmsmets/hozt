@@ -455,6 +455,20 @@ class User implements UserInterface
         return $this->members;
     }
 
+    public function getEnabledMembers(): Collection
+    {
+        return $this->members->filter(function(Member $member){
+            return $member->isEnabled();
+        });
+    }
+
+    public function getMembersWithTeam(): Collection
+    {
+        return $this->members->filter(function(Member $member){
+            return $member->isEnabled() and !is_null($member->getTeam());
+        });
+    }
+
     public function addMember(Member $member): self
     {
         if (!$this->members->contains($member)) {

@@ -46,7 +46,7 @@ easy_admin:
                     - { property: 'calendar.url', label: 'Website', type: 'text' }
                     - { property: 'overnight', label: 'Met overnachting' }
                     - { type: 'group', label: 'Filter leden', icon: 'filter', css_class: "col-xs-12 col-md-9" }
-                    - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, css_class: 'mb-4', help: 'Selecteer de trainingsgroep die deelneemt aan de wedstrijd. Enkel geselecteerde groepen kunnen inschrijven.' }
+                    - { property: 'teams', label: 'Groep', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, by_reference: false, css_class: 'mb-4', help: 'Selecteer de trainingsgroep die deelneemt aan de wedstrijd. Enkel geselecteerde groepen kunnen inschrijven.' }
                     - { property: 'noregistrationid', label: 'Niet-vergunningshouders', type: 'checkbox' }
                     - { property: 'restrictions', label: 'Limieten' }
                     - { property: 'similarGenderAgeLimits', label: 'Zelfde leeftijden voor jongens/meisjes', help: 'Geef bij gelijke leeftijdslimieten enkel de jongens in. Geen geboortejaren maar leeftijden invullen. Het geboortejaar wordt nadien bepaald met de datum van de wedstrijd.' }

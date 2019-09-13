@@ -1,12 +1,12 @@
-{% for member in app.user.getMembers() %}
-<div class="mb-3">
+{% for member in app.user.getEnabledMembers() %}
+<div class="mb-4 mb-lg-5">
   <h5 class="d-flex justify-content-between mb-0">{{member}} <button class="btn btn-sm btn-light" data-member="{{member.uuid}}">bewerk</button></h5>
   <ul class="list-unstyled text-muted">
-    <li><span class="badge badge-primary">{{member.team.name}}</span></li>
-    <li class="small">{% if member.gender == 'M' %}<i class="fas fa-male"></i>{% else %}<i class="fas fa-female"></i>{% endif %} {{member.birthdate|localizeddate('short','none')}}</li>
-    {% if member.registrationId is not empty %}<li class="small">{{member.registrationId}}</li>{% endif %}
+    <li class="mb-1">{%if member.team%}<span class="badge badge-primary mr-1">{{member.team.name}}</span>{%endif%}{%for tag in member.grouping%}<span class="badge badge-secondary mr-1">{{tag.name}}</span>{%endfor%}</li>
+    <li class="mb-1 small">{% if member.gender == 'M' %}<i class="fas fa-male"></i>{% else %}<i class="fas fa-female"></i>{% endif %} {{member.birthdate|localizeddate('short','none')}}</li>
+    <li class="mb-1 small">Lidnummer {{member.memberId}} {%if member.registrationId%}| Licentienummer {{member.registrationId}}{%endif%}</li>
     {% set elapsed = date().diff(member.memberSince) %}
-    <li class="small">{{elapsed|date('%a')}} dagen lid (sinds {{member.memberSince|localizeddate('short','none')}})</li>
+    <li class="mb-1 small">{{elapsed|date('%a')}} dagen lid (sinds {{member.memberSince|localizeddate('short','none')}})</li>
   </ul>
 </div>
 {% endfor %}
