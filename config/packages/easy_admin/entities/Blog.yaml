@@ -32,7 +32,7 @@ easy_admin:
                     - { property: 'pinned', label: 'Vastgepind' }
                     - { property: 'archived', label: 'Gearchiveerd' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
-                    - { property: 'author', label: 'Auteur', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] } }
+                    - { property: 'author', label: 'Auteur', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getAdminUsers'] } }
                     - { property: 'publishAt', label: 'Publiceer vanaf' }
                     - { property: 'description', label: 'Korte omschrijving', type: 'textarea' }
                     - { property: 'event', label: 'Kalender event', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getFilteredCalendarEvents'] } }

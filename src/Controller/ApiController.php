@@ -541,12 +541,12 @@ class ApiController extends AbstractController
             );
             $data = array();
             foreach ($enrolments as $enrolment) {
-                if ($enrolment->getEnabled()) {
+                if ($enrolment->isEnabled()) {
                     $data[] = array(
                         'member' => $enrolment->getMember()->getId(),
                         'enrolment' => $enrolment->getId(),
                         'competitionpart' => $enrolment->getCompetitionPart()->getId(),
-                        'disabled' => $enrolment->getDisabled(),
+                        //'disabled' => $enrolment->isDisabled(),
                         'enrolled' => $enrolment->getEnrolled(),
                         'enrolledAt' => $enrolment->getEnrolledAt(),
                         'editable' => $enrolment->getCompetitionPart()->getCompetition()->getEnrolBefore() > $this->now,

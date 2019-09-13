@@ -14,7 +14,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class Member
 {
 
-    const registrationIdRegex = '/^HOZT\/\d+\/\d\d/';
+    const registrationIdRegex = '/[a-zA-Z]+\/[0-9]{5}\/[0-9]{2}/';
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -298,12 +298,13 @@ class Member
 
     public function getRegistrationId(): ?string
     {
-        return preg_match(self::registrationIdRegex, $this->registrationId) ? $this->registrationId : null;
+        //return preg_match(self::registrationIdRegex, $this->registrationId) ? $this->registrationId : null;
+        return $this->registrationId;
     }
 
     public function setRegistrationId(?string $registrationId): self
     {
-        if (preg_match(self::registrationIdRegex, $registrationId)) $this->registrationId = $registrationId;
+        if (preg_match(self::registrationIdRegex, $registrationId)) $this->registrationId = strtoupper($registrationId);
 
         return $this;
     }
