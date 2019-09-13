@@ -116,7 +116,9 @@ class Member
     /**
      * Virtual variables
      */
-    private $teamChanged = false; // or registrationId !!
+    private $enabledChanged = false;
+    private $registrationIdChanged = false;
+    private $teamChanged = false; // or registrationId or enabled -> handle all by competitionManager !!
 
     public function __construct(int $memberId)
     {
@@ -164,6 +166,7 @@ class Member
 
     public function setEnabled(bool $enabled): self
     {
+        $this->enabledChanged = $this->enabled !== $enabled;
         $this->enabled = $enabled;
 
         return $this;
@@ -304,7 +307,10 @@ class Member
 
     public function setRegistrationId(?string $registrationId): self
     {
-        if (preg_match(self::registrationIdRegex, $registrationId)) $this->registrationId = strtoupper($registrationId);
+        if (preg_match(self::registrationIdRegex, $registrationId)) {
+            $this->registrationIdChanged = $this->registrationId !== $strtoupper($registrationId);
+            $this->registrationId = strtoupper($registrationId);
+        }
 
         return $this;
     }

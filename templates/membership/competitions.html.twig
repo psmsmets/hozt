@@ -4,7 +4,7 @@
 
 {% block main %}
 
-{% set members = app.user.getMembers() %}
+{% set members = app.user.getMembersWithTeam() %}
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
@@ -37,7 +37,7 @@
                 <li class="list-inline-item"><i class="fas fa-minus-square text-warning"></i> afgemeld</li>
                 <li class="list-inline-item"><i class="fas fa-square text-medium"></i> niet beschikbaar</li>
               </ul>
-              <small><button class="btn btn-medium btn-sm" id="competitions-edit" data-action="edit"><i class="fas fa-edit"></i> bewerk</button></small>
+              <small><button class="btn btn-medium btn-sm" id="competitions-edit" data-action="edit"><i class="fas fa-lock"></i> bewerken</button></small>
             </div>
 
             <div class="table-responsive">
@@ -56,8 +56,20 @@
                   {% set past = competition.calendar.calcendtime < date() %}
                   {% set new  = competition.hasnewcompetitionenrolments and edit %}
                   <tr class="competition{%if past%} competition-past{%endif%} {%if new%}competition-new{%endif%} {%if not edit%}competition-locked{%endif%}">
-                    <th scope="row" class="text-right" colspan={{1+members|length}}>
+                    <th scope="row" class="" colspan={{1+members|length}}>
+
+            <div class="row text-left w-100 p-0 m-0 align-items-center">
+              <div class="col-lg-4 pl-0"><small class="text-muted"><i class="fas fa-edit"></i> voor {{competition.enrolBefore|localizeddate('medium','none')}}</small></div>
+              <div class="col-lg-8 text-lg-right px-0"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}} <i class="fas fa-external-link-alt ml-2"></i></a></div>
+            </div>
+
+<!--
+                      <div class="d-inline-flex text-left justify-content-between w-100">
+                      <small class="text-muted align-bottom mr-1"><i class="fas fa-edit"></i> voor <br class="">{{competition.enrolBefore|localizeddate('medium','none')}}</small>
                       <a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}} <i class="fas fa-external-link-alt ml-2"></i></a>
+                      </div>
+
+-->
                     </th>
                   </tr>
                   {% for cpart in competition.competitionParts %}

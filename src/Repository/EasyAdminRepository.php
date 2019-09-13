@@ -62,21 +62,15 @@ class EasyAdminRepository
     }
     public static function getAdultUsers(EntityRepository $er) {
         return $er->createQueryBuilder('u')
-            ->andWhere('u.enabled = :enabled')
-            ->andWhere('u.verified = :verified')
+            ->andWhere('u.enabled = true')
             ->andWhere('u.roles LIKE :role')
-            ->setParameter('enabled', true)
-            ->setParameter('verified', true)
             ->setParameter('role', '%ADULT%')
         ;
     }
     public static function getAdminUsers(EntityRepository $er) {
         return $er->createQueryBuilder('u')
-            ->andWhere('u.enabled = :enabled')
-            ->andWhere('u.verified = :verified')
+            ->andWhere('u.enabled = true')
             ->andWhere('u.roles LIKE :role')
-            ->setParameter('enabled', true)
-            ->setParameter('verified', true)
             ->setParameter('role', '%ADMIN%')
         ;
     }

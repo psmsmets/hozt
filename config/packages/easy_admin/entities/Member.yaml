@@ -33,9 +33,9 @@ easy_admin:
                     - { property: 'address', label: 'Address' }
                     - { property: 'memberSince', label: 'Lid sinds' }
                     - { property: 'registrationId', label: 'Licentienummer' }
-                    - { property: 'team', label: 'Zwemt bij', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }  }
+                    - { property: 'team', label: 'Zwemt bij', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, by_reference: false  }
                     - { property: 'grouping', label: 'Tags' }
-                    - { property: 'user', label: 'Beheerder', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getAdultUsers'] }  }
+                    - { property: 'user', label: 'Beheerder', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getAdultUsers'] }, by_reference: false  }
                     - { property: 'enabled', label: 'Actief' }
             search:
                 fields: ['firstname','lastname','team.name','team.abbr','user.lastname','user.firstname','registrationId']
@@ -73,7 +73,7 @@ easy_admin:
                     - { property: 'zip', label: 'Postcode' }
                     - { property: 'town', label: 'Plaats' }
                     - { property: 'nation', label: 'Land', type: 'country', with_flag: true }
-                    - { property: 'members', label: 'Leden' }
+                    - { property: 'members', label: 'Leden', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, by_reference: false }
                     - { property: 'user', label: 'Eigenaar' }
 
 
