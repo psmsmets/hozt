@@ -491,7 +491,11 @@ class ApiController extends AbstractController
                             $address->setUser($this->security->getUser());
                             $this->em->persist($address);
                         }
+                        foreach($address->getMembers() as $member) {
+                            $member->setAddress($address);
+                        }
                         $this->em->flush();
+
                         return $this->json([
                             'success' => true,
                             'message' => $this->translator->trans(sprintf('preferences.address.%s.success', $action )),
