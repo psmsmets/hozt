@@ -30,7 +30,7 @@
               <dd class="col-sm-4 text-sm-right align-baseline"><small class="text-muted">{{competition.calendar.startTime|localizeddate('medium','none')}}</small></dd>
               <dd class="col-sm-8"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-top">{{competition.organization}}</small></a></dd>
             {% else %}
-              <li class="list-unstyled-item">Geen komende wedstrijden gevonden.</li>
+              <p>Geen komende wedstrijden gevonden.</p>
             {% endfor%}
             </dl>
             <a href="{{path('membership_competitions')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Alle wedstrijden</a>
@@ -47,7 +47,7 @@
               <dd class="col-sm-4 text-sm-right align-baseline"><small class="text-muted">{{competition.calendar.startTime|localizeddate('medium','none')}}</small></dd>
               <dd class="col-sm-8"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-top">{{competition.organization}}</small></a></dd>
             {% else %}
-              <li class="list-unstyled-item">Geen komende wedstrijden gevonden.</li>
+              <p>Geen nieuwe wedstrijden gevonden.</p>
             {% endfor%}
             </dl>
             <a href="{{path('membership_competitions')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Alle wedstrijden</a>
