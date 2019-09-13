@@ -77,7 +77,7 @@
             <li class="mb-1"><i class="fas fa-stream"></i> Dagdelen (#{{event.competition.enabledcompetitionparts|length}})</li>
               <ul class="list-unstyled mb-2">
               {% for part in event.competition.enabledcompetitionparts%}
-               <li class="list-unstyled-item" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}{%if app.user%} |<span class="text-primary">{%for enrolment in part.getUserEnrolments(app.user)%} {{enrolment.member.firstname}}{%endfor%}</span>{%endif%}</li>
+               <li class="list-unstyled-item" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}{%if app.user%} |<span class="text-primary">{%for enrolment in part.getUserEnrolments(app.user,true)%}{{enrolment.member.firstname}}{%endfor%}</span>{%endif%}</li>
               {% endfor %}
               </ul>
             <li class="mb-2"><i class="fas fa-edit"></i> Deadline {{event.competition.enrolBefore|localizeddate|localizeddate('full','none')}}</li>

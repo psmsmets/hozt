@@ -105,6 +105,11 @@ class CompetitionEnrolment
         return $this;
     }
 
+    public function isEnrolled(): ?bool
+    {
+        return $this->isEnabled() and $this->enrolled;
+    }
+
     public function getFiltered(): bool
     {
         return $this->filtered;
@@ -149,20 +154,20 @@ class CompetitionEnrolment
         return $this;
     }
 
-    public function getEnabled(): bool
+    public function isEnabled(): bool
     {
         if (!$this->filtered) return false;
         return $this->restrictions ? $this->qualified : true;
     }
 
-    public function getDisabled(): bool
+    public function isDisabled(): bool
     {
-        return !$this->getEnabled();
+        return !$this->isEnabled();
     }
 
     public function getBtnDisabled(): string
     {
-        return $this->getDisabled() ? 'disabled' : '';
+        return $this->isDisabled() ? 'disabled' : '';
     }
 
     public function getNotifiedAt(): ?\DateTimeImmutable

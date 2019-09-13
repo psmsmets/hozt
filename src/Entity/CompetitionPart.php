@@ -251,10 +251,14 @@ class CompetitionPart
     }
 
 
-    public function getUserEnrolments(User $user): Collection
+    public function getUserEnrolments(User $user, bool $enrolled=null ): Collection
     {
-        return $this->enrolments->filter(function(CompetitionEnrolment $enrolment) use($user) {
-            return $enrolment->getMember()->getUser() === $user;
+        return $this->enrolments->filter(function(CompetitionEnrolment $enrolment) use($user, $enrolled) {
+            if (is_null($enrolled)) {
+                return $enrolment->getMember()->getUser() === $user;
+            } else {
+                return $enrolment->getMember()->getUser() === $user and $enrolment->isEnabled() and $enrolment->getEnrolled() === $enrolled;
+            }
         });
     }
 

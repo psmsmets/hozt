@@ -174,13 +174,16 @@ easy_admin:
                     - { property: 'member.team', label: 'Groep', type: 'text' }
                     - { property: 'enabled', label: 'Toeg.', type: 'boolean' }
                     - { property: 'qualified', label: 'Limiet', type: 'boolean' }
-                    - { property: 'enrolled', label: 'Ingeschreven', type: 'boolean' }
+                    - { property: 'isEnrolled', label: 'Ingeschreven', type: 'boolean' }
                     - { property: 'enrolledAt', label: 'Op' }
-                    #- { property: 'competition.name', label: 'Wedstrijd', type: 'text' }
-                    #- { property: 'competition.organization', label: 'Org.', type: 'text' }
-                    #- { property: 'cancelled', label: 'Geannul.', type: 'boolean' }
-                    #- { property: 'enrolments', label: 'Inschrijvingen' }
-                #sort: ['day', 'ASC']
-                #dql_filter: 'entity.archived = false AND entity.enabledAt is not null'
+                sort: ['competitionPart.daypart', 'ASC']
+                dql_filter: 'entity.filtered = true'
+                #dql_filter: 'entity.filtered = true AND entity.restrictions = true'
                 actions: ['-new','-edit','-delete']
                 batch_actions: ['qualified','unqualified']
+                max_results: 50
+            search:
+                fields: ['competitionPart.competition.calendar.title','competitionPart.daypart','competitionPart.competition.organization','competitionPart.competition.calendar.location']
+                #fields: ['member.firstname','member.lastname','member.team.name','member.team.abbr','member.registrationId'] # need to fix member issue
+                #dql_filter: 'entity.filtered = true'
+                dql_filter: ''

@@ -60,4 +60,24 @@ class EasyAdminRepository
             ->orderBy('c.dayNumber, t.startTime', 'ASC')
         ;
     }
+    public static function getAdultUsers(EntityRepository $er) {
+        return $er->createQueryBuilder('u')
+            ->andWhere('u.enabled = :enabled')
+            ->andWhere('u.verified = :verified')
+            ->andWhere('u.roles LIKE :role')
+            ->setParameter('enabled', true)
+            ->setParameter('verified', true)
+            ->setParameter('role', '%ADULT%')
+        ;
+    }
+    public static function getAdminUsers(EntityRepository $er) {
+        return $er->createQueryBuilder('u')
+            ->andWhere('u.enabled = :enabled')
+            ->andWhere('u.verified = :verified')
+            ->andWhere('u.roles LIKE :role')
+            ->setParameter('enabled', true)
+            ->setParameter('verified', true)
+            ->setParameter('role', '%ADMIN%')
+        ;
+    }
 }
