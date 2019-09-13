@@ -845,9 +845,7 @@ class PageController extends AbstractController
         $this->initTemplateData();
         $this->addToTemplateData( 
             'competitions',
-            $this->getDoctrine()
-                ->getRepository(Competition::class)
-                ->findCompetitionsByUser( 
+            $this->competitionManager->getPeriodUserCompetitions( 
                     $this->user, $this->calendarManager->getPeriodStart(),$this->calendarManager->getPeriodEnd()
                 )
         );
