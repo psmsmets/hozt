@@ -94,14 +94,14 @@ $(document).ready(function(){
 
     $('#competitions-edit').click( function() {
         if (editingCompetitions) {
-            $(this).html('<i class="fas fa-edit"></i> bewerken').removeClass('btn-secondary').addClass('btn-medium'); 
+            $(this).html('<i class="fas fa-lock"></i> bewerken'); //.removeClass('btn-medium').addClass('btn-dark'); 
             $('#competitions-tab > a').removeClass( "disabled" );
             $('tr.competition-locked').removeClass('d-none');
             showTabCompetitions($('#competitions-tab').find('.active')[0]);
             editCompetitions(false);
             loadCompetitions();
         } else {
-            $(this).html('<i class="fas fa-save"></i> bewaren').removeClass('btn-medium').addClass('btn-secondary');
+            $(this).html('<i class="fas fa-lock-open"></i> afronden'); //.removeClass('btn-dark').addClass('btn-medium');
             $('#competitions-tab > a').addClass( "disabled" );
             $('tr.competition-locked').addClass('d-none');
             editCompetitions(true);
