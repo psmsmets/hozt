@@ -78,7 +78,6 @@ class MemberGrouping
     public function setName(string $name ): self
     {
         $this->name = $name;
-        $this->setFullname();
 
         return $this;
     }
