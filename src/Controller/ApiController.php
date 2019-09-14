@@ -550,9 +550,9 @@ class ApiController extends AbstractController
                         'member' => $enrolment->getMember()->getId(),
                         'enrolment' => $enrolment->getId(),
                         'competitionpart' => $enrolment->getCompetitionPart()->getId(),
-                        //'disabled' => $enrolment->isDisabled(),
                         'enrolled' => $enrolment->getEnrolled(),
                         'enrolledAt' => $enrolment->getEnrolledAt(),
+                        'new' => is_null($enrolment->getEnrolledAt()),
                         'editable' => $enrolment->getCompetitionPart()->getCompetition()->getEnrolBefore() > $this->now,
                     );
                 }

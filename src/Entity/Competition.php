@@ -632,16 +632,16 @@ class Competition
         return count($this->getEnabledCompetitionParts())>0;
     }
 
-    public function getNewCompetitionEnrolments(): Collection
+    public function getNewCompetitionEnrolments(User $user=null): Collection
     {
-        return $this->competitionParts->filter(function(CompetitionPart $competitionPart) {
-            return $competitionPart->isActive() and $competitionPart->hasNewEnrolments();
+        return $this->competitionParts->filter(function(CompetitionPart $competitionPart) use($user) {
+            return $competitionPart->isActive() and $competitionPart->hasNewEnrolments($user);
         });
     }
 
-    public function hasNewCompetitionEnrolments(): bool
+    public function hasNewCompetitionEnrolments(User $user=null): bool
     {
-        return count($this->getNewCompetitionEnrolments())>0;
+        return count($this->getNewCompetitionEnrolments($user))>0;
     }
 
     public function addCompetitionPart(CompetitionPart $competitionPart): self

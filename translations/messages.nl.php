@@ -20,6 +20,7 @@ return [
     'ongoing' => 'lopend',
     'preferences.title' => 'Voorkeuren...',
     'preferences.account' => 'Bewerk je account',
+    'preferences.user' => 'Bewerk je account',
     'preferences.address' => 'Addresboek',
     'preferences.members' => 'Leden',
     'preferences.notifications' => 'Notificaties',

@@ -225,16 +225,17 @@ class CompetitionPart
         return count($this->enrolments)>0;
     }
 
-    public function getNewEnrolments(): Collection
+    public function getNewEnrolments(User $user=null): Collection
     {
-        return $this->enrolments->filter(function(CompetitionEnrolment $enrolment) {
-            return is_null($enrolment->getEnrolledAt());
+        return $this->enrolments->filter(function(CompetitionEnrolment $enrolment) use($user) {
+            if (is_null($user)) return is_null($enrolment->getEnrolledAt());
+            return is_null($enrolment->getEnrolledAt()) and $enrolment->getMember()->getUser() === $user;
         });
     }
 
-    public function hasNewEnrolments(): bool
+    public function hasNewEnrolments(User $user=null): bool
     {
-        return count($this->getNewEnrolments())>0;
+        return count($this->getNewEnrolments($user))>0;
     }
 
     public function getMemberEnrolment(Member $member): ?CompetitionEnrolment
@@ -250,16 +251,24 @@ class CompetitionPart
         return !is_null($this->getMemberEnrolment($member));
     }
 
-
     public function getUserEnrolments(User $user, bool $enrolled=null ): Collection
     {
         return $this->enrolments->filter(function(CompetitionEnrolment $enrolment) use($user, $enrolled) {
-            if (is_null($enrolled)) {
-                return $enrolment->getMember()->getUser() === $user;
-            } else {
-                return $enrolment->getMember()->getUser() === $user and $enrolment->isEnabled() and $enrolment->getEnrolled() === $enrolled;
-            }
+            if (is_null($enrolled)) return $enrolment->getMember()->getUser() === $user;
+            return $enrolment->getMember()->getUser() === $user and $enrolment->isEnabled() and $enrolment->getEnrolled() === $enrolled;
         });
+    }
+
+    public function getNewUserEnrolments(User $user): Collection
+    {
+        return $this->enrolments->filter(function(CompetitionEnrolment $enrolment) use($user) {
+            if (is_null($enrolled)) return $enrolment->getMember()->getUser() === $user and is_null($enrolment->getEnrolledAt());
+        });
+    }
+
+    public function hasNewUserEnrolments(User $user): bool
+    {
+        return !is_null($this->getNewUserEnrolments($user));
     }
 
     public function addEnrolment(CompetitionEnrolment $enrolment): self

@@ -307,7 +307,10 @@ class Member
 
     public function setRegistrationId(?string $registrationId): self
     {
-        if (preg_match(self::registrationIdRegex, $registrationId)) {
+        if (is_null($registrationId)) {
+            $this->registrationId = null;
+        }
+        elseif (preg_match(self::registrationIdRegex, $registrationId)) {
             $this->registrationIdChanged = $this->registrationId !== $strtoupper($registrationId);
             $this->registrationId = strtoupper($registrationId);
         }

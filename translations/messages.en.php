@@ -12,6 +12,7 @@ return [
     'afternoon' => 'afternoon',
     'evening' => 'evening',
     'preferences.title' => 'Preferences...',
+    'preferences.user' => 'Edit your account',
     'preferences.account' => 'Edit your account',
     'preferences.address' => 'Addressbook',
     'preferences.members' => 'Members',
