@@ -54,7 +54,7 @@
                 {% for competition in page.competitions %}
                   {% set edit = competition.enrolbefore > date() %}
                   {% set past = competition.calendar.calcendtime < date() %}
-                  {% set new  = competition.hasnewcompetitionenrolments and edit %}
+                  {% set new  = competition.hasnewcompetitionenrolments(app.user) and edit %}
                   <tr class="competition{%if past%} competition-past{%endif%} {%if new%}competition-new{%endif%} {%if not edit%}competition-locked{%endif%}">
                     <th scope="row" class="" colspan={{1+members|length}}>
 
@@ -73,7 +73,7 @@
                     </th>
                   </tr>
                   {% for cpart in competition.competitionParts %}
-                  <tr class="competition {%if cpart.hasnewenrolments and edit%}competition-new {%endif%}{%if past%}competition-past {%endif%} {%if not edit%}text-muted competition-locked{%endif%}">
+                  <tr class="competition {%if cpart.hasnewenrolments(app.user) and edit%}competition-new {%endif%}{%if past%}competition-past {%endif%} {%if not edit%}text-muted competition-locked{%endif%}">
                     <td scope="row" class="text-right">{{cpart.daypart|localizeddate('full','none')}} | {{cpart.partname|trans}}</td>
                     {% for member in members %}
                     <td id="competition-enrolment-{{cpart.id}}-{{member.id}}" {%if edit%}class="competition-editable"{%endif%}><i class="fas fa-square text-medium"></i></td>

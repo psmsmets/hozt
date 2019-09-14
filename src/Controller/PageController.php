@@ -860,7 +860,7 @@ class PageController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
 
-        $tabs = ['members','address','notifications','account'];
+        $tabs = ['members','address','notifications','user'];
         $tab = (string) $request->query->get('tab', null);
         if (!in_array($tab,$tabs)) $tab = $tabs[0];
 
