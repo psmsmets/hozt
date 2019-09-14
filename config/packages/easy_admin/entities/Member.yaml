@@ -32,7 +32,7 @@ easy_admin:
                     - { property: 'birthdate', label: 'Geboortedatum', type: 'birthday' }
                     - { property: 'address', label: 'Address' }
                     - { property: 'memberSince', label: 'Lid sinds' }
-                    - { property: 'registrationId', label: 'Licentienummer' }
+                    - { property: 'registrationId', label: 'Licentienummer', type_options: { disabled: true } }
                     - { property: 'team', label: 'Zwemt bij', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, by_reference: false  }
                     - { property: 'grouping', label: 'Tags' }
                     - { property: 'user', label: 'Beheerder', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getAdultUsers'] }, by_reference: false  }

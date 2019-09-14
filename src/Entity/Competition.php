@@ -756,7 +756,7 @@ class Competition
         return $this;
     }
 
-    public function getEnrolBefore(): ?\DateTimeInterface
+    public function getEnrolBefore(): \DateTimeInterface
     {
         return $this->enrolBefore;
     }

@@ -243,7 +243,7 @@ function api_load_module_training_today() {
     var module = "api_load_module_training_today";
     var hoztAPI  = "/api/training/vandaag";
 
-   $('#'+module).html("<div class=\"pt-3 pb-3 pl-3 pr-0\"><h5 class=\"pb-2 mb-0\">Trainingsuren <span class=\"badge badge-primary font-weight-light\">vandaag</span></h5><div id=\""+module+"_items\"></div></div>");
+   $('#'+module).html("<div class=\"pt-3 pb-3 pl-3 pr-0\"><h5 class=\"pb-2 mb-0\">Trainingsuren <span class=\"badge badge-primary font-weight-light align-text-top\">vandaag</span></h5><div id=\""+module+"_items\"></div></div>");
 
     $.getJSON( hoztAPI, {
         format: "json"
@@ -275,7 +275,7 @@ function api_load_module_training_tomorrow() {
     var module = "api_load_module_training_tomorrow";
     var hoztAPI  = "/api/training/morgen";
 
-   $('#'+module).html("<div class=\"pt-3 pb-3 pl-3 pr-0\"><h5 class=\"pb-2 mb-0\">Trainingsuren <span class=\"badge badge-medium font-weight-light\">morgen</span></h5><div id=\""+module+"_items\"></div></div>");
+   $('#'+module).html("<div class=\"pt-3 pb-3 pl-3 pr-0\"><h5 class=\"pb-2 mb-0\">Trainingsuren <span class=\"badge badge-medium font-weight-light align-text-top\">morgen</span></h5><div id=\""+module+"_items\"></div></div>");
 
     $.getJSON( hoztAPI, {
         format: "json"
