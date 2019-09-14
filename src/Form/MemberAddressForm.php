@@ -62,7 +62,7 @@ class MemberAddressForm extends AbstractType
                 'label'    => 'address.member',
                 'multiple' => true,
                 'expanded' => true,
-                'required' => false,
+                'required' => true,
                 ))
         ;
     }
