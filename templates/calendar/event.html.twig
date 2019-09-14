@@ -21,7 +21,7 @@
 
         <h4 class="p-0 mb-1 d-flex justify-content-between">
           <span>{{event.title|ucfirst}}
-          {% if event.competition is not empty%}<small class="badge badge-medium">{{event.competition.organization}}</small>{%endif%}
+          {% if event.competition is not empty%}<small class="badge badge-medium align-text-bottom">{{event.competition.organization}}</small>{%endif%}
           </span>
           <small>
             {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
@@ -80,7 +80,7 @@
                <li class="list-unstyled-item" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}{%if app.user%} |<span class="text-primary">{%for enrolment in part.getUserEnrolments(app.user,true)%}<span class="ml-2">{{enrolment.member.firstname}}</span>{%endfor%}</span>{%endif%}</li>
               {% endfor %}
               </ul>
-            <li class="mb-2"><i class="fas fa-edit"></i> Deadline {{event.competition.enrolBefore|localizeddate|localizeddate('full','none')}}</li>
+            <li class="mb-2"><i class="fas fa-edit"></i> Deadline {{event.competition.enrolBefore|localizeddate('full','none')}}</li>
             {% endif %}
           {% endif %}
         </ul>
