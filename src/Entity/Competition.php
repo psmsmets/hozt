@@ -35,11 +35,6 @@ class Competition
     private $updatedAt;
 
     /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
-    private $enabledAt;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\CalendarEvent", inversedBy="competition", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
@@ -152,7 +147,6 @@ class Competition
     {
         $this->createdAt = new \DateTime("now");
         $this->updatedAt = $this->createdAt;
-        $this->enabledAt = null;
         $this->enrolBeforeDays = 21;
         $this->overnight = false;
         $this->registrationId = true;
@@ -621,6 +615,11 @@ class Competition
         return $this->competitionParts;
     }
 
+    public function hasCompetitionParts(): bool
+    {
+        return count($this->getCompetitionParts())>0;
+    }
+
     public function getEnabledCompetitionParts(): Collection
     {
         return $this->competitionParts->filter(function(CompetitionPart $competitionPart) {
@@ -666,16 +665,6 @@ class Competition
         }
 
         return $this;
-    }
-
-    public function hasCompetitionParts(): bool
-    {
-        return count($this->getCompetitionParts())>0;
-    }
-
-    public function hasActiveCompetitionParts(): bool
-    {
-        return count($this->getActiveCompetitionParts())>0;
     }
 
     public function getFirstDayCompetitionParts(): ?\DateTimeInterface
@@ -767,44 +756,14 @@ class Competition
         return $this;
     }
 
-    public function getEnrolBefore(): \DateTimeInterface
+    public function getEnrolBefore(): ?\DateTimeInterface
     {
         return $this->enrolBefore;
     }
 
-    public function getEnrolFrom(): \DateTimeInterface
-    {
-        return $this->enabledAt;
-    }
-
-    public function getEnabledAt(): \DateTimeInterface
-    {
-        return $this->enabledAt;
-    }
-
     public function getEnrol(): bool
     {
-        return !is_null($this->enabledAt);
-    }
-
-    public function getEnabled(): bool
-    {
-        return !is_null($this->enabledAt);
-    }
-
-    public function setEnabled(bool $enabled): self
-    {
-        if (is_null($this->enabledAt) and $enabled) {
-            if (!$this->hasActiveCompetitionParts()) return $this;
-            $this->enabledAt = new \DateTimeImmutable('now');
-        }
-
-        return $this;
-    }
-
-    public function isActive(): bool
-    {
-        return $this->getEnabled();
+        return $this->hasEnabledCompetitionParts();
     }
 
 }
