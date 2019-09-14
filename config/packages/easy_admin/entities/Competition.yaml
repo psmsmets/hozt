@@ -25,7 +25,7 @@ easy_admin:
                     - { property: 'registrationid', label: 'Vergunning', type: 'boolean' }
                 sort: ['calendar.startTime', 'ASC']
                 dql_filter: 'calendar.archived = false AND calendar.cancelled = false'
-                batch_actions: ['enable','updateEnrolments']
+                batch_actions: ['updateEnrolments']
             form:
                 fields:
                     - { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
