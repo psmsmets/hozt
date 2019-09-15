@@ -9,7 +9,7 @@
     <a class="dropdown-item" href="{{path('membership_competitions')}}">Wedstrijden</a>
     <a class="dropdown-item" href="{{path('membership_preferences')}}">Voorkeuren...</a>
     <a class="dropdown-item" href="{{path('security_change_password')}}">Wachtwoord veranderen</a>
-    {% if is_granted('ROLE_SUPERADMIN') %}
+    {% if is_granted('ROLE_ADMIN') %}
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="/beheer">Beheer</a>
     {% endif %}
