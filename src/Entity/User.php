@@ -215,14 +215,6 @@ class User implements UserInterface
         return false;
     }
 
-    public function isAdult(): bool
-    {
-        foreach ($this->roles as $role) {
-            if ($role === 'ROLE_ADULT') return true;
-        }
-        return false;
-    }
-
     /**
      * @see UserInterface
      */

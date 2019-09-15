@@ -211,7 +211,11 @@ class AdminController extends EasyAdminController
         $user->setDetails($details);
         $this->em->persist($details);
 
-        $this->userManager->invite($user);
+        if ($this->userManager->invite($user)) {        
+            $this->addFlash('info', 'Invitatie email verzonden.');
+        } else {
+            $this->addFlash('danger', 'Invitatie email niet verzonden.');
+        }
 
         parent::persistEntity($user);
     }

@@ -57,8 +57,7 @@ security:
          - { path: ^/api/private, roles: ROLE_USER }
 
     role_hierarchy:
-      ROLE_ADULT:        ROLE_USER
-      ROLE_COACH:        ROLE_ADULT
+      ROLE_COACH:        ROLE_USER
       ROLE_BOARD:        ROLE_BOARD
-      ROLE_ADMIN:        ROLE_ADULT
+      ROLE_ADMIN:        ROLE_USER
       ROLE_SUPERADMIN:   [ROLE_ADMIN,ROLE_BOARD,ROLE_COACH]

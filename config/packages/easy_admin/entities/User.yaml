@@ -21,7 +21,6 @@ easy_admin:
                     - { property: 'verified', label: 'Geverifieerd', type: 'boolean' }
                     - { property: 'isActive', label: 'Online', type: 'boolean' }
                     - { property: 'lastActiveAt', label: 'Laatst online' }
-                    - { property: 'isAdult', label: 'Volw', type: 'boolean'  }
                     - { property: 'isSuperadmin', label: 'Backend', type: 'boolean' }
                 sort: ['id', 'ASC']
                 actions: ['show']
@@ -34,7 +33,7 @@ easy_admin:
                     - { property: 'mobilePhone', label: 'Mobiel nr' }
                     #- { property: 'verified', label: 'Geverifieerd' }
                     - { property: 'members', label: 'Ledenbeheer', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'], by_reference: false } }
-                    - { property: 'roles', label: 'Toegangsrechten', type: 'choice', type_options: { multiple: true, choices: { 'Lid':'ROLE_USER', '- Gebruiker (volw/voogd)': 'ROLE_ADULT', 'Trainer': 'ROLE_COACH','Bestuurslid': 'ROLE_BOARD', 'Beheerder': '- ROLE_ADMIN', '-- Superbeheerder': 'ROLE_SUPERADMIN' } } }
+                    - { property: 'roles', label: 'Toegangsrechten', type: 'choice', type_options: { multiple: true, choices: { 'Lid':'ROLE_USER', 'Trainer': 'ROLE_COACH', 'Bestuurslid': 'ROLE_BOARD', 'Beheerder': 'ROLE_ADMIN', '- Superbeheerder': 'ROLE_SUPERADMIN' } } }
                     - { property: 'enabled', label: 'Actief' }
             show:
                 fields:
