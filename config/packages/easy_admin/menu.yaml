@@ -10,12 +10,13 @@ easy_admin:
            - label: "Pagina's"
            - label: 'Blog'
              icon: 'book'
+             permission: 'ROLE_SUPER_ADMIN'
              children:
                - { entity: 'BlogPost', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'BlogPost', label: 'Lijst', icon: 'list' }
                - { entity: 'BlogCategory', label: 'Categorieën', icon: 'bookmark' }
-           - { entity: 'StaticPage', label: "Statische pagina's", icon: 'briefcase' }
-           - { entity: 'CarouselSlide', label: 'Carousel', icon: 'star' }
+           - { entity: 'StaticPage', label: "Statische pagina's", icon: 'briefcase', permission: 'ROLE_SUPER_ADMIN' }
+           - { entity: 'CarouselSlide', label: 'Carousel', icon: 'star', permission: 'ROLE_SUPER_ADMIN' }
            - label: "Clubbeheer"
            - label: 'Structuur'
              icon: 'sitemap'
@@ -46,7 +47,7 @@ easy_admin:
            - label: 'Wedstrijden'
              icon: 'trophy'
              children:
-               - { entity: 'Competition', label: 'Overzicht', icon: 'list' }
+               - { entity: 'Competition', label: 'Overzicht', icon: 'list', default: true }
                - { entity: 'CompetitionPartDraft', label: 'Draft dagdelen', icon: 'star-half' }
                - { entity: 'CompetitionPartActive', label: 'Actieve dagdelen', icon: 'star' }
                - { entity: 'CompetitionEnrolments', label: 'Inschrijvingen', icon: 'check' }
@@ -54,8 +55,8 @@ easy_admin:
                - { entity: 'CompetitionDocumentCategory', label: 'Bijlage categorie', icon: 'folder-open' }
                - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'home' }
            - label: "Varia"
-           - { entity: 'ContactForm', label: 'Contact', icon: 'comment' }
-           - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle' }
+           - { entity: 'ContactForm', label: 'Contact', icon: 'comment', permission: 'ROLE_SUPER_ADMIN' }
+           - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle', permission: 'ROLE_SUPER_ADMIN' }
 
            - label: 'Testmoment'
              icon: 'thumbs-up'
@@ -64,12 +65,13 @@ easy_admin:
                - { entity: 'TryoutEnrolment', label: 'Inschrijvingen', icon: 'list' }
            - label: 'Sponsors'
              icon: 'life-ring'
+             permission: 'ROLE_SUPER_ADMIN'
              children:
                - { entity: 'Sponsor', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'Sponsor', label: 'Lijst', icon: 'list' }
                - { entity: 'SponsorCategory', label: 'Categorieën', icon: 'bookmark' }
            - label: "Toegang"
-           - { entity: 'User', label: 'Gebruikers', icon: 'user-lock' }
+           - { entity: 'User', label: 'Gebruikers', icon: 'user-lock', permission: 'ROLE_SUPER_ADMIN' }
 
     list:
         title: '%%entity_label%%'

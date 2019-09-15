@@ -202,7 +202,7 @@ class User implements UserInterface
     public function isAdmin(): bool
     {
         foreach ($this->roles as $role) {
-            if ($role === 'ROLE_ADMIN' or $role === 'ROLE_SUPERADMIN') return true;
+            if ($role === 'ROLE_ADMIN' or $role === 'ROLE_SUPER_ADMIN') return true;
         }
         return false;
     }
@@ -210,15 +210,7 @@ class User implements UserInterface
     public function isSuperAdmin(): bool
     {
         foreach ($this->roles as $role) {
-            if ($role === 'ROLE_SUPERADMIN') return true;
-        }
-        return false;
-    }
-
-    public function isAdult(): bool
-    {
-        foreach ($this->roles as $role) {
-            if ($role === 'ROLE_ADULT') return true;
+            if ($role === 'ROLE_SUPER_ADMIN') return true;
         }
         return false;
     }
