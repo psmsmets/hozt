@@ -689,7 +689,7 @@ class AdminController extends EasyAdminController
         $this->em->flush();
     }
 
-    public function reinviteBatchAction(array $ids)
+    public function verifyBatchAction(array $ids)
     {
         $class = $this->entity['class'];
         if ($class !== 'App\Entity\User') return;
@@ -698,10 +698,27 @@ class AdminController extends EasyAdminController
 
         foreach ($ids as $id) {
             $user = $em->find($class,$id);
-            $this->userManager->invite($user);
+            $user->setVerified(true);
         }
 
         $this->em->flush();
+    }
+
+    public function reinviteBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        if ($class !== 'App\Entity\User') return;
+
+        $em = $this->getDoctrine()->getManagerForClass($class);
+        $cnt = 0;
+
+        foreach ($ids as $id) {
+            $user = $em->find($class,$id);
+            if ($this->userManager->invite($user)) $cnt++;
+        }
+
+        $this->em->flush();
+        $this->addFlash('info', sprintf('%d invitatie email(s) verzonden.', $cnt));
     }
 
 /*
