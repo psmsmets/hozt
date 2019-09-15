@@ -81,11 +81,6 @@ class User implements UserInterface
     private $verified;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isActive;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -142,7 +137,6 @@ class User implements UserInterface
       $this->password = bin2hex(random_bytes(64));
       $this->enabled = true;
       $this->verified = $verified;
-      $this->isActive = false;
       $this->roles = array();
       $this->secret = null;
       $this->secretExpiration = $this->createdAt;
@@ -203,6 +197,30 @@ class User implements UserInterface
     {
         $this->roles = array_unique($roles);
         return $this;
+    }
+
+    public function isAdmin(): bool
+    {
+        foreach ($this->roles as $role) {
+            if ($role === 'ROLE_ADMIN' or $role === 'ROLE_SUPERADMIN') return true;
+        }
+        return false;
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        foreach ($this->roles as $role) {
+            if ($role === 'ROLE_SUPERADMIN') return true;
+        }
+        return false;
+    }
+
+    public function isAdult(): bool
+    {
+        foreach ($this->roles as $role) {
+            if ($role === 'ROLE_ADULT') return true;
+        }
+        return false;
     }
 
     /**
@@ -314,23 +332,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getIsActive(): ?bool
-    {
-        return $this->isActive();
-    }
-
-    public function setIsActive(bool $isActive): self
-    {
-        $this->isActive = $isActive;
-        return $this;
-    }
-
     public function isActive(): ?bool
     {
         return is_null($this->lastActiveAt) ? false : $this->lastActiveAt->modify('+1800 seconds') > new \DateTime('now');
     }
 
-    public function getLastActiveAt(): ?\DateTimeImmutable
+    public function getLastActiveAt(): ?\DateTimeInterface
     {
         return $this->lastActiveAt;
     }

@@ -51,6 +51,7 @@ services:
                             # fetching services directly from the container via $container->get() won't work.
                             # The best practice is to be explicit about your dependencies anyway.
         bind:
+            $defaultSender: { '%app.mailer.from%': '%app.mailer.name%' }
             $publicDir: '%app.path.public%' 
             $competitionDocumentsDir: '%app.path.doc.competition%' 
 
