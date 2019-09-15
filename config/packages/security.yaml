@@ -58,8 +58,7 @@ security:
 
     role_hierarchy:
       ROLE_ADULT:        ROLE_USER
-      ROLE_COACH:        ROLE_USER
-      ROLE_BOARD:        ROLE_USER
-      ROLE_MANAGER:      ROLE_USER 
-      ROLE_ADMIN:        ROLE_MANAGER
+      ROLE_COACH:        ROLE_ADULT
+      ROLE_BOARD:        ROLE_BOARD
+      ROLE_ADMIN:        ROLE_ADULT
       ROLE_SUPERADMIN:   [ROLE_ADMIN,ROLE_BOARD,ROLE_COACH]

@@ -130,7 +130,7 @@ class User implements UserInterface
      */
     private $details;
 
-    public function __construct(bool $verified = false)
+    public function __construct(bool $verified=true)
     {
       $this->createdAt = new \DateTime("now");
       $this->passwordUpdatedAt = $this->createdAt;
