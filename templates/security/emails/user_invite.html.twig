@@ -1,0 +1,13 @@
+{% include 'emails/_style.html.twig' %}
+
+<p>Hallo {{name}}!</p>
+
+<p>Er is een HoZT-account voor je aangemaakt op <a href="{{absolute_url('/')}}">https://www.hozt.be</a>. Je gebruikersnaam op de website is dit email adres.</p>
+
+<p>Met je HoZT-account beheer je onder meer de inschrijvingen voor zwemwedstrijden en kan zelf je adres en contactgegevens up-to-date houden.</p>
+
+<p>Heb je nog geen wachtwoord? Dan kan je een <a href="{{absolute_url( path('security_forgot_password') )}}">nieuw wachtwoord aanvragen</a>.</p>
+
+<p>Als je dit verzoek niet hebt uitgevoerd, neem dan contact op met de <a href="mailto:{{webmaster}}">webmaster</a>.</p>
+
+<p class="small text-muted">Je ontvangt deze e-mail vanwege je lidmaatschap bij <a href="{{absolute_url('/')}}">HoZT</a>.</p>

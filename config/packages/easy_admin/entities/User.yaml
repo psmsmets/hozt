@@ -13,17 +13,19 @@ easy_admin:
             label: 'Gebruikers'
             list:
                 fields:
-                    - { property: 'id', label: 'Id' }
+                    #- { property: 'id', label: 'Id' }
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
-                    - { property: 'verified', label: 'Geverifieerd', type: 'boolean' }
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
+                    - { property: 'members', label: 'Leden' }
+                    - { property: 'verified', label: 'Geverifieerd', type: 'boolean' }
                     - { property: 'isActive', label: 'Online', type: 'boolean' }
                     - { property: 'lastActiveAt', label: 'Laatst online' }
-                    - { property: 'roles' }
-                    - { property: 'members', label: 'Leden' }
+                    - { property: 'isAdult', label: 'Volw', type: 'boolean'  }
+                    - { property: 'isSuperadmin', label: 'Backend', type: 'boolean' }
                 sort: ['id', 'ASC']
                 actions: ['show']
+                batch_actions: ['enable','disable','reinvite']
             form:
                 fields:
                     - { property: 'firstname', label: 'Voornaam' }

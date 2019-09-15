@@ -23,20 +23,26 @@ use App\Form\UserForgotPassword;
 use App\Form\UserResetPassword;
 use App\Form\UserChangePassword;
 
+# managers
+use App\Service\UserManager;
+
 class SecurityController extends AbstractController
 {
+    private $userManager;
     private $userRepository;
     private $mailer;
     private $encoder;
     protected $encryptor;
     
     public function __construct(
+            UserManager $userManager,
             UserRepository $userRepository, 
             \Swift_Mailer $mailer, 
             UserPasswordEncoderInterface $encoder, 
             EncryptorInterface $encryptor
         )
     {
+        $this->userManager = $userManager;
         $this->userRepository = $userRepository;
         $this->mailer = $mailer;
         $this->encoder = $encoder;

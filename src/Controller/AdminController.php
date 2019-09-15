@@ -48,16 +48,18 @@ use App\Repository\TrainingTeamRepository;
 use App\Service\CalendarManager;
 use App\Service\CompetitionManager;
 use App\Service\MemberManager;
+use App\Service\UserManager;
 
 class AdminController extends EasyAdminController
 {
     private $competitionManager;
 
-    public function __construct(CalendarManager $calendarManager, CompetitionManager $competitionManager, MemberManager $memberManager)
+    public function __construct(CalendarManager $calendarManager, CompetitionManager $competitionManager, MemberManager $memberManager, UserManager $userManager)
     {
         $this->calendarManager = $calendarManager;
         $this->competitionManager = $competitionManager;
         $this->memberManager = $memberManager;
+        $this->userManager = $userManager;
     }
 
     // Customizes the instantiation of specific entities
@@ -208,6 +210,9 @@ class AdminController extends EasyAdminController
         $details = new UserDetails();
         $user->setDetails($details);
         $this->em->persist($details);
+
+        $this->userManager->invite($user);
+
         parent::persistEntity($user);
     }
 
@@ -608,8 +613,11 @@ class AdminController extends EasyAdminController
         $class = $this->entity['class'];
         $em = $this->getDoctrine()->getManagerForClass($class);
 
+        if ($class === 'App\Entity\User') $user = $this->container->get('security.token_storage')->getToken()->getUser();
+
         foreach ($ids as $id) {
             $entities = $em->find($class,$id);
+            if ($class === 'App\Entity\User' and ($entities === $user or $entities->isSuperAdmin() )) continue;
             if (method_exists($entities, 'setEnabled')) $entities->setEnabled(false);
         }
 
@@ -644,8 +652,8 @@ class AdminController extends EasyAdminController
         $em = $this->getDoctrine()->getManagerForClass($class);
 
         foreach ($ids as $id) {
-            $entities = $em->find($class,$id);
-            $this->competitionManager->addEnrolments($entities);
+            $competition = $em->find($class,$id);
+            $this->competitionManager->addEnrolments($competition);
         }
 
         $this->em->flush();
@@ -659,8 +667,8 @@ class AdminController extends EasyAdminController
         $em = $this->getDoctrine()->getManagerForClass($class);
 
         foreach ($ids as $id) {
-            $entities = $em->find($class,$id);
-            $entities->setQualified(true);
+            $enrolment = $em->find($class,$id);
+            $enrolment->setQualified(true);
         }
 
         $this->em->flush();
@@ -674,8 +682,23 @@ class AdminController extends EasyAdminController
         $em = $this->getDoctrine()->getManagerForClass($class);
 
         foreach ($ids as $id) {
-            $entities = $em->find($class,$id);
-            $entities->setQualified(false);
+            $enrolment = $em->find($class,$id);
+            $enrolment->setQualified(false);
+        }
+
+        $this->em->flush();
+    }
+
+    public function reinviteBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        if ($class !== 'App\Entity\User') return;
+
+        $em = $this->getDoctrine()->getManagerForClass($class);
+
+        foreach ($ids as $id) {
+            $user = $em->find($class,$id);
+            $this->userManager->invite($user);
         }
 
         $this->em->flush();
