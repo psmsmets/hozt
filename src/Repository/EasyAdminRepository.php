@@ -60,13 +60,6 @@ class EasyAdminRepository
             ->orderBy('c.dayNumber, t.startTime', 'ASC')
         ;
     }
-    public static function getAdultUsers(EntityRepository $er) {
-        return $er->createQueryBuilder('u')
-            ->andWhere('u.enabled = true')
-            ->andWhere('u.roles LIKE :role')
-            ->setParameter('role', '%ADULT%')
-        ;
-    }
     public static function getAdminUsers(EntityRepository $er) {
         return $er->createQueryBuilder('u')
             ->andWhere('u.enabled = true')

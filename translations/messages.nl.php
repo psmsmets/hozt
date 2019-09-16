@@ -18,6 +18,8 @@ return [
     'past' => 'voorbij',
     'future' => 'toekomstig',
     'ongoing' => 'lopend',
+    'Male' => 'Man',
+    'Female' => 'vrouw',
     'preferences.title' => 'Voorkeuren...',
     'preferences.account' => 'Bewerk je account',
     'preferences.user' => 'Bewerk je account',

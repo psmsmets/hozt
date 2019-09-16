@@ -10,7 +10,56 @@ easy_admin:
     entities:
         Member:
             class: App\Entity\Member
-            label: 'Leden'
+            label: 'Actieve Leden'
+            list:
+                fields:
+                    - { property: 'memberId', label: 'Lidnr' }
+                    - { property: 'firstname', label: 'Voornaam' }
+                    - { property: 'lastname', label: 'Achternaam' }
+                    - { property: 'team', label: 'Zwemgroep', type: 'text' }
+                    - { property: 'registrationId', label: 'Licentie' }
+                    - { property: 'user', label: 'Beheerder' }
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                sort: ['memberId', 'ASC']
+                batch_actions: ['disable']
+                actions: ['-new','show']
+                dql_filter: 'entity.enabled = true'
+            form:
+                fields:
+                    - { property: 'firstname', label: 'Voornaam', type_options: { disabled: true } }
+                    - { property: 'lastname', label: 'Achternaam', type_options: { disabled: true } }
+                    - { property: 'gender', label: 'Geslacht', type: 'text', type_options: { disabled: true } }
+                    - { property: 'birthdate', label: 'Geboortedatum', type_options: { disabled: true } }
+                    - { property: 'memberId', label: 'Lid nummer', help: 'Lid nummer van Assist Online (uniek!).', type_options: { disabled: true }}
+                    - { property: 'memberSince', label: 'Lid sinds', type_options: { disabled: true } }
+                    - { property: 'registrationId', label: 'Licentienummer', type_options: { disabled: true } }
+                    - { property: 'address', label: 'Address', type_options: { disabled: true } }
+                    - { property: 'team', label: 'Zwemt bij', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, by_reference: false  }
+                    - { property: 'grouping', label: 'Tags' }
+                    - { property: 'user', label: 'Beheerder', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, by_reference: false  }
+                    - { property: 'enabled', label: 'Actief' }
+            search:
+                fields: ['firstname','lastname','team.name','team.abbr','user.lastname','user.firstname','registrationId']
+                #dql_filter: ''
+            show:
+                fields:
+                    - { property: 'firstname', label: 'Voornaam' }
+                    - { property: 'lastname', label: 'Achternaam' }
+                    - { property: 'gender', label: 'Geslacht' }
+                    - { property: 'birthdate', label: 'Geboortedatum' }
+                    - { property: 'memberId', label: 'Lid nummer (Assist)'}
+                    - { property: 'memberSince', label: 'Lid sinds' }
+                    - { property: 'address', label: 'Address' }
+                    - { property: 'registrationId', label: 'Licentienummer' }
+                    - { property: 'team', label: 'Zwemt bij'  }
+                    - { property: 'grouping', label: 'Tags' }
+                    - { property: 'user', label: 'Beheerder'  }
+                    - { property: 'enabled', label: 'Actief' }
+
+
+        MemberInactive:
+            class: App\Entity\Member
+            label: 'Inactieve Leden'
             list:
                 fields:
                     - { property: 'memberId', label: 'Lidnr' }
@@ -21,34 +70,21 @@ easy_admin:
                     - { property: 'registrationId', label: 'Licentie' }
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
                 sort: ['memberId', 'ASC']
-                batch_actions: ['enable','disable']
-                actions: ['-new']
-            form:
-                fields:
-                    - { property: 'memberId', label: 'Lid nummer', help: 'Lid nummer van Assist Online (uniek!).'}
-                    - { property: 'firstname', label: 'Voornaam' }
-                    - { property: 'lastname', label: 'Achternaam' }
-                    - { property: 'gender', label: 'Geslacht', type: 'choice', type_options: { choices: {'Man': 'M', 'Vrouw': 'F'} } }
-                    - { property: 'birthdate', label: 'Geboortedatum', type: 'birthday' }
-                    - { property: 'address', label: 'Address' }
-                    - { property: 'memberSince', label: 'Lid sinds' }
-                    - { property: 'registrationId', label: 'Licentienummer', type_options: { disabled: true } }
-                    - { property: 'team', label: 'Zwemt bij', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, by_reference: false  }
-                    - { property: 'grouping', label: 'Tags' }
-                    - { property: 'user', label: 'Beheerder', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getAdultUsers'] }, by_reference: false  }
-                    - { property: 'enabled', label: 'Actief' }
+                batch_actions: ['enable']
+                actions: ['-new','-edit']
+                dql_filter: 'entity.enabled = false'
             search:
                 fields: ['firstname','lastname','team.name','team.abbr','user.lastname','user.firstname','registrationId']
-                dql_filter: ''
+                #dql_filter: ''
             show:
                 fields:
-                    - { property: 'memberId', label: 'Lid nummer (Assist)'}
                     - { property: 'firstname', label: 'Voornaam' }
                     - { property: 'lastname', label: 'Achternaam' }
                     - { property: 'gender', label: 'Geslacht' }
                     - { property: 'birthdate', label: 'Geboortedatum', type: 'birthday' }
-                    - { property: 'address', label: 'Address' }
+                    - { property: 'memberId', label: 'Lid nummer (Assist)'}
                     - { property: 'memberSince', label: 'Lid sinds' }
+                    - { property: 'address', label: 'Address' }
                     - { property: 'registrationId', label: 'Licentienummer' }
                     - { property: 'team', label: 'Zwemt bij'  }
                     - { property: 'grouping', label: 'Tags' }

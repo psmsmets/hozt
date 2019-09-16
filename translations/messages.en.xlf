@@ -33,21 +33,33 @@
         <source>Sunday</source>
         <target>Sunday</target>
       </trans-unit>
-      <trans-unit id="xD1bqsX" resname="competition.morning">
-        <source>competition.morning</source>
+      <trans-unit id="wjsxoBe" resname="morning">
+        <source>morning</source>
         <target>morning</target>
       </trans-unit>
-      <trans-unit id="6WBplAN" resname="competition.afternoon">
-        <source>competition.afternoon</source>
+      <trans-unit id="yOB8GsJ" resname="afternoon">
+        <source>afternoon</source>
         <target>afternoon</target>
       </trans-unit>
-      <trans-unit id="ZdoWYLu" resname="competition.evening">
-        <source>competition.evening</source>
+      <trans-unit id="5b0IAdE" resname="evening">
+        <source>evening</source>
         <target>evening</target>
+      </trans-unit>
+      <trans-unit id="A.jBJz4" resname="Male">
+        <source>Male</source>
+        <target>Male</target>
+      </trans-unit>
+      <trans-unit id="6MyoCK5" resname="Female">
+        <source>Female</source>
+        <target>Female</target>
       </trans-unit>
       <trans-unit id="VJLEtLO" resname="preferences.title">
         <source>preferences.title</source>
         <target>Preferences...</target>
+      </trans-unit>
+      <trans-unit id="GIE4s64" resname="preferences.user">
+        <source>preferences.user</source>
+        <target>Edit your account</target>
       </trans-unit>
       <trans-unit id="DIUMcQV" resname="preferences.account">
         <source>preferences.account</source>
@@ -104,6 +116,34 @@
       <trans-unit id="lRHCpKK" resname="address.member">
         <source>address.member</source>
         <target>Member</target>
+      </trans-unit>
+      <trans-unit id="Att2RVQ" resname="GROUPING_BOARD">
+        <source>GROUPING_BOARD</source>
+        <target>Board</target>
+      </trans-unit>
+      <trans-unit id="uJWnFR." resname="GROUPING_DAILY_OPERATIONS">
+        <source>GROUPING_DAILY_OPERATIONS</source>
+        <target>Daily Operations</target>
+      </trans-unit>
+      <trans-unit id="JY09Ugs" resname="GROUPING_COACHES">
+        <source>GROUPING_COACHES</source>
+        <target>Coaches</target>
+      </trans-unit>
+      <trans-unit id="15vdrj7" resname="GROUPING_OFFICIALS">
+        <source>GROUPING_OFFICIALS</source>
+        <target>Officials</target>
+      </trans-unit>
+      <trans-unit id="xD1bqsX" resname="competition.morning">
+        <source>competition.morning</source>
+        <target>morning</target>
+      </trans-unit>
+      <trans-unit id="6WBplAN" resname="competition.afternoon">
+        <source>competition.afternoon</source>
+        <target>afternoon</target>
+      </trans-unit>
+      <trans-unit id="ZdoWYLu" resname="competition.evening">
+        <source>competition.evening</source>
+        <target>evening</target>
       </trans-unit>
     </body>
   </file>

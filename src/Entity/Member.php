@@ -216,6 +216,11 @@ class Member
         return $this->gender;
     }
 
+    public function getGenderFull(): ?string
+    {
+        return $this->isMale() ? 'Male' : 'Female';
+    }
+
     public function setGender(string $gender): self
     {
         $this->gender = strtoupper(substr($gender,0,1)) === 'M' ? 'M' : 'F';

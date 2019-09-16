@@ -11,6 +11,8 @@ return [
     'morning' => 'morning',
     'afternoon' => 'afternoon',
     'evening' => 'evening',
+    'Male' => 'Male',
+    'Female' => 'Female',
     'preferences.title' => 'Preferences...',
     'preferences.user' => 'Edit your account',
     'preferences.account' => 'Edit your account',
