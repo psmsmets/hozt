@@ -29,6 +29,8 @@ return [
     'address.town' => 'Town',
     'address.nation' => 'Nation',
     'address.member' => 'Member',
+    'user.edit' => 'Edit user details',
+    'notifications.edit' => 'Edit user notifications',
     'GROUPING_BOARD' => 'Board',
     'GROUPING_DAILY_OPERATIONS' => 'Daily Operations',
     'GROUPING_COACHES' => 'Coaches',

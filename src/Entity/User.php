@@ -130,6 +130,12 @@ class User implements UserInterface
      */
     private $details;
 
+    /**
+     * Virtual variables
+     */
+    private $plainPassword = null;
+    private $emailChanged = false;
+
     public function __construct(bool $verified=true)
     {
       $this->createdAt = new \DateTime("now");
@@ -162,9 +168,15 @@ class User implements UserInterface
 
     public function setEmail(string $email): self
     {
+        $this->emailChanged = $this->email !== strtolower($email);
         $this->email = strtolower($email);
 
         return $this;
+    }
+
+    public function getEmailChanged(): ?bool
+    {
+        return $this->emailChanged;
     }
 
     /**
@@ -246,6 +258,18 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         $this->plainPassword = null;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
     }
 
     public function getFirstname(): ?string

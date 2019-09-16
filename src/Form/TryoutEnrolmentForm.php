@@ -24,7 +24,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class TryoutEnrolmentForm extends AbstractType
 {
-
     private $params;
 
     public function __construct(ParameterBagInterface $params)
