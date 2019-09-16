@@ -62,6 +62,27 @@ class AdminController extends EasyAdminController
         $this->userManager = $userManager;
     }
 
+    protected function createCompetitionListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null)
+    {
+        /* @var EntityManager */
+        $em = $this->getDoctrine()->getManagerForClass($this->entity['class']);
+        /* @var DoctrineQueryBuilder */
+        $queryBuilder = $em->createQueryBuilder()
+            ->select('entity')
+            ->from($this->entity['class'], 'entity')
+            ->innerJoin('entity.calendar','calendar')
+            ;
+
+        if (!empty($dqlFilter)) {
+            $queryBuilder->andWhere($dqlFilter);
+        }
+
+        if (null !== $sortField) {
+            $queryBuilder->orderBy(strpos($sortField,'.') ? $sortField : 'entity.'.$sortField, $sortDirection ?: 'DESC');
+        }
+        return $queryBuilder;
+    }
+
     // Customizes the instantiation of specific entities
     public function createNewBlogPostEntity()
     {

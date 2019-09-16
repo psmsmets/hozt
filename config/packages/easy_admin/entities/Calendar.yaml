@@ -24,6 +24,13 @@ easy_admin:
                 fields:
                     - { property: 'title', label: 'Titel' }
                     #- { property: 'slug', label: 'Slug' }
+                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'sequence', label: 'Volgorde' }
+                    - { property: 'enabled', label: 'Actief' }
+            show:
+                fields:
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'slug', label: 'Slug' }
                     - { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'sequence', label: 'Volgorde' }
                     - { property: 'enabled', label: 'Actief' }
@@ -60,12 +67,30 @@ easy_admin:
                     - { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
                     - { property: 'isCompetition', label: 'Zwemwedstrijd' }
                     - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabledOrderBySequence'] } }
-                    - { property: 'description', label: 'Omschrijving', type: 'textarea' }
+                    #- { property: 'description', label: 'Omschrijving', type: 'textarea' }
                     - { property: 'location', label: 'Locatie' }
                     - { property: 'url', label: 'Website' }
                     - { property: 'staticPage', label: 'Pagina' }
-                    - { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.img.calendar%' }
+                    #- { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.img.calendar%' }
                     - { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.doc.calendar%' }
+            show:
+                fields:
+                    #- { type: 'group', label: 'Basisgegevens', icon: 'pencil', css_class: "col-xs-12 col-md-9" }
+                    - { property: 'enabled', label: 'Actief' }
+                    - { property: 'cancelled', label: 'Geannuleerd' }
+                    - { property: 'title', label: 'Titel' }
+                    - { property: 'trueStartTime', label: 'Van', type: 'datetime' }
+                    - { property: 'calcEndTime', label: 'Tot', type: 'datetime' }
+                    - { property: 'allDay', label: 'Hele dag' }
+                    - { property: 'category', label: 'Categorie' }
+                    - { property: 'body', label: 'Tekst', type: 'textarea', css_class: 'w-100'}
+                    #- { type: 'group', label: 'Opties', icon: 'cog', css_class: "col-xs-12 col-md-3" }
+                    - { property: 'location', label: 'Locatie' }
+                    - { property: 'url', label: 'Website' }
+                    - { property: 'competition', label: 'Zwemwedstrijd' }
+                    #- { property: 'staticPage', label: 'Pagina' }
+                    #- { property: 'imageFile', type: 'vich_image', label: 'Afbeelding', base_path: '%app.path.img.calendar%' }
+                    #- { property: 'documentFile', type: 'vich_file', label: 'Bijlage', base_path: '%app.path.doc.calendar%' }
             edit:
                 actions: ['delete']
             search:
