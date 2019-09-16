@@ -145,6 +145,14 @@
         <source>address.member</source>
         <target>Leden</target>
       </trans-unit>
+      <trans-unit id="vQxH4zm" resname="user.edit">
+        <source>user.edit</source>
+        <target>Bewerk gebruiker</target>
+      </trans-unit>
+      <trans-unit id="gcpJRSF" resname="notifications.edit">
+        <source>notifications.edit</source>
+        <target>Bewerk notificatie instellingen</target>
+      </trans-unit>
       <trans-unit id="Att2RVQ" resname="GROUPING_BOARD">
         <source>GROUPING_BOARD</source>
         <target>Bestuur</target>
@@ -172,6 +180,10 @@
       <trans-unit id="ZdoWYLu" resname="competition.evening">
         <source>competition.evening</source>
         <target>avond</target>
+      </trans-unit>
+      <trans-unit id="Xr8NOM1" resname="password.wrong">
+        <source>password.wrong</source>
+        <target>__password.wrong</target>
       </trans-unit>
     </body>
   </file>

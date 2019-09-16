@@ -1,8 +1,8 @@
 {% set details = app.user.details %}
 
-<span class="float-right">
-  <button class="btn btn-sm btn-light ml-2" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{details.id}}">bewerk</button> 
-</span>
+<div class="text-right">
+  <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{details.id}}"><i class="fas fa-pen"></i> {{'form.edit'|trans}}</button> 
+</div>
 
 <div class="col-lg-10 mb-4">
   <div class="row">

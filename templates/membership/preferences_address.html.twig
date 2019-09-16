@@ -2,16 +2,17 @@
 
 {% set members = address.getMembers() %}
 
-<div class="mb-2">{{address}}
-  <span class="float-right">
-    <button class="btn btn-sm btn-light ml-2" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{address.id}}">bewerk</button> 
-  </span>
-  <ul class="small text-muted list-inline">
-    {% for member in members %}
-      <li class="list-inline-item">{{member}}</li>
-    {% endfor %}
-  </ul>
+<div class="d-flex justify-content-between mb-2">
+  <div class=""> 
+    <h6>{{address}}</h6>
+    <ul class="small text-muted list-inline">
+      {% for member in members %}
+        <li class="list-inline-item">{{member}}</li>
+      {% endfor %}
+    </ul>  
   </div>
+  <span><button class="btn btn-sm btn-light ml-2" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{address.id}}"><i class="fas fa-pen d-none d-lg-inline"></i> {{'form.edit'|trans}}</button></span>
+</div>
 {% endfor %}
 
 <div class="mt-5">
