@@ -1,5 +1,5 @@
 require('bootstrap');
-require('bcswipe');
+//require('bcswipe');
 
 $('.carousel').carousel({ interval: 6500 });
-$('.carousel').bcSwipe({ threshold: 60 });
+//$('.carousel').bcSwipe({ threshold: 60 });

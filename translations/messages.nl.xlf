@@ -5,6 +5,22 @@
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
     <body>
+      <trans-unit id="U0Lgnyc" resname="Enable">
+        <source>Enable</source>
+        <target>Activeer</target>
+      </trans-unit>
+      <trans-unit id="t_PkqkJ" resname="Disable">
+        <source>Disable</source>
+        <target>Deactiveer</target>
+      </trans-unit>
+      <trans-unit id="KngCXea" resname="Select">
+        <source>Select</source>
+        <target>Selecteer</target>
+      </trans-unit>
+      <trans-unit id="FCF0wZR" resname="Deselect">
+        <source>Deselect</source>
+        <target>Deselecteer</target>
+      </trans-unit>
       <trans-unit id="agDfwdy" resname="Monday">
         <source>Monday</source>
         <target>Maandag</target>
@@ -33,16 +49,16 @@
         <source>Sunday</source>
         <target>Zondag</target>
       </trans-unit>
-      <trans-unit id="xD1bqsX" resname="competition.morning">
-        <source>competition.morning</source>
+      <trans-unit id="wjsxoBe" resname="morning">
+        <source>morning</source>
         <target>voormiddag</target>
       </trans-unit>
-      <trans-unit id="6WBplAN" resname="competition.afternoon">
-        <source>competition.afternoon</source>
+      <trans-unit id="yOB8GsJ" resname="afternoon">
+        <source>afternoon</source>
         <target>namiddag</target>
       </trans-unit>
-      <trans-unit id="ZdoWYLu" resname="competition.evening">
-        <source>competition.evening</source>
+      <trans-unit id="5b0IAdE" resname="evening">
+        <source>evening</source>
         <target>avond</target>
       </trans-unit>
       <trans-unit id="hMzfioS" resname="past">
@@ -57,12 +73,24 @@
         <source>ongoing</source>
         <target>lopend</target>
       </trans-unit>
+      <trans-unit id="A.jBJz4" resname="Male">
+        <source>Male</source>
+        <target>Man</target>
+      </trans-unit>
+      <trans-unit id="6MyoCK5" resname="Female">
+        <source>Female</source>
+        <target>vrouw</target>
+      </trans-unit>
       <trans-unit id="VJLEtLO" resname="preferences.title">
         <source>preferences.title</source>
         <target>Voorkeuren...</target>
       </trans-unit>
       <trans-unit id="DIUMcQV" resname="preferences.account">
         <source>preferences.account</source>
+        <target>Bewerk je account</target>
+      </trans-unit>
+      <trans-unit id="GIE4s64" resname="preferences.user">
+        <source>preferences.user</source>
         <target>Bewerk je account</target>
       </trans-unit>
       <trans-unit id="frd_hDB" resname="preferences.address">
@@ -117,16 +145,32 @@
         <source>address.member</source>
         <target>Leden</target>
       </trans-unit>
-      <trans-unit id="wjsxoBe" resname="morning">
-        <source>morning</source>
+      <trans-unit id="Att2RVQ" resname="GROUPING_BOARD">
+        <source>GROUPING_BOARD</source>
+        <target>Bestuur</target>
+      </trans-unit>
+      <trans-unit id="uJWnFR." resname="GROUPING_DAILY_OPERATIONS">
+        <source>GROUPING_DAILY_OPERATIONS</source>
+        <target>Dagelijkse werking</target>
+      </trans-unit>
+      <trans-unit id="JY09Ugs" resname="GROUPING_COACHES">
+        <source>GROUPING_COACHES</source>
+        <target>Trainers</target>
+      </trans-unit>
+      <trans-unit id="15vdrj7" resname="GROUPING_OFFICIALS">
+        <source>GROUPING_OFFICIALS</source>
+        <target>Officials</target>
+      </trans-unit>
+      <trans-unit id="xD1bqsX" resname="competition.morning">
+        <source>competition.morning</source>
         <target>voormiddag</target>
       </trans-unit>
-      <trans-unit id="yOB8GsJ" resname="afternoon">
-        <source>afternoon</source>
+      <trans-unit id="6WBplAN" resname="competition.afternoon">
+        <source>competition.afternoon</source>
         <target>namiddag</target>
       </trans-unit>
-      <trans-unit id="5b0IAdE" resname="evening">
-        <source>evening</source>
+      <trans-unit id="ZdoWYLu" resname="competition.evening">
+        <source>competition.evening</source>
         <target>avond</target>
       </trans-unit>
     </body>

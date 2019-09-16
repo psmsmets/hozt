@@ -57,8 +57,7 @@ class UserManager
         $user = new User();
 
         // create and link user details 
-        $details = new UserDetails();
-        $user->setDetails($details);
+        $details = new UserDetails($user);
 
         $user->setFirstname($firstname);
         $user->setLastname($lastname);

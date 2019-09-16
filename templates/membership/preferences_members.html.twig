@@ -1,8 +1,5 @@
 {% for member in app.user.getEnabledMembers() %}
 <div class="mb-3 mb-lg-4">
-  <span class="float-right">
-    <button class="btn btn-sm btn-light" data-member="{{member.uuid}}">bewerk</button>
-  </span>
   <h5 class="mb-0">{{member}}</h5>
   <ul class="list-unstyled text-muted">
     <li class="mb-1">{%if member.team%}<span class="badge badge-primary mr-1">{{member.team.name}}</span>{%endif%}{%for tag in member.grouping%}<span class="badge badge-secondary mr-1">{{tag.name}}</span>{%endfor%}</li>

@@ -1,7 +1,28 @@
-<p>Verander je naam en voornaam</p>
-<p>Verander je email adres</p>
-<p>Verander je telefoonnummer</p>
-<p> </p>
-<p>Wachtwoord ingeven om te bevestigen</p>
-<p> </p>
+{% set user = app.user %}
+
+<span class="float-right">
+  <button class="btn btn-sm btn-light ml-2" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{user.id}}">bewerk</button> 
+</span>
+
+<div class="col-lg-10 mb-4">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="smaller">Voornaam</label>
+      <div class="form-control">{{user.firstname}}</div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="smaller">Naam</label>
+      <div class="form-control">{{user.lastname}}</div>
+    </div>
+    <div class="col-12 mb-3">
+      <label class="smaller">Email</label>
+      <div class="form-control">{{user.email|hide_email}}</div>
+    </div>
+    <div class="col-12 mb-3">
+      <label class="smaller">Mobiele telefoon</label>
+      <div class="form-control">{{user.mobilePhone|hide_telephone}}</div>
+    </div>
+  </div>
+</div>
+
 <p><a href="{{path('security_change_password')}}"><i class="fas fa-key"></i> Wachtwoord veranderen</a></p>

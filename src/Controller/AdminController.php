@@ -207,8 +207,8 @@ class AdminController extends EasyAdminController
     // special persist
     public function persistUserEntity($user)
     {
-        $details = new UserDetails();
-        $user->setDetails($details);
+        $details = new UserDetails($user);
+        //$user->setDetails($details);
         $this->em->persist($details);
 
         if ($this->userManager->invite($user)) {        

@@ -536,6 +536,7 @@ class User implements UserInterface
         return $this->details;
     }
 
+/*
     public function setDetails(?UserDetails $details): self
     {
         $this->details = $details;
@@ -548,6 +549,7 @@ class User implements UserInterface
 
         return $this;
     }
+*/
 
 /*
     public static function loadValidatorMetadata(ClassMetadata $metadata)

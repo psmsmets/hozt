@@ -1,13 +1,22 @@
 {% set details = app.user.details %}
-<dl class="row">
 
-  <dt class="col-sm-4">Nieuwe wedstrijden</dt>
-  <dd class="col-sm-8">{% for d in details.notificationDaynames %}{{d|trans|slice(0,2)}} {% endfor %}</dd>
+<span class="float-right">
+  <button class="btn btn-sm btn-light ml-2" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{details.id}}">bewerk</button> 
+</span>
 
-  <dt class="col-sm-4">Herinnering</dt>
-  <dd class="col-sm-8">{{details.reminderOffset}} dag{% if details.reminderOffset != 1%}en{% endif %} vooraf</dd>
-
-  <dt class="col-sm-4">Extra email</dt>
-  <dd class="col-sm-8">{{details.secondaryEmail}}</dd>
-
-</dl>
+<div class="col-lg-10 mb-4">
+  <div class="row">
+    <div class="col-12 mb-3">
+      <label class="smaller">Nieuwe wedstrijden en naderende deadlines</label>
+      <div class="form-control">{% for d in details.notificationDaynames %}{{d|trans|slice(0,2)}} {% endfor %}</div>
+    </div>
+    <div class="col-12 mb-3">
+      <label class="smaller">Herinneringen aangemelde wedstrijden</label>
+      <div class="form-control">{{details.reminderOffset}} dag{% if details.reminderOffset != 1%}en{% endif %} vooraf</div>
+    </div>
+    <div class="col-12 mb-3">
+      <label class="smaller">Extra email</label>
+      <div class="form-control">{%if details.secondaryEmail%}{{details.secondaryEmail|hide_email}}{%else%}geen{%endif%}</div>
+    </div>
+  </div>
+</div>
