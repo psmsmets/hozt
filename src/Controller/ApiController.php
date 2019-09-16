@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 # entities
 use App\Entity\TrainingTeam;
@@ -27,6 +28,8 @@ use App\Entity\Tryout;
 use App\Entity\Member;
 use App\Entity\MemberAddress;
 use App\Entity\MemberGrouping;
+use App\Entity\User;
+use App\Entity\UserDetails;
 
 # repositories
 use App\Repository\TryoutEnrolmentRepository;
@@ -42,6 +45,8 @@ use App\Form\UserPreferencesForm;
 # managers
 use App\Service\CalendarManager;
 use App\Service\CompetitionManager;
+use App\Service\UserManager;
+use App\Service\MemberManager;
 
 class ApiController extends AbstractController
 {
@@ -432,20 +437,20 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/private/membership/preferences", name="api_membership_preferences")
      */
-    public function api_membership_preferences(Request $request)
+    public function api_membership_preferences(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
 
-        $tabs = ['members','address','notifications','account'];
+        $tabs = ['members','address','notifications','user'];
         $tab = (string) $request->query->get('tab', null);
         if (!in_array($tab,$tabs)) $tab = $tabs[0];
 
         $json = $request->query->get('format', null) == 'json';
         $action = $request->query->get('action', null);
-        $remove = $action == 'remove';
         $edit = $action == 'edit';
         $new = $action == 'new';
         $form = null;
+        $formSuccess = false;
 
         if ($json && $action == 'load' )
         {
@@ -454,10 +459,10 @@ class ApiController extends AbstractController
                 'html' => $this->render(sprintf('membership/preferences_%s.html.twig', $tab), ['tab' => $tab])->getContent(),
             ]);
         }
-        elseif ($json && ($edit or $new or $remove))
+        elseif ($json and ($edit or $new))
         {
-            $id = (int) $request->query->get('id', null);
             $user = $this->security->getUser();
+            $id = (int) $request->query->get('id', null);
 
             if ( $tab == 'address' )
             {
@@ -465,49 +470,60 @@ class ApiController extends AbstractController
 
                 if (!$address instanceof MemberAddress) return $this->json(['success' => false]);
 
-                if ($remove)
+                $form = $this->createForm(MemberAddressForm::class, $address);
+                $form->handleRequest($request);
+
+                if ($formSuccess = ($form->isSubmitted() && $form->isValid()))
                 {
-                    if (count($address->getMembers())==0) {
-                        $this->em->remove($address);
-                        $this->em->flush();
-                        return $this->json([
-                            'success' => true,
-                            'message' => $this->translator->trans(sprintf('preferences.address.%s.success', $action )),
-                        ]);
-                    } else {
+                    if ($new) {
+                        $address = $form->getData();
+                        $address->setUser($this->security->getUser());
+                        $this->em->persist($address);
+                    }
+                    foreach($address->getMembers() as $member) {
+                        $member->setAddress($address);
+                    }
+                }
+            }
+            elseif ( $tab == 'notifications' )
+            {
+                $form = $this->createForm(UserDetailsForm::class, $user->getDetails());
+                $form->handleRequest($request);
+                $formSuccess = $form->isSubmitted() && $form->isValid();
+            }
+            elseif ( $tab == 'user' )
+            {
+                $form = $this->createForm(UserPreferencesForm::class);
+                $form->handleRequest($request);
+
+                if ($formSuccess = $form->isSubmitted() && $form->isValid())
+                {
+                    $formData = $form->getData();
+                    if (!$encoder->isPasswordValid($user, $formData['plainPassword']))
+                    {
                         return $this->json([
                             'success' => false,
-                            'message' => $this->translator->trans(sprintf('preferences.address.%s.inuse', $action )),
+                            'message' => $this->translator->trans('password.wrong'),
                         ]);
                     }
+                    $user->setFirstname($formData['firstname']);
+                    $user->setLastname($formData['lastname']);
+                    $user->setEmail($formData['email']);
+                    $user->setMobilephone($formData['mobilephone']);
+                } else {
+                    $form = $this->createForm(UserPreferencesForm::class, $user);
                 }
-                else
-                {
-                    $form = $this->createForm(MemberAddressForm::class, $address);
-                    $form->handleRequest($request);
-
-                    if ($form->isSubmitted() && $form->isValid())
-                    {
-                        if ($new) {
-                            $address = $form->getData();
-                            $address->setUser($this->security->getUser());
-                            $this->em->persist($address);
-                        }
-                        foreach($address->getMembers() as $member) {
-                            $member->setAddress($address);
-                        }
-                        $this->em->flush();
-
-                        return $this->json([
-                            'success' => true,
-                            'message' => $this->translator->trans(sprintf('preferences.address.%s.success', $action )),
-                        ]);
-                    }
-                }
-
             }
 
             if ($form) {
+                if ($formSuccess) {
+                    $this->em->flush();
+                    return $this->json([
+                        'success' => true,
+                        'message' => $this->translator->trans(sprintf('preferences.%s.%s.success', $tab, $action )),
+                        'redirect' => $user->getEmailChanged() ? '/logout' : null,
+                    ]);
+                }
                 return $this->json([
                     'success' => true,
                     'html' => $this->render('membership/preferences_form.html.twig', [
@@ -523,6 +539,7 @@ class ApiController extends AbstractController
             }
 
         }
+        return $this->json([ 'success' => false, 'html' => null ]); // catch
     }
 
     /**

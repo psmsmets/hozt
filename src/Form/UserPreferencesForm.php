@@ -11,14 +11,23 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserPreferences extends AbstractType
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+
+class UserPreferencesForm extends AbstractType
 {
+    private $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('password', PasswordType::class, array(
-                'label'    => false,
-                'attr' => ['placeholder'=>'Wachtwoord'],
+            ->add('plainPassword', PasswordType::class, array(
+                'label'    => 'Wachtwoord',
+                'attr' => ['placeholder'=>'Wachtwoord', 'class'=> 'mb-4'],
                 'required' => true,
                 ))
             ->add('firstname', TextType::class, array(
@@ -32,11 +41,11 @@ class UserPreferences extends AbstractType
                 'required' => true,
                 ))
             ->add('email', EmailType::class, array(
-                'label'    => false,
+                'label'    => 'Email',
                 'attr' => ['placeholder'=>'E-mail'],
                 'required' => true,
                 ))
-            ->add('telephone', TextType::class, array(
+            ->add('mobilephone', TextType::class, array(
                 'label'    => 'Mobiele telefoon',
                 'help'    => 'Enkel een Belgisch of Nederlands telefoonnummer beginnende met de landcode',
                 'attr' => ['placeholder'=>'+324...','pattern'=>$this->params->get('app.regex.mobile')],
@@ -49,7 +58,6 @@ class UserPreferences extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
-            'data_class' => User::class,
         ]);
     }
 }

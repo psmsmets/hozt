@@ -36,6 +36,8 @@ return [
     'address.town' => 'Plaats',
     'address.nation' => 'Land',
     'address.member' => 'Leden',
+    'user.edit' => 'Bewerk gebruiker',
+    'notifications.edit' => 'Bewerk notificatie instellingen',
     'GROUPING_BOARD' => 'Bestuur',
     'GROUPING_DAILY_OPERATIONS' => 'Dagelijkse werking',
     'GROUPING_COACHES' => 'Trainers',
