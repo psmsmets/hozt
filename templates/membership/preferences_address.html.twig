@@ -5,7 +5,6 @@
 <div class="mb-2">{{address}}
   <span class="float-right">
     <button class="btn btn-sm btn-light ml-2" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{address.id}}">bewerk</button> 
-    <button class="btn btn-sm btn-light ml-2 d-none" {% if members is empty %}data-tab="{{tab}}" data-action="remove" data-id="{{address.id}}"{% else %}disabled{% endif %}>verwijder</button>
   </span>
   <ul class="small text-muted list-inline">
     {% for member in members %}

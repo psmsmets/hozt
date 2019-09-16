@@ -55,6 +55,6 @@ class AppExtension extends AbstractExtension
     public function hideTelephone(string $tel): string
     {
         // return only four last digits
-        return str_repeat("*", strlen($tel) - 2) . substr($tel, -2);
+        return str_repeat("*", strlen($tel) - 3) . substr($tel, - 3);
     }
 }

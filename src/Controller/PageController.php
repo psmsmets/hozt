@@ -49,7 +49,6 @@ use App\Repository\MemberGroupingRepository;
 use App\Form\ContactFormType;
 use App\Form\ClubfeestType;
 use App\Form\TryoutEnrolmentForm;
-use App\Form\MemberAddressForm;
 
 # managers
 use App\Service\CalendarManager;

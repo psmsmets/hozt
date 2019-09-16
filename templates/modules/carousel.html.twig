@@ -1,6 +1,7 @@
+{% if carousel %}
 <!-- CAROUSEL
 ================================================== -->
-<div id="HoZTCarousel" class="carousel slide carousel-fade banner banner-bg banner-lg fade-in d-print-none" data-ride="carousel">
+<div id="HoZTCarousel" class="carousel slide carousel-fade banner banner-lg fade-in d-print-none" data-ride="carousel">
   {% if carousel|length > 1 %}
     <!--<ol class="carousel-indicators d-none d-md-flex">-->
     <ol class="carousel-indicators">
@@ -13,12 +14,12 @@
   {% for slide in carousel %}
     <div class="carousel-item {% if loop.index0 == 0%}active{% endif%}">
 
-      {% if slide.image is not empty%}
+      {% if slide.image %}
         <img src="{{ vich_uploader_asset(slide, 'imageFile') }}">
       {% endif %}
 
       <div class="container {% if slide.overlay %}overlay{% endif %}">
-        <div class="carousel-caption lead">
+        <div class="carousel-caption lead {%if not slide.image%}text-dark{%endif%}">
 
         {% if slide.publishAt > date()%}
           <i class="fas fa-lock" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Nog niet publiek"></i>
@@ -29,25 +30,25 @@
           {% if slide.showTitle %}<h1>{{ slide.title|ucfirst }}</h1>{% endif %}
           {{ slide.body|raw }}
 
-          {% if slide.url is not empty or slide.event is not empty %}
+          {% if slide.url or slide.event %}
             <p class="text-center">
 
               {% set btn1 = 'btn btn-secondary mt-2' %}
               {% set btn2 = 'btn btn-primary mt-2 mr-1' %}
 
-              {% if slide.url is not empty %}
+              {% if slide.url %}
 
-                <a href="{{ slide.url }}" class="{{btn2}} mr-2"><i class="fas fa-angle-double-right"></i> {% if slide.urlButton is empty%}Kom meer te weten{% else %}{{slide.urlButton}}{% endif %}</a>
+                <a href="{{ slide.url }}" class="{{btn2}} mr-2"><i class="fas fa-angle-double-right"></i> {% if not slide.urlButton%}Kom meer te weten{% else %}{{slide.urlButton}}{% endif %}</a>
 
               {% endif %}
 
-              {% if slide.event is not empty %}
+              {% if slide.event %}
 
                 <a href="{{ path('calendar_event', {'uuid': slide.event.uuid}) }}" class="{{btn1}} mr-2"><i class="far fa-calendar-alt"></i></a>
 
                 {% set comp = slide.event.competition %}
 
-                {% if comp is not empty %}
+                {% if comp %}
 
                   {% if slide.publishAt < slide.event.startTime|date_modify('midnight') %}
 
@@ -89,3 +90,4 @@
   {% endfor %}
   </div><!-- carousel inner -->
 </div>
+{%endif%}

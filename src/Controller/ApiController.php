@@ -36,6 +36,8 @@ use App\Repository\MemberGroupingRepository;
 
 # forms
 use App\Form\MemberAddressForm;
+use App\Form\UserDetailsForm;
+use App\Form\UserPreferencesForm;
 
 # managers
 use App\Service\CalendarManager;

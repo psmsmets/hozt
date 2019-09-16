@@ -15,7 +15,7 @@ class UserDetails
      * Parameters
      */
     const MIN_REMINDEROFFSET = 1;
-    const MAX_REMINDEROFFSET = 7;
+    const MAX_REMINDEROFFSET = 5;
 
     /**
      * @ORM\Id()
@@ -44,10 +44,11 @@ class UserDetails
      */
     private $secondaryEmail;
 
-    public function __construct(bool $verified = false)
+    public function __construct(User $user)
     {
+      $this->user = $user;
       $this->notificationDays = range(1,7);
-      $this->reminderOffset = 1;
+      $this->reminderOffset = 2;
     }
 
     public function getId(): ?int
@@ -60,12 +61,14 @@ class UserDetails
         return $this->user;
     }
 
+/*
     public function setUser(?User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
+*/
 
     public function getNotificationDaynames(): ?array
     {

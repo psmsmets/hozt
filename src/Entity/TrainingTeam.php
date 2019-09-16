@@ -375,7 +375,7 @@ class TrainingTeam
     /**
      * @return Collection|Member[]
      */
-    public function getMembers(bool $enabled = true): Collection
+    public function getMembers(bool $enabled=true): Collection
     {
         if (is_null($enabled)) return $this->members;
         return $this->members->filter(function(Member $member) use ($enabled) {
@@ -383,7 +383,7 @@ class TrainingTeam
         });
     }
 
-    public function hasMembers(bool $enabled = true): bool
+    public function hasMembers(bool $enabled=true): bool
     {
         return count($this->getMembers($enabled));
     }
