@@ -40,16 +40,31 @@ class UserPreferencesForm extends AbstractType
                 'attr' => ['placeholder'=>'Naam'],
                 'required' => true,
                 ))
-            ->add('email', EmailType::class, array(
-                'label'    => 'Email',
-                'attr' => ['placeholder'=>'E-mail'],
-                'required' => true,
+            ->add('currentEmail', EmailType::class, array(
+                'label'    => 'E-mail adres',
+                'attr' => ['placeholder'=>'Huidig e-mail adres'],
+                'required' => false,
+                'mapped' => false,
                 ))
-            ->add('mobilephone', TextType::class, array(
+            ->add('newEmail', EmailType::class, array(
+                'label'    => false,
+                'attr' => ['placeholder'=>'Nieuw e-mail adres'],
+                'required' => false,
+                'mapped' => false,
+                ))
+            ->add('currentMobilephone', TextType::class, array(
                 'label'    => 'Mobiele telefoon',
-                'help'    => 'Enkel een Belgisch of Nederlands telefoonnummer beginnende met de landcode',
-                'attr' => ['placeholder'=>'+324...','pattern'=>$this->params->get('app.regex.mobile')],
-                'required' => true,
+                //'help'    => 'Enkel een Belgisch of Nederlands telefoonnummer beginnende met de landcode',
+                'attr' => ['placeholder'=>'Huidige mobiele telefoon','pattern'=>$this->params->get('app.regex.mobile')],
+                'required' => false,
+                'mapped' => false,
+                ))
+            ->add('newMobilephone', TextType::class, array(
+                'label'    => false,
+                'help'    => 'Enkel een Belgisch of Nederlands telefoonnummer beginnende met de landcode (+324... of +316...)',
+                'attr' => ['placeholder'=>'Nieuwe mobiele telefoon','pattern'=>$this->params->get('app.regex.mobile')],
+                'required' => false,
+                'mapped' => false,
                 ))
         ;
     }
