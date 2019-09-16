@@ -508,8 +508,12 @@ class ApiController extends AbstractController
                     }
                     $user->setFirstname($formData['firstname']);
                     $user->setLastname($formData['lastname']);
-                    $user->setEmail($formData['email']);
-                    $user->setMobilephone($formData['mobilephone']);
+                    if ( $form['currentEmail']->getData() === $user->getEmail() and !is_null($form['newEmail']->getData()) ) {
+                        $user->setEmail($form['newEmail']->getData());
+                    }
+                    if ( $form['currentMobilephone']->getData() === $user->getMobilephone() and !is_null($form['newMobilephone']->getData()) ) {
+                        $user->setMobilephone($form['newMobilephone']->getData());
+                    }
                 } else {
                     $form = $this->createForm(UserPreferencesForm::class, $user);
                 }
