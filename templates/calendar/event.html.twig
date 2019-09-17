@@ -80,7 +80,7 @@
                <li class="list-unstyled-item" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}{%if app.user%} |<span class="text-primary">{%for enrolment in part.getUserEnrolments(app.user,true)%}<span class="ml-2">{{enrolment.member.firstname}}</span>{%endfor%}</span>{%endif%}</li>
               {% endfor %}
               </ul>
-            <li class="mb-2"><i class="fas fa-edit"></i> Deadline {{event.competition.enrolBefore|localizeddate('full','none')}}</li>
+            <li class="mb-2"><i class="fas fa-edit"></i> Aan- en afmelden voor {{event.competition.enrolBefore|localizeddate('full','none')}}</li>
             {% endif %}
           {% endif %}
         </ul>

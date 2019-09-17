@@ -1,28 +1,24 @@
 {% set user = app.user %}
 
-<div class="text-right">
-  <button class="btn btn-light btn-sm" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{user.id}}"><i class="fas fa-pen"></i> {{'form.edit'|trans}}</button> 
+<div class="mb-2">
+  <label class="smaller mt-2 mb-0">Voornaam</label>
+  <button class="btn btn-light btn-sm float-right" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-form="user_name_form" data-action="edit" data-id="{{user.id}}"><i class="fas fa-pen"></i> {{'form.edit'|trans}}</button> 
 </div>
+<div class="col-lg-8 form-control">{{user.firstname}}</div>
+<label class="smaller mt-2 mt-lg-3">Naam</label>
+<div class="col-lg-8 form-control">{{user.lastname}}</div>
 
-<div class="col-lg-10 mb-4">
-  <div class="row">
-    <div class="col-md-6 mb-3">
-      <label class="smaller">Voornaam</label>
-      <div class="form-control">{{user.firstname}}</div>
-    </div>
-    <div class="col-md-6 mb-3">
-      <label class="smaller">Naam</label>
-      <div class="form-control">{{user.lastname}}</div>
-    </div>
-    <div class="col-12 mb-3">
-      <label class="smaller">E-mail</label>
-      <div class="form-control">{{user.email|hide_email}}</div>
-    </div>
-    <div class="col-12 mb-3">
-      <label class="smaller">Mobiele telefoon</label>
-      <div class="form-control">{{user.mobilePhone|hide_telephone}}</div>
-    </div>
-  </div>
+
+<div class="mt-5 mb-2">
+  <label class="smaller mt-2 mb-0">E-mail</label>
+  <button class="btn btn-light btn-sm float-right" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-form="user_email_form" data-action="edit" data-id="{{user.id}}"><i class="fas fa-pen"></i> {{'form.edit'|trans}}</button> 
 </div>
+<div class="col-lg-8 form-control">{{user.email|hide_email}}</div>
 
-<p><a href="{{path('security_change_password')}}"><i class="fas fa-key"></i> Wachtwoord veranderen</a></p>
+<div class="mt-5 mb-2">
+  <label class="smaller mt-2 mb-0">Mobiele telefoon</label>
+  <button class="btn btn-light btn-sm float-right" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-form="user_mobilephone_form" data-action="edit" data-id="{{user.id}}"><i class="fas fa-pen"></i> {{'form.edit'|trans}}</button> 
+</div>
+<div class="col-lg-8 form-control">{{user.mobilePhone|hide_telephone}}</div>
+
+<p class="mt-4"><a href="{{path('security_change_password')}}"><i class="fas fa-key"></i> Wachtwoord veranderen</a></p>

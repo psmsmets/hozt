@@ -87,11 +87,11 @@
       </trans-unit>
       <trans-unit id="DIUMcQV" resname="preferences.account">
         <source>preferences.account</source>
-        <target>Bewerk je account</target>
+        <target>Account</target>
       </trans-unit>
       <trans-unit id="GIE4s64" resname="preferences.user">
         <source>preferences.user</source>
-        <target>Bewerk je account</target>
+        <target>Account</target>
       </trans-unit>
       <trans-unit id="frd_hDB" resname="preferences.address">
         <source>preferences.address</source>
@@ -104,6 +104,30 @@
       <trans-unit id="OLVQQZA" resname="preferences.notifications">
         <source>preferences.notifications</source>
         <target>Notificaties</target>
+      </trans-unit>
+      <trans-unit id="vpF4HFk" resname="member_address_form.edit">
+        <source>member_address_form.edit</source>
+        <target>Adres aanpassen</target>
+      </trans-unit>
+      <trans-unit id="Mb_cnk2" resname="user_details_form.edit">
+        <source>user_details_form.edit</source>
+        <target>Notificatie voorkeuren aanpassen</target>
+      </trans-unit>
+      <trans-unit id="MZcRvLl" resname="user_name_form.edit">
+        <source>user_name_form.edit</source>
+        <target>Je naam aanpassen</target>
+      </trans-unit>
+      <trans-unit id="chRmeM6" resname="user_email_form.edit">
+        <source>user_email_form.edit</source>
+        <target>E-mail adres aanpassen</target>
+      </trans-unit>
+      <trans-unit id="UzkP_Xo" resname="user_mobilephone_form.edit">
+        <source>user_mobilephone_form.edit</source>
+        <target>Mobiele telefoon aanpassen</target>
+      </trans-unit>
+      <trans-unit id="gvvjD2M" resname="form.edit">
+        <source>form.edit</source>
+        <target>Bewerk</target>
       </trans-unit>
       <trans-unit id="Ci3qibM" resname="form.save">
         <source>form.save</source>
@@ -119,7 +143,7 @@
       </trans-unit>
       <trans-unit id="ds5xdN6" resname="address.edit">
         <source>address.edit</source>
-        <target>Adres bewerken</target>
+        <target>Adres aanpassen</target>
       </trans-unit>
       <trans-unit id="wiAs9Zf" resname="address.remove">
         <source>address.remove</source>
@@ -147,11 +171,11 @@
       </trans-unit>
       <trans-unit id="vQxH4zm" resname="user.edit">
         <source>user.edit</source>
-        <target>Bewerk gebruiker</target>
+        <target>Je account aanpassen</target>
       </trans-unit>
       <trans-unit id="gcpJRSF" resname="notifications.edit">
         <source>notifications.edit</source>
-        <target>Bewerk notificatie instellingen</target>
+        <target>Notificatie aanpassen</target>
       </trans-unit>
       <trans-unit id="Att2RVQ" resname="GROUPING_BOARD">
         <source>GROUPING_BOARD</source>
@@ -168,18 +192,6 @@
       <trans-unit id="15vdrj7" resname="GROUPING_OFFICIALS">
         <source>GROUPING_OFFICIALS</source>
         <target>Officials</target>
-      </trans-unit>
-      <trans-unit id="xD1bqsX" resname="competition.morning">
-        <source>competition.morning</source>
-        <target>voormiddag</target>
-      </trans-unit>
-      <trans-unit id="6WBplAN" resname="competition.afternoon">
-        <source>competition.afternoon</source>
-        <target>namiddag</target>
-      </trans-unit>
-      <trans-unit id="ZdoWYLu" resname="competition.evening">
-        <source>competition.evening</source>
-        <target>avond</target>
       </trans-unit>
       <trans-unit id="Xr8NOM1" resname="password.wrong">
         <source>password.wrong</source>

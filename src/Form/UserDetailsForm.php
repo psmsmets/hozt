@@ -14,10 +14,29 @@ class UserDetailsForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('secondaryEmail', EmailType::class, array(
-                'label'    => false,
-                'attr' => ['placeholder'=>'E-mail'],
+            ->add('notificationDays', ChoiceType::class, array(
+                'label'    => 'Notificatie dagen',
                 'required' => true,
+                'multiple' => true,
+                'choices' => range(1,7),
+                'choice_label' => function ($choice, $key, $value) {
+                    return jddayofweek($key,$mode=1);
+                },
+                //'choice_translation_domain' => true,
+                ))
+            ->add('reminderOffset', ChoiceType::class, array(
+                'label'    => 'Stuur een wedstrijd herinnering ... dag(en) vooraf',
+                'attr' => ['class'=> 'custom-select'],
+                'required' => true,
+                'choices' => range(UserDetails::minReminderOffset,UserDetails::maxReminderOffset),
+                'choice_label' => function ($choice, $key, $value) {
+                    return $value;
+                },
+                ))
+            ->add('secondaryEmail', EmailType::class, array(
+                'label'    => 'Secundair e-mail adres',
+                'attr' => ['placeholder'=>'E-mail'],
+                'required' => false,
                 ))
         ;
     }
@@ -26,7 +45,6 @@ class UserDetailsForm extends AbstractType
     {
         $resolver->setDefaults([
             // Configure your form options here
-            'data_class' => UserDetails::class,
         ]);
     }
 }

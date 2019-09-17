@@ -825,8 +825,6 @@ class PageController extends AbstractController
      */
     public function membership()
     {
-        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
-
         $this->initTemplateData();
         $this->addToTemplateData( 'upcoming_competitions', $this->competitionManager->getUpcomingUserCompetitions($this->user));
         $this->addToTemplateData( 'new_competitions', $this->competitionManager->getNewUserCompetitions($this->user));
@@ -839,8 +837,6 @@ class PageController extends AbstractController
      */
     public function membership_competitions()
     {
-        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
-
         $this->initTemplateData();
         $this->addToTemplateData( 
             'competitions',
@@ -857,8 +853,6 @@ class PageController extends AbstractController
      */
     public function membership_preferences(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
-
         $tabs = ['members','address','notifications','user'];
         $tab = (string) $request->query->get('tab', null);
         if (!in_array($tab,$tabs)) $tab = $tabs[0];
@@ -868,6 +862,34 @@ class PageController extends AbstractController
         $this->addToTemplateData( 'tab', $tab);
 
         return $this->render(sprintf('membership/preferences.html.twig'), $this->template_data );
+    }
+
+    /**
+     * @Route("/sportsecretariaat", name="management")
+     */
+/*
+    public function management()
+    {
+        $this->initTemplateData();
+        $this->addToTemplateData( 'competitions', $this->competitionManager->getPeriodCompetitions(
+            $this->calendarManager->getPeriodStart(), $this->calendarManager->getPeriodEnd()
+        ));
+
+        return $this->render('management/index.html.twig', $this->template_data );
+    }
+*/
+
+    /**
+     * @Route("/sportsecretariaat", name="management_competitions")
+     */
+    public function management_competitions()
+    {
+        $this->initTemplateData();
+        $this->addToTemplateData( 'competitions', $this->competitionManager->getPeriodCompetitions(
+            $this->calendarManager->getPeriodStart(), $this->calendarManager->getPeriodEnd()
+        ));
+
+        return $this->render('management/competitions.html.twig', $this->template_data );
     }
 
 
