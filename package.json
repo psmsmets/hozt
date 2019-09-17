@@ -19,11 +19,11 @@
     },
     "dependencies": {
         "@travishorn/session-timeout": "^2.0.3",
-        "bcswipe": "^2.0.3",
         "countup": "^1.8.2",
         "countup.js": "^2.0.4",
         "jquery": "^3.4.1",
         "jquery.scrollto": "^2.1.2",
-        "popper.js": "^1.15.0"
+        "popper.js": "^1.15.0",
+        "set-value": ">=2.0.1"
     }
 }
