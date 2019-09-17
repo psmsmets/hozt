@@ -23,7 +23,7 @@ return [
     'preferences.title' => 'Voorkeuren...',
     'preferences.account' => 'Account',
     'preferences.user' => 'Account',
-    'preferences.address' => 'Addresboek',
+    'preferences.address' => 'Adresboek',
     'preferences.members' => 'Leden',
     'preferences.notifications' => 'Notificaties',
     'member_address_form.edit' => 'Adres aanpassen',

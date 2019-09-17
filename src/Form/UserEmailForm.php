@@ -18,13 +18,13 @@ class UserEmailForm extends AbstractType
         $builder
             ->add('currentEmail', EmailType::class, array(
                 'label'    => 'Huidig e-mail adres',
-                'attr' => ['placeholder'=>'e-mail'],
+                'attr' => ['placeholder'=>'E-mail'],
                 'required' => true,
                 'mapped' => false,
                 ))
             ->add('newEmail', EmailType::class, array(
                 'label'    => 'Nieuw e-mail adres',
-                'attr' => ['placeholder'=>'e-mail', 'class'=> 'mb-4'],
+                'attr' => ['placeholder'=>'E-mail', 'class'=> 'mb-4'],
                 'required' => true,
                 'mapped' => false,
                 ))

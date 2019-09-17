@@ -3,12 +3,10 @@ require('../css/hozt.scss');
 require('bootstrap');
 require('jquery.scrollTo');
 import { CountUp } from 'countup.js';
-import sessionTimeout from '@travishorn/session-timeout';
 
 var $ = require('jquery');
 window.$ = $;
 window.jQuery = $;
-
 
 // Hide Header on on scroll down
 var didScroll;
@@ -67,21 +65,49 @@ function toClipboard(id){
 };
 
 
+
+
+
+function getSessionTimeout( sessionModal, sessionWarn, sessionTime, sessionLogout ) {
+    var elapsed;
+    $.getJSON("/api/session/timeout", null, function(result) {
+        if (result.success) { 
+            elapsed = result.elapsed;
+            if (elapsed > sessionWarn) {
+                $(sessionModal).modal('show');
+            }
+            if (elapsed > sessionTime) {
+                document.location.replace(sessionLogout.data('logout'));
+            }
+        };
+    });
+}
+
+function sessionHandler( sessionModal ){
+
+    if ($(sessionModal).length == 0 ) return;
+
+    var sessionTime = 1200;
+    var sessionWarn = 900;
+    var sessionLogout = $('#sessionModal [data-logout]');
+
+    $(sessionLogout).click(function() {
+        document.location.replace(sessionLogout.data('logout'));
+    });
+
+    $(sessionModal).on('hide.bs.modal', function (e) {
+        $.getJSON("/api/session/keep-alive");
+    });
+
+    var sessionInterval = setInterval(function() {
+        getSessionTimeout( sessionModal, sessionWarn, sessionTime, sessionLogout );
+    }, 30000);
+}
+
+
 $(document).ready(function(){
 
-    if ( $(document.body).data('session-timeout') ) {
-        // todo: integrate bootstrap 4 styling: modal with buttons
-        sessionTimeout({
-            //warnAfter: 6000, // test
-            appendTimestamp: true,
-            keepAliveUrl: '/api/keep-alive',
-            message: 'Ben je er nog?',
-            timeOutUrl: '/loguit',
-            logOutUrl: '/loguit',
-            logOutBtnText: 'Uitloggen',
-            stayConnectedBtnText: 'Verder doen',
-        });
-    }
+    sessionHandler($('#sessionModal'));
 
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();

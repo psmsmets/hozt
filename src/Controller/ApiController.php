@@ -57,8 +57,11 @@ class ApiController extends AbstractController
     private $em;
     private $now;
     private $translator;
+    private $calendarManager;
+    private $competitionManager;
+    private $userManager;
 
-    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator, CalendarManager $calendarManager, CompetitionManager $competitionManager)
+    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator, CalendarManager $calendarManager, CompetitionManager $competitionManager )
     {
         $this->requestStack = $requestStack;
         $this->security = $security;
@@ -70,15 +73,24 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/keep-alive", name="api_session_timeout")
+     * @Route("/api/session/timeout", name="api_session_timeout")
      */
-    public function api_session_timeout(Request $request)
+    public function api_session_timeout()
     {
-        $time = $request->query->get('time', null);
+        $user = $this->security->getUser();
+
         return $this->json(array(
-            'result' => !is_null($time), 
-            'time' => date('r', $time ) 
+            'success' => !is_null($user), 
+            'elapsed' => (new \DateTime())->getTimestamp() - $this->security->getUser()->getLastActiveAt()->getTimestamp() 
         ));
+    }
+
+    /**
+     * @Route("/api/session/keep-alive", name="api_session_keepalive")
+     */
+    public function api_session_keepalive()
+    {
+        return $this->json(['success' => true]);
     }
 
     /**

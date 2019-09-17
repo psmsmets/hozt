@@ -32,7 +32,9 @@ class LastActivitySubscriber implements EventSubscriberInterface
 
     public function onResponse(FilterResponseEvent $event)
     {
-        $user = $this->security->getUser();
-        if (!is_null($user)) $this->userManager->setActivity($user);
+        if ($event->getRequest()->getPathInfo() !== '/api/session/timeout') {
+            $user = $this->security->getUser();
+            if (!is_null($user)) $this->userManager->setActivity($user);
+        }
     }
 }
