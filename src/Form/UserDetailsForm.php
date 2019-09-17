@@ -14,11 +14,6 @@ class UserDetailsForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('secondaryEmail', EmailType::class, array(
-                'label'    => false,
-                'attr' => ['placeholder'=>'E-mail'],
-                'required' => false,
-                ))
             ->add('notificationDays', ChoiceType::class, array(
                 'label'    => 'Notificatie dagen',
                 'required' => true,
@@ -37,6 +32,11 @@ class UserDetailsForm extends AbstractType
                 'choice_label' => function ($choice, $key, $value) {
                     return $value;
                 },
+                ))
+            ->add('secondaryEmail', EmailType::class, array(
+                'label'    => 'Secundair e-mail adres',
+                'attr' => ['placeholder'=>'E-mail'],
+                'required' => false,
                 ))
         ;
     }

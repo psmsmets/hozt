@@ -44,11 +44,22 @@ class UserDetails
      */
     private $secondaryEmail;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $secondaryEmailVerified;
+
+    /**
+     * Virtual variables
+     */
+    private $secondaryEmailChanged = false;
+
     public function __construct(User $user)
     {
       $this->user = $user;
       $this->notificationDays = range(1,7);
       $this->reminderOffset = 2;
+      $this->secondaryEmailVerified = false;
     }
 
     public function getId(): ?int
@@ -109,9 +120,32 @@ class UserDetails
 
     public function setSecondaryEmail(?string $secondaryEmail): self
     {
-        $this->secondaryEmail = $secondaryEmail;
+        $this->secondaryEmailChanged = $this->secondaryEmail !== strtolower($secondaryEmail);
+        $this->secondaryEmail = strtolower($secondaryEmail);
 
         return $this;
+    }
+
+    public function getSecondaryEmailChanged(): ?bool
+    {
+        return $this->secondaryEmailChanged;
+    }
+
+    public function getSecondaryEmailVerified(): ?bool
+    {
+        return $this->secondaryEmailVerified;
+    }
+
+    public function setSecondaryEmailVerified(bool $verified): self
+    {
+        $this->verified = $verified;
+
+        return $this;
+    }
+
+    public function isSecondaryEmailVerified(): ?bool
+    {
+        return $this->secondaryEmailVerified ? true : false;
     }
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)

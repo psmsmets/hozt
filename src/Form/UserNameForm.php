@@ -31,7 +31,7 @@ class UserNameForm extends AbstractType
                 'required' => true,
                 ))
             ->add('lastname', TextType::class, array(
-                'label'    => 'Naam',
+                'label'    => 'Familienaam',
                 'attr' => ['placeholder'=>'Naam', 'class'=>'mb-4'],
                 'required' => true,
                 ))

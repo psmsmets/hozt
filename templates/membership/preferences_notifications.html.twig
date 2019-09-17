@@ -1,13 +1,13 @@
 {% set details = app.user.details %}
 
 <div class="mb-2">
-  <label class="smaller mt-2 mb-0">Notificaties nieuwe wedstrijden en naderende deadlines</label>
+  <label class="smaller mt-2 mb-0">Ontvang notificatie e-mails op</label>
   <button class="btn btn-light btn-sm float-right" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-form="user_details_form" data-action="edit" data-id="{{details.id}}"><i class="fas fa-pen"></i> {{'form.edit'|trans}}</button>
 </div>
 <div class="col-lg-8 form-control">{% for d in details.notificationDaynames %}{% if details.notificationDaynames|length>4 %}{{d|trans|slice(0,2)}}{% else %}{{d|trans}}{% endif %}{% if not loop.last%}, {% endif %}{% endfor %}</div>
 
-<label class="smaller mt-2 mt-lg-3">Herinneringsmails aangemelde wedstrijden</label>
+<label class="smaller mt-2 mt-lg-3">Stuur herinneringsmails voor aangemelde wedstrijden</label>
 <div class="col-lg-8 form-control">{{details.reminderOffset}} dag{% if details.reminderOffset != 1%}en{% endif %} vooraf</div>
 
-<label class="smaller mt-2 mt-lg-3">Extra e-mail adres</label>
+<label class="smaller mt-2 mt-lg-3">Verstuur notificaties naar een secundair e-mail adres</label>
 <div class="col-lg-8 form-control mb-3">{%if details.secondaryEmail%}{{details.secondaryEmail|hide_email}}{%else%}geen{%endif%}</div>
