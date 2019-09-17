@@ -98,7 +98,7 @@
               <div class="modal-header">
                 <h5 class="modal-title" id="sessionModalLabel">{{'session.timeout'|trans}}</h5>
               </div>
-              <div class="modal-body">{{'session.message'|trans}}<br>{{'session.remaining'|trans}} <span></span> {{'session.seconds'|trans}}.</div>
+              <div class="modal-body">{{'session.message'|trans}}<br>{{'session.remaining_before'|trans}}<span id="sessionModalRemaining"></span>{{'session.remaining_after'|trans}}</div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-medium" data-logout="{{path('security_logout')}}">{{'session.logout'|trans}}</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">{{'session.continue'|trans}}</button>
