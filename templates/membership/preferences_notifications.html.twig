@@ -10,4 +10,8 @@
 <div class="col-lg-8 form-control">{{details.reminderOffset}} dag{% if details.reminderOffset != 1%}en{% endif %} vooraf</div>
 
 <label class="smaller mt-2 mt-lg-3">Verstuur notificaties naar een secundair e-mail adres</label>
-<div class="col-lg-8 form-control mb-3">{%if details.secondaryEmail%}{{details.secondaryEmail|hide_email}}{%else%}geen{%endif%}</div>
+<div class="col-lg-8 form-control mb-2">{%if details.secondaryEmail%}{{details.secondaryEmail|hide_email}}{%else%}geen{%endif%}</div>
+
+<p class="smaller text-muted">{%if details.secondaryEmail%}
+{%if details.secondaryEmailVerified%}<span class="badge badge-success align-text-top">actief</span>{%else%}<span class="badge badge-danger align-text-top">niet actief</span> <a href="#" class="text-muted">Verificatie e-mail opnieuw versturen</a>{%endif%}
+{%endif%}</p>
