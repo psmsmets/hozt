@@ -169,6 +169,30 @@
         <source>address.member</source>
         <target>Leden</target>
       </trans-unit>
+      <trans-unit id="ZVwDSv." resname="session.timeout">
+        <source>session.timeout</source>
+        <target>Ben je er nog?!</target>
+      </trans-unit>
+      <trans-unit id="kZ8zEC2" resname="session.message">
+        <source>session.message</source>
+        <target>Je sessie gaat verlopen wegens inactiviteit.</target>
+      </trans-unit>
+      <trans-unit id="AUu.GoL" resname="session.remaining_before">
+        <source>session.remaining_before</source>
+        <target>Je hebt nog </target>
+      </trans-unit>
+      <trans-unit id="_mDM2db" resname="session.remaining_after">
+        <source>session.remaining_after</source>
+        <target>s voor je automatisch uitgelogd wordt.</target>
+      </trans-unit>
+      <trans-unit id="LLvkXec" resname="session.logout">
+        <source>session.logout</source>
+        <target>Uitloggen</target>
+      </trans-unit>
+      <trans-unit id="i6I5JOG" resname="session.continue">
+        <source>session.continue</source>
+        <target>Verder doen</target>
+      </trans-unit>
       <trans-unit id="vQxH4zm" resname="user.edit">
         <source>user.edit</source>
         <target>Je account aanpassen</target>

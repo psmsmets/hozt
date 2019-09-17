@@ -65,15 +65,13 @@ function toClipboard(id){
 };
 
 
-
-
-
 function getSessionTimeout( sessionModal, sessionWarn, sessionTime, sessionLogout ) {
     var elapsed;
     $.getJSON("/api/session/timeout", null, function(result) {
         if (result.success) { 
             elapsed = result.elapsed;
             if (elapsed > sessionWarn) {
+                $('#sessionModalRemaining').html(sessionTime-elapsed);
                 $(sessionModal).modal('show');
             }
             if (elapsed > sessionTime) {
@@ -101,7 +99,7 @@ function sessionHandler( sessionModal ){
 
     var sessionInterval = setInterval(function() {
         getSessionTimeout( sessionModal, sessionWarn, sessionTime, sessionLogout );
-    }, 30000);
+    }, 15000);
 }
 
 
