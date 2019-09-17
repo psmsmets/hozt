@@ -4,21 +4,19 @@
 
 {% block main %}
 
-{% set members = app.user.getMembersWithTeam() %}
-
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
-      <li class="breadcrumb-item"><a href="{{path('membership')}}">Mijn account</a></li>
+      <li class="breadcrumb-item"><a href="{{path('management_competitions')}}">Sportsecretariaat</a></li>
       <li class="breadcrumb-item active" aria-current="page">Wedstrijden</li>
     </ol>
   </nav>
 
   <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
 
-    <h2 class="text-primary d-flex justify-content-between mb-2">Mijn wedstrijden</h2>
+    <h2 class="text-primary d-flex justify-content-between mb-2">Sportsecretariaat wedstrijden</h2>
 
     <div class="row">
-      <div class="col-12 col-lg-3">
+      <div class="col-12 col-md-3">
         <div class="nav flex-column nav-pills" id="competitions-tab" role="tablist" aria-orientation="vertical">
           <a class="nav-link active" id="competitions-upcoming-tab" data-toggle="pill" href="#competitions" role="tab" aria-controls="competitions" aria-selected="false">Aanstaande</a>
           <a class="nav-link" id="competitions-new-tab" data-toggle="pill" href="#competitions" role="tab" aria-controls="competitions" aria-selected="false">Nieuw <span class="badge badge-light"></span></a>
@@ -27,48 +25,35 @@
         </div>
       </div>
 
-      <div class="col-12 col-lg-9 mt-3 mt-lg-0 mx-2 mx-lg-0">
+      <div class="col-12 col-md-9 mt-3 mt-md-0 mx-2 mx-md-0">
         <div class="tab-content" id="competitions-tabContent">
           <div class="tab-pane fade show active" id="competitions" role="tabpanel" aria-labelledby="competitions-upcoming-tab">
-
-            <div class="mb-3 d-print-none d-block d-md-flex justify-content-between text-center text-md-left">
-              <ul class="list-inline">
-                <li class="list-inline-item"><i class="fas fa-check-square text-success"></i> ingeschreven</li>
-                <li class="list-inline-item"><i class="fas fa-minus-square text-warning"></i> afgemeld</li>
-                <li class="list-inline-item"><i class="fas fa-square text-medium"></i> niet beschikbaar</li>
-              </ul>
-              <small><button class="btn btn-medium btn-sm" id="competitions-edit" data-action="edit"><i class="fas fa-lock"></i> bewerken</button></small>
-            </div>
 
             <div class="table-responsive">
               <table class="table table-hover text-center">
                 <thead>
                   <tr>
                     <th scope="col" class="text-right">Datum/locatie</th>
-                    {% for member in members %}
-                    <th scope="col"><span class="font-weight-normal">{{member.team.abbr}}</span><br/>{{member.firstname}}</th>
-                    {% endfor %}
                   </tr>
                 </thead>
                 <tbody>
                 {% for competition in page.competitions %}
                   {% set edit = competition.enrolbefore > date() %}
                   {% set past = competition.calendar.calcendtime < date() %}
-                  {% set new  = competition.hasnewcompetitionenrolments(app.user) and edit %}
-                  <tr class="competition{%if past%} competition-past{%endif%} {%if new%}competition-new{%endif%} {%if not edit%}competition-locked{%endif%}">
-                    <th scope="row" class="" colspan={{1+members|length}}>
-                      <div class="row text-left w-100 p-0 m-0 align-items-center">
-                        <div class="col-lg-4 pl-0"><small class="text-muted"><i class="fas fa-edit"></i> voor {{competition.enrolBefore|localizeddate('medium','none')}}</small></div>
-                        <div class="col-lg-8 text-lg-right px-0"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}} <i class="fas fa-external-link-alt ml-2"></i></a></div>
-                      </div>
+                  <tr class="competition{%if past%} competition-past{%endif%} {%if not edit%}competition-locked{%endif%}">
+                    <th scope="row" class="" colspan=1>
+
+            <div class="row text-left w-100 p-0 m-0 align-items-center">
+              <div class="col-lg-4 pl-0"><small class="text-muted"><i class="fas fa-edit"></i> voor {{competition.enrolBefore|localizeddate('medium','none')}}</small></div>
+              <div class="col-lg-8 text-lg-right px-0"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}} <i class="fas fa-external-link-alt ml-2"></i></a></div>
+            </div>
+
+
                     </th>
                   </tr>
                   {% for cpart in competition.competitionParts %}
                   <tr class="competition {%if cpart.hasnewenrolments(app.user) and edit%}competition-new {%endif%}{%if past%}competition-past {%endif%} {%if not edit%}text-muted competition-locked{%endif%}">
                     <td scope="row" class="text-right">{{cpart.daypart|localizeddate('full','none')}} | {{cpart.partname|trans}}</td>
-                    {% for member in members %}
-                    <td id="competition-enrolment-{{cpart.id}}-{{member.id}}" {%if edit%}class="competition-editable"{%endif%}><i class="fas fa-square text-medium"></i></td>
-                    {% endfor %}
                   </tr>
                   {% endfor %}
                 {% endfor %}
@@ -92,5 +77,5 @@
 
 {% block javascripts %}
 {{ parent() }}
-{{ encore_entry_script_tags('membership_competitions') }}
+{# encore_entry_script_tags('management_competitions') #}
 {% endblock %}

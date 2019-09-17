@@ -30,7 +30,7 @@ return [
     'form.save' => 'Bewaren',
     'form.close' => 'Sluiten',
     'address.new' => 'Nieuw adres',
-    'address.edit' => 'Adres bewerken',
+    'address.edit' => 'Adres aanpassen',
     'address.remove' => 'Adres verwijderen',
     'address.streetnumber' => 'Straat en nummer',
     'address.zip' => 'Postcode',

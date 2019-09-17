@@ -2,7 +2,7 @@
 <div class="modal-content">
 {{ form_start(form, {attr: {class: 'needs-validation', action: url } }) }}
   <div class="modal-header">
-    <h5 class="modal-title" id="preferencesModalLabel">{{'%s.%s'|format(tab,action)|trans}}</h5>
+    <h5 class="modal-title" id="preferencesModalLabel">{{'%s.%s'|format(formName,action)|trans}}</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>

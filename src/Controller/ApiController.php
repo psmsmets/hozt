@@ -40,7 +40,9 @@ use App\Repository\MemberGroupingRepository;
 # forms
 use App\Form\MemberAddressForm;
 use App\Form\UserDetailsForm;
-use App\Form\UserPreferencesForm;
+use App\Form\UserNameForm;
+use App\Form\UserEmailForm;
+use App\Form\UserMobilephoneForm;
 
 # managers
 use App\Service\CalendarManager;
@@ -439,109 +441,144 @@ class ApiController extends AbstractController
      */
     public function api_membership_preferences(Request $request, UserPasswordEncoderInterface $encoder)
     {
-        $this->denyAccessUnlessGranted('ROLE_USER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+        if ($request->query->get('format', null) !== 'json') return $this->json(['success' => false]);
 
         $tabs = ['members','address','notifications','user'];
         $tab = (string) $request->query->get('tab', null);
         if (!in_array($tab,$tabs)) $tab = $tabs[0];
 
-        $json = $request->query->get('format', null) == 'json';
         $action = $request->query->get('action', null);
         $edit = $action == 'edit';
         $new = $action == 'new';
-        $form = null;
-        $formSuccess = false;
 
-        if ($json && $action == 'load' )
+        if ($action == 'load')
         {
             return $this->json([
                 'success' => true,
                 'html' => $this->render(sprintf('membership/preferences_%s.html.twig', $tab), ['tab' => $tab])->getContent(),
             ]);
         }
-        elseif ($json and ($edit or $new))
+        if (!($edit or $new)) return $this->json([ 'success' => false, 'html' => null ]);
+
+        $forms = ['member_address_form','user_details_form','user_name_form','user_email_form','user_mobilephone_form'];
+        $formName = (string) $request->query->get('form', null);
+        if (!in_array($formName,$forms)) return $this->json(['success' => false]);
+
+        $form = null;
+        $formSuccess = false;
+
+        $user = $this->security->getUser();
+        $id = (int) $request->query->get('id', null);
+
+        if ( $tab == 'address' )
         {
-            $user = $this->security->getUser();
-            $id = (int) $request->query->get('id', null);
+            $address = $new ? new MemberAddress($user) : $user->getMemberAddress($id);
 
-            if ( $tab == 'address' )
+            if (!$address instanceof MemberAddress) return $this->json(['success' => false]);
+
+            $form = $this->createForm(MemberAddressForm::class, $address);
+            $form->handleRequest($request);
+
+            if ($formSuccess = ($form->isSubmitted() && $form->isValid()))
             {
-                $address = $new ? new MemberAddress($user) : $user->getMemberAddress($id);
-
-                if (!$address instanceof MemberAddress) return $this->json(['success' => false]);
-
-                $form = $this->createForm(MemberAddressForm::class, $address);
-                $form->handleRequest($request);
-
-                if ($formSuccess = ($form->isSubmitted() && $form->isValid()))
-                {
-                    if ($new) {
-                        $address = $form->getData();
-                        $address->setUser($this->security->getUser());
-                        $this->em->persist($address);
-                    }
-                    foreach($address->getMembers() as $member) {
-                        $member->setAddress($address);
-                    }
+                if ($new) {
+                    $address = $form->getData();
+                    $address->setUser($this->security->getUser());
+                    $this->em->persist($address);
+                }
+                foreach($address->getMembers() as $member) {
+                    $member->setAddress($address);
                 }
             }
-            elseif ( $tab == 'notifications' )
-            {
-                $form = $this->createForm(UserDetailsForm::class, $user->getDetails());
-                $form->handleRequest($request);
-                $formSuccess = $form->isSubmitted() && $form->isValid();
-            }
-            elseif ( $tab == 'user' )
-            {
-                $form = $this->createForm(UserPreferencesForm::class);
-                $form->handleRequest($request);
+        }
+        elseif ( $tab == 'notifications' )
+        {
+            $details = $user->getDetails();
+            $form = $this->createForm(UserDetailsForm::class);
 
-                if ($formSuccess = $form->isSubmitted() && $form->isValid())
+            $form->handleRequest($request);
+
+            if ($formSuccess = ($form->isSubmitted() && $form->isValid()))
+            {
+                $formData = $form->getData();
+
+                $details->setSecondaryEmail($formData['secondaryEmail']);
+                $details->setNotificationDays($formData['notificationDays']);
+                $details->setReminderOffset($formData['reminderOffset']);
+            } else {
+                $form->get('secondaryEmail')->setData($details->getSecondaryEmail());
+                $form->get('notificationDays')->setData($details->getNotificationDays());
+                $form->get('reminderOffset')->setData($details->getReminderOffset());
+            }
+        }
+        elseif ( $tab == 'user' )
+        {
+            switch ($formName) {
+                case "user_name_form":
+                    $form = $this->createForm(UserNameForm::class);
+                    break;
+                case "user_email_form":
+                    $form = $this->createForm(UserEmailForm::class);
+                    break;
+                case "user_mobilephone_form":
+                    $form = $this->createForm(UserMobilephoneForm::class);
+                    break;
+                default:
+                    return $this->json(['success' => false]);
+            }
+            $form->handleRequest($request);
+
+            if ( $formSuccess = ($form->isSubmitted() && $form->isValid()) )
+            {
+                $formData = $form->getData();
+
+                if (!$encoder->isPasswordValid($user, $formData['plainPassword']))
                 {
-                    $formData = $form->getData();
-                    if (!$encoder->isPasswordValid($user, $formData['plainPassword']))
-                    {
-                        return $this->json([
-                            'success' => false,
-                            'message' => $this->translator->trans('password.wrong'),
-                        ]);
-                    }
-                    $user->setFirstname($formData['firstname']);
-                    $user->setLastname($formData['lastname']);
-                    if ( $form['currentEmail']->getData() === $user->getEmail() and !is_null($form['newEmail']->getData()) ) {
-                        $user->setEmail($form['newEmail']->getData());
-                    }
-                    if ( $form['currentMobilephone']->getData() === $user->getMobilephone() and !is_null($form['newMobilephone']->getData()) ) {
-                        $user->setMobilephone($form['newMobilephone']->getData());
-                    }
-                } else {
-                    $form = $this->createForm(UserPreferencesForm::class, $user);
-                }
-            }
-
-            if ($form) {
-                if ($formSuccess) {
-                    $this->em->flush();
                     return $this->json([
-                        'success' => true,
-                        'message' => $this->translator->trans(sprintf('preferences.%s.%s.success', $tab, $action )),
-                        'redirect' => $user->getEmailChanged() ? '/logout' : null,
+                        'success' => false,
+                        'message' => $this->translator->trans('password.wrong'),
                     ]);
                 }
+                switch ($formName) {
+                    case "user_name_form":
+                        $user->setFirstname($formData['firstname']);
+                        $user->setLastname($formData['lastname']);
+                        break;
+                    case "user_email_form":
+                        if ( $form['currentEmail']->getData() === $user->getEmail() ) $user->setEmail($form['newEmail']->getData());
+                        break;
+                    case "user_mobilephone_form":
+                        if ( $form['currentMobilephone']->getData() === $user->getMobilephone() ) 
+                            $user->setMobilephone($form['newMobilephone']->getData());
+                        break;
+                }
+            } else {
+                if ($formName == 'user_name_form') {
+                    $form->get('firstname')->setData($user->getFirstname());
+                    $form->get('lastname')->setData($user->getLastname());
+                }
+            }
+        }
+        if ($form) {
+            if ($formSuccess) {
+                $this->em->flush();
                 return $this->json([
                     'success' => true,
-                    'html' => $this->render('membership/preferences_form.html.twig', [
-                        'tab' => $tab,
-                        'action' => $action,
-                        'url' => $this->generateUrl('api_membership_preferences',
-                               [ 'tab' => $tab, 'format' => 'json', 'action' => $action, 'id' => $id ]),
-                        'form' => $form->createView(),
-                    ])->getContent(),
+                    'message' => $this->translator->trans(sprintf('preferences.%s.%s.success', $tab, $action )),
+                    'redirect' => $user->getEmailChanged() ? '/logout' : null,
                 ]);
-            } else {
-                return $this->json([ 'success' => false, 'html' => null ]);
             }
-
+            return $this->json([
+                'success' => true,
+                'html' => $this->render('membership/preferences_form.html.twig', [
+                    'tab' => $tab,
+                    'formName' => $formName,
+                    'action' => $action,
+                    'url' => $this->generateUrl('api_membership_preferences',
+                           [ 'tab' => $tab, 'form' => $formName, 'format' => 'json', 'action' => $action, 'id' => $id ]),
+                    'form' => $form->createView(),
+                ])->getContent(),
+            ]);
         }
         return $this->json([ 'success' => false, 'html' => null ]); // catch
     }

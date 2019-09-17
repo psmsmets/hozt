@@ -11,10 +11,10 @@
       {% endfor %}
     </ul>  
   </div>
-  <span><button class="btn btn-sm btn-light ml-2" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-action="edit" data-id="{{address.id}}"><i class="fas fa-pen d-none d-lg-inline"></i> {{'form.edit'|trans}}</button></span>
+  <span><button class="btn btn-sm btn-light ml-2" data-toggle="modal" data-target="#preferencesModal" data-tab="{{tab}}" data-form="member_address_form" data-action="edit" data-id="{{address.id}}"><i class="fas fa-pen d-none d-lg-inline"></i> {{'form.edit'|trans}}</button></span>
 </div>
 {% endfor %}
 
 <div class="mt-5">
-  <button class="btn btn-sm btn-light float-right" data-toggle="modal" data-target="#preferencesModal" data-action="new" data-tab="{{tab}}" data-id="1"><i class="fas fa-plus-square"></i> Nieuw</button>
+  <button class="btn btn-sm btn-light float-right" data-toggle="modal" data-target="#preferencesModal" data-form="member_address_form" data-action="new" data-tab="{{tab}}" data-id="1"><i class="fas fa-plus-square"></i> Nieuw</button>
 </div>

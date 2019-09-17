@@ -16,14 +16,14 @@
     <h2 class="text-primary d-flex justify-content-between">{{'preferences.title'|trans}}</h2>
 
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-lg-3">
         <div class="nav flex-column nav-pills" id="preferences-tab" role="tablist" aria-orientation="vertical">
         {% for tab in page.tabs %}
           <a class="nav-link{% if loop.first %} active{% endif %}" id="preferences-{{tab}}-tab" data-toggle="pill" href="#preferences-{{tab}}" role="tab"  aria-controls="preferences-{{tab}}" area-selected="false" data-tab="{{tab}}">{{'preferences.%s'|format(tab)|trans}}</a>
         {% endfor %}
         </div>
       </div>
-      <div class="col-md-9 mt-3 mt-md-0 mx-2 mx-md-0">
+      <div class="col-lg-9 mt-3 mt-lg-0 mx-2 mx-lg-0">
         <div class="tab-content" id="preferences-tabContent">
         {% for tab in page.tabs %}
           <div class="tab-pane fade{% if loop.first %}show active{% endif %}" id="preferences-{{tab}}" role="tabpanel" aria-labelledby="preferences-{{tab}}-tab">

@@ -105,6 +105,10 @@
         <source>preferences.notifications</source>
         <target>Notificaties</target>
       </trans-unit>
+      <trans-unit id="gvvjD2M" resname="form.edit">
+        <source>form.edit</source>
+        <target>Aanpassen</target>
+      </trans-unit>
       <trans-unit id="Ci3qibM" resname="form.save">
         <source>form.save</source>
         <target>Bewaren</target>

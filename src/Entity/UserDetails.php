@@ -14,8 +14,8 @@ class UserDetails
     /**
      * Parameters
      */
-    const MIN_REMINDEROFFSET = 1;
-    const MAX_REMINDEROFFSET = 5;
+    const minReminderOffset = 1;
+    const maxReminderOffset = 5;
 
     /**
      * @ORM\Id()
@@ -94,8 +94,8 @@ class UserDetails
 
     public function setReminderOffset(int $reminderOffset): self
     {
-        if ( $reminderOffset < self::MIN_REMINDEROFFSET ) $reminderOffset = self::MIN_REMINDEROFFSET;
-        if ( $reminderOffset > self::MAX_REMINDEROFFSET ) $reminderOffset = self::MAX_REMINDEROFFSET;
+        if ( $reminderOffset < self::minReminderOffset ) $reminderOffset = self::minReminderOffset;
+        if ( $reminderOffset > self::maxReminderOffset ) $reminderOffset = self::maxReminderOffset;
 
         $this->reminderOffset = $reminderOffset;
 
