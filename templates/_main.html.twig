@@ -61,7 +61,7 @@
 
     </head>
 
-    <body class="bg-light" data-session-timeout="{% if app.user is not null %}true{% else %}false{% endif %}">
+    <body class="bg-light">
 
         {% block nav %}{% endblock %}
         {% block top %}{% endblock %}
@@ -90,6 +90,23 @@
         {% block footer %}{% endblock %}
 
         <a id="toTop" href="javascript:;" style="visibility:hidden;"><span id="toTopHover"></span><img width="40" height="40" alt="To Top" src="/assets/img/to-top@2x.png"></a>
+
+{% if app.user %}
+        <div class="modal fade" id="sessionModal" tabindex="-1" role="dialog" aria-labelledby="sessionModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="sessionModalLabel">{{'session.timeout'|trans}}</h5>
+              </div>
+              <div class="modal-body">{{'session.message'|trans}}<br>{{'session.remaining'|trans}} <span></span> {{'session.seconds'|trans}}.</div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-medium" data-logout="{{path('security_logout')}}">{{'session.logout'|trans}}</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">{{'session.continue'|trans}}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+{% endif %}
 
         <!-- JavaScript
         ================================================== -->
