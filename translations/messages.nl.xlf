@@ -95,7 +95,7 @@
       </trans-unit>
       <trans-unit id="frd_hDB" resname="preferences.address">
         <source>preferences.address</source>
-        <target>Addresboek</target>
+        <target>Adresboek</target>
       </trans-unit>
       <trans-unit id="M7ze_7f" resname="preferences.members">
         <source>preferences.members</source>
