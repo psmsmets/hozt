@@ -865,31 +865,37 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/sportsecretariaat", name="management")
+     * @Route("/sportsecretariaat", name="sportadmin")
      */
-/*
-    public function management()
+    public function sportadmin()
     {
-        $this->initTemplateData();
-        $this->addToTemplateData( 'competitions', $this->competitionManager->getPeriodCompetitions(
-            $this->calendarManager->getPeriodStart(), $this->calendarManager->getPeriodEnd()
-        ));
-
-        return $this->render('management/index.html.twig', $this->template_data );
+        return $this->redirectToRoute('sportadmin_competitions');
     }
-*/
 
     /**
-     * @Route("/sportsecretariaat", name="management_competitions")
+     * @Route("/sportsecretariaat/zwemwedstrijden", name="sportadmin_competitions")
      */
-    public function management_competitions()
+    public function sportadmin_competitions()
     {
         $this->initTemplateData();
         $this->addToTemplateData( 'competitions', $this->competitionManager->getPeriodCompetitions(
             $this->calendarManager->getPeriodStart(), $this->calendarManager->getPeriodEnd()
         ));
 
-        return $this->render('management/competitions.html.twig', $this->template_data );
+        return $this->render('sportadmin/competitions.html.twig', $this->template_data );
+    }
+
+    /**
+     * @Route("/sportsecretariaat/zwemwedstrijd/{id}", name="sportadmin_competition")
+     */
+    public function sportadmin_competition(int $id)
+    {
+        $this->initTemplateData();
+        $this->addToTemplateData( 'competitions', $this->competitionManager->getPeriodCompetitions(
+            $this->calendarManager->getPeriodStart(), $this->calendarManager->getPeriodEnd()
+        ));
+
+        return $this->render('sportadmin/competitions.html.twig', $this->template_data );
     }
 
 
