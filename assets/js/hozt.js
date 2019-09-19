@@ -80,7 +80,7 @@ function getSessionTimeout( sessionModal, sessionWarn, sessionTime, sessionLogou
             document.location.replace(sessionLogout.data('logout'));
         }
     }).fail(function() {
-        document.location.replace(sessionLogout.data('logout'));
+        document.location.reload(true); // force to get the login window
     });
 }
 
