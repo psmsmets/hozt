@@ -1,6 +1,6 @@
 {% extends 'default.html.twig' %}
 
-{% block title %}Mijn account{% endblock %}
+{% block title %}Sportsecretariaat{% endblock %}
 
 {% block main %}
 
@@ -45,7 +45,7 @@
 
             <div class="row text-left w-100 p-0 m-0 align-items-center">
               <div class="col-lg-4 pl-0"><small class="text-muted"><i class="fas fa-edit"></i> voor {{competition.enrolBefore|localizeddate('medium','none')}}</small></div>
-              <div class="col-lg-8 text-lg-right px-0"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}} <i class="fas fa-external-link-alt ml-2"></i></a></div>
+              <div class="col-lg-8 text-lg-right px-0"><a href="{{ path('sportadmin_competition', {'id': competition.id}) }}" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}}</a> <a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary"><i class="fas fa-external-link-alt ml-2"></i></a></div>
             </div>
 
 
@@ -77,5 +77,5 @@
 
 {% block javascripts %}
 {{ parent() }}
-{# encore_entry_script_tags('management_competitions') #}
+{# encore_entry_script_tags('sportadmin_competition') #}
 {% endblock %}

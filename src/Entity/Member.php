@@ -361,10 +361,10 @@ class Member
         return $this->competitionEnrolments;
     }
 
-    public function getActiveCompetitionEnrolments(): Collection
+    public function getEnabledCompetitionEnrolments(): Collection
     {
         return $this->competitionEnrolments->filter(function(CompetitionEnrolment $enrolment) {
-            return $enrolment->isActive();
+            return $enrolment->isEnabled();
         });
     }
 

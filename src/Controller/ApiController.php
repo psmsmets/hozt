@@ -648,4 +648,30 @@ class ApiController extends AbstractController
         return $this->json([ 'success' => false ]); //catch
     }
 
+    /**
+     * @Route("/api/private/sportadmin/competition/{id}", name="api_sportadmin_competition")
+     */
+    public function api_sportadmin_competition(int $id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+
+        $enrolments = $this->competitionManager->getCompetitionEnrolments($id);
+
+        $data = array();
+        foreach ($enrolments as $enrolment) {
+            if ($enrolment->isEnabled()) {
+                $data[] = array(
+                    'member' => $enrolment->getMember()->getId(),
+                    'enrolment' => $enrolment->getId(),
+                    'competitionpart' => $enrolment->getCompetitionPart()->getId(),
+                    'enrolled' => $enrolment->getEnrolled(),
+                    'enrolledAt' => $enrolment->getEnrolledAt(),
+                    'new' => is_null($enrolment->getEnrolledAt()),
+                    'enabled' => $enrolment->isEnabled(),
+                );
+            }
+        }
+        return $this->json([ 'success' => true, 'data' => $data ]);
+    }
+
 }
