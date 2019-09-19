@@ -891,11 +891,9 @@ class PageController extends AbstractController
     public function sportadmin_competition(int $id)
     {
         $this->initTemplateData();
-        $this->addToTemplateData( 'competitions', $this->competitionManager->getPeriodCompetitions(
-            $this->calendarManager->getPeriodStart(), $this->calendarManager->getPeriodEnd()
-        ));
+        $this->addToTemplateData( 'competition', $this->competitionManager->getCompetition($id) );
 
-        return $this->render('sportadmin/competitions.html.twig', $this->template_data );
+        return $this->render('sportadmin/competition.html.twig', $this->template_data );
     }
 
 

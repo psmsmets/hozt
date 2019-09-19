@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Competition;
 use App\Entity\CompetitionEnrolment;
 use App\Entity\User;
 use App\Entity\Member;
@@ -39,6 +40,22 @@ class CompetitionEnrolmentRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->orderBy('members.birthdate', 'DESC')
             ->orderBy('competitionPart.daypart', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findCompetitionEnrolments(Competition $competition)
+    {
+        return $this->createQueryBuilder('enrolments')
+            ->innerJoin('enrolments.competitionPart','competitionPart')
+            ->innerJoin('competitionPart.competition','competition')
+            ->innerJoin('enrolments.member', 'members')
+            ->addSelect('enrolments')
+            ->addSelect('members')
+            ->addSelect('competitionPart')
+            ->andWhere('competition = :competition')
+            ->setParameter('competition', $competition)
             ->getQuery()
             ->getResult()
         ;

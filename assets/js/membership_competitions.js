@@ -53,7 +53,6 @@ function editCompetition(element) {
     });
 }
 
-
 function editCompetitions(edit=false) {
     $("tr:not(.d-none) td[id^='competition-enrolment-']").each( function() {
         if ($('i',this).attr('data-value')!==undefined) {

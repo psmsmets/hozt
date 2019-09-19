@@ -1,0 +1,116 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Sportsecretariaat{% endblock %}
+
+{% block main %}
+
+  {% set competition = page.competition %}
+  {% set name = "%s • %s • %s"|format(competition.calendar.title, competition.organization, competition.location) %}
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
+      <li class="breadcrumb-item"><a href="{{path('sportadmin')}}">Sportsecretariaat</a></li>
+      <li class="breadcrumb-item"><a href="{{path('sportadmin_competitions')}}">Wedstrijden</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{name}}</li>
+    </ol>
+  </nav>
+
+  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
+
+    <h2 class="text-primary d-flex justify-content-between mb-2">{{name}}</h2>
+
+    <ul class="list-unstyled font-weight-lighter cal-smaller mb-3">
+      <li class="mb-2"><i class="fas fa-swimming-pool"></i> {{competition.pool}}, {{competition.calendar.location|ucwords}}</li>
+      <li class="mb-2"><i class="fas fa-swimmer"></i>
+        {% for team in competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
+      </li>
+      {% if competition.restrictions %}
+      <li class="mb-2 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
+      {% endif %}
+      {% if competition.overnight %}
+      <li class="mb-2 text-warning"><i class="fas fa-info-circle"></i> met overnachting</li>
+      {% endif %}
+      <li class="mb-2"><i class="fas fa-filter"></i>
+      {% if competition.registrationId %}Licentiehouders{%else%}Iedereen{%endif%}
+      {% if competition.agelimits %}
+        {% if competition.similarGenderAgeLimits%}
+          {% if competition.maleagemin %}
+            vanaf {{competition.maleagemin}}j (°{{competition.malebirthyearmax}})
+          {% endif %}
+          {% if competition.maleagemax %}
+            tot {{competition.maleagemax}}j (°{{competition.malebirthyearmin}})
+          {% endif %}
+        {% else %}
+          <i class="fas fa-male" style="width:auto;"></i>
+          {% if competition.maleagemin %}
+            vanaf {{competition.maleagemin}}j (°{{competition.malebirthyearmax}})
+          {% endif %}
+          {% if competition.maleagemax %}
+            tot {{competition.maleagemax}}j (°{{competition.malebirthyearmin}})
+          {% endif %}
+          <i class="fas fa-female text-normal" style="width:auto;"></i>
+          {% if competition.femaleagemin %}
+            vanaf {{competition.femaleagemin}}j (°{{competition.femalebirthyearmax}})
+          {% endif %}
+          {% if competition.femaleagemax %}
+            tot {{competition.femaleagemax}}j (°{{competition.femalebirthyearmin}})
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      </li>
+      {% if competition.hasenabledcompetitionparts %}
+      <li class="mb-1"><i class="fas fa-stream"></i> Dagdelen (#{{competition.enabledcompetitionparts|length}})</li>
+        <ul class="list-unstyled mb-2">
+        {% for part in competition.enabledcompetitionparts%}
+          <li class="list-unstyled-item" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <li class="mb-2"><i class="fas fa-edit"></i> Aan- en afmelden voor {{competition.enrolBefore|localizeddate('full','none')}}</li>
+    </ul>
+
+    {% if competition.hasenabledcompetitionparts %}
+    {% set parts = competition.enabledcompetitionparts %}
+
+    <ul class="list-inline">
+      <li class="list-inline-item"><i class="fas fa-check-square text-success"></i> ingeschreven</li>
+      <li class="list-inline-item"><i class="fas fa-minus-square text-warning"></i> afgemeld</li>
+      <li class="list-inline-item"><i class="fas fa-square text-medium"></i> niet beschikbaar</li>
+    </ul>
+
+    <div class="table-responsive mt-3">
+      <table class="table table-hover text-center" id="competition-enrolments" data-competition="{{competition.id}}">
+        <thead>
+          <tr>
+            <th scope="col" class="text-left">Naam</th>
+            <th scope="col">Groep</th>
+            {% for part in parts %}
+            <th scope="col">{{part.day|localizeddate('none','none', null, null, "ccc dd/MM/YY")}}<br>{{part.partname|trans}}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+        {% for team in competition.teams %}
+          {% for member in team.members %}
+          <tr class="competition-disabled">
+            <td class="text-left">{{member.name}}</td>
+            <td>{{member.team.abbr}}</td>
+            {% for part in parts %}
+            <td id="competition-enrolment-{{part.id}}-{{member.id}}"><i class="fas fa-square text-medium"></i></td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% endif %}
+
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('sportadmin_competition') }}
+{% endblock %}

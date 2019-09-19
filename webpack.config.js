@@ -37,6 +37,7 @@ Encore
     .addEntry('training_category', './assets/js/training_category.js')
     .addEntry('membership_competitions', './assets/js/membership_competitions.js')
     .addEntry('membership_preferences', './assets/js/membership_preferences.js')
+    .addEntry('sportadmin_competition', './assets/js/sportadmin_competition.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

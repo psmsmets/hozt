@@ -73,6 +73,30 @@ class CompetitionRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findCompetition(int $id)
+    {
+        return $this->createQueryBuilder('competition')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('competition.pool','pool')
+            ->innerJoin('competition.teams','teams')
+            ->innerJoin('competition.competitionParts','competitionParts')
+            ->innerJoin('competitionParts.enrolments','enrolments')
+            ->innerJoin('enrolments.member','members')
+            ->addSelect('competition')
+            ->addSelect('competitionParts')
+            ->addSelect('event')
+            ->addSelect('pool')
+            ->addSelect('teams')
+            ->addSelect('enrolments')
+            ->addSelect('members')
+            ->andWhere('competition.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+
     public function findCompetitions(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd)
     {
         return $this->createQueryBuilder('competition')

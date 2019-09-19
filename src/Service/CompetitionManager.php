@@ -218,6 +218,20 @@ class CompetitionManager
         return $this->competitionRepository->findCompetitions($periodStart, $periodEnd);
     }
 
+    public function getCompetition(int $id): Competition 
+    {
+        return $this->competitionRepository->findCompetition($id);
+    }
+
+    public function getCompetitionEnrolments(int $id): array 
+    {
+        if ($competition = $this->competitionRepository->find($id)) {
+            return $this->competitionEnrolmentRepository->findCompetitionEnrolments($competition);
+        } else {
+            return [];
+        }
+    }
+
     public function toggleCompetition(User $user, int $competitionPartId, int $memberId, bool $enrolled): bool 
     {
         $enrolment = $this->competitionEnrolmentRepository->findUserCompetitionEnrolment( 
