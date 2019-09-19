@@ -64,20 +64,23 @@ function toClipboard(id){
     textArea.remove();
 };
 
-
 function getSessionTimeout( sessionModal, sessionWarn, sessionTime, sessionLogout ) {
-    var elapsed;
-    $.getJSON("/api/session/timeout", null, function(result) {
+    $.getJSON("/api/session/timeout", function(result) {
+        var logout = true;
         if (result.success) { 
-            elapsed = result.elapsed;
-            if (elapsed > sessionWarn) {
+            if (result.elapsed < sessionWarn) {
+                logout = false;
+                $(sessionModal).modal('hide');
+            } else if (result.elapsed < sessionTime) {
                 $('#sessionModalRemaining').html(sessionTime-elapsed);
                 $(sessionModal).modal('show');
             }
-            if (elapsed > sessionTime) {
-                document.location.replace(sessionLogout.data('logout'));
-            }
-        };
+        }
+        if (logout) { 
+            document.location.replace(sessionLogout.data('logout'));
+        }
+    }).fail(function() {
+        document.location.replace(sessionLogout.data('logout'));
     });
 }
 
@@ -88,6 +91,8 @@ function sessionHandler( sessionModal ){
     var sessionTime = 1200;
     var sessionWarn = 900;
     var sessionLogout = $('#sessionModal [data-logout]');
+
+    getSessionTimeout( sessionModal, sessionWarn, sessionTime, sessionLogout );
 
     $(sessionLogout).click(function() {
         document.location.replace(sessionLogout.data('logout'));
@@ -102,10 +107,10 @@ function sessionHandler( sessionModal ){
     }, 15000);
 }
 
+sessionHandler($('#sessionModal'));
+
 
 $(document).ready(function(){
-
-    sessionHandler($('#sessionModal'));
 
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
@@ -169,6 +174,11 @@ $(document).ready(function(){
     var bannerImgTop0 = 50;
     var bannerImgTop;
  
+    // scroll elements
+    var scrollFadeIn = $('.scroll-fade-in');
+    var carousel = $('.carousel-item');
+    // todo: remove carousel scroll parallax using js
+
     /* Every time the window is scrolled ... */
     $(window).scroll( function(){
 
@@ -189,30 +199,30 @@ $(document).ready(function(){
         }
 
         /* Check the location of each desired element */
-        $('.scroll-fade-in').each( function(i){
+        if ( $(scrollFadeIn).length > 0 ) {
+            $(scrollFadeIn).each( function(i) {
+                if ( $(window).scrollTop() > $(this).position().top - $(window).height()/3 ){
 
-            /*if (bottom_of_window > bottom_of_object){*/
-            if ( $(window).scrollTop() > $(this).position().top - $(window).height()/3 ){
-
-              $(this).animate({
-                opacity: "1"
-              }, {
-                duration: 1000,
-                specialEasing: {
-                },
-                complete: function() {
-                  $( this ).removeClass( "scroll-fade-in" );
+                    $(this).animate({
+                        opacity: "1"
+                    },{
+                        duration: 1000,
+                        specialEasing: {},
+                        complete: function() {
+                            $( this ).removeClass( "scroll-fade-in" );
+                        }
+                   });
                 }
-              });
-
-            }      
-        });
+            });
+        }
       
-        if (scrollPos <= bannerHeight0) {
-            $('.carousel-item').each(function() {
-                bannerImgTop = bannerImgTop0 - 2 * ((bannerHeight0-scrollPos)/bannerHeight0-1)*50 * bannerVelocity;
-                $(this).children('img').css('top', Math.round(bannerImgTop * 100) / 100 + '%'); 
-            }); 
+        if ( $(carousel).length > 0 ) {
+            if (scrollPos <= bannerHeight0) {
+                $(carousel).each(function() {
+                    bannerImgTop = bannerImgTop0 - 2 * ((bannerHeight0-scrollPos)/bannerHeight0-1)*50 * bannerVelocity;
+                    $(this).children('img').css('top', Math.round(bannerImgTop * 100) / 100 + '%'); 
+                }); 
+            }
         }
  
     });
@@ -221,14 +231,12 @@ $(document).ready(function(){
 
 
 $(window).on( "load", function() {
-
-  api_load_module_training_tyr();
-  api_load_module_competition_programs();
-  api_load_module_competition_results();
-  api_load_module_training_today();
-  api_load_module_training_tomorrow();
-  api_load_module_calendar_upcoming();
-
+    api_load_module_training_tyr();
+    api_load_module_competition_programs();
+    api_load_module_competition_results();
+    api_load_module_training_today();
+    api_load_module_training_tomorrow();
+    api_load_module_calendar_upcoming();
 });
 
 
