@@ -218,7 +218,7 @@ class CompetitionManager
         return $this->competitionRepository->findCompetitions($periodStart, $periodEnd);
     }
 
-    public function getCompetition(int $id): Competition 
+    public function getCompetition(int $id): ?Competition 
     {
         return $this->competitionRepository->findCompetition($id);
     }
