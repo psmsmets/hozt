@@ -4,21 +4,46 @@
 
 {% block main %}
 
-  {% set competition = page.competition %}
-  {% set name = "%s • %s • %s"|format(competition.calendar.title, competition.organization, competition.location) %}
+  {% set team = page.team %}
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
       <li class="breadcrumb-item"><a href="{{path('sportadmin')}}">Sportsecretariaat</a></li>
-      <li class="breadcrumb-item"><a href="{{path('sportadmin_competitions')}}">Wedstrijden</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{name}}</li>
+      <li class="breadcrumb-item active" aria-current="page">{{team.abbr}}</li>
     </ol>
   </nav>
 
   <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
 
-    <h2 class="text-primary d-flex justify-content-between mb-2">{{name}}</h2>
+    <h2 class="text-primary d-flex justify-content-between mb-2">{{team.name}}</h2>
 
+    <p>Trainers: 
+    {% for coach in team.coaches %}
+      <span class="badge badge-secondary align-text-bottom ml-1">{{ coach.name }}</span>
+    {% endfor %}
+    </p>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Voornaam</th>
+            <th scope="col">Naam</th>
+            <th scope="col">Licentie</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for member in team.members %}
+          <tr>
+            <th scope="row">{{member.memberid}}</th>
+            <td>{{member.firstname}}</td>
+            <td>{{member.lastname}}</td>
+            <td>{{member.registrationId}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
   </div>
 {% endblock %}

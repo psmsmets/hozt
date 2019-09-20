@@ -1,0 +1,55 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Sportsecretariaat{% endblock %}
+
+{% block main %}
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
+      <li class="breadcrumb-item active" aria-current="page">Sportsecretariaat</li>
+    </ol>
+  </nav>
+
+  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
+
+    <h2 class="text-primary d-flex justify-content-between">Overzicht</h2>
+
+    <div class="row">
+
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-primary d-flex">Komende wedstrijden <small><span class="badge badge-primary ml-2">{{page.upcoming_competitions|length}}</span></small></h5>
+            <dl class="row">
+            {% for competition in page.upcoming_competitions|slice(0, 5) %}
+              <dd class="col-sm-4 text-sm-right align-baseline"><small class="text-muted">{{competition.calendar.startTime|localizeddate('medium','none')}}</small></dd>
+              <dd class="col-sm-8"><a href="{{ path('sportadmin_competition', {'id': competition.id}) }}" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-top">{{competition.organization}}</small></a></dd>
+            {% else %}
+              <p>Geen komende wedstrijden gevonden.</p>
+            {% endfor%}
+            </dl>
+            <a href="{{path('sportadmin_competitions')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Alle wedstrijden</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-primary d-flex">Groepen <small><span class="badge badge-primary ml-2">{{page.teams|length}}</span></small></h5>
+            <dl class="row">
+            {% for team in page.teams %}
+              <dd class="col-3 text-right align-baseline"><small class="text-muted">{{team.abbr}}</small></dd>
+              <dd class="col-9"><a href="{{ path('sportadmin_training_team',{'abbr': team.abbr}) }}" class="text-dark">{{team.name}}<small class="badge badge-medium align-text-top ml-2">{{team.members|length}}</small></a></dd>
+            {% else %}
+              <p>Geen groepen gevonden.</p>
+            {% endfor%}
+            </dl>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+{% endblock %}

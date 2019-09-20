@@ -116,6 +116,24 @@ class CompetitionRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findUpcomingCompetitions(\DateTimeInterface $reftime=null)
+    {
+        if (is_null($reftime)) $reftime = new \DateTime('today');
+
+        return $this->createQueryBuilder('competition')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('competition.competitionParts','competitionParts')
+            ->addSelect('competition')
+            ->addSelect('event')
+            ->addSelect('competitionParts')
+            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->setParameter('reftime', $reftime->format('Y-m-d'))
+            ->orderBy('event.startTime', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findCompetitionsByUser(User $user, \DateTimeInterface $periodStart, \DateTimeInterface $periodEnd)
     {
         return $this->createQueryBuilder('competition')
