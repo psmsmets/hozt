@@ -17,7 +17,7 @@
 
     <div class="row">
       <div class="col-12 col-md-3">
-        <div class="nav flex-column nav-pills" id="competitions-tab" role="tablist" aria-orientation="vertical">
+        <div class="nav flex-column nav-pills bg-light" id="competitions-tab" role="tablist" aria-orientation="vertical">
           <a class="nav-link active" id="competitions-upcoming-tab" data-toggle="pill" href="#competitions" role="tab" aria-controls="competitions" aria-selected="false">Aanstaande</a>
           <a class="nav-link" id="competitions-new-tab" data-toggle="pill" href="#competitions" role="tab" aria-controls="competitions" aria-selected="false">Nieuw <span class="badge badge-light"></span></a>
           <a class="nav-link" id="competitions-all-tab" data-toggle="pill" href="#competitions" role="tab" aria-controls="competitions" aria-selected="true">Dit seizoen</a>
@@ -25,41 +25,39 @@
         </div>
       </div>
 
-      <div class="col-12 col-md-9 mt-3 mt-md-0 mx-2 mx-md-0">
+      <div class="col-12 col-md-9 mt-3 mt-lg-0">
         <div class="tab-content" id="competitions-tabContent">
+
           <div class="tab-pane fade show active" id="competitions" role="tabpanel" aria-labelledby="competitions-upcoming-tab">
-
-            <div class="table-responsive">
-              <table class="table table-hover text-center">
-                <thead>
-                  <tr>
-                    <th scope="col" class="text-right">Datum/locatie</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {% for competition in page.competitions %}
-                  {% set edit = competition.enrolbefore > date() %}
-                  {% set past = competition.calendar.calcendtime < date() %}
-                  <tr class="competition{%if past%} competition-past{%endif%} {%if not edit%}competition-locked{%endif%}">
-                    <th scope="row" class="" colspan=1>
-
-            <div class="row text-left w-100 p-0 m-0 align-items-center">
-              <div class="col-lg-4 pl-0"><small class="text-muted"><i class="fas fa-edit"></i> voor {{competition.enrolBefore|localizeddate('medium','none')}}</small></div>
-              <div class="col-lg-8 text-lg-right px-0"><a href="{{ path('sportadmin_competition', {'id': competition.id}) }}" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}}</a> <a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary"><i class="fas fa-external-link-alt ml-2"></i></a></div>
+          {% for competition in page.competitions %}
+            {% if not loop.first %}
+            <hr class="pb-2 mt-2">
+            {% endif %}
+            {% set edit = competition.enrolbefore > date() %}
+            {% set past = competition.calendar.calcendtime < date() %}
+            <div class="competition{%if past%} competition-past{%endif%} {%if not edit%}competition-locked{%endif%} mb-1">
+              <h5 class="d-flex mb-1 justify-content-between">
+                <a href="{{ path('sportadmin_competition', {'id': competition.id}) }}" class="text-primary">
+                  {{competition.calendar.title}} <small class="badge badge-medium align-text-bottom">{{competition.organization}}</small> 
+                </a>
+                <small>
+                {% if competition.hasEnabledCompetitionParts%}
+                  {%if edit%}<span class="badge badge-success align-text-bottom">open</span>{%else%}<span class="badge badge-danger align-text-bottom">gesloten</span>{%endif%}
+                {% else %}
+                  <span class="badge badge-warning align-text-bottom">niet actief</span>
+                {% endif %}
+                </small>
+              </h5>
+              <h6 class="mb-1">
+                  {{competition.calendar.formattedPeriod}}
+              </h6>
+              <ul class="list-unstyled cal-small small font-weight-lighter">
+                <li class="list-unstyled-item mb-1"><i class="fas fa-swimmer"></i> {%for team in competition.teams%}{{team.abbr}}&nbsp;&nbsp;{%endfor%}</li>
+                <li class="list-unstyled-item mb-1"><i class="fas fa-edit"></i> Aan- en afmelden voor {{competition.enrolBefore|localizeddate('medium','none')}}</li>
+                <li class="list-unstyled-item mb-1"><i class="fas fa-stream"></i> Dagdelen (#{{competition.enabledcompetitionparts|length}})</li>
+              </ul>
             </div>
-
-
-                    </th>
-                  </tr>
-                  {% for cpart in competition.competitionParts %}
-                  <tr class="competition {%if cpart.hasnewenrolments(app.user) and edit%}competition-new {%endif%}{%if past%}competition-past {%endif%} {%if not edit%}text-muted competition-locked{%endif%}">
-                    <td scope="row" class="text-right">{{cpart.daypart|localizeddate('full','none')}} | {{cpart.partname|trans}}</td>
-                  </tr>
-                  {% endfor %}
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
+          {% endfor %}
           </div>
 
           <div class="tab-pane fade" id="competitions-archive" role="tabpanel" aria-labelledby="competitions-archive-tab">
@@ -67,7 +65,6 @@
           </div>
 
         </div>
-
       </div>
 
     </div>

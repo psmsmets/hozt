@@ -21,7 +21,7 @@
 
         <h4 class="p-0 mb-1 d-flex justify-content-between">
           <span>{{event.title|ucfirst}}
-          {% if event.competition is not empty%}<small class="badge badge-medium align-text-bottom">{{event.competition.organization}}</small>{%endif%}
+          {% if event.competition %}<small class="badge badge-medium align-text-bottom">{{event.competition.organization}}</small>{%endif%}
           </span>
           <small>
             {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
