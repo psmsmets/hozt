@@ -40,7 +40,7 @@
             <dl class="row">
             {% for team in page.teams %}
               <dd class="col-3 text-right align-baseline"><small class="text-muted">{{team.abbr}}</small></dd>
-              <dd class="col-9"><a href="" class="text-dark">{{team.name}}<small class="badge badge-medium align-text-top ml-2">{{team.members|length}}</small></a></dd>
+              <dd class="col-9"><a href="{{ path('sportadmin_training_team',{'abbr': team.abbr}) }}" class="text-dark">{{team.name}}<small class="badge badge-medium align-text-top ml-2">{{team.members|length}}</small></a></dd>
             {% else %}
               <p>Geen groepen gevonden.</p>
             {% endfor%}

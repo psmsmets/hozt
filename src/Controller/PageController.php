@@ -430,9 +430,7 @@ class PageController extends AbstractController
             ->getRepository(TrainingTeamCategory::class)
             ->findOneBySlug($slug)
             ;
-        if (!$category) {
-            throw $this->createNotFoundException();
-        }
+        if (!$category) throw $this->createNotFoundException();
 
         $this->initTemplateData();
         $this->addToTemplateData( 'lastvisit',
@@ -900,6 +898,19 @@ class PageController extends AbstractController
         $this->addToTemplateData( 'competition', $this->competitionManager->getCompetition($id) );
 
         return $this->render('sportadmin/competition.html.twig', $this->template_data );
+    }
+
+    /**
+     * @Route("/sportsecretariaat/{abbr}", name="sportadmin_training_team")
+     */
+    public function sportadmin_training_team(string $abbr)
+    {
+        $this->initTemplateData();
+        $team = $this->getDoctrine()->getRepository(TrainingTeam::class)->findOneBy(['abbr'=>$abbr]);
+        if (!$team) throw $this->createNotFoundException();
+        $this->addToTemplateData( 'team', $team );
+
+        return $this->render('sportadmin/team.html.twig', $this->template_data );
     }
 
 
