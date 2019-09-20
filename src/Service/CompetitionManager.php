@@ -218,6 +218,11 @@ class CompetitionManager
         return $this->competitionRepository->findCompetitions($periodStart, $periodEnd);
     }
 
+    public function getUpcomingCompetitions(\DateTimeInterface $reftime=null): array 
+    {
+        return $this->competitionRepository->findUpcomingCompetitions($reftime);
+    }
+
     public function getCompetition(int $id): ?Competition 
     {
         return $this->competitionRepository->findCompetition($id);

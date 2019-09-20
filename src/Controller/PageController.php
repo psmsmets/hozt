@@ -869,7 +869,13 @@ class PageController extends AbstractController
      */
     public function sportadmin()
     {
-        return $this->redirectToRoute('sportadmin_competitions');
+        $this->initTemplateData();
+        $this->addToTemplateData( 'upcoming_competitions', $this->competitionManager->getUpcomingCompetitions());
+        $this->addToTemplateData( 'teams', $this->getDoctrine()
+            ->getRepository(TrainingTeam::class)->getEnabled()
+        );
+
+        return $this->render('sportadmin/overview.html.twig', $this->template_data );
     }
 
     /**
