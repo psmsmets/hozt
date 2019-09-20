@@ -58,11 +58,11 @@
         {% endif %}
       {% endif %}
       </li>
-      {% if competition.hasenabledcompetitionparts %}
+      {% if competition.hascompetitionparts %}
       <li class="mb-1"><i class="fas fa-stream"></i> Dagdelen (#{{competition.enabledcompetitionparts|length}})</li>
         <ul class="list-unstyled mb-2">
-        {% for part in competition.enabledcompetitionparts%}
-          <li class="list-unstyled-item" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}</li>
+        {% for part in competition.competitionparts%}
+          <li class="list-unstyled-item {% if not part.enabled%}text-muted{%endif%}" style="margin-left:1.85rem;">{{part.day|localizeddate('none','none', null, null, "ccc d MMM Y")}} | {{part.partname|trans}}</li>
           {% endfor %}
         </ul>
       {% endif %}
