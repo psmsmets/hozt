@@ -15,7 +15,7 @@ easy_admin:
                 query_builder: ['App\Repository\EasyAdminRepository','Test']
                 fields:
                     #- { property: 'id', label: 'id' }
-                    - { property: 'calendar', label: 'Kalender event' }
+                    - { property: 'calendar', label: 'Kalender event', type: 'text' }
                     - { property: 'calendar.location', label: 'Locatie' }
                     - { property: 'organization', label: 'Org.' }
                     - { property: 'pool', label: 'Bad', type: 'text' }
