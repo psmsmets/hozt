@@ -55,7 +55,7 @@
                   {% set edit = competition.enrolbefore > date() %}
                   {% set past = competition.calendar.calcendtime < date() %}
                   {% set new  = competition.hasnewcompetitionenrolments(app.user) and edit %}
-                  <tr class="competition{%if past%} competition-past{%endif%} {%if new%}competition-new{%endif%} {%if not edit%}competition-locked{%endif%}">
+                  <tr class="competition{%if new%} competition-new{%endif%}{%if not edit%} competition-locked{%endif%}{%if past%} competition-past d-none{%endif%}">
                     <th scope="row" class="" colspan={{1+members|length}}>
                       <div class="row text-left w-100 p-0 m-0 align-items-center">
                         <div class="col-lg-4 pl-0"><small class="text-muted"><i class="fas fa-edit"></i> voor {{competition.enrolBefore|localizeddate('medium','none')}}</small></div>

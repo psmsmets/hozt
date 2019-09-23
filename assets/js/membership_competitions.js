@@ -89,8 +89,6 @@ var editingCompetitions = false;
 
 $(document).ready(function(){
 
-    $('.competition-past').hide();
-
     $('#competitions-edit').click( function() {
         if (editingCompetitions) {
             $(this).html('<i class="fas fa-lock"></i> bewerken'); //.removeClass('btn-medium').addClass('btn-dark'); 
