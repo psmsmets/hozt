@@ -29,12 +29,9 @@
 
           <div class="tab-pane fade show active" id="competitions" role="tabpanel" aria-labelledby="competitions-upcoming-tab">
           {% for competition in page.competitions %}
-            {% if not loop.first %}
-            <hr class="pb-2 mt-2">
-            {% endif %}
             {% set edit = competition.enrolbefore > date() %}
             {% set past = competition.calendar.calcendtime < date() %}
-            <div class="competition{%if past%} competition-past{%endif%} {%if not edit%}competition-locked{%endif%} mb-1">
+            <div class="competition{%if past%} competition-past d-none{%endif%} {% if not loop.last %}pb-2 mb-3 border-bottom{%endif%}">
               <h5 class="d-flex mb-1 justify-content-between">
                 <a href="{{ path('sportadmin_competition', {'id': competition.id}) }}" class="text-primary">
                   {{competition.calendar.title}} <small class="badge badge-medium align-text-bottom">{{competition.organization}}</small> 
@@ -73,5 +70,5 @@
 
 {% block javascripts %}
 {{ parent() }}
-{# encore_entry_script_tags('sportadmin_competition') #}
+{{ encore_entry_script_tags('sportadmin_competitions') }}
 {% endblock %}

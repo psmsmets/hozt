@@ -1,6 +1,5 @@
 require('bootstrap');
 
-
 var statusNull = '<i class="fas fa-square text-medium h4"></i>';
 var statusTrue = '<i class="fas fa-check-square text-success" data-value="true"></i>';
 var statusFalse = '<i class="fas fa-minus-square text-warning" data-value="false"></i>';
@@ -33,9 +32,3 @@ console.log(id);
 
 // on pageload
 loadCompetitionEnrolments($('#competition-enrolments').data('competition'));
-
-$(document).ready(function(){
-
-    //$('.competition-disabled').hide();
-
-})
