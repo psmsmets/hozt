@@ -482,6 +482,8 @@ class PageController extends AbstractController
         if (is_null($year) or $year < 2016 or $year > 2050 ) {
             return $this->redirectToRoute('calendar_list', ['year' => $this->getCurrentCalendarYear() ]);
         }
+        $start = $this->calendarManager->yearToPeriodStart($year);
+        $end = $start->modify('+1year');
 
         $this->initTemplateData();
         $this->addToTemplateData( 'lastvisit',
@@ -493,9 +495,9 @@ class PageController extends AbstractController
         );
         $this->addToTemplateData( 'calendar_events', $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
-            ->findCalendarEvents($this->calendarManager->getPeriodStart(),$this->calendarManager->getPeriodEnd())
+            ->findCalendarEvents($start,$end)
         );
-        $this->addToTemplateData( 'calendar_period', ['start'=>$this->calendarManager->getPeriodStart(),'end'=>$this->calendarManager->getPeriodEnd()]);
+        $this->addToTemplateData( 'calendar_period', ['start'=>$start,'end'=>$end]);
 
         return $this->render('calendar/list.html.twig', $this->template_data );
     }
