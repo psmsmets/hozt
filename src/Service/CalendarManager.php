@@ -34,6 +34,11 @@ class CalendarManager
         return true;
     }
 
+    public function yearToPeriodStart(int $year): \DateTimeInterface
+    {
+        return new \DateTimeImmutable("$year-08-15");
+    }
+
     public function calcPeriodStart(\DateTimeInterface $refdate=null): \DateTimeInterface
     {
         if (is_null($refdate)) $refdate = new \DateTimeImmutable('today');
