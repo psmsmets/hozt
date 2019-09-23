@@ -6,7 +6,6 @@ var statusFalse = '<i class="fas fa-minus-square text-warning" data-value="false
 
 
 function loadCompetitionEnrolments(id) {
-console.log(id);
     $.getJSON( "/api/private/sportadmin/competition/"+id )
     .done(function( data ) {
         if (data.success) {
@@ -20,6 +19,9 @@ console.log(id);
                         $(td).html( statusFalse );
                     }
                     td.closest('tr').removeClass('competition-disabled');
+                    if (!item.enrolledAt) {
+                      td.addClass('table-active');
+                    }
                 } else {
                     $(td).html( statusNull );
                 }
