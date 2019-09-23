@@ -740,7 +740,7 @@ class Competition
 
     public function setEnrolBeforeDays(int $enrolBeforeDays): self
     {
-        if ($enrolBeforeDays>7) $this->enrolBeforeDays = $enrolBeforeDays;
+        if ($enrolBeforeDays >= 7) $this->enrolBeforeDays = $enrolBeforeDays;
         $this->setEnrolBefore();
 
         return $this;
