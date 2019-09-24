@@ -23,19 +23,19 @@
     {% endfor %}
     </p>
     <div class="table-responsive">
-      <table class="table">
+      <table class="table sortable">
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Voornaam</th>
-            <th scope="col">Naam</th>
-            <th scope="col">Licentie</th>
+            <th scope="col" class="sortable">Voornaam</th>
+            <th scope="col" class="sortable">Naam</th>
+            <th scope="col" class="sortable">Licentie</th>
           </tr>
         </thead>
         <tbody>
         {% for member in team.members %}
           <tr>
-            <th scope="row">{{member.memberid}}</th>
+            <td scope="row">{{member.memberid}}</th>
             <td>{{member.firstname}}</td>
             <td>{{member.lastname}}</td>
             <td>{{member.registrationId}}</td>
@@ -50,5 +50,5 @@
 
 {% block javascripts %}
 {{ parent() }}
-{# encore_entry_script_tags('management_competitions') #}
+{{ encore_entry_script_tags('sortable') }}
 {% endblock %}

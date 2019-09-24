@@ -82,11 +82,12 @@
     </ul>
 
     <div class="table-responsive pt-3">
-      <table class="table table-hover text-center" id="competition-enrolments" data-competition="{{competition.id}}">
+      <table class="table table-hover text-center sortable" id="competition-enrolments" data-competition="{{competition.id}}">
         <thead>
           <tr>
-            <th scope="col" class="text-left">Naam</th>
-            <th scope="col">Groep</th>
+            <th scope="col" class="text-left sortable">Voornaam</th>
+            <th scope="col" class="text-left sortable">Naam</th>
+            <th scope="col" class="sortable">Groep</th>
             {% for part in parts %}
             <th scope="col">{{part.day|localizeddate('none','none', null, null, "ccc dd/MM/YY")}}<br>{{part.partname|trans}}</th>
             {% endfor %}
@@ -96,7 +97,8 @@
         {% for team in competition.teams %}
           {% for member in team.members %}
           <tr class="competition-disabled">
-            <td class="text-left">{{member.name}}</td>
+            <td class="text-left">{{member.firstname}}</td>
+            <td class="text-left">{{member.lastname}}</td>
             <td>{{member.team.abbr}}</td>
             {% for part in parts %}
             <td id="competition-enrolment-{{part.id}}-{{member.id}}"><i class="fas fa-square text-medium"></i></td>
@@ -116,4 +118,5 @@
 {% block javascripts %}
 {{ parent() }}
 {{ encore_entry_script_tags('sportadmin_competition') }}
+{{ encore_entry_script_tags('sortable') }}
 {% endblock %}
