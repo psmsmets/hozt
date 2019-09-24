@@ -671,9 +671,9 @@ class Competition
     {
         $nofCompetitionParts = count($this->competitionParts);
         if ($nofCompetitionParts==0) return null;
-        $day = $this->competitionParts[0]->getDay();
-        for ($i=1; $i < $nofCompetitionParts; $i++) {
-            if ($this->competitionParts[$i]->getDay() < $day) $day = $this->competitionParts[$i]->getDay();
+        $day = $this->competitionParts->first()->getDay();
+        foreach ($this->competitionParts as $part) {
+            if ($part->getDay() < $day) $day = $part->getDay();
         }
         return $day;
     }
@@ -682,9 +682,9 @@ class Competition
     {
         $nofCompetitionParts = count($this->competitionParts);
         if ($nofCompetitionParts==0) return null;
-        $day = $this->competitionParts[0]->getDay();
-        for ($i=1; $i < $nofCompetitionParts; $i++) {
-            if ($this->competitionParts[$i]->getDay() > $day) $day = $this->competitionParts[$i]->getDay();
+        $day = $this->competitionParts->first()->getDay();
+        foreach ($this->competitionParts as $part) {
+            if ($part->getDay() > $day) $day = $part->getDay();
         }
         return $day;
     }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
 use App\Entity\Competition;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -204,6 +205,27 @@ class CompetitionRepository extends ServiceEntityRepository
             ->andWhere('enrolments.filtered = true')
             ->setParameter('reftime', $reftime->format('Y-m-d'))
             ->setParameter('user', $user)
+            ->orderBy('event.startTime', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findUpcomingCompetitionsByTeam(TrainingTeam $team, int $days=14)
+    {
+        $reftime = new \DateTime(sprintf("today +%d days", abs($days)));
+
+        return $this->createQueryBuilder('competition')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('competition.competitionParts','competitionParts')
+            ->innerJoin('competition.teams','teams')
+            ->addSelect('competition')
+            ->addSelect('event')
+            ->addSelect('competitionParts')
+            ->andWhere('teams.id = :team')
+            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->setParameter('reftime', $reftime->format('Y-m-d'))
+            ->setParameter('team', $team->getId())
             ->orderBy('event.startTime', 'ASC')
             ->getQuery()
             ->getResult()

@@ -6,6 +6,7 @@ use App\Entity\Competition;
 use App\Entity\CompetitionEnrolment;
 use App\Entity\User;
 use App\Entity\Member;
+use App\Entity\TrainingTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -75,6 +76,67 @@ class CompetitionEnrolmentRepository extends ServiceEntityRepository
             ->setParameter('memberId', $memberId)
             ->getQuery()
             ->getOneOrNullResult()
+        ;
+    }
+
+    public function findUpcomingMemberCompetitionEnrolments(Member $member, int $days=14)
+    {
+        $reftime = new \DateTime(sprintf("today +%d days", abs($days)));
+
+        return $this->createQueryBuilder('enrolment')
+            ->innerJoin('enrolment.competitionPart','competitionPart')
+            ->innerJoin('competitionPart.competition','competition')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('enrolment.member', 'membr')
+            ->andWhere('membr = :membr')
+            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->setParameter('membr', $member)
+            ->setParameter('reftime', $reftime)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findUpcomingMemberCompetitionEnrolmentsNotTeam(Member $member, TrainingTeam $team, int $days=14)
+    {
+        $reftime = new \DateTime(sprintf("today +%d days", abs($days)));
+
+        return $this->createQueryBuilder('enrolment')
+            ->innerJoin('enrolment.competitionPart','competitionPart')
+            ->innerJoin('competitionPart.competition','competition')
+            ->innerJoin('competition.teams','teams')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('enrolment.member', 'membr')
+            ->addSelect('competitionPart')
+            ->addSelect('competition')
+            ->addSelect('teams')
+            ->andWhere('membr = :membr')
+            ->andWhere('teams.id <> :team')
+            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->setParameter('membr', $member)
+            ->setParameter('team', $team->getId())
+            ->setParameter('reftime', $reftime)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findPastIrrelevantCompetitionEnrolments(int $days=7)
+    {
+        $reftime = new \DateTime(sprintf("today midnight -%d days", abs($days)));
+
+        return $this->createQueryBuilder('enrolment')
+            ->innerJoin('enrolment.competitionPart','competitionPart')
+            ->innerJoin('competitionPart.competition','competition')
+            ->innerJoin('competition.calendar','event')
+            ->andWhere('( event.endTime < :reftime or (event.startTime < :reftime and event.endTime is null) )')
+            ->andWhere('enrolment.filtered = :filtered or (enrolment.restrictions = :restrictions and enrolment.qualified = :qualified)')
+            ->setParameter('reftime', $reftime)
+            ->setParameter('filtered', false)
+            ->setParameter('restrictions', true)
+            ->setParameter('qualified', false)
+            ->getQuery()
+            ->getResult()
         ;
     }
 

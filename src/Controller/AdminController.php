@@ -229,7 +229,7 @@ class AdminController extends EasyAdminController
     public function persistUserEntity($user)
     {
         $details = new UserDetails($user);
-        //$user->setDetails($details);
+        $user->setDetails($details);
         $this->em->persist($details);
 
         if ($this->userManager->invite($user)) {        
@@ -355,19 +355,25 @@ class AdminController extends EasyAdminController
         parent::persistEntity($entity);
     }
 
-    public function updateCompetitionEntity($entity)
+    public function updateCompetitionEntity($competition)
     {
-        $entity->setUpdatedAt();
-        if ($entity->getSimilarGenderAgeLimits()) $entity->duplicateGenderAgeLimits();
-        if ($entity->getUpdatePartList()) $this->competitionManager->addDayParts($entity);
-//dd($entity->getUpdateFilter());
-        if ($entity->hasEnabledCompetitionParts()) $this->competitionManager->filterCompetitionEnrolments($entity);
+        $competition->setUpdatedAt();
+        if ($competition->getSimilarGenderAgeLimits()) $competition->duplicateGenderAgeLimits();
 
-        $event = $entity->getCalendar();
+        if ($competition->getUpdatePartList()) $this->competitionManager->addDayParts($competition);
+
+        if ($competition->hasEnabledCompetitionParts()) {
+            $this->competitionManager->filterCompetitionEnrolments($competition);
+            foreach($this->competitionManager->getExitMessage() as $message) {
+                $this->addFlash($message['alert'], $message['html']);
+            }
+        }
+
+        $event = $competition->getCalendar();
         $event->setUpdatedAt();
         $this->em->flush();
 
-        parent::persistEntity($entity);
+        parent::persistEntity($competition);
     }
 
     public function updateCompetitionPoolEntity($entity)
@@ -404,6 +410,16 @@ class AdminController extends EasyAdminController
             }
         }
         parent::persistEntity($entity);
+    }
+
+    public function updateMemberEntity($member)
+    {
+        if ($member->hasEnabledChanged() and $member->isDisabled()) $this->competitionManager->disableMemberEnrolments($member);
+        if ($member->hasTeamChanged() or $member->hasRegistrationIdChanged()) $this->competitionManager->verifyMemberEnrolments($member);
+        foreach($this->competitionManager->getExitMessage() as $message) {
+            $this->addFlash($message['alert'], $message['html']);
+        } 
+        parent::persistEntity($member);
     }
 
     public function updateTrainingCoachEntity($entity)
