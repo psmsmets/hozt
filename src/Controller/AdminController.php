@@ -446,7 +446,9 @@ class AdminController extends EasyAdminController
         if ($member->hasTeamChanged() or $member->hasRegistrationIdChanged()) $this->competitionManager->verifyMemberEnrolments($member);
         foreach($this->competitionManager->getExitMessage() as $message) {
             $this->addFlash($message['alert'], $message['html']);
-        } 
+        }
+        if ($member->hasUserChanged()) $this->memberManager->setAddressUser($member);
+
         parent::persistEntity($member);
     }
 
@@ -712,23 +714,6 @@ class AdminController extends EasyAdminController
         // don't return anything or redirect to any URL because it will be ignored
         // when a batch action finishes, user is redirected to the original page
     }
-
-/*
-    public function addEnrolmentsBatchAction(array $ids)
-    {
-        $class = $this->entity['class'];
-        if ($class !== 'App\Entity\Competition') return;
-
-        $em = $this->getDoctrine()->getManagerForClass($class);
-
-        foreach ($ids as $id) {
-            $competition = $em->find($class,$id);
-            $this->competitionManager->addEnrolments($competition);
-        }
-
-        $this->em->flush();
-    }
-*/
 
     public function qualifiedBatchAction(array $ids)
     {

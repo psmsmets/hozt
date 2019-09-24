@@ -104,7 +104,7 @@ class Member
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competitor", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competitor")
      */
     private $competitionEnrolments;
 
@@ -117,6 +117,7 @@ class Member
      * Virtual variables
      */
     private $enabledChanged = false;
+    private $userChanged = false;
     private $registrationIdChanged = false;
     private $teamChanged = false; // or registrationId or enabled -> handle all by competitionManager !!
 
@@ -364,9 +365,15 @@ class Member
 
     public function setUser(?User $user): self
     {
+        $this->userChanged = $this->user !== $user;
         $this->user = $user;
 
         return $this;
+    }
+
+    public function hasUserChanged(): ?bool
+    {
+        return $this->userChanged;
     }
 
     /**

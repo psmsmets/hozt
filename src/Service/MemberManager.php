@@ -11,12 +11,12 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class MemberManager 
 {
-    private $entityManager;
+    private $em;
     private $memberRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, MemberRepository $memberRepository )
+    public function __construct(EntityManagerInterface $em, MemberRepository $memberRepository )
     {
-        $this->entityManager = $entityManager;
+        $this->em = $em;
         $this->memberRepository = $memberRepository;
     }
 
@@ -46,12 +46,14 @@ class MemberManager
         return $member;
     }
 
-    public function findMember(int $memberId, string $firstname, string $lastname, string $gender, \DateTimeInterface $birthdate): ?Member
+    public function findMemberById(int $memberId): ?Member
     {
-        if ($member = $this->memberRepository->findByMemberId($memberId)) return $member;
-        //if ($member = $this->memberRepository->findBySpecs($firstname,$lastname,$gender,$birthdate)) return $member;
+        return $this->memberRepository->findByMemberId($memberId);
+    }
 
-        return null;
+    public function findMemberBySpecs(string $firstname, string $lastname, string $gender, \DateTimeInterface $birthdate): ?Member
+    {
+        return $this->memberRepository->findBySpecs($firstname,$lastname,$gender,$birthdate);
     }
 
     public function createAddress(string $street, string $zip, string $town, string $nation, User $user=null): MemberAddress
@@ -64,6 +66,30 @@ class MemberManager
         $address->setNation($nation);
 
         return $address;
+    }
+
+    public function setAddressUser(Member $member, bool $flush=true)
+    {
+        $address = $member->getAddress();
+        $address->setUser($member->getUser());
+
+        if ($flush) $this->em->flush();
+    }
+
+    public function setAddress(MemberAddress $address, bool $flush=true)
+    {
+        foreach($address->getMembers() as $member) {
+            $member->setAddress($address);
+        }
+        if ($flush) $this->em->flush();
+    }
+
+    public function removeOrphantAddresses (User $user, bool $flush=true)
+    {
+        foreach($user->getOrphantMemberAddresses() as $address) {
+            $this->em->remove($address);
+        }
+        if ($flush) $this->em->flush();
     }
 
     public function getLastMemberId(): int
