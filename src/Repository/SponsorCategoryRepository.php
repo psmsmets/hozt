@@ -24,15 +24,17 @@ class SponsorCategoryRepository extends ServiceEntityRepository
     //  */
     public function findAllActiveSponsors()
     {
+        $reftime = new \DateTime('today');
+
         return $this->createQueryBuilder('c')
             ->innerJoin('c.sponsors','s')
             ->addSelect('c')
             ->addSelect('s')
             ->andWhere('c.enabled = :enabled')
             ->andWhere('s.enabled = :enabled')
-            ->andWhere('( s.publishAt <= :today and (s.publishUntil >= :today or s.publishUntil is null) )')
+            ->andWhere('( s.publishAt <= :reftime and (s.publishUntil >= :reftime or s.publishUntil is null) )')
             ->setParameter('enabled', true)
-            ->setParameter('today', date("Y-m-d"))
+            ->setParameter('reftime', $reftime)
             ->orderBy('c.sequence, s.name', 'ASC')
             ->getQuery()
             ->getResult()

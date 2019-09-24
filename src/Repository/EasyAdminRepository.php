@@ -21,12 +21,12 @@ class EasyAdminRepository
         ;
     }
     public static function getFilteredCalendarEvents(EntityRepository $er) {
-        $today = new \DateTime("today midnight");
+        $reftime = new \DateTime("today midnight -35 days");
         return $er->createQueryBuilder('c')
             ->andwhere('c.archived = :archived')
             ->andwhere('c.startTime >= :startTime')
             ->setParameter('archived', false)
-            ->setParameter('startTime', $today->modify('-35 days')->format('Y-m-d'))
+            ->setParameter('startTime', $reftime)
             ->orderBy('c.startTime', 'ASC')
         ;
     }

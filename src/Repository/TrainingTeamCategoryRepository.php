@@ -56,6 +56,8 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
 
     public function findOneBySlugJoinedToTeamsCoachesSchedule($slug)
     {
+        $reftime = new \DateTime('today');
+
         return $this->createQueryBuilder('category')
             ->innerJoin('category.teams', 'teams')
             ->leftJoin('teams.schedule', 'schedule')
@@ -73,7 +75,7 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate > :now or schedule.endDate is null)')
             ->setParameter('slug', $slug)
             ->setParameter('enabled', true)
-            ->setParameter('now', date("Y-m-d"))
+            ->setParameter('now', $reftime)
             ->orderBy('category.sequence, t.abbr', 'ASC')
             ->getQuery()
             ->getOneOrNullResult();
@@ -105,7 +107,8 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
 
     public function findAllJoinedToTeamsCoachesSchedule(int $days=28)
     {
-        $today = new \DateTime('today');
+        $reftime = new \DateTimeImmutable('today');
+
         return $this->createQueryBuilder('category')
             ->innerJoin('category.teams', 'teams')
             ->leftJoin('teams.schedule', 'schedule')
@@ -118,8 +121,8 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->andWhere('schedule.startDate <= :start')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('enabled', true)
-            ->setParameter('now', $today->format('Y-m-d'))
-            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('now', $reftime)
+            ->setParameter('start', $reftime->modify('+'.$days.' days'))
             ->orderBy('category.sequence, teams.abbr, schedule.dayNumber, time.startTime', 'ASC')
             ->getQuery()
             ->getResult();
@@ -143,7 +146,8 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
 
     public function findAllWithPersistentTraining(int $days=28)
     {
-        $today = new \DateTime('today');
+        $reftime = new \DateTime('today');
+
         return $this->createQueryBuilder('cat')
             ->innerJoin('cat.teams', 'teams')
             ->leftJoin('teams.schedule', 'schedule')
@@ -154,8 +158,8 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->andWhere('schedule.startDate <= :start')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('persistent', true)
-            ->setParameter('now', $today->format('Y-m-d'))
-            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('now', $reftime)
+            ->setParameter('start', $reftime->modify('+'.$days.' days'))
             ->getQuery()
             ->getResult()
         ;     
@@ -163,7 +167,8 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
 
     public function findAllWithTrainingException(int $days=28)
     {
-        $today = new \DateTime('today');
+        $reftime = new \DateTimeImmutable('today');
+
         return $this->createQueryBuilder('cat')
             ->innerJoin('cat.teams', 'teams')
             ->leftJoin('teams.exceptions', 'exceptions')
@@ -171,8 +176,8 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->addSelect('teams')
             ->andWhere('exceptions.startDate <= :start')
             ->andWhere('exceptions.endDate >= :now')
-            ->setParameter('now', $today->format('Y-m-d'))
-            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('now', $reftime)
+            ->setParameter('start', $reftime->modify('+'.$days.' days'))
             ->getQuery()
             ->getResult()
         ;     

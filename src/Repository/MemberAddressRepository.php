@@ -20,35 +20,6 @@ class MemberAddressRepository extends ServiceEntityRepository
         parent::__construct($registry, MemberAddress::class);
     }
 
-    // /**
-    //  * @return MemberAddress[] Returns an array of MemberAddress objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?MemberAddress
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-
     public function findOneById(int $id, User $user): ?MemberAddress
     {
         return $this->createQueryBuilder('a')

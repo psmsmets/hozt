@@ -42,6 +42,8 @@ class CompetitionDocumentRepository extends ServiceEntityRepository
 
     public function findUpcomingCompetitionDocuments(string $slug, int $limit = 5)
     {
+        $reftime = new \DateTime('today midnight');
+
         return $this->createQueryBuilder('doc')
             ->innerJoin('doc.category','cat')
             ->innerJoin('doc.competition','comp')
@@ -54,7 +56,7 @@ class CompetitionDocumentRepository extends ServiceEntityRepository
             ->andWhere('cat.slug = :slug')
             ->andWhere('COALESCE(doc.document, doc.url) is not null')
             ->setParameter('cancelled', false)
-            ->setParameter('today_start', date("Y-m-d").' 00:00')
+            ->setParameter('today_start', $reftime)
             ->setParameter('slug', $slug)
             ->orderBy('event.startTime', 'ASC')
             ->setMaxResults($limit)
@@ -66,6 +68,7 @@ class CompetitionDocumentRepository extends ServiceEntityRepository
     public function findPastCompetitionDocuments()
     {
         $reftime = new \DateTime('today midnight');
+
         return $this->createQueryBuilder('doc')
             ->innerJoin('doc.category','cat')
             ->innerJoin('doc.competition','comp')
@@ -76,7 +79,7 @@ class CompetitionDocumentRepository extends ServiceEntityRepository
             ->andWhere('cat.autoCleanup = :autoCleanup')
             ->andWhere('( event.endTime < :reftime or (event.startTime < :reftime and event.endTime is null) )')
             ->setParameter('autoCleanup', true)
-            ->setParameter('reftime', $reftime->format('Y-m-d H:i'))
+            ->setParameter('reftime', $reftime)
             ->getQuery()
             ->getResult()
         ;

@@ -40,8 +40,8 @@ class CalendarEventRepository extends ServiceEntityRepository
             ->andWhere('event.startTime >= :startTime')
             ->andWhere('(event.endTime < :endTime or (event.endTime is null and event.startTime < :endTime))')
             ->setParameter('enabled', true)
-            ->setParameter('startTime', $periodStart->format('Y-m-d'))
-            ->setParameter('endTime', $periodEnd->format('Y-m-d'))
+            ->setParameter('startTime', $periodStart)
+            ->setParameter('endTime', $periodEnd)
             ->orderBy('event.startTime', 'ASC')
             ->getQuery()
             ->getResult()
@@ -50,6 +50,8 @@ class CalendarEventRepository extends ServiceEntityRepository
 
     public function findUpcomingCalendarEvents(int $limit = 10)
     {
+        $reftime = new \DateTime('today midnight');
+
         return $this->createQueryBuilder('event')
             ->innerJoin('event.category','cat')
             ->andWhere('cat.enabled = :enabled')
@@ -58,8 +60,7 @@ class CalendarEventRepository extends ServiceEntityRepository
             ->andWhere('( event.endTime >= :today_start or (event.startTime >= :today_start and event.endTime is null) )')
             ->setParameter('enabled', true)
             ->setParameter('cancelled', false)
-            ->setParameter('today_start', date("Y-m-d").' 00:00')
-            //->setParameter('today_end', date("Y-m-d").' 23:59')
+            ->setParameter('today_start', $reftime)
             ->orderBy('event.startTime', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -118,7 +119,7 @@ class CalendarEventRepository extends ServiceEntityRepository
             ->andWhere('event.archived = :archived')
             ->andWhere('( event.endTime < :reftime or (event.startTime < :reftime and event.endTime is null) )')
             ->setParameter('archived', false)
-            ->setParameter('reftime', $reftime->format("Y-m-d"))
+            ->setParameter('reftime', $reftime)
             ->getQuery()
             ->getResult()
         ;

@@ -26,6 +26,7 @@ class TrainingExceptionRepository extends ServiceEntityRepository
     public function findAllByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28)
     {
         $today = new \DateTime('today');
+
         return $this->createQueryBuilder('exception')
             ->leftJoin('exception.teams', 'exception_teams')
             ->leftJoin('exception_teams.category', 'exception_teams_category')
@@ -38,8 +39,8 @@ class TrainingExceptionRepository extends ServiceEntityRepository
             ->andWhere('exception.startDate <= :start')
             ->andWhere('exception.endDate >= :now')
             ->setParameter('category', $teamCategory)
-            ->setParameter('now', $today->format('Y-m-d'))
-            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('now', $today)
+            ->setParameter('start', $today->modify('+'.$days.' days'))
             ->orderBy('exception.startDate, exception.endDate', 'ASC')
             ->getQuery()
             ->getResult()
@@ -49,6 +50,7 @@ class TrainingExceptionRepository extends ServiceEntityRepository
     public function findAll(int $days=28)
     {
         $today = new \DateTime('today');
+
         return $this->createQueryBuilder('exception')
             ->leftJoin('exception.teams', 'teams')
             ->leftJoin('exception.schedule', 'schedule')
@@ -56,17 +58,18 @@ class TrainingExceptionRepository extends ServiceEntityRepository
             ->addSelect('schedule')
             ->andWhere('exception.startDate <= :start')
             ->andWhere('exception.endDate >= :now')
-            ->setParameter('now', $today->format('Y-m-d'))
-            ->setParameter('start', $today->modify('+'.$days.' days')->format('Y-m-d'))
+            ->setParameter('now', $today)
+            ->setParameter('start', $today->modify('+'.$days.' days'))
             ->orderBy('exception.startDate, exception.endDate', 'ASC')
             ->getQuery()
             ->getResult()
         ;     
     }
 
-    public function findAllGeneralOnDate(\DateTime $refdate = null )
+    public function findAllGeneralOnDate(\DateTime $reftime=null )
     {
-        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
+        if (is_null($reftime)) $reftime = new \DateTime('today midnight');
+
         return $this->createQueryBuilder('exception')
             ->leftJoin('exception.teams', 'teams')
             ->leftJoin('exception.schedule', 'schedule')
@@ -74,22 +77,23 @@ class TrainingExceptionRepository extends ServiceEntityRepository
             ->andWhere('schedule is null')
             ->andWhere('exception.startDate <= :ref')
             ->andWhere('exception.endDate >= :ref')
-            ->setParameter('ref', $refdate->format("Y-m-d"))
+            ->setParameter('ref', $reftime)
             ->getQuery()
             ->getResult()
         ;     
     }
 
-    public function findAllOnDate(\DateTime $refdate = null )
+    public function findAllOnDate(\DateTime $reftime=null )
     {
-        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
+        if (is_null($reftime)) $reftime = new \DateTime('today midnight');
+
         return $this->createQueryBuilder('exception')
             ->leftJoin('exception.teams', 'teams')
             ->leftJoin('exception.schedule', 'schedule')
             ->addSelect('teams')
             ->andWhere('exception.startDate <= :ref')
             ->andWhere('exception.endDate >= :ref')
-            ->setParameter('ref', $refdate->format("Y-m-d"))
+            ->setParameter('ref', $reftime)
             ->getQuery()
             ->getResult()
         ;     

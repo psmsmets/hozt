@@ -104,7 +104,7 @@ class Member
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="member", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competitor", orphanRemoval=true)
      */
     private $competitionEnrolments;
 

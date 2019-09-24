@@ -56,7 +56,7 @@ class CompetitionEnrolment
      * @ORM\ManyToOne(targetEntity="App\Entity\Member", inversedBy="competitionEnrolments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $member;
+    private $competitor;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\CompetitionPart", inversedBy="enrolments")
@@ -73,7 +73,7 @@ class CompetitionEnrolment
         $this->qualified = false;
         $this->enrolledAt = null;
         $this->notifiedAt = null;
-        $this->member = $member;
+        $this->competitor = $member;
         $this->setCompetitionPart($competitionPart);
     }
 
@@ -189,7 +189,12 @@ class CompetitionEnrolment
 
     public function getMember(): ?Member
     {
-        return $this->member;
+        return $this->competitor;
+    }
+
+    public function getCompetitor(): ?Member
+    {
+        return $this->competitor;
     }
 
     public function getCompetitionPart(): ?CompetitionPart
