@@ -59,7 +59,6 @@ class ApiController extends AbstractController
     private $translator;
     private $calendarManager;
     private $competitionManager;
-    private $userManager;
 
     public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator, CalendarManager $calendarManager, CompetitionManager $competitionManager )
     {
@@ -451,7 +450,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/private/membership/preferences", name="api_membership_preferences")
      */
-    public function api_membership_preferences(Request $request, UserPasswordEncoderInterface $encoder)
+    public function api_membership_preferences(Request $request, UserPasswordEncoderInterface $encoder, MemberManager $memberManager)
     {
         if ($request->query->get('format', null) !== 'json') return $this->json(['success' => false]);
 
@@ -498,9 +497,8 @@ class ApiController extends AbstractController
                     $address->setUser($this->security->getUser());
                     $this->em->persist($address);
                 }
-                foreach($address->getMembers() as $member) {
-                    $member->setAddress($address);
-                }
+                $memberManager->setAddress($address);
+                $memberManager->removeOrphantAddresses($user);
             }
         }
         elseif ( $tab == 'notifications' )

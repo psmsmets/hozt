@@ -212,22 +212,21 @@ class CompetitionRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findUpcomingCompetitionsByTeam(TrainingTeam $team, int $days=14)
+    public function findUpcomingCompetitionsByTeam(TrainingTeam $team, int $days=5)
     {
         $reftime = new \DateTime(sprintf("today +%d days", abs($days)));
 
         return $this->createQueryBuilder('competition')
-            ->innerJoin('competition.calendar','event')
             ->innerJoin('competition.competitionParts','competitionParts')
             ->innerJoin('competition.teams','teams')
             ->addSelect('competition')
-            ->addSelect('event')
             ->addSelect('competitionParts')
+            ->addSelect('teams')
             ->andWhere('teams.id = :team')
-            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->andWhere('competition.enrolBefore >= :reftime')
             ->setParameter('reftime', $reftime)
             ->setParameter('team', $team->getId())
-            ->orderBy('event.startTime', 'ASC')
+            ->orderBy('competition.enrolBefore', 'ASC')
             ->getQuery()
             ->getResult()
         ;

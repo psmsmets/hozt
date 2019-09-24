@@ -524,6 +524,13 @@ class User implements UserInterface
         return $this->memberAddresses;
     }
 
+    public function getOrphantMemberAddresses(): Collection
+    {
+        return $this->memberAddresses->filter(function(MemberAddress $address) {
+            return count($address->getMembers()) === 0;
+        });
+    }
+
     public function addMemberAddress(MemberAddress $memberAddress): self
     {
         if (!$this->memberAddresses->contains($memberAddress)) {

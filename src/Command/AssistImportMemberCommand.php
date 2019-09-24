@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Service\CompetitionManager;
 use App\Service\MemberManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -15,14 +16,16 @@ class AssistImportMemberCommand extends Command
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:assist:import-member';
     private $memberManager;
+    private $competitionManager;
     private $em;
 
-    public function __construct(MemberManager $memberManager, EntityManagerInterface $em)
+    public function __construct(MemberManager $memberManager, CompetitionManager $competitionManager, EntityManagerInterface $em)
     {
         // best practices recommend to call the parent constructor first and
         // then set your own properties. That wouldn't work in this case
         // because configure() needs the properties set in this constructor
         $this->memberManager = $memberManager;
+        $this->competitionManager = $competitionManager;
         $this->em = $em;
 
         parent::__construct();
@@ -65,7 +68,7 @@ No escaping is required converting the .xls to .csv.
 
         $cnt = -abs( (int) $input->getOption('skip') );
         $new = 0;
-        $update = 0;
+        $upd = 0;
 
         $persist = ! $input->getOption('test');
         $debug = $input->getOption('debug');
@@ -97,10 +100,24 @@ No escaping is required converting the .xls to .csv.
 
                 if ($memberId === 0) continue;
 
-                $member = $this->memberManager->findMember($memberId, $firstname, $lastname, $gender, $birthdate);
-
-                if (is_null($member))
+                if ($member = $this->memberManager->findMemberById($memberId))
                 {
+                    $output->write(sprintf('%s %s exists with id:%d and memberId: %d.',
+                        $member->getFirstname(),
+                        $member->getLastname(),
+                        $member->getId(),
+                        $member->getMemberId()
+                    ));
+                    if ($member->getRegistrationId() !== $registrationId ) {
+                        $upd++;
+                        $member->setRegistrationId();
+                        $this->competitionManager->verifyMemberEnrolments($member);
+                        $output->write(sprintf(' registrationId updated to %s.', $registrationId));
+                    }
+                    $output->writeln('');
+
+                } else {
+
                     $new++;
 
                     $address = $this->memberManager->createAddress($street, $zip, $town, $nation);
@@ -117,16 +134,7 @@ No escaping is required converting the .xls to .csv.
                         $this->em->flush();
                     }
 
-                    $output->writeln(sprintf('%s %s created with id:%d and memberId: %d',
-                        $member->getFirstname(),
-                        $member->getLastname(),
-                        $member->getId(),
-                        $member->getMemberId()
-                    ));
-
-                } else {
-
-                    $output->writeln(sprintf('%s %s exists with id:%d and memberId: %d',
+                    $output->writeln(sprintf('%s %s created with id:%d and memberId: %d.',
                         $member->getFirstname(),
                         $member->getLastname(),
                         $member->getId(),
@@ -142,7 +150,7 @@ No escaping is required converting the .xls to .csv.
         }
 
         $output->writeln('');
-        $output->writeln(sprintf('%d members found from assist of which %d imported.', $cnt, $new));
+        $output->writeln(sprintf('%d members found from assist of which %d imported and %d updated.', $cnt, $new, $upd));
 
     }
 }

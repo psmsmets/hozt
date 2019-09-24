@@ -26,6 +26,7 @@ return [
     'preferences.address' => 'Adresboek',
     'preferences.members' => 'Leden',
     'preferences.notifications' => 'Notificaties',
+    'member_address_form.new' => 'Adres toevoegen',
     'member_address_form.edit' => 'Adres aanpassen',
     'user_details_form.edit' => 'Notificatie voorkeuren aanpassen',
     'user_name_form.edit' => 'Je naam aanpassen',
