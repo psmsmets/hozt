@@ -416,7 +416,7 @@ class User implements UserInterface
     {
         if (is_null($type)) return null;
 
-        $this->secretExpiration = new \DateTime("now +1 hour");
+        $this->secretExpiration = new \DateTime("now +12 hour");
         $token =  hash(
             'sha256', 
             $this->email . " " . $this->secretExpiration->getTimestamp() . " " . bin2hex(random_bytes(32)) 
@@ -444,7 +444,7 @@ class User implements UserInterface
 
     public function expireSecret(): self
     {  
-        $this->secretExpiration = new \DateTime("now -100 year");
+        $this->secretExpiration = null;
         $this->secret = null;
         return $this;
     }
