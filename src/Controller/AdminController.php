@@ -713,6 +713,7 @@ class AdminController extends EasyAdminController
         // when a batch action finishes, user is redirected to the original page
     }
 
+/*
     public function addEnrolmentsBatchAction(array $ids)
     {
         $class = $this->entity['class'];
@@ -727,6 +728,7 @@ class AdminController extends EasyAdminController
 
         $this->em->flush();
     }
+*/
 
     public function qualifiedBatchAction(array $ids)
     {

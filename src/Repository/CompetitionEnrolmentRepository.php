@@ -79,17 +79,18 @@ class CompetitionEnrolmentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findUpcomingMemberCompetitionEnrolments(Member $member, int $days=14)
+    public function findUpcomingMemberCompetitionEnrolments(Member $member, int $days=5)
     {
         $reftime = new \DateTime(sprintf("today +%d days", abs($days)));
 
         return $this->createQueryBuilder('enrolment')
             ->innerJoin('enrolment.competitionPart','competitionPart')
             ->innerJoin('competitionPart.competition','competition')
-            ->innerJoin('competition.calendar','event')
             ->innerJoin('enrolment.competitor', 'competitor')
+            ->addSelect('competitionPart')
+            ->addSelect('competition')
             ->andWhere('competitor = :member')
-            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->andWhere('competition.enrolBefore >= :reftime')
             ->setParameter('competitor', $member)
             ->setParameter('reftime', $reftime)
             ->getQuery()
@@ -97,7 +98,7 @@ class CompetitionEnrolmentRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findUpcomingMemberCompetitionEnrolmentsNotTeam(Member $member, TrainingTeam $team, int $days=14)
+    public function findUpcomingMemberCompetitionEnrolmentsNotTeam(Member $member, TrainingTeam $team, int $days=5)
     {
         $reftime = new \DateTime(sprintf("today +%d days", abs($days)));
 
@@ -105,14 +106,12 @@ class CompetitionEnrolmentRepository extends ServiceEntityRepository
             ->innerJoin('enrolment.competitionPart','competitionPart')
             ->innerJoin('competitionPart.competition','competition')
             ->innerJoin('competition.teams','teams')
-            ->innerJoin('competition.calendar','event')
             ->innerJoin('enrolment.competitor', 'competitor')
             ->addSelect('competitionPart')
             ->addSelect('competition')
-            ->addSelect('teams')
             ->andWhere('competitor = :member')
             ->andWhere('teams.id <> :team')
-            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->andWhere('competition.enrolBefore >= :reftime')
             ->setParameter('member', $member)
             ->setParameter('team', $team->getId())
             ->setParameter('reftime', $reftime)
