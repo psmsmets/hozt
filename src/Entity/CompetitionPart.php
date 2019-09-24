@@ -243,7 +243,7 @@ class CompetitionPart
         $enrolment = $this->enrolments->filter(function(CompetitionEnrolment $enrolment) use($member) {
             return $enrolment->getMember() === $member;
         });
-        return count($enrolment)==1 ? $enrolment[0] : null;
+        return count($enrolment)==1 ? $enrolment->first() : null;
     }
 
     public function hasMemberEnrolment(Member $member): bool

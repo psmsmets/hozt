@@ -104,7 +104,7 @@ class Member
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="member", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\CompetitionEnrolment", mappedBy="competitor", orphanRemoval=true)
      */
     private $competitionEnrolments;
 
@@ -159,7 +159,7 @@ class Member
         return $this;
     }
 
-    public function getEnabled(): ?bool
+    public function getEnabled(): bool
     {
         return $this->enabled;
     }
@@ -172,9 +172,19 @@ class Member
         return $this;
     }
 
-    public function isEnabled(): ?bool
+    public function isEnabled(): bool
     {
-        return $this->enabled ? true : false;
+        return $this->enabled;
+    }
+
+    public function isDisabled(): bool
+    {
+        return !$this->enabled;
+    }
+
+    public function hasEnabledChanged(): ?bool
+    {
+        return $this->enabledChanged;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -313,6 +323,7 @@ class Member
     public function setRegistrationId(?string $registrationId): self
     {
         if (is_null($registrationId)) {
+            $this->registrationIdChanged = !is_null($this->registrationId);
             $this->registrationId = null;
         }
         elseif (preg_match(self::registrationIdRegex, $registrationId)) {
@@ -321,6 +332,11 @@ class Member
         }
 
         return $this;
+    }
+
+    public function hasRegistrationIdChanged(): bool
+    {
+        return $this->registrationIdChanged;
     }
 
     public function getTeam(): ?TrainingTeam
@@ -336,7 +352,7 @@ class Member
         return $this;
     }
 
-    public function getTeamChanged(): bool
+    public function hasTeamChanged(): bool
     {
         return $this->teamChanged;
     }
@@ -365,14 +381,6 @@ class Member
     {
         return $this->competitionEnrolments->filter(function(CompetitionEnrolment $enrolment) {
             return $enrolment->isEnabled();
-        });
-    }
-
-    public function getActiveCompetitionEnrolmentsFromDate(\DateTimeInterface $refdate = null): Collection
-    {
-        if (is_null($refdate)) $refdate = new \DateTime('today');
-        return $this->competitionEnrolments->filter(function(CompetitionEnrolment $enrolment) use ($refdate) {
-            return $enrolment->isActive() and $enrolment->getCompetition()->getCalendar()->getStartTime() > $refdate;
         });
     }
 

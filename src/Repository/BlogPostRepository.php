@@ -25,6 +25,8 @@ class BlogPostRepository extends ServiceEntityRepository
     //  */
     public function findSpecialPinnedBlogPost()
     {
+        $now = new \DateTime('now');
+
         return $this->createQueryBuilder('post')
             ->innerJoin('post.category','category')
             ->leftJoin('post.event','event')
@@ -41,7 +43,7 @@ class BlogPostRepository extends ServiceEntityRepository
             ->setParameter('enabled', true)
             ->setParameter('pinned', true)
             ->setParameter('special', true)
-            ->setParameter('now', date("Y-m-d H:i"))
+            ->setParameter('now', $now)
             ->orderBy('post.publishAt', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
@@ -51,6 +53,8 @@ class BlogPostRepository extends ServiceEntityRepository
 
     public function findSpecialBlogPosts(int $limit)
     {
+        $now = new \DateTime('now');
+
         return $this->createQueryBuilder('post')
             ->innerJoin('post.category','cat')
             ->leftJoin('post.event','event')
@@ -67,7 +71,7 @@ class BlogPostRepository extends ServiceEntityRepository
             ->setParameter('enabled', true)
             ->setParameter('pinned', false)
             ->setParameter('special', true)
-            ->setParameter('now', date("Y-m-d H:i"))
+            ->setParameter('now', $now)
             ->orderBy('post.publishAt', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
@@ -78,6 +82,7 @@ class BlogPostRepository extends ServiceEntityRepository
     public function findBlogPosts(BlogCategory $category = null, int $page = 1,
         bool $admin = false, int $limit = BlogPost::NUMBER_OF_ITEMS)
     {
+        $now = new \DateTime('now');
         $offset = ( $page < 1 ? 0 : $page - 1 ) * BlogPost::NUMBER_OF_ITEMS;
 
         if (is_null($category))
@@ -94,7 +99,7 @@ class BlogPostRepository extends ServiceEntityRepository
                 ->andWhere('post.publishAt <= :now')
                 //->andWhere('(p.publishUntil > :now or p.publishUntil is null)')
                 ->setParameter('enabled', true)
-                ->setParameter('now', date("Y-m-d H:i"))
+                ->setParameter('now', $now)
                 ->orderBy('post.publishAt', 'DESC')
                 ->setFirstResult( $offset )
                 ->setMaxResults($limit)
@@ -116,7 +121,7 @@ class BlogPostRepository extends ServiceEntityRepository
                 //->andWhere('(p.publishUntil > :now or p.publishUntil is null)')
                 ->setParameter('category', $category)
                 ->setParameter('enabled', true)
-                ->setParameter('now', date("Y-m-d H:i"))
+                ->setParameter('now', $now)
                 ->orderBy('post.publishAt', 'DESC')
                 ->setFirstResult( $offset )
                 ->setMaxResults($limit)
@@ -128,6 +133,8 @@ class BlogPostRepository extends ServiceEntityRepository
 
     public function countBlogPosts(string $category = null)
     {
+        $now = new \DateTime('now');
+
         if (is_null($category))
         {
             return $this->createQueryBuilder('post')
@@ -137,7 +144,7 @@ class BlogPostRepository extends ServiceEntityRepository
                 ->andWhere('post.publishAt <= :now')
                 //->andWhere('(p.publishUntil > :now or p.publishUntil is null)')
                 ->setParameter('enabled', true)
-                ->setParameter('now', date("Y-m-d H:i"))
+                ->setParameter('now', $now)
                 ->getQuery()
                 ->getSingleScalarResult()
             ;
@@ -151,7 +158,7 @@ class BlogPostRepository extends ServiceEntityRepository
                 //->andWhere('(p.publishUntil > :now or p.publishUntil is null)')
                 ->setParameter('category', $category)
                 ->setParameter('enabled', true)
-                ->setParameter('now', date("Y-m-d H:i"))
+                ->setParameter('now', $now)
                 ->getQuery()
                 ->getSingleScalarResult()
             ;
@@ -197,6 +204,8 @@ class BlogPostRepository extends ServiceEntityRepository
     }
     public function findCalenderEventBlogPosts(string $uuid)
     {
+        $now = new \DateTime('now');
+
         return $this->createQueryBuilder('post')
             ->innerJoin('post.category','category')
             ->leftJoin('post.event','event')
@@ -209,7 +218,7 @@ class BlogPostRepository extends ServiceEntityRepository
             //->andWhere('(post.publishUntil > :now or post.publishUntil is null)')
             ->setParameter('uuid', $uuid)
             ->setParameter('enabled', true)
-            ->setParameter('now', date("Y-m-d H:i"))
+            ->setParameter('now', $now)
             ->orderBy('post.publishAt', 'DESC')
             ->getQuery()
             ->getResult()

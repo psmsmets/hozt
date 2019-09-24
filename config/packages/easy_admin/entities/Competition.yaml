@@ -12,7 +12,6 @@ easy_admin:
             class: App\Entity\Competition
             label: 'Zwemwedstrijd'
             list:
-                query_builder: ['App\Repository\EasyAdminRepository','Test']
                 fields:
                     #- { property: 'id', label: 'id' }
                     - { property: 'calendar', label: 'Kalender event', type: 'text' }
@@ -171,8 +170,8 @@ easy_admin:
                     - { property: 'competitionPart.competition.name', label: 'Wedstrijd', type: 'text' }
                     - { property: 'competitionPart.daypart', label: 'Datum', template: 'easy_admin/localizeddate_full.html.twig' }
                     - { property: 'competitionPart.partname', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
-                    - { property: 'member', label: 'Naam', type: 'text' }
-                    - { property: 'member.team', label: 'Groep', type: 'text' }
+                    - { property: 'competitor', label: 'Naam', type: 'text' }
+                    - { property: 'competitor.team', label: 'Groep', type: 'text' }
                     - { property: 'enabled', label: 'Toeg.', type: 'boolean' }
                     - { property: 'qualified', label: 'Limiet', type: 'boolean' }
                     - { property: 'isEnrolled', label: 'Ingeschreven', type: 'boolean' }
@@ -184,7 +183,6 @@ easy_admin:
                 batch_actions: ['qualified','unqualified']
                 max_results: 50
             search:
-                fields: ['competitionPart.competition.calendar.title','competitionPart.daypart','competitionPart.competition.organization','competitionPart.competition.calendar.location']
-                #fields: ['member.firstname','member.lastname','member.team.name','member.team.abbr','member.registrationId'] # need to fix member issue
+                fields: ['competitionPart.competition.calendar.title','competitionPart.daypart','competitionPart.competition.organization','competitionPart.competition.calendar.location','competitor.firstname','competitor.lastname']
                 #dql_filter: 'entity.filtered = true'
                 dql_filter: ''

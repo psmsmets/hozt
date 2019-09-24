@@ -270,14 +270,6 @@ class TrainingTeam
         });
     }
 
-    public function getEnabledCompetitionsFromDate(\DateTimeInterface $refdate = null): Collection
-    {
-        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
-        return $this->competitions->filter(function(Competition $competition) use ($refdate) {
-            return $competition->isEnabled() and $competition->getCalendar()->getStartTime() > $refdate;
-        });
-    }
-
     public function addCompetition(Competition $competition): self
     {
         if (!$this->competitions->contains($competition)) {

@@ -83,6 +83,34 @@ class AdminController extends EasyAdminController
         return $queryBuilder;
     }
 
+    protected function createCompetitionEnrolmentsListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null)
+    {
+        $reftime = new \DateTime('today');
+
+        /* @var EntityManager */
+        $em = $this->getDoctrine()->getManagerForClass($this->entity['class']);
+        /* @var DoctrineQueryBuilder */
+        $queryBuilder = $em->createQueryBuilder()
+            ->select('entity')
+            ->from($this->entity['class'], 'entity')
+            ->innerJoin('entity.competitionPart','competitionPart')
+            ->innerJoin('entity.competitor','competitor')
+            ->innerJoin('competitionPart.competition','competition')
+            ->innerJoin('competition.calendar','calendar')
+            ->andWhere('competition.enrolBefore > :reftime')
+            ->setParameter('reftime',$reftime)
+            ;
+
+        if (!empty($dqlFilter)) {
+            $queryBuilder->andWhere($dqlFilter);
+        }
+
+        if (null !== $sortField) {
+            $queryBuilder->orderBy(strpos($sortField,'.') ? $sortField : 'entity.'.$sortField, $sortDirection ?: 'DESC');
+        }
+        return $queryBuilder;
+    }
+
     // Customizes the instantiation of specific entities
     public function createNewBlogPostEntity()
     {
@@ -229,7 +257,7 @@ class AdminController extends EasyAdminController
     public function persistUserEntity($user)
     {
         $details = new UserDetails($user);
-        //$user->setDetails($details);
+        $user->setDetails($details);
         $this->em->persist($details);
 
         if ($this->userManager->invite($user)) {        
@@ -355,19 +383,25 @@ class AdminController extends EasyAdminController
         parent::persistEntity($entity);
     }
 
-    public function updateCompetitionEntity($entity)
+    public function updateCompetitionEntity($competition)
     {
-        $entity->setUpdatedAt();
-        if ($entity->getSimilarGenderAgeLimits()) $entity->duplicateGenderAgeLimits();
-        if ($entity->getUpdatePartList()) $this->competitionManager->addDayParts($entity);
-//dd($entity->getUpdateFilter());
-        if ($entity->hasEnabledCompetitionParts()) $this->competitionManager->filterCompetitionEnrolments($entity);
+        $competition->setUpdatedAt();
+        if ($competition->getSimilarGenderAgeLimits()) $competition->duplicateGenderAgeLimits();
 
-        $event = $entity->getCalendar();
+        if ($competition->getUpdatePartList()) $this->competitionManager->addDayParts($competition);
+
+        if ($competition->hasEnabledCompetitionParts()) {
+            $this->competitionManager->filterCompetitionEnrolments($competition);
+            foreach($this->competitionManager->getExitMessage() as $message) {
+                $this->addFlash($message['alert'], $message['html']);
+            }
+        }
+
+        $event = $competition->getCalendar();
         $event->setUpdatedAt();
         $this->em->flush();
 
-        parent::persistEntity($entity);
+        parent::persistEntity($competition);
     }
 
     public function updateCompetitionPoolEntity($entity)
@@ -404,6 +438,16 @@ class AdminController extends EasyAdminController
             }
         }
         parent::persistEntity($entity);
+    }
+
+    public function updateMemberEntity($member)
+    {
+        if ($member->hasEnabledChanged() and $member->isDisabled()) $this->competitionManager->disableMemberEnrolments($member);
+        if ($member->hasTeamChanged() or $member->hasRegistrationIdChanged()) $this->competitionManager->verifyMemberEnrolments($member);
+        foreach($this->competitionManager->getExitMessage() as $message) {
+            $this->addFlash($message['alert'], $message['html']);
+        } 
+        parent::persistEntity($member);
     }
 
     public function updateTrainingCoachEntity($entity)

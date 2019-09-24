@@ -62,8 +62,17 @@ class CompetitionManager
                 $cnt_rem++;
             }
         }
+        $this->exitMessage[] = array( 'alert' => 'success', 'html' => sprintf('Removed %d/%d documents.', $cnt_rem, $cnt_doc) );
+
+        $cnt_rem = 0;
+        $enrolments = $this->competitionEnrolmentRepository->findPastIrrelevantCompetitionEnrolments();
+        foreach( $enrolments as $enrolment ) {
+            $this->entityManager->remove($enrolment);
+            $cnt_rem++;
+        }
+        $this->exitMessage[] = array( 'alert' => 'success', 'html' => sprintf('Removed %d irrelevant enrolments.', $cnt_rem) );
+
         $this->entityManager->flush();
-        $this->exitMessage[] = sprintf('Removed %d/%d documents.', $cnt_rem, $cnt_doc);
 
         return true;
     }
@@ -87,7 +96,7 @@ class CompetitionManager
             }
         }
         $this->entityManager->flush();
-        $this->exitMessage[] = sprintf('Added %d/%d parts.', $add_parts, $all_parts);
+        $this->exitMessage[] = array( 'alert' => 'success', 'html' => sprintf('Added %d/%d parts.', $add_parts, $all_parts) );
 
         return true;
     }
@@ -114,7 +123,7 @@ class CompetitionManager
         }
 
         if ($flush) $this->entityManager->flush();
-        $this->exitMessage[] = sprintf('Added %d of %d enrolments.', $add, $all);
+        $this->exitMessage[] = array( 'alert' => 'success', 'html' => sprintf('Added %d of %d enrolments.', $add, $all) );
 
         return true;
     }
@@ -146,7 +155,29 @@ class CompetitionManager
         }
 
         if ($flush) $this->entityManager->flush();
-        $this->exitMessage[] = sprintf('Verified %d erolments: %d updated %d removed.', $all, $upd, $rem);
+        $this->exitMessage[] = array(
+            'alert' => 'success', 
+            'html' => sprintf('Verified %d erolments: %d updated %d removed.', $all, $upd, $rem)
+        );
+
+        return true;
+    }
+
+    public function disableMemberEnrolments(Member $member, bool $flush=true): ?bool
+    {
+        $upd=0;
+
+        foreach ($this->competitionEnrolmentRepository->findUpcomingMemberCompetitionEnrolments($member) as $enrolment)
+        {
+            $enrolment->setFiltered(false);
+            $upd++;
+        }
+
+        if ($flush) $this->entityManager->flush();
+        $this->exitMessage[] = array(
+            'alert' => 'success',
+             'html' => sprintf('Disabled %d enrolments for member %s.', $member->getName(), $upd)
+        );
 
         return true;
     }
@@ -156,29 +187,38 @@ class CompetitionManager
         $add=0; $upd=0;
 
         $team = $member->getTeam();
-        foreach ($member->getActiveCompetitionEnrolmentsFromDate() as $enrolment)
+        $enrolled = $team->getDefaultEnrolled();
+
+        foreach ($this->competitionEnrolmentRepository->findUpcomingMemberCompetitionEnrolmentsNotTeam($member,$team) as $enrolment)
         {
-            if (!$enrolment->getCompetition()->getTeams()->contains($team)) {
-                $enrolment->setFiltered(false);
-                $upd++;
-            }
+            $enrolment->setFiltered(false);
         }
 
-        $enrolled = $team()->getDefaultEnrolled();
-        foreach ($team->getEnabledCompetitionsFromDate() as $competition)
+        foreach ($this->competitionRepository->findUpcomingCompetitionsByTeam($team) as $competition)
         {
             $filtered = $this->memberCompliantWithCompetition($member,$competition);
             foreach ($competition->getEnabledCompetitionParts() as $competitionPart)
             {
-                if ($enrolment = $competitionPart->getMemberEnrolment($member)) continue;
-                $enrolment = new CompetitionEnrolment( $competitionPart, $member, $enrolled, $filtered, $competition->getRestrictions() );
-                $this->entityManager->persist($enrolment);
-                $add++;
+                if ($enrolment = $competitionPart->getMemberEnrolment($member)) 
+                {
+                    if ($enrolment->getFiltered() !== $filtered) {
+                        $enrolment->setFiltered($filtered);
+                        $upd++;
+                    }
+                } else {
+                    $enrolment = new CompetitionEnrolment($competitionPart, $member, $enrolled, $filtered, $competition->getRestrictions());
+                    $this->entityManager->persist($enrolment);
+                    $add++;
+                }
             }
         }
 
         if ($flush) $this->entityManager->flush();
-        $this->exitMessage[] = sprintf('Verified enrolments for member %s: %d added %d updated.', $member->getName(), $add, $upd);
+        $this->exitMessage[] = array(
+            'alert' => 'success', 
+             'html' => sprintf('Verified enrolments for member %s: %d added %d updated.', $member->getName(), $add, $upd)
+        );
+
         return true;
     }
 

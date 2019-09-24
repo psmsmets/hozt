@@ -21,6 +21,8 @@ class TrainingTeamRepository extends ServiceEntityRepository
 
     public function findAllJoinedToCoachesAndSchedule()
     {
+        $reftime = new \DateTime('today');
+
         return $this->createQueryBuilder('t')
             ->innerJoin('t.coaches', 'c')
             ->innerJoin('t.schedule', 's')
@@ -37,7 +39,7 @@ class TrainingTeamRepository extends ServiceEntityRepository
             ->andWhere('s.startDate <= :now')
             ->andWhere('(s.endDate > :now or s.endDate is null)')
             ->setParameter('enabled', true)
-            ->setParameter('now', date("Y-m-d"))
+            ->setParameter('now', $reftime)
             ->orderBy('d.id, s.start_time', 'ASC')
             ->getQuery()
             ->getResult()

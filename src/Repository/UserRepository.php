@@ -44,14 +44,15 @@ class UserRepository extends ServiceEntityRepository
 
     public function findOneByToken(string $token, string $type): ?User
     {
-        $now = new \DateTime('now');
+        $reftime = new \DateTime('now');
+
         return $this->createQueryBuilder('user')
             ->andWhere('user.enabled = :enabled')
             ->andWhere('user.secret = :secret')
             ->andWhere('user.secretExpiration > :now')
             ->setParameter('enabled', true)
             ->setParameter('secret', "$type=$token" )
-            ->setParameter('now', $now->format('Y-m-d H:i:s') )
+            ->setParameter('now', $reftime )
             ->getQuery()
             ->getOneOrNullResult()
         ;

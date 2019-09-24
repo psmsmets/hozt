@@ -35,13 +35,14 @@ class TryoutRepository extends ServiceEntityRepository
     {
         $now = new \DateTime('now');
         $old = new \DateTime("today midnight -$pastdays days");
+
         return $this->createQueryBuilder('tryout')
             ->where('tryout.enabled = :enabled')
             ->andwhere('tryout.publishAt < :ref')
             ->andwhere('tryout.startTime > :end')
             ->setParameter('enabled', true)
-            ->setParameter('ref', $now->format('Y-m-d H:i'))
-            ->setParameter('end', $old->format('Y-m-d H:i'))
+            ->setParameter('ref', $now)
+            ->setParameter('end', $old)
             ->orderBy('tryout.startTime', 'ASC')
             ->getQuery()
             ->getResult()
@@ -52,14 +53,15 @@ class TryoutRepository extends ServiceEntityRepository
     {
         $now = new \DateTime('now');
         $old = new \DateTime('today midnight -0 days');
+
         return $this->createQueryBuilder('tryout')
             ->select('count(tryout.id)')
             ->where('tryout.enabled = :enabled')
             ->andwhere('tryout.publishAt < :ref')
             ->andwhere('tryout.startTime > :end')
             ->setParameter('enabled', true)
-            ->setParameter('ref', $now->format('Y-m-d H:i'))
-            ->setParameter('end', $old->format('Y-m-d H:i'))
+            ->setParameter('ref', $now)
+            ->setParameter('end', $old)
             ->getQuery()
             ->getSingleScalarResult()
         ;    
