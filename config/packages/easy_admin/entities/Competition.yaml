@@ -106,7 +106,7 @@ easy_admin:
             edit:
                 actions: ['delete']
             search:
-                fields: ['category.title','competition.teamCategories.name','competition.teamCategories.abbr','competition.teams.name','competition.teams.abbr','competition.calendar.location','competition.calendar.startTime','competition.calendar.endTime','competition.calendar.title']
+                fields: ['category.title','competition.teams.name','competition.teams.abbr','competition.calendar.location','competition.calendar.startTime','competition.calendar.endTime','competition.calendar.title']
 
         CompetitionDocumentCategory:
             class: App\Entity\CompetitionDocumentCategory
