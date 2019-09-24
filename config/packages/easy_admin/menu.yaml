@@ -30,7 +30,7 @@ easy_admin:
                #- { entity: 'Member', label: 'Nieuw', icon: 'plus-square', params: { action: 'new' } }
                - { entity: 'Member', label: 'Lijst actieve leden', icon: 'list' }
                - { entity: 'MemberInactive', label: 'Lijst inactieve leden', icon: 'list' }
-               - { entity: 'MemberAddress', label: 'Addressen', icon: 'address-book' }
+               #- { entity: 'MemberAddress', label: 'Addressen', icon: 'address-book' }
                - { entity: 'MemberGrouping', label: 'Groepen', icon: 'bookmark' }
            - label: "Training & Wedstrijden"
            - label: 'Trainingen'
