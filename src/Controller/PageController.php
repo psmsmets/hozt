@@ -40,6 +40,7 @@ use App\Entity\MemberAddress;
 use App\Entity\MemberGrouping;
 
 # repositories
+use App\Repository\TrainingScheduleRepository;
 use App\Repository\TryoutEnrolmentRepository;
 use App\Repository\TryoutRepository;
 use App\Repository\MemberRepository;
@@ -846,6 +847,36 @@ class PageController extends AbstractController
         );
 
         return $this->render('membership/competitions.html.twig', $this->template_data );
+    }
+
+    /**
+     * @Route("/mijn-account/trainingsuren", name="membership_schedule")
+     */
+    public function membership_schedule(TrainingScheduleRepository $scheduleRepo)
+    {
+        $this_week = new \DateTimeImmutable('today last monday');
+        $next_week = $this_week->modify('+1 week');
+        $two_weeks = $next_week->modify('+1 week');
+
+        $this->initTemplateData();
+
+        $this->addToTemplateData( 'this_week_mon', $this_week );
+        $this->addToTemplateData( 'this_week_sun', $this_week->modify('next sunday') );
+        $this->addToTemplateData( 
+            'schedule_this_week', $scheduleRepo->findAllByUserForPeriod($this->user, $this_week)
+        );
+        $this->addToTemplateData( 'next_week_mon', $next_week );
+        $this->addToTemplateData( 'next_week_sun', $next_week->modify('next sunday') );
+        $this->addToTemplateData( 
+            'schedule_next_week', $scheduleRepo->findAllByUserForPeriod($this->user, $next_week)
+        );
+        $this->addToTemplateData( 'two_weeks_mon', $two_weeks );
+        $this->addToTemplateData( 'two_weeks_sun', $two_weeks->modify('next sunday') );
+        $this->addToTemplateData( 
+            'schedule_two_weeks', $scheduleRepo->findAllByUserForPeriod($this->user, $two_weeks)
+        );
+
+        return $this->render('membership/schedules.html.twig', $this->template_data );
     }
 
     /**

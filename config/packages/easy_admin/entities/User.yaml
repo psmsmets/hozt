@@ -21,7 +21,7 @@ easy_admin:
                     - { property: 'verified', label: 'Geverifieerd', type: 'boolean' }
                     - { property: 'isActive', label: 'Online', type: 'boolean' }
                     - { property: 'lastActiveAt', label: 'Laatst online' }
-                    - { property: 'isSuperAdmin', label: 'Backend', type: 'boolean' }
+                    - { property: 'isAdmin', label: 'Backend', type: 'boolean' }
                 sort: ['id', 'ASC']
                 actions: ['show']
                 batch_actions: ['enable','disable','verify','reinvite']
