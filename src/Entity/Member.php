@@ -317,7 +317,6 @@ class Member
 
     public function getRegistrationId(): ?string
     {
-        //return preg_match(self::registrationIdRegex, $this->registrationId) ? $this->registrationId : null;
         return $this->registrationId;
     }
 
@@ -328,7 +327,7 @@ class Member
             $this->registrationId = null;
         }
         elseif (preg_match(self::registrationIdRegex, $registrationId)) {
-            $this->registrationIdChanged = $this->registrationId !== $strtoupper($registrationId);
+            $this->registrationIdChanged = $this->registrationId !== strtoupper($registrationId);
             $this->registrationId = strtoupper($registrationId);
         }
 

@@ -651,7 +651,7 @@ class ApiController extends AbstractController
      */
     public function api_sportadmin_competition(int $id)
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
+        $this->denyAccessUnlessGranted('ROLE_MANAGER', null, 'Je hebt geen toegang om deze pagina te bekijken!');
 
         $enrolments = $this->competitionManager->getCompetitionEnrolments($id);
 
