@@ -24,11 +24,11 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-primary">Komende wedstrijden<small><span class="badge badge-primary align-text-top ml-2">{{page.upcoming_competitions|length}}</span></small></h5>
+            <h5 class="card-title text-primary">Komende wedstrijden<small><span class="badge badge-primary align-text-bottom ml-2">{{page.upcoming_competitions|length}}</span></small></h5>
             <dl class="row">
             {% for competition in page.upcoming_competitions|slice(0, 5) %}
               <dd class="col-sm-4 text-sm-right align-baseline"><small class="text-muted">{{competition.calendar.startTime|localizeddate('medium','none')}}</small></dd>
-              <dd class="col-sm-8"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-top">{{competition.organization}}</small></a></dd>
+              <dd class="col-sm-8"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-bottom">{{competition.organization}}</small></a></dd>
             {% else %}
               <p>Geen komende wedstrijden gevonden.</p>
             {% endfor%}
@@ -41,11 +41,11 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-primary">Nieuwe wedstrijden<small><span class="badge badge-primary align-text-top ml-2">{{page.new_competitions|length}}</span></small></h5>
+            <h5 class="card-title text-primary">Nieuwe wedstrijden<small><span class="badge badge-primary align-text-bottom ml-2">{{page.new_competitions|length}}</span></small></h5>
             <dl class="row">
             {% for competition in page.new_competitions|slice(0, 5) %}
               <dd class="col-sm-4 text-sm-right align-baseline"><small class="text-muted">{{competition.calendar.startTime|localizeddate('medium','none')}}</small></dd>
-              <dd class="col-sm-8"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-top">{{competition.organization}}</small></a></dd>
+              <dd class="col-sm-8"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-bottom">{{competition.organization}}</small></a></dd>
             {% else %}
               <p>Geen nieuwe wedstrijden gevonden.</p>
             {% endfor%}
@@ -60,7 +60,7 @@
           <div class="card-body">
             <h5 class="card-title text-primary d-flex">Leden <small><span class="badge badge-primary ml-2">{{app.user.getEnabledMembers()|length}}</span></small></h5>
             {% for member in app.user.getEnabledMembers() %}
-            <p class="card-text">{{member}}{%if member.team%} | {{member.team.name}}{%endif%} {%for tag in member.grouping%}<span class="badge badge-secondary small ml-1 align-text-top">{{tag.name}}</span>{%endfor%}<br><span class="text-muted small">Lidnr. {{member.memberId}} {%if member.registrationId%}| Licentienr. {{member.registrationId}}{%endif%}</span></p>
+            <p class="card-text">{{member}}{%if member.team%} | {{member.team.name}}{%endif%} {%for tag in member.grouping%}<span class="badge badge-secondary small ml-1 align-text-bottom">{{tag.name}}</span>{%endfor%}<br><span class="text-muted small">Lidnr. {{member.memberId}} {%if member.registrationId%}| Licentienr. {{member.registrationId}}{%endif%}</span></p>
             {% endfor %}
             <a href="{{path('membership_preferences')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Voorkeuren</a>
           </div>
