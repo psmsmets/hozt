@@ -19,11 +19,11 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-primary d-flex">Komende wedstrijden <small><span class="badge badge-primary ml-2">{{page.upcoming_competitions|length}}</span></small></h5>
+            <h5 class="card-title text-primary">Komende wedstrijden<small><span class="badge align-text-bottom badge-primary ml-2">{{page.upcoming_competitions|length}}</span></small></h5>
             <dl class="row">
             {% for competition in page.upcoming_competitions|slice(0, 5) %}
               <dd class="col-sm-4 text-sm-right align-baseline"><small class="text-muted">{{competition.calendar.startTime|localizeddate('medium','none')}}</small></dd>
-              <dd class="col-sm-8"><a href="{{ path('sportadmin_competition', {'id': competition.id}) }}" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-top">{{competition.organization}}</small></a></dd>
+              <dd class="col-sm-8"><a href="{{ path('sportadmin_competition', {'id': competition.id}) }}" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-bottom">{{competition.organization}}</small></a></dd>
             {% else %}
               <p>Geen komende wedstrijden gevonden.</p>
             {% endfor%}
@@ -36,11 +36,11 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-primary d-flex">Groepen <small><span class="badge badge-primary ml-2">{{page.teams|length}}</span></small></h5>
+            <h5 class="card-title text-primary">Groepen<small><span class="badge align-text-bottom badge-primary ml-2">{{page.teams|length}}</span></small></h5>
             <dl class="row">
             {% for team in page.teams %}
-              <dd class="col-3 text-right align-baseline"><small class="text-muted">{{team.abbr}}</small></dd>
-              <dd class="col-9"><a href="{{ path('sportadmin_training_team',{'abbr': team.abbr}) }}" class="text-dark">{{team.name}}<small class="badge badge-medium align-text-top ml-2">{{team.members|length}}</small></a></dd>
+              <dd class="col-2 text-right align-baseline pr-2"><small class="text-muted">{{team.abbr}}</small></dd>
+              <dd class="col-10 pl-2"><small class="badge badge-medium align-text-bottom mr-2" style="width:1.5rem">{{team.members|length}}</small><a href="{{ path('sportadmin_training_team',{'abbr': team.abbr}) }}" class="text-dark">{{team.name}}</a></dd>
             {% else %}
               <p>Geen groepen gevonden.</p>
             {% endfor%}

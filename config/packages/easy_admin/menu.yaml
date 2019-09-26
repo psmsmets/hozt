@@ -31,7 +31,7 @@ easy_admin:
                - { entity: 'Member', label: 'Lijst actieve leden', icon: 'list' }
                - { entity: 'MemberInactive', label: 'Lijst inactieve leden', icon: 'list' }
                #- { entity: 'MemberAddress', label: 'Addressen', icon: 'address-book' }
-               - { entity: 'MemberGrouping', label: 'Groepen', icon: 'bookmark' }
+               - { entity: 'MemberGrouping', label: 'Groepen', icon: 'bookmark', permission: 'ROLE_SUPER_ADMIN' }
            - label: "Training & Wedstrijden"
            - label: 'Trainingen'
              icon: 'tasks'

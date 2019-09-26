@@ -55,10 +55,11 @@ security:
          - { path: ^/beheer, roles: ROLE_ADMIN } #should become admin, add super_admin restrictions in backend
          - { path: ^/mijn-account, roles: ROLE_USER }
          - { path: ^/api/private, roles: ROLE_USER }
-         - { path: ^/sportsecretariaat, roles: ROLE_ADMIN }
+         - { path: ^/sportsecretariaat, roles: ROLE_MANAGER }
 
     role_hierarchy:
+      ROLE_BOARD:        ROLE_USER
       ROLE_COACH:        ROLE_USER
-      ROLE_BOARD:        ROLE_BOARD
-      ROLE_ADMIN:        ROLE_USER
-      ROLE_SUPER_ADMIN:   [ROLE_ADMIN,ROLE_BOARD,ROLE_COACH]
+      ROLE_MANAGER:      ROLE_USER
+      ROLE_ADMIN:        ROLE_MANAGER
+      ROLE_SUPER_ADMIN:  [ROLE_ADMIN,ROLE_BOARD,ROLE_COACH]

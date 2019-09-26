@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\TrainingSchedule;
 use App\Entity\TrainingTeam;
 use App\Entity\TrainingTeamCategory;
@@ -25,7 +26,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     // /**
     //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
     //  */
-    public function findAllJoinedToTeam(int $days=28, \DateTime $reftime=null)
+    public function findAllJoinedToTeam(int $days=28, \DateTimeInterface $reftime=null)
     {
         if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
@@ -44,11 +45,39 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         ;     
     }
 
+    // /**
+    //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
+    //  */
+    public function findAllByUserForPeriod(User $user, \DateTimeInterface $reftime=null, int $days=7 )
+    {
+        return $this->createQueryBuilder('schedule')
+            ->innerJoin('schedule.teams', 'teams')
+            ->innerJoin('teams.members', 'members')
+            ->innerJoin('members.user', 'user')
+            ->innerJoin('schedule.time', 'time')
+            ->leftJoin('schedule.exceptions', 'exception')
+            ->leftJoin('exception.teams', 'ex_teams')
+            ->addSelect('teams')
+            ->addSelect('members')
+            ->addSelect('time')
+            ->addSelect('exception')
+            ->addSelect('ex_teams')
+            ->andWhere('schedule.startDate <= :start')
+            ->andWhere('(schedule.endDate >= :end or schedule.endDate is null)')
+            ->andWhere('user = :user')
+            ->setParameter('start', $reftime)
+            ->setParameter('end', $reftime->modify(sprintf("+%d days", $days)))
+            ->setParameter('user', $user)
+            ->orderBy('time.startTime, time.duration, teams.abbr', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;     
+    }
 
     // /**
     //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
     //  */
-    public function findAllOnDate(\DateTime $reftime=null)
+    public function findAllOnDate(\DateTimeInterface $reftime=null)
     {
         if (is_null($reftime)) $reftime = new \DateTime('today midnight');
 
@@ -72,7 +101,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         ;     
     }
 
-    public function findAllByTeamJoinedToTeam(string $team_abbr, \DateTime $reftime=null)
+    public function findAllByTeamJoinedToTeam(string $team_abbr, \DateTimeInterface $reftime=null)
     {
         if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
@@ -91,7 +120,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         ;     
     }
 
-    public function findAllByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28, \DateTime $reftime=null)
+    public function findAllByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28, \DateTimeInterface $reftime=null)
     {
         if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
@@ -110,7 +139,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         ;     
     }
 
-    public function countPersistentByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28, \DateTime $reftime=null)
+    public function countPersistentByTeamCategory(TrainingTeamCategory $teamCategory, int $days=28, \DateTimeInterface $reftime=null)
     {
         if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
@@ -130,7 +159,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->getSingleScalarResult()
         ;     
     }
-    public function countPersistent(int $days=28, \DateTime $reftime=null)
+    public function countPersistent(int $days=28, \DateTimeInterface $reftime=null)
     {
         if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
@@ -147,7 +176,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         ;     
     }
 
-    public function findAllPersistent(int $days=28, \DateTime $reftime=null)
+    public function findAllPersistent(int $days=28, \DateTimeInterface $reftime=null)
     {
         if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
@@ -163,7 +192,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
         ;     
     }
 
-    public function findAllJoinedToTeams(\DateTime $reftime=null)
+    public function findAllJoinedToTeams(\DateTimeInterface $reftime=null)
     {
         if (is_null($reftime)) $reftime = new \DateTime('today midnight');
 
