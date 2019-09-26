@@ -24,8 +24,9 @@ function loadCompetitionEnrolments(id) {
                     $(td).html( statusNull );
                 }
             });
-            $('#competition-enrolments-error').addClass('d-none');
         }
+    }).fail(function() {
+        $('#competition-enrolments-error').removeClass('d-none');
     });
 }
 
