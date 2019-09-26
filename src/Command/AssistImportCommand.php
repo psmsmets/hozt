@@ -11,10 +11,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
-class AssistImportMemberCommand extends Command
+class AssistImportCommand extends Command
 {
     // the name of the command (the part after "bin/console")
-    protected static $defaultName = 'app:assist:import-member';
+    protected static $defaultName = 'app:assist:import';
     private $memberManager;
     private $competitionManager;
     private $em;
@@ -47,13 +47,15 @@ Dates are formatted dd/mm/yyyy (format d/m/Y).
 CSV lines are processed by php fgetcsv with default parameters (comma separated: \",\", '\"' , '\"').
 No escaping is required converting the .xls to .csv.
 
+By default no data is persisted to the database.
+
 "
             )
 
             ->addArgument('csv_file', InputArgument::REQUIRED, 'An escaped csv memberlist by Assists')
             ->addOption('skip', 's', InputOption::VALUE_OPTIONAL, 'Number of header lines to skip.', 1 )
-            ->addOption('test', 't', InputOption::VALUE_NONE, 'Test without persisting members.' )
-            ->addOption('debug', 'd', InputOption::VALUE_NONE, 'Print feedback.' )
+            ->addOption('persist', 'p', InputOption::VALUE_NONE, 'Persist and update members, disables test run.' )
+            ->addOption('debug', 'd', InputOption::VALUE_NONE, 'Output csv lines to stdout.' )
     ;
     }
 
@@ -61,8 +63,9 @@ No escaping is required converting the .xls to .csv.
     {
         // outputs multiple lines to the console (adding "\n" at the end of each line)
         $output->writeln([
-            'Assist Member Import',
-            '====================',
+            '========================',
+            'Assist :: Import Members',
+            '========================',
             '',
         ]);
 
@@ -70,8 +73,11 @@ No escaping is required converting the .xls to .csv.
         $new = 0;
         $upd = 0;
 
-        $persist = ! $input->getOption('test');
+        $persist = $input->getOption('persist');
         $debug = $input->getOption('debug');
+
+        
+        $output->writeln(sprintf("Persist = %s\n", $persist ? 'true' : 'false (test mode)'));
 
         // Open the file for reading
         if ( ($h = fopen($input->getArgument('csv_file'), "r")) !== false ) 
@@ -96,7 +102,7 @@ No escaping is required converting the .xls to .csv.
                 $email = $data[14];
                 $birthdate = \DateTime::createFromFormat('d/m/Y',$data[17]);
                 $gender = strtoupper(substr($data[19],0,1)) === 'M' ? 'M' : 'F';
-                $registrationId = $data[31];
+                $registrationId = $this->memberManager->isValidRegistrationId($data[31]) ? $data[31] : null;
 
                 if ($memberId === 0) continue;
 
@@ -108,11 +114,15 @@ No escaping is required converting the .xls to .csv.
                         $member->getId(),
                         $member->getMemberId()
                     ));
-                    if ($member->getRegistrationId() !== $registrationId ) {
-                        $upd++;
-                        $member->setRegistrationId();
-                        $this->competitionManager->verifyMemberEnrolments($member);
+                    if ($member->getRegistrationId() !== $registrationId)
+                    {
+                        if ($persist)
+                        {
+                            $member->setRegistrationId($registrationId);
+                            $this->competitionManager->verifyMemberEnrolments($member);
+                        }
                         $output->write(sprintf(' registrationId updated to %s.', $registrationId));
+                        $upd++;
                     }
                     $output->writeln('');
 

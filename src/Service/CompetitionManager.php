@@ -187,6 +187,8 @@ class CompetitionManager
         $add=0; $upd=0;
 
         $team = $member->getTeam();
+        if (is_null($team)) return false;
+
         $enrolled = $team->getDefaultEnrolled();
 
         foreach ($this->competitionEnrolmentRepository->findUpcomingMemberCompetitionEnrolmentsNotTeam($member,$team) as $enrolment)

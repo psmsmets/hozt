@@ -88,7 +88,7 @@
       "js": [
         "/assets/build/runtime.4a5782fa.js",
         "/assets/build/0.042ee23b.js",
-        "/assets/build/sportadmin_competition.e2d1b13f.js"
+        "/assets/build/sportadmin_competition.8bfdf924.js"
       ]
     },
     "sportadmin_competitions": {
@@ -148,7 +148,7 @@
     "/assets/build/hozt.11c85629.css": "sha384-JlqRJKu64BdGKHDe6icS3B8s7oXUEvydxcyBb3OwG+2KjH9JE8t+jzQiFrFfYbMl",
     "/assets/build/membership_competitions.ae72f1df.js": "sha384-jB7ux06mAg7PL+5i7PQSM+WZycBpJWk5wHeFDzMvW702MRO4Jn+hrhA4x0ePJOcs",
     "/assets/build/membership_preferences.1e827a99.js": "sha384-LNVzsZrm7Nj+oj+L2hp5NyufNa9PfNDUoI04lB045iifAGiRoLurItqvceLkik+i",
-    "/assets/build/sportadmin_competition.e2d1b13f.js": "sha384-W51PhZb7+DK5act24rQHnrxCfaz0CfEtQDK36B5PE6anP+6Mh64WnT3xp5uBCpqJ",
+    "/assets/build/sportadmin_competition.8bfdf924.js": "sha384-P9I6c3XfbpFSr+e8uobP1j3c3uwc1k+5aUeM0qFuWIuY4qYv/QEZFjfsedTgKdF1",
     "/assets/build/sportadmin_competitions.c257cd4a.js": "sha384-JxPg1lX7odmnZDRtxohWW++f7mnYqQ2Td5KRO8fJCVRlEMXMdKPbTxmj7imqloQb",
     "/assets/build/easy_admin.d7209129.css": "sha384-1gQo4bGGOE8Ko2wLX5FbCcoc5xHCMDWofgakj3dimHH6Ejj3PbmkpCKMV69VJCmD",
     "/assets/build/security.88163478.css": "sha384-mv76uPlVHTn8eslj3d4HaSG2hRCFB0rYoYSGGVddkhbE/DbNR57AH/JSaF2Kf+5z",

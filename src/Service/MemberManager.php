@@ -56,6 +56,11 @@ class MemberManager
         return $this->memberRepository->findBySpecs($firstname,$lastname,$gender,$birthdate);
     }
 
+    public function isValidRegistrationId($registrationId): bool
+    {
+        return preg_match(Member::registrationIdRegex, $registrationId);
+    }
+
     public function createAddress(string $street, string $zip, string $town, string $nation, User $user=null): MemberAddress
     {
         $address = new MemberAddress($user);
