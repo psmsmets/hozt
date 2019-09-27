@@ -30,17 +30,17 @@
         <div class="tab-content" id="schedule-tabContent">
 
           <div class="tab-pane fade show active" id="this-week" role="tabpanel" aria-labelledby="schedule-this-week-tab">
-            <h5>{{page.this_week_mon|localizeddate('long','none')}} - {{page.this_week_sun|localizeddate('long','none')}}</h5>
+            <h5><span class="text-muted mr-2 mr-md-3">Week #{{page.this_week_mon|date('W')}}</span>{{page.this_week_mon|localizeddate('long','none')}} - {{page.this_week_sun|localizeddate('long','none')}}</h5>
             {% include 'membership/schedule_week.html.twig' with {'week_schedule': page.schedule_this_week } %}
           </div>
 
           <div class="tab-pane fade" id="next-week" role="tabpanel" aria-labelledby="schedule-next-week-tab">
-            <h5>{{page.next_week_mon|localizeddate('long','none')}} - {{page.next_week_sun|localizeddate('long','none')}}</h5>
+            <h5><span class="text-muted mr-2 mr-md-3">Week #{{page.next_week_mon|date('W')}}</span>{{page.next_week_mon|localizeddate('long','none')}} - {{page.next_week_sun|localizeddate('long','none')}}</h5>
             {% include 'membership/schedule_week.html.twig' with {'week_schedule': page.schedule_next_week } %}
           </div>
 
           <div class="tab-pane fade" id="two-weeks" role="tabpanel" aria-labelledby="schedule-next-week-tab">
-            <h5>{{page.two_weeks_mon|localizeddate('long','none')}} - {{page.two_weeks_sun|localizeddate('long','none')}}</h5>
+            <h5><span class="text-muted mr-2 mr-md-3">Week #{{page.two_weeks_mon|date('W')}}</span>{{page.two_weeks_mon|localizeddate('long','none')}} - {{page.two_weeks_sun|localizeddate('long','none')}}</h5>
             {% include 'membership/schedule_week.html.twig' with {'week_schedule': page.schedule_two_weeks } %}
           </div>
 

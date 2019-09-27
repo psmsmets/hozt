@@ -3,12 +3,12 @@
    {% set schedules = week_schedule|filter(s => s.dayNumber == day) %}
    {% if schedules is not empty %}
 
-   <dl class="row mb-md-2"> 
+   <dl class="row mb-md-2 {%if loop.first%}mt-3{%endif%}"> 
      {% for schedule in schedules %}
      <dt class="col-12 col-sm-2 col-lg-3 text-md-right mb-1">{% if loop.index0 == 0%}{{schedule.dayName|trans()}}{% endif %}</dt>
       <dd class="col-5 col-sm-3 col-lg-2 p-0 text-right mb-1">{{schedule.time}}</dd>
       <dd class="col-7 col-sm-7 mb-1">
-        {% for team in schedule.getTeams %}{% for member in team.getMembers%}<span class="mr-2">{{member.firstname}}</span>{%endfor%}{% endfor %}
+        {% for team in schedule.getTeams %}<span class="mr-2 mr-md-3"><span class="badge badge-secondary align-text-bottom">{{team.abbr}}</span> {% for member in team.getMembers%}{{member.firstname}}{%endfor%}</span><br class="d-inline d-md-none"/>{% endfor %}
         {% if schedule.comment %}<span class="badge badge-info ml-md-1"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
         {% if schedule.description %}
           <span class="badge badge-light text-muted float-md-right mt-md-2"><i class="fas fa-comment"></i> {{schedule.description}}</span>
