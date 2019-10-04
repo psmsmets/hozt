@@ -56,7 +56,7 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
 
     public function findOneBySlugJoinedToTeamsCoachesSchedule($slug)
     {
-        $reftime = new \DateTime('today');
+        $reftime = new \DateTimeImmutable('today');
 
         return $this->createQueryBuilder('category')
             ->innerJoin('category.teams', 'teams')
@@ -122,7 +122,7 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('enabled', true)
             ->setParameter('now', $reftime)
-            ->setParameter('start', $reftime->modify('+'.$days.' days'))
+            ->setParameter('start', $reftime->modify(sprintf('+%d days', $days)))
             ->orderBy('category.sequence, teams.abbr, schedule.dayNumber, time.startTime', 'ASC')
             ->getQuery()
             ->getResult();
@@ -146,7 +146,7 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
 
     public function findAllWithPersistentTraining(int $days=28)
     {
-        $reftime = new \DateTime('today');
+        $reftime = new \DateTimeImmutable('today');
 
         return $this->createQueryBuilder('cat')
             ->innerJoin('cat.teams', 'teams')
@@ -159,7 +159,7 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('persistent', true)
             ->setParameter('now', $reftime)
-            ->setParameter('start', $reftime->modify('+'.$days.' days'))
+            ->setParameter('start', $reftime->modify(sprintf('+%d days', $days)))
             ->getQuery()
             ->getResult()
         ;     
@@ -177,7 +177,7 @@ class TrainingTeamCategoryRepository extends ServiceEntityRepository
             ->andWhere('exceptions.startDate <= :start')
             ->andWhere('exceptions.endDate >= :now')
             ->setParameter('now', $reftime)
-            ->setParameter('start', $reftime->modify('+'.$days.' days'))
+            ->setParameter('start', $reftime->modify(sprintf('+%d days', $days)))
             ->getQuery()
             ->getResult()
         ;     

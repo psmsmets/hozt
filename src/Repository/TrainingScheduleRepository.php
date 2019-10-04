@@ -38,7 +38,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('schedule.startDate <= :start')
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('now', $reftime)
-            ->setParameter('start', $reftime->modify('+'.$days.' days'))
+            ->setParameter('start', (clone $reftime)->modify(sprintf('+%d days', $days)))
             ->orderBy('schedule.dayNumber, time.startTime, time.duration, teams.abbr', 'ASC')
             ->getQuery()
             ->getResult()
@@ -66,7 +66,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate >= :end or schedule.endDate is null)')
             ->andWhere('user = :user')
             ->setParameter('start', $reftime)
-            ->setParameter('end', $reftime->modify(sprintf("+%d days", $days)))
+            ->setParameter('end', (clone $reftime)->modify(sprintf('+%d days', $days)))
             ->setParameter('user', $user)
             ->orderBy('time.startTime, time.duration, teams.abbr', 'ASC')
             ->getQuery()
@@ -79,7 +79,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     //  */
     public function findAllOnDate(\DateTimeInterface $reftime=null)
     {
-        if (is_null($reftime)) $reftime = new \DateTime('today midnight');
+        if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
         return $this->createQueryBuilder('schedule')
             ->innerJoin('schedule.teams', 'teams')
@@ -153,7 +153,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('teamsCat = :teamCategory')
             ->setParameter('persistent', true)
             ->setParameter('now', $reftime)
-            ->setParameter('start', $reftime->modify('+'.$days.' days'))
+            ->setParameter('start', (clone $reftime)->modify(sprintf('+%d days', $days)))
             ->setParameter('teamCategory', $teamCategory)
             ->getQuery()
             ->getSingleScalarResult()
@@ -170,7 +170,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('persistent', true)
             ->setParameter('now', $reftime)
-            ->setParameter('start', $reftime->modify('+'.$days.' days'))
+            ->setParameter('start', (clone $reftime)->modify(sprintf('+%d days', $days)))
             ->getQuery()
             ->getSingleScalarResult()
         ;     
@@ -186,7 +186,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->andWhere('(schedule.endDate >= :now or schedule.endDate is null)')
             ->setParameter('persistent', true)
             ->setParameter('now', $reftime)
-            ->setParameter('start', $reftime->modify('+'.$days.' days'))
+            ->setParameter('start', (clone $reftime)->modify(sprintf('+%d days', $days)))
             ->getQuery()
             ->getResult()
         ;     
@@ -194,7 +194,7 @@ class TrainingScheduleRepository extends ServiceEntityRepository
 
     public function findAllJoinedToTeams(\DateTimeInterface $reftime=null)
     {
-        if (is_null($reftime)) $reftime = new \DateTime('today midnight');
+        if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
         return $this->createQueryBuilder('s')
             ->innerJoin('s.time', 'h')
