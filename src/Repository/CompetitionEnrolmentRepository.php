@@ -34,6 +34,7 @@ class CompetitionEnrolmentRepository extends ServiceEntityRepository
             ->addSelect('enrolments')
             ->addSelect('competitor')
             ->addSelect('competitionPart')
+            ->andWhere('event.cancelled = false')
             ->andWhere('( event.startTime >= :start and event.startTime < :end and (event.endTime < :end or event.endTime is null) )')
             ->andWhere('user = :user')
             ->setParameter('start', $periodStart)
