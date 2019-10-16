@@ -3,6 +3,7 @@
 {% set cookie = 'calendar_event_'~page.calendar_event.uuid %}
 {% set event = page.calendar_event %}
 {% set past  = date(event.trueEndTime) < date() %}
+{% set cancelled  = event.cancelled %}
 
 {% block title %}{{event.title|capitalize}}{% endblock %}
 
@@ -11,7 +12,7 @@
 
   <h4 class="m-3 ml-md-0"><i class="far fa-calendar-alt mr-1 mr-md-2"></i> Kalender <span class="text-muted"> / {{event.category}}</span></h4>
 
-  <div class="p-3 mb-4 {% if event.cancelled %}alert-danger{% else %}bg-white{% endif %} shadow-sm">
+  <div class="p-3 mb-4 {% if cancelled %}alert-danger{% else %}bg-white{% endif %} shadow-sm">
 
     <div class="media align-top pt-2 cal-{{event.category.sequence}}">
 
@@ -24,21 +25,25 @@
           {% if event.competition %}<small class="badge badge-medium align-text-bottom">{{event.competition.organization}}</small>{%endif%}
           </span>
           <small>
-            {% if event.cancelled %}<span class="badge badge-danger ml-1">Geannuleerd</span>{% endif %}
-            {% if cookie not in app.request.cookies|keys and event.startTime>date() %}<span class="badge badge-secondary ml-1">Nieuw</span>{% endif %}
+            {% if cancelled %}
+              <span class="badge badge-danger ml-1">Geannuleerd</span>
+            {% else %}
+              {% if cookie not in app.request.cookies|keys and event.startTime>date() %}<span class="badge badge-secondary ml-1">Nieuw</span>{% endif %}
+            {% endif%}
           </small>
         </h4>
 
         <h6 class="mb-3">{{event.getFormattedPeriod|lower}}</h6>
 
-        <ul class="list-unstyled {% if not event.cancelled %}text-muted{% endif %} cal-smaller font-weight-lighter">
-          {% if event.competition is empty %}
-            {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|ucwords}}</li>{% endif %}
-          {% else %}
+        <ul class="list-unstyled {% if not cancelled %}text-muted{% endif %} cal-smaller font-weight-lighter">
+        {% if event.competition is empty %}
+          {% if event.location %}<li class="mb-1"><i class="fas fa-map-marked-alt"></i> {{event.location|ucwords}}</li>{% endif %}
+        {% else %}
             <li class="mb-2"><i class="fas fa-swimming-pool"></i> {{event.competition.pool}}, {{event.location|ucwords}}</li>
             <li class="mb-2"><i class="fas fa-swimmer"></i>
               {% for team in event.competition.teams %}<span class="pr-1">{{team.abbr}}</span>{% endfor %}
             </li>
+          {% if not cancelled %}
             {% if event.competition.restrictions %}
               <li class="mb-2 text-danger"><i class="fas fa-exclamation-triangle"></i> limieten</li>
             {% endif %}
@@ -82,7 +87,8 @@
               </ul>
             <li class="mb-2"><i class="fas fa-edit"></i> Aan- en afmelden voor {{event.competition.enrolBefore|localizeddate('full','none')}}</li>
             {% endif %}
-          {% endif %}
+          {% endif%}
+        {% endif %}
         </ul>
 
         {% if event.body is not empty %}

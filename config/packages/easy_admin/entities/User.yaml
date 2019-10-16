@@ -25,6 +25,8 @@ easy_admin:
                 sort: ['id', 'ASC']
                 actions: ['show']
                 batch_actions: ['enable','disable','verify','reinvite']
+            search:
+                fields: ['firstname','lastname','email','mobilePhone']
             form:
                 fields:
                     - { property: 'firstname', label: 'Voornaam' }

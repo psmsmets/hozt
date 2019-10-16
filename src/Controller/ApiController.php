@@ -194,7 +194,7 @@ class ApiController extends AbstractController
 
     }
 
-    private function serialize_training_schedule(array $schedule, array $exceptions, \DateTime $refdate): array
+    private function serialize_training_schedule(array $schedule, array $exceptions, \DateTimeInterface $refdate): array
     {
         $data = array();
 
