@@ -52,17 +52,25 @@
                 </thead>
                 <tbody>
                 {% for competition in page.competitions %}
+                  {% set cancelled = competition.calendar.cancelled %}
                   {% set edit = competition.enrolbefore > date() %}
                   {% set past = competition.calendar.calcendtime < date() %}
                   {% set new  = competition.hasnewcompetitionenrolments(app.user) and edit %}
                   <tr class="competition{%if new%} competition-new{%endif%}{%if not edit%} competition-locked{%endif%}{%if past%} competition-past d-none{%endif%}">
                     <th scope="row" class="" colspan={{1+members|length}}>
                       <div class="row text-left w-100 p-0 m-0 align-items-center">
-                        <div class="col-lg-4 pl-0"><small class="text-muted"><i class="fas fa-edit"></i> voor {{competition.enrolBefore|localizeddate('medium','none')}}</small></div>
+                        <div class="col-lg-4 pl-0"><small class="text-muted">
+                          {% if cancelled %}
+                          <i class="fas fa-window-close"></i> geannuleerd
+                          {% else %}
+                          <i class="fas fa-edit"></i> voor {{competition.enrolBefore|localizeddate('medium','none')}}
+                          {% endif %}
+                        </small></div>
                         <div class="col-lg-8 text-lg-right px-0"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-primary">{{competition.calendar.title}} • {{competition.organization}} • {{competition.location}} <i class="fas fa-external-link-alt ml-2"></i></a></div>
                       </div>
                     </th>
                   </tr>
+                  {% if not cancelled %}
                   {% for cpart in competition.competitionParts %}
                   <tr class="competition {%if cpart.hasnewenrolments(app.user) and edit%}competition-new {%endif%}{%if past%}competition-past d-none {%endif%} {%if not edit%}text-muted competition-locked{%endif%}">
                     <td scope="row" class="text-right">{{cpart.daypart|localizeddate('full','none')}} | {{cpart.partname|trans}}</td>
@@ -71,6 +79,7 @@
                     {% endfor %}
                   </tr>
                   {% endfor %}
+                  {% endif %}
                 {% endfor %}
                 </tbody>
               </table>
