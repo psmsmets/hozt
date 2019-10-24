@@ -118,7 +118,7 @@ easy_admin:
                     - { property: 'name', label: 'Naam' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'help', label: 'Help' }
-                    - { property: 'value', label: 'Bedrag' }
+                    - { property: 'unitPrice', label: 'Eenheidsprijs' }
             new:
                 fields: ['-event.title','-category.name']
             edit:
