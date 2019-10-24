@@ -44,7 +44,11 @@
 
               {% if slide.event %}
 
+                {% if slide.event.enabledEnrolmentEvent %}
+                <a href="{{path('enrolment_event_uuid', { uuid: slide.event.uuid })}}" class="{{btn2}} mr-2"><i class="fas fa-check"></i> inschrijven</a>
+                {% else %}
                 <a href="{{ path('calendar_event', {'uuid': slide.event.uuid}) }}" class="{{btn1}} mr-2"><i class="far fa-calendar-alt"></i></a>
+                {% endif %}
 
                 {% set comp = slide.event.competition %}
 

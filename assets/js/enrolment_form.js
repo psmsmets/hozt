@@ -50,6 +50,7 @@ function getTotals() {
     });
 
     $('input#enrolment_form_totalPrice').val(totalPrice.toFixed(2).replace(".", ","));
+    $('input#enrolment_form_numberOfPersons').val(totalDefault);
 
     return {
         "default" : totalDefault,
@@ -71,14 +72,20 @@ function setMaxIncluded(totals) {
     });
 }
 
+function setDefaultRequired(totals) {
+    if (totals.default == 0) {
+      $('input.form-control[data-category-type="default"]').attr("required",true);
+    } else {
+      $('input.form-control[data-category-type="default"]').attr("required",false);
+    }
+}
+
 $('input.form-control[data-category-type]').each(function(){
     $(this).focusout(function(){
-        if ($(this).val() == ''){
-            return true;
-        }
         var totals = getTotals();
         if ($(this).data('category-type') !== 'supplement' ) {
             setMaxIncluded(totals);
         }
+        setDefaultRequired(totals);
     });
 });

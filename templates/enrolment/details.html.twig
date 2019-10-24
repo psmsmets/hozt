@@ -9,7 +9,8 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
       <li class="breadcrumb-item"><a href="{{path('enrolment_list')}}">Inschrijven</a></li>
-      <li class="breadcrumb-item active">{{enrolment.event.calendar.title}}</li>
+      <li class="breadcrumb-item"><a href="{{path('enrolment_event_uuid', { uuid: enrolment.event.uuid })}}">{{enrolment.event.calendar.title}}</a></li>
+      <li class="breadcrumb-item active">Inschrijving {{enrolment.name}}</li>
     </ol>
   </nav>
 
@@ -27,22 +28,24 @@
 
     <p>We verwachten je <strong>{{enrolment.time.startTime|localizeddate('full','short')}}</strong> in {{enrolment.event.calendar.location}}.</p>
 
-  {% if enrolment.event.inputs %}
-    {% set cat = enrolment.event.inputs.first.category %}
+  {% set inputs = enrolment.event.nonzeroinputs %}
+  {% if inputs or enrolment.event.times|length > 1 %}
     <div class="jumbotron py-4 font-weight-light">
     <h5 class="mb-3">Details van je inschrijving</h5>
 
-    {% if enrolment.event.times|length > 1%}
+  {% if enrolment.event.times|length > 1%}
     <h6>Tijdstip</h6>
     <ul style="list-style-type:none;">
       <li>{{enrolment.time|localizeddate('none','short')}} uur</li>
     </ul>
-    {% endif %}
+  {% endif %}
+  {% if inputs %}
+    {% set cat = inputs.first.category %}
     <h6>{{cat.name}}</h6>
     <ul style="list-style-type:none;">
 
-    {% for input in enrolment.event.inputs %}
-      {% if input.category != cat %}
+    {% for input in inputs %}
+      {% if input.category is not same as (cat) %}
         {% set cat = input.category %}
         </ul>
         <h6>{{cat.name}}</h6>
@@ -53,17 +56,18 @@
       {% endif %}
     {% endfor %}
     </ul>
-    {% if not enrolment.event.freeOfCharge %}
+  {% endif %}
+  {% if not enrolment.event.freeOfCharge %}
     <p>{% if enrolment.paid %}Totaal{%else%}Te betalen{%endif%} <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong>
     </p>
-    {% endif %}
+  {% endif %}
   </div>
   {% endif %}
 
   {% if not enrolment.event.freeOfCharge and enrolment.paid %}
     <p class="text-success"><i class="fas fa-thumbs-up"></i> Je betaling is voldaan.</p>
   {% elseif not enrolment.event.freeOfCharge and not enrolment.paid %}
-    <p><span class="text-danger">Je hebt nog niet betaald, of je betaling is nog niet verwerkt.</span><br>Heb je nog niet betaald? Gelieve dan <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong> over te schrijven op rekeningnummer {{org_bank}} met mededeling <strong>"{{enrolment.event.title}}"</strong>.<p>
+    <p><span class="text-danger">Je hebt nog niet betaald, of je betaling is nog niet verwerkt.</span><br>Heb je nog niet betaald? Gelieve dan <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong> over te schrijven op rekeningnummer {{org_bank}} met mededeling <strong>"{{enrolment.event.title}} - {{enrolment.name}}"</strong>.<p>
   {% endif %}
 
   {% if enrolment.message %}

@@ -632,4 +632,15 @@ class CalendarEvent
         return $this;
     }
 
+    public function hasEnrolmentEvent(): ?bool
+    {
+        return !is_null($this->enrolmentEvent);
+    }
+
+    public function hasEnabledEnrolmentEvent(): ?bool
+    {
+        if (!$this->hasEnrolmentEvent()) return false;
+        return $this->enrolmentEvent->isEnabled();
+    }
+
 }
