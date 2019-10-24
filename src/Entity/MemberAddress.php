@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Intl\Countries;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MemberAddressRepository")
@@ -66,9 +67,9 @@ class MemberAddress
         return $this->id;
     }
 
-    public function getNation(): ?string
+    public function getNation(bool $code = false): ?string
     {
-        return $this->nation;
+        return $code ? $this->nation : Countries::getName($this->nation);
     }
 
     public function setNation(string $nation): self

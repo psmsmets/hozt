@@ -1,0 +1,78 @@
+{% extends 'default.html.twig' %}
+
+{% set enrolment = page.enrolment %}
+
+{% block title %}Inschrijving - {{enrolment.event.calendar.title|ucfirst}}{% endblock %}
+
+{% block main %}
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
+      <li class="breadcrumb-item"><a href="{{path('enrolment_list')}}">Inschrijven</a></li>
+      <li class="breadcrumb-item active">{{enrolment.event.calendar.title}}</li>
+    </ol>
+  </nav>
+
+  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
+
+    <h1 class="text-primary">{{enrolment.event.calendar.title|ucfirst}}</h1>
+
+    <p class="font-weight-light mb-1"><i class="fas fa-calendar mr-3"></i>{{enrolment.time.startTime|localizeddate('full','short')|ucfirst}}</p>
+    <p class="font-weight-light mb-1"><i class="fas fa-map-marked-alt mr-2"></i> {{enrolment.event.calendar.location|ucwords}}</p>
+    <p class="font-weight-light mb-1"><i class="fas fa-info-circle mr-2"></i> Bekijk de <a href="{{ path('calendar_event', { uuid: enrolment.event.calendar.uuid } )}}">kalender</a></p>
+
+    <p class="mt-4 mt-lg-5">Hallo {{enrolment.name}}</p>
+
+    <p>Je hebt je ingeschreven voor de HoZT-activiteit "{{enrolment.event.title|ucfirst}}".</p>
+
+    <p>We verwachten je <strong>{{enrolment.time.startTime|localizeddate('full','short')}}</strong> in {{enrolment.event.calendar.location}}.</p>
+
+  {% if enrolment.event.inputs %}
+    {% set cat = enrolment.event.inputs.first.category %}
+    <div class="jumbotron py-4 font-weight-light">
+    <h5 class="mb-3">Details van je inschrijving</h5>
+
+    {% if enrolment.event.times|length > 1%}
+    <h6>Tijdstip</h6>
+    <ul style="list-style-type:none;">
+      <li>{{enrolment.time|localizeddate('none','short')}} uur</li>
+    </ul>
+    {% endif %}
+    <h6>{{cat.name}}</h6>
+    <ul style="list-style-type:none;">
+
+    {% for input in enrolment.event.inputs %}
+      {% if input.category != cat %}
+        {% set cat = input.category %}
+        </ul>
+        <h6>{{cat.name}}</h6>
+        <ul style="list-style-type:none;">
+      {% endif %}
+      {% if input.number > 0 %}
+        <li>{{input.number}} x {{input.name}}{% if input.unitPrice %} : € {{ (input.price)|number_format(2, ',', '.') }}{% endif %}</li>
+      {% endif %}
+    {% endfor %}
+    </ul>
+    {% if not enrolment.event.freeOfCharge %}
+    <p>{% if enrolment.paid %}Totaal{%else%}Te betalen{%endif%} <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong>
+    </p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if not enrolment.event.freeOfCharge and enrolment.paid %}
+    <p class="text-success"><i class="fas fa-thumbs-up"></i> Je betaling is voldaan.</p>
+  {% elseif not enrolment.event.freeOfCharge and not enrolment.paid %}
+    <p><span class="text-danger">Je hebt nog niet betaald, of je betaling is nog niet verwerkt.</span><br>Heb je nog niet betaald? Gelieve dan <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong> over te schrijven op rekeningnummer {{org_bank}} met mededeling <strong>"{{enrolment.event.title}}"</strong>.<p>
+  {% endif %}
+
+  {% if enrolment.message %}
+    <p class="mt-3 mt-lg-4"><b>Je bericht:</b><br>{{enrolment.message}}</p>
+  {% endif %}
+
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

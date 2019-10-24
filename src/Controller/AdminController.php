@@ -39,6 +39,12 @@ use App\Entity\Member;
 use App\Entity\MemberAddress;
 use App\Entity\MemberGrouping;
 
+use App\Entity\Enrolment;
+use App\Entity\EnrolmentEvent;
+use App\Entity\EnrolmentTime;
+use App\Entity\EnrolmentInput;
+use App\Entity\EnrolmentInputCategory;
+
 # repositories
 use App\Repository\TryoutEnrolmentRepository;
 use App\Repository\TryoutRepository;
@@ -62,6 +68,30 @@ class AdminController extends EasyAdminController
         $this->userManager = $userManager;
     }
 
+    protected function createCalendarEventListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null)
+    {
+        $reftime = new \DateTime('today');
+
+        /* @var EntityManager */
+        $em = $this->getDoctrine()->getManagerForClass($this->entity['class']);
+        /* @var DoctrineQueryBuilder */
+        $queryBuilder = $em->createQueryBuilder()
+            ->select('entity')
+            ->from($this->entity['class'], 'entity')
+            ->andWhere('( entity.endTime >= :reftime or (entity.startTime >= :reftime and entity.endTime is null) )')
+            ->setParameter('reftime',$reftime)
+            ;
+
+        if (!empty($dqlFilter)) {
+            $queryBuilder->andWhere($dqlFilter);
+        }
+
+        if (null !== $sortField) {
+            $queryBuilder->orderBy(strpos($sortField,'.') ? $sortField : 'entity.'.$sortField, $sortDirection ?: 'DESC');
+        }
+        return $queryBuilder;
+    }
+
     protected function createCompetitionListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null)
     {
         /* @var EntityManager */
@@ -71,6 +101,30 @@ class AdminController extends EasyAdminController
             ->select('entity')
             ->from($this->entity['class'], 'entity')
             ->innerJoin('entity.calendar','calendar')
+            ;
+
+        if (!empty($dqlFilter)) {
+            $queryBuilder->andWhere($dqlFilter);
+        }
+
+        if (null !== $sortField) {
+            $queryBuilder->orderBy(strpos($sortField,'.') ? $sortField : 'entity.'.$sortField, $sortDirection ?: 'DESC');
+        }
+        return $queryBuilder;
+    }
+
+    protected function createCompetitionPartActiveListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null)
+    {
+        $reftime = new \DateTime('today');
+
+        /* @var EntityManager */
+        $em = $this->getDoctrine()->getManagerForClass($this->entity['class']);
+        /* @var DoctrineQueryBuilder */
+        $queryBuilder = $em->createQueryBuilder()
+            ->select('entity')
+            ->from($this->entity['class'], 'entity')
+            ->andWhere('( entity.daypart >= :reftime )')
+            ->setParameter('reftime',$reftime)
             ;
 
         if (!empty($dqlFilter)) {
@@ -97,6 +151,8 @@ class AdminController extends EasyAdminController
             ->innerJoin('entity.competitor','competitor')
             ->innerJoin('competitionPart.competition','competition')
             ->innerJoin('competition.calendar','calendar')
+            ->andWhere('calendar.cancelled = false')
+            ->andWhere('calendar.startTime > :reftime')
             ->andWhere('competition.enrolBefore > :reftime')
             ->setParameter('reftime',$reftime)
             ;
@@ -604,6 +660,32 @@ class AdminController extends EasyAdminController
         parent::persistEntity($entity);
     }
 
+    public function updateEnrolmentEventEntity($enrolmentEvent)
+    {
+        if ($enrolmentEvent->isEnabled()) {
+            $this->addFlash('warning', 'Opgelet: event is actief en kan niet meer gedeactiveerd worden.');
+        }
+        parent::persistEntity($enrolmentEvent);
+    }
+
+    public function updateEnrolmentTimeEntity($enrolmentTime)
+    {
+        if ($enrolmentTime->isLocked()) {
+            $this->addFlash('warning', 'Opgelet: event is actief. Sommige data kan niet meer gewijzigd worden.');
+        }
+        parent::persistEntity($enrolmentTime);
+    }
+
+    public function updateEnrolmentInputEntity($enrolmentInput)
+    {
+        if ($enrolmentInput->isLocked()) {
+            $this->addFlash('warning', 'Opgelet: event is actief. Sommige data kan niet meer gewijzigd worden.');
+            //$this->em->clear('App\Entity\EnrolmentInput');
+            return;
+        }
+        parent::persistEntity($enrolmentInput);
+    }
+
     // General update
     public function updateEntity($entity)
     {
@@ -620,7 +702,7 @@ class AdminController extends EasyAdminController
             $this->addFlash('danger', 'Fout: Wedstrijd dagdeel heeft gerelateerde data. Verwijderen niet toegestaan.');
             return;
         }
-        parent::persistEntity($entity);
+        parent::removeEntity($entity);
     }
 
     public function removeCalendarEventEntity($entity)
@@ -633,7 +715,7 @@ class AdminController extends EasyAdminController
             $this->addFlash('danger', 'Fout: Kalender evenement heeft gerelateerde data. Verwijderen niet toegestaan.');
             return;
         }
-        parent::persistEntity($entity);
+        parent::removeEntity($entity);
     }
 
     public function removeTrainingScheduleEntity($entity)
@@ -666,7 +748,7 @@ class AdminController extends EasyAdminController
             $this->addFlash('danger', 'Fout: Training tijdstip heeft gerelateerde data. Verwijderen niet toegestaan.');
             return;
         }
-        parent::persistEntity($entity);
+        parent::removeEntity($entity);
     }
 
     public function removeTryoutEntity($entity)
@@ -677,6 +759,33 @@ class AdminController extends EasyAdminController
             return;
         }
         parent::removeEntity($entity);
+    }
+
+    public function removeEnrolmentTimeEntity($enrolmentTime)
+    {
+        if ($enrolmentTime->isLocked()) {
+            $this->addFlash('danger', 'Fout: event is geactiveerd. Verwijderen niet toegestaan.');
+            return;
+        }
+        parent::removeEntity($enrolmentTime);
+    }
+
+    public function removeEnrolmentInputEntity($enrolmentInput)
+    {
+        if ($enrolmentInput->isLocked()) {
+            $this->addFlash('danger', 'Fout: input is gerelateerd aan een actief event. Verwijderen niet toegestaan.');
+            return;
+        }
+        parent::removeEntity($enrolmentInput);
+    }
+
+    public function removeEnrolmentInputCategoryEntity($enrolmentInputCategory)
+    {
+        if ($enrolmentInputCategory->isLocked()) {
+            $this->addFlash('danger', 'Fout: input categorie is gerelateerd aan een actief event. Verwijderen niet toegestaan.');
+            return;
+        }
+        parent::removeEntity($enrolmentInputCategory);
     }
 
     public function disableBatchAction(array $ids)
@@ -775,6 +884,52 @@ class AdminController extends EasyAdminController
 
         $this->em->flush();
         $this->addFlash('info', sprintf('%d invitatie email(s) verzonden.', $cnt));
+    }
+
+    public function cancelPaymentBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        if ($class !== 'App\Entity\Enrolment') return;
+
+        $em = $this->getDoctrine()->getManagerForClass($class);
+
+        foreach ($ids as $id) {
+            $enrolment = $em->find($class,$id);
+            $enrolment->setPaid(false);
+        }
+
+        $this->em->flush();
+    }
+
+    public function completePaymentBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        if ($class !== 'App\Entity\Enrolment') return;
+
+        $em = $this->getDoctrine()->getManagerForClass($class);
+
+        foreach ($ids as $id) {
+            $enrolment = $em->find($class,$id);
+            $enrolment->setPaid(true);
+        }
+
+        $this->em->flush();
+    }
+
+    public function cancelEnrolmentBatchAction(array $ids)
+    {
+        $class = $this->entity['class'];
+        if ($class !== 'App\Entity\Enrolment') return;
+
+        $em = $this->getDoctrine()->getManagerForClass($class);
+
+        foreach ($ids as $id) {
+            $enrolment = $em->find($class,$id);
+            $enrolment->clearInputData();
+        }
+
+        $this->em->remove($enrolment);
+        $this->em->flush();
     }
 
 /*

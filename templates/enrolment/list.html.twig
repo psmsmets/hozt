@@ -1,0 +1,54 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}Inschrijven{% endblock %}
+
+{% block main %}
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
+      <li class="breadcrumb-item active" aria-current="page">Inschrijven</li>
+    </ol>
+  </nav>
+
+  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
+
+    <h1 class="text-primary d-flex justify-content-between">Inschrijven</h1>
+    <p class="lead">Schrijf je in op een HoZT-activiteit</p>
+
+    {% for event in page.events %}
+      {% set enrol = date() < event.enrolBefore %}
+      <div class="list-group-item pl-0 pl-md-3 pr-0 pr-md-3 mb-3 align-items-center">
+        <h4 class="d-flex justify-content-between">{{ event.title }}
+          <small>
+            {% if event.freeOfCharge %}<span class="badge badge-medium">gratis</span>{% endif %}
+            {% if not event.guestAccess %}<span class="badge badge-secondary ml-2"><i class="fas fa-user-lock"></i></span>{% endif %}
+          </small>
+        </h4>
+        <h6 class="d-flex justify-content-between">{{ event.calendar.startTime|localizeddate('full','none') }} om {% for time in event.times %}{%if loop.index > 1 %}{% if loop.last %} en {% else %}, {% endif %}{% endif%}{{ time.startTime|localizeddate('none','short') }}{% endfor %}
+          <span class="pl-1 text-right">
+          {% if enrol %}
+            <small>inschrijven tot {{ event.enrolBefore|localizeddate('medium','short')}}</small>
+          {% else %}
+            <small class="text-muted">inschrijven gesloten</small>
+          {% endif %}
+          </span>
+        </h6>
+        <div class="mt-3">
+          {% if enrol %}
+          <a class="btn btn-primary" href="{{ path('enrolment_event_uuid', { 'uuid': event.calendar.uuid }) }}"><i class="fas fa-check"></i> Inschrijven</a>
+          {% else %}
+          <button class="btn btn-primary" disabled><i class="fas fa-check"></i> Inschrijven</button>
+          {% endif %}
+          <a class="btn btn-medium ml-2" href="{{ path('calendar_event', { 'uuid': event.calendar.uuid }) }}"><i class="fas fa-calendar-day"></i> Info</a>
+          {% if is_granted('ROLE_MANAGER') %}
+          <a class="btn btn-medium ml-2" href="{{ path('enrolment_enrolled', { 'uuid': event.calendar.uuid }) }}"><i class="fas fa-list-ol"></i> Inschrijvingen</a>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <p class="lead">Geen inschrijvingen gevonden.</p>
+    {% endfor %}
+
+
+  </div>
+{% endblock %}

@@ -95,7 +95,7 @@ class Tryout
         $this->publishAt = new \DateTime("tomorrow midnight");
         $this->enrolFrom = $this->publishAt; 
         $this->startTime = new \DateTime("today noon + 14 days"); 
-        $this->duration = new \DateInterval("+P00Y00M00DT01H00M00S"); 
+        $this->duration = new \DateInterval("PT1H"); 
         $this->nofEnrolments = 0;
         $this->maxEnrolments = 12;
         $this->enabled = true;

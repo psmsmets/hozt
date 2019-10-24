@@ -14,7 +14,7 @@
 <p><b>Je bericht:</b><br>{{enrol.message}}</p>
 {% endif %}
 
-<p>We verwachten je {{event.getFormattedPeriod()}} in {{event.location}}.</p>
+<p>We verwachten je {{event.getFormattedPeriod()}} in {{event.calendar.location}}.</p>
 
 <p>Alle info over het {{event.title|ucfirst}} kan je terug vinden op <a href="https://www.hozt.be{{ path('calendar_event', {'uuid': event.uuid}) }}">HoZT.be{{ path('calendar_event', {'uuid': event.uuid}) }}</a></p>
 

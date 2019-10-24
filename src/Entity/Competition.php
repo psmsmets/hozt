@@ -35,7 +35,7 @@ class Competition
     private $updatedAt;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\CalendarEvent", inversedBy="competition", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\CalendarEvent", inversedBy="competition")
      * @ORM\JoinColumn(nullable=false)
      */
     private $calendar;

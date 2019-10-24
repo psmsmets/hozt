@@ -154,7 +154,7 @@ easy_admin:
                     - { property: 'competition.organization', label: 'Org.', type: 'text' }
                     - { property: 'daypart', label: 'Datum', template: 'easy_admin/localizeddate_full.html.twig' }
                     - { property: 'partname', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
-                    - { property: 'cancelled', label: 'Geannul.', type: 'boolean' }
+                    #- { property: 'cancelled', label: 'Geannul.', type: 'boolean' }
                     - { property: 'enrolments', label: 'Inschrijvingen' }
                 sort: ['daypart', 'ASC']
                 dql_filter: 'entity.archived = false AND entity.enabledAt is not null'
@@ -163,7 +163,7 @@ easy_admin:
 
         CompetitionEnrolments:
             class: App\Entity\CompetitionEnrolment
-            label: 'Inschrijvingen'
+            label: 'Inschrijvingen met limieten'
             list:
                 fields:
                     - { property: 'competitionPart.competition.name', label: 'Wedstrijd', type: 'text' }
@@ -176,8 +176,8 @@ easy_admin:
                     - { property: 'isEnrolled', label: 'Ingeschreven', type: 'boolean' }
                     - { property: 'enrolledAt', label: 'Op' }
                 sort: ['competitionPart.daypart', 'ASC']
-                dql_filter: 'entity.filtered = true'
-                #dql_filter: 'entity.filtered = true AND entity.restrictions = true'
+                #dql_filter: 'entity.filtered = true'
+                dql_filter: 'entity.filtered = true AND entity.restrictions = true'
                 actions: ['-new','-edit','-delete']
                 batch_actions: ['qualified','unqualified']
                 max_results: 50

@@ -136,6 +136,11 @@ class User implements UserInterface
     private $plainPassword = null;
     private $emailChanged = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Enrolment", mappedBy="user")
+     */
+    private $enrolments;
+
     public function __construct(bool $verified=true)
     {
       $this->createdAt = new \DateTime("now");
@@ -149,6 +154,7 @@ class User implements UserInterface
       $this->blogPosts = new ArrayCollection();
       $this->members = new ArrayCollection();
       $this->memberAddresses = new ArrayCollection();
+      $this->enrolments = new ArrayCollection();
     }
 
     public function __toString(): ?string
@@ -565,6 +571,37 @@ class User implements UserInterface
     public function getDetails(): ?UserDetails
     {
         return $this->details;
+    }
+
+    /**
+     * @return Collection|Enrolment[]
+     */
+    public function getEnrolments(): Collection
+    {
+        return $this->enrolments;
+    }
+
+    public function addEnrolment(Enrolment $enrolment): self
+    {
+        if (!$this->enrolments->contains($enrolment)) {
+            $this->enrolments[] = $enrolment;
+            $enrolment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnrolment(Enrolment $enrolment): self
+    {
+        if ($this->enrolments->contains($enrolment)) {
+            $this->enrolments->removeElement($enrolment);
+            // set the owning side to null (unless already changed)
+            if ($enrolment->getUser() === $this) {
+                $enrolment->setUser(null);
+            }
+        }
+
+        return $this;
     }
 
 /*

@@ -12,6 +12,7 @@ use App\Entity\BlogCategory;
 use App\Entity\Tryout;
 use App\Entity\TryoutEnrolment;
 use App\Entity\MemberGrouping;
+use App\Entity\EnrolmentInput;
 
 use App\Repository\TryoutRepository;
 use App\Repository\TryoutEnrolmentRepository;
