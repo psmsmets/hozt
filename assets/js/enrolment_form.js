@@ -74,9 +74,9 @@ function setMaxIncluded(totals) {
 
 function setDefaultRequired(totals) {
     if (totals.default == 0) {
-      $('input.form-control[data-category-type="default"]').attr("required",true);
+      $('input.form-control[data-category-type="default"]').attr("min",1);
     } else {
-      $('input.form-control[data-category-type="default"]').attr("required",false);
+      $('input.form-control[data-category-type="default"]').attr("min",0);
     }
 }
 
