@@ -1038,7 +1038,7 @@ class PageController extends AbstractController
                         'text/html'
                     )
                 ;
-                $this->email_flash($this->mailer->send($message));
+                if (!$this->mailer->send($message)) $this->email_flash(false); // only notify if error
 
                 return $this->redirectToRoute('enrolment_details', array('uuid'=>$enrolment->getUuid()));
             }

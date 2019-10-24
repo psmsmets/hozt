@@ -222,6 +222,24 @@ class EnrolmentEvent
         return $this->inputs;
     }
 
+    public function getNonZeroInputs(): Collection
+    {
+        $inputs = $this->inputs->filter(function(EnrolmentInput $input){
+            return $input->getNumber() > 0;
+        });
+
+        $iterator = $inputs->getIterator();
+        $iterator->uasort(function (EnrolmentInput $a, EnrolmentInput $b) {
+            $ds = $a->getCategory()->getSequence() - $b->getCategory()->getSequence();
+
+            if ($ds > 0) return 1;
+            if ($ds < 0) return -1;
+            if ($ds == 0) return ($a->getId() > $b->getId()) ? 1 : -1;
+        });
+
+        return new ArrayCollection(iterator_to_array($iterator));
+    }
+
     public function addInput(EnrolmentInput $input): self
     {
         if ($this->enabled) return $this;

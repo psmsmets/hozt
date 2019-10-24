@@ -10,7 +10,7 @@ easy_admin:
     entities:
         Enrolments:
             class: App\Entity\Enrolment
-            label: 'Event : inschrijving'
+            label: 'Evenement : inschrijving'
             list:
                 fields:
                     - { property: 'name', label: 'Naam' }
@@ -19,6 +19,8 @@ easy_admin:
                     - { property: 'paid', label: 'Betaald', type: 'boolean' }
                     - { property: 'enrolledAt', label: 'Ingeschreven' }
                     - { property: 'event', label: 'Event' }
+                    - { property: 'user', label: 'Gebruiker' }
+                    - { property: 'uuid', label: 'Id', permission: 'ROLE_SUPER_ADMIN' }
                 sort: ['id', 'ASC']
                 actions: ['-new','-edit','-remove']
                 batch_actions: ['completePayment','cancelPayment','cancelEnrolment']
@@ -32,7 +34,7 @@ easy_admin:
                 actions: ['-new','delete']
         EnrolmentEvent:
             class: App\Entity\EnrolmentEvent
-            label: 'Enrolment : event'
+            label: 'Evenement : event'
             list:
                 fields:
                     - { property: 'enabled', label: 'Actief', type: 'boolean' }
@@ -66,7 +68,7 @@ easy_admin:
                 actions: ['delete']
         EnrolmentTime:
             class: App\Entity\EnrolmentTime
-            label: 'Inschrijving : tijdstip'
+            label: 'Evenement : tijdstip'
             list:
                 fields:
                     - { property: 'locked', label: 'Locked', type: 'boolean' }
@@ -97,7 +99,7 @@ easy_admin:
                 actions: ['delete']
         EnrolmentInput:
             class: App\Entity\EnrolmentInput
-            label: 'Inschrijving : input'
+            label: 'Evenement : input'
             list:
                 fields:
                     - { property: 'locked', label: 'Locked', type: 'boolean' }
@@ -126,7 +128,7 @@ easy_admin:
                 actions: ['delete']
         EnrolmentInputCategory:
             class: App\Entity\EnrolmentInputCategory
-            label: 'Inschrijving : input categorie'
+            label: 'Evenement : input categorie'
             list:
                 fields:
                     - { property: 'locked', label: 'Locked', type: 'boolean' }

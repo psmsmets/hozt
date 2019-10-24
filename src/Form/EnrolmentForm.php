@@ -89,13 +89,13 @@ class EnrolmentForm extends AbstractType
                 $formOptions = [
                     'label'    => $this->twig->render('enrolment/formatter/enrolmentInput_label.html.twig', ['enrolmentInput'=>$input]),
                     //'data' => 0,
-                    'required' => false,
+                    'required' => $category->isDefault(),
                     'mapped' => false,
                     'attr' => [
                         'placeholder' => $input->getNumber(),
                         'data-category-type' => $category->getTypeName(), 
                         'data-value' => $input->getUnitPrice(),
-                        'min' => 0,
+                        'min' =>  0,
                     ],
                 ];
                 if ($category->isIncluded()) $formOptions['attr']['max'] = 0;

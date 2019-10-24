@@ -10,13 +10,21 @@
 
 <p>We verwachten je <strong>{{enrolment.time.startTime|localizeddate('full','short')}}</strong> in {{enrolment.event.calendar.location}}.</p>
 
-{% if enrolment.event.inputs %}
+{% set inputs = enrolment.event.nonzeroinputs %}
+{% if inputs or enrolment.event.times|length > 1 %}
 <p>Details van je inschrijving:<p>
-{% set cat = enrolment.event.inputs.first.category %}
+{% if enrolment.event.times|length > 1%}
+  <div><strong>Tijdstip</strong></div>
+  <ul style="list-style-type:none;">
+    <li>{{enrolment.time|localizeddate('none','short')}} uur</li>
+  </ul>
+{% endif %}
+{% if inputs %}
+{% set cat = inputs.first.category %}
 <div><strong>{{cat.name}}</strong></div>
 <ul style="list-style-type:none;">
-  {% for input in enrolment.event.inputs %}
-    {% if input.category != cat %}
+  {% for input in inputs %}
+    {% if input.category is not same as (cat) %}
       {% set cat = input.category %}
       </ul>
       <div><strong>{{cat.name}}</strong></div>
@@ -28,10 +36,11 @@
   {% endfor %}
 </ul>
 {% endif %}
+{% endif %}
 
 {% if not enrolment.event.freeOfCharge %}
 <p>Het te betalen bedrag bedraagt <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong>.</p>
-<p>Gelieve <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong> over te schrijven op rekeningnummer {{org_bank}} met mededeling "{{enrolment.event.title}}".</p>
+<p>Gelieve <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong> over te schrijven op rekeningnummer {{org_bank}} met mededeling "{{enrolment.event.title}} - {{enrolment.name}}".</p>
 {% endif %}
 
 {% if enrolment.message %}
