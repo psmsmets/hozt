@@ -18,3 +18,6 @@ easy_admin:
                 - 'assets/build/easy_admin.css'
             js:
                 - 'bundles/easyadmin/bootstrap-all.js'
+        form_theme: # Both themes are for ckeditor integration
+            - "@EasyAdmin/form/bootstrap_4.html.twig"
+            - "@FOSCKEditor/Form/ckeditor_widget.html.twig"
