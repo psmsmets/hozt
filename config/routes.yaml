@@ -43,30 +43,26 @@ training_coaches:
     path: /trainers
     controller: App\Controller\PageController::training_coaches
 
-# enrol
-enrol_list:
+# enrolment
+enrolment_list:
     path: /inschrijven
-    controller: App\Controller\PageController::enrol_list
+    controller: App\Controller\PageController::enrolment_list
 
-enrol_clubfeest:
-    path: /clubfeest
-    controller: App\Controller\PageController:enrol_clubfeest
+enrolment_event_uuid:
+    path: /inschrijven/{uuid<^[a-zA-Z0-9]{16}$>}
+    controller: App\Controller\PageController::enrolment_event_uuid
 
-enroled_clubfeest:
-    path: /clubfeest/ingeschreven
-    controller: App\Controller\PageController:enroled_clubfeest
+enrolment_event_slug:
+    path: /inschrijven/{slug}
+    controller: App\Controller\PageController::enrolment_event_slug
 
-#enrol_item:
-#    path: /inschrijvingen/{slug}
-#    controller: App\Controller\PageController::enrol_item
+enrolment_details:
+    path: /inschrijving/{uuid<^[a-zA-Z0-9]{24}$>}
+    controller: App\Controller\PageController::enrolment_details
 
-#enrol_details:
-#    path: /inschrijvingen/{slug}/details
-#    controller: App\Controller\PageController::enrol_details
-
-#enrol_form:
-#    path: /inschrijvingen/{slug}/formulier
-#    controller: App\Controller\PageController::enrol_form
+enrolment_enrolled:
+    path: /ingeschrijvingen/{uuid<^[a-zA-Z0-9]{16}$>}
+    controller: App\Controller\PageController::enrolment_enrolled
 
 # contact
 contact_form:

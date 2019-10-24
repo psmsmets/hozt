@@ -1,0 +1,45 @@
+{# templates/emails/enrolment.html.twig #}
+
+{% include 'emails/_style.html.twig' %}
+
+<p class="text-hozt"><strong>Inschrijving HoZT {{enrolment.event.title}}</strong></p>
+
+<p>Hallo {{enrolment.name}},</p>
+
+<p>We hebben je inschrijving voor de HoZT-activiteit "{{enrolment.event.title|ucfirst}}" goed ontvangen.</p>
+
+<p>We verwachten je <strong>{{enrolment.time.startTime|localizeddate('full','short')}}</strong> in {{enrolment.event.calendar.location}}.</p>
+
+{% if enrolment.event.inputs %}
+<p>Details van je inschrijving:<p>
+{% set cat = enrolment.event.inputs.first.category %}
+<div><strong>{{cat.name}}</strong></div>
+<ul style="list-style-type:none;">
+  {% for input in enrolment.event.inputs %}
+    {% if input.category != cat %}
+      {% set cat = input.category %}
+      </ul>
+      <div><strong>{{cat.name}}</strong></div>
+      <ul style="list-style-type:none;">
+    {% endif %}
+    {% if input.number > 0 %}
+      <li>{{input.number}} x {{input.name}}{% if input.unitPrice %} : € {{ (input.price)|number_format(2, ',', '.') }}{% endif %}</li>
+    {% endif %}
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if not enrolment.event.freeOfCharge %}
+<p>Het te betalen bedrag bedraagt <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong>.</p>
+<p>Gelieve <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong> over te schrijven op rekeningnummer {{org_bank}} met mededeling "{{enrolment.event.title}}".</p>
+{% endif %}
+
+{% if enrolment.message %}
+<p><b>Je bericht:</b><br>{{enrolment.message}}</p>
+{% endif %}
+
+<p>De unieke id van je inschrijving is <i>{{enrolment.uuid}}</i>.<br>Je kan je inschrijving{%if not enrolment.event.freeOfCharge%} en de betaalstatus{% endif %} bekijken via <a href="{{ url('enrolment_details', {'uuid': enrolment.uuid}) }}">deze link</a>.</p>
+
+<p>Alle info over de HoZT-activiteit "{{enrolment.event.title|ucfirst}}" kan je terugvinden op de <a href="{{ url('calendar_event', {'uuid': enrolment.event.uuid}) }}">kalender</a></p>
+
+<p class="small text-muted">** Dit is een automatisch bericht van <a href="{{ url('enrolment_list') }}">HoZT.be{{ path('enrolment_list') }}</a> **</p>

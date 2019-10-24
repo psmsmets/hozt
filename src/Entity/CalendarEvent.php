@@ -125,7 +125,7 @@ class CalendarEvent
     private $url;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Competition", mappedBy="calendar", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Competition", mappedBy="calendar")
      */
     private $competition;
 
@@ -138,6 +138,11 @@ class CalendarEvent
      * @ORM\ManyToOne(targetEntity="App\Entity\StaticPage", inversedBy="calendar")
      */
     private $staticPage;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\EnrolmentEvent", mappedBy="calendar")
+     */
+    private $enrolmentEvent;
 
     public function __construct()
     {
@@ -605,6 +610,24 @@ class CalendarEvent
     public function setStaticPage(?StaticPage $staticPage): self
     {
         $this->staticPage = $staticPage;
+
+        return $this;
+    }
+
+    public function getEnrolmentEvent(): ?EnrolmentEvent
+    {
+        return $this->enrolmentEvent;
+    }
+
+    public function setEnrolmentEvent(?EnrolmentEvent $enrolmentEvent): self
+    {
+        $this->enrolmentEvent = $enrolmentEvent;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newCalendar = $enrolmentEvent === null ? null : $this;
+        if ($newCalendar !== $enrolmentEvent->getCalendar()) {
+            $enrolmentEvent->setCalendar($newCalendar);
+        }
 
         return $this;
     }

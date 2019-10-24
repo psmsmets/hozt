@@ -1,0 +1,149 @@
+# This file sets the configuration of the 'Category' entity.
+#
+# NOTE: this demo application splits the backend configuration into several
+# small files for educational purposes. In your application you can put the
+# entire backend configuration in just one file.
+#
+# The configuration options are explained in detail in the bundle documentation,
+# which is published at https://github.com/javiereguiluz/EasyAdminBundle
+easy_admin:
+    entities:
+        Enrolments:
+            class: App\Entity\Enrolment
+            label: 'Event : inschrijving'
+            list:
+                fields:
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'numberOfPersons', label: 'Personen' }
+                    - { property: 'totalPrice', label: 'Bedrag', template: 'easy_admin/currency.html.twig' }
+                    - { property: 'paid', label: 'Betaald', type: 'boolean' }
+                    - { property: 'enrolledAt', label: 'Ingeschreven' }
+                    - { property: 'event', label: 'Event' }
+                sort: ['id', 'ASC']
+                actions: ['-new','-edit','-remove']
+                batch_actions: ['completePayment','cancelPayment','cancelEnrolment']
+            search:
+                fields: ['name','event.calendar.title']
+            form:
+                fields:
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'paid', label: 'Betaald' }
+            edit:
+                actions: ['-new','delete']
+        EnrolmentEvent:
+            class: App\Entity\EnrolmentEvent
+            label: 'Enrolment : event'
+            list:
+                fields:
+                    - { property: 'enabled', label: 'Actief', type: 'boolean' }
+                    - { property: 'calendar', label: 'Event' }
+                    - { property: 'slug', label: 'Slug', type: 'text' }
+                    - { property: 'enrolBefore', label: 'Inschrijven tot' }
+                    - { property: 'totalNumberOfPersons', label: 'Personen' }
+                    - { property: 'totalPrice', label: 'Bedrag', template: 'easy_admin/currency.html.twig' }
+                    - { property: 'enrolments', label: 'Inschrijvingen' }
+                    - { property: 'freeOfCharge', label: 'Kosteloos', type: 'boolean' }
+                    - { property: 'guestAccess', label: 'Publiek', type: 'boolean' }
+                sort: ['calendar.startTime', 'ASC']
+                batch_actions: ['enable']
+            form:
+                fields:
+                    - { property: 'calendar', label: 'Kalender event', type_options: { required: true, query_builder: ['App\Repository\EasyAdminRepository','getPotentialEnrolmentEvents'] } }
+                    - { property: 'calendar.title', label: 'Titel', type: 'text' }
+                    - { property: 'calendar.startTime', label: 'Van', type: 'datetime', type_options: { disabled: true }, template: 'easy_admin/trans.html.twig' }
+                    - { property: 'calendar.trueEndTime', label: 'Tot', type: 'datetime', type_options: { disabled: true }, template: 'easy_admin/trans.html.twig' }
+                    - { property: 'calendar.body', label: 'Tekst', type: 'fos_ckeditor', css_class: 'w-100', type_options: { config_name: 'standard' } }
+                    - { property: 'calendar.location', label: 'Locatie', type: 'text', type_options: { required: true } }
+                    - { property: 'enrolBeforeDays', label: 'Inschrijven tot ... dagen vooraf' }
+                    - { property: 'inputs', label: 'Invoervelden', type_options: { disabled: true } }
+                    - { property: 'freeOfCharge', label: 'Kosteloos' }
+                    - { property: 'guestAccess', label: 'Publiek toegankelijk' }
+                    - { property: 'enabled', label: 'Actief' }
+            new:
+                fields: ['-calendar.title','-calendar.body','-calendar.startTime','-calendar.trueEndTime','-calendar.location']
+            edit:
+                fields: ['-calendar']
+                actions: ['delete']
+        EnrolmentTime:
+            class: App\Entity\EnrolmentTime
+            label: 'Inschrijving : tijdstip'
+            list:
+                fields:
+                    - { property: 'locked', label: 'Locked', type: 'boolean' }
+                    - { property: 'event', label: 'Event' }
+                    - { property: 'startTime', label: 'Start', template: 'easy_admin/localizeddate_medium_short.html.twig' }
+                    - { property: 'endTime', label: 'Einde', template: 'easy_admin/localizeddate_none_short.html.twig' }
+                    - { property: 'strictEndTime', label: 'Strict', type: 'boolean' }
+                    - { property: 'totalNumberOfPersons', label: 'Personen' }
+                    - { property: 'maxNumberOfPersons', label: 'Max' }
+                    - { property: 'strictNumberOfPersonsLimit', label: 'Limiet', type: 'boolean' }
+                    - { property: 'totalPrice', label: 'Bedrag', template: 'easy_admin/currency.html.twig' }
+                    - { property: 'enrolments', label: 'Inschrijvingen' }
+                sort: ['startTime', 'ASC']
+            form:
+                fields:
+                    - { property: 'event', label: 'Event', type_options: { required: true, query_builder: ['App\Repository\EasyAdminRepository','getInActiveEnrolmentEvents'] } }
+                    - { property: 'event.title', label: 'Event', type: 'text', type_options: { disabled: true } }
+                    - { property: 'startTime', label: 'Wanneer', type: 'time' }
+                    - { property: 'duration', label: 'Duur', type_options: { with_years: false, with_months: false, with_days: false, with_hours: true, with_minutes: true } }
+                    - { property: 'strictEndTime', label: 'Strict einduur' }
+                    - { property: 'showDate', label: 'Toon datum' }
+                    - { property: 'maxNumberOfPersons', label: 'Max personen' }
+                    - { property: 'strictNumberOfPersonsLimit', label: 'Stricte limiet' }
+            new:
+                fields: ['-event.title']
+            edit:
+                fields: ['-event']
+                actions: ['delete']
+        EnrolmentInput:
+            class: App\Entity\EnrolmentInput
+            label: 'Inschrijving : input'
+            list:
+                fields:
+                    - { property: 'locked', label: 'Locked', type: 'boolean' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'unitPrice', label: 'Eenh. prijs', template: 'easy_admin/currency.html.twig' }
+                    - { property: 'totalNumber', label: 'Aantal' }
+                    - { property: 'totalPrice', label: 'Bedrag', template: 'easy_admin/currency.html.twig' }
+                    - { property: 'category', label: 'Menugang' }
+                    - { property: 'event', label: 'Event' }
+                sort: ['id', 'ASC']
+            form:
+                fields:
+                    - { property: 'event', label: 'Event', type_options: { required: true, query_builder: ['App\Repository\EasyAdminRepository','getInActiveEnrolmentEvents'] } }
+                    - { property: 'event.title', label: 'Event', type: 'text', type_options: { disabled: true } }
+                    - { property: 'category', label: 'Categorie', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getUnlockedEnrolmentInputCategories'] } }
+                    - { property: 'category.name', label: 'Categorie', type: 'text', type_options: { disabled: true } }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'help', label: 'Help' }
+                    - { property: 'value', label: 'Bedrag' }
+            new:
+                fields: ['-event.title','-category.name']
+            edit:
+                fields: ['-event','-category']
+                actions: ['delete']
+        EnrolmentInputCategory:
+            class: App\Entity\EnrolmentInputCategory
+            label: 'Inschrijving : input categorie'
+            list:
+                fields:
+                    - { property: 'locked', label: 'Locked', type: 'boolean' }
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'typeName', label: 'Type', template: 'easy_admin/trans.html.twig' }
+                    - { property: 'showTitle', label: 'Toon titel', type: 'boolean' }
+                    - { property: 'showDescription', label: 'Toon omschrijving', type: 'boolean' }
+                    - { property: 'sequence', label: 'Volgorde' }
+                sort: ['sequence', 'ASC']
+            form:
+                fields:
+                    - { property: 'name', label: 'Naam' }
+                    - { property: 'description', label: 'Omschrijving' }
+                    - { property: 'type', label: 'Type', type: 'choice', type_options: { multiple: false, choices: {'default':'D','included':'I','supplement':'S'}, required: true  }, template: 'easy_admin/trans.html.twig' }
+                    - { property: 'showTitle', label: 'Toon titel' }
+                    - { property: 'showDescription', label: 'Toon omschrijving' }
+                    - { property: 'sequence', label: 'Volgorde' }
+            edit:
+                actions: ['delete']

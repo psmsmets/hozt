@@ -51,10 +51,18 @@ easy_admin:
                - { entity: 'Competition', label: 'Overzicht', icon: 'list', default: true }
                - { entity: 'CompetitionPartDraft', label: 'Draft dagdelen', icon: 'star-half' }
                - { entity: 'CompetitionPartActive', label: 'Actieve dagdelen', icon: 'star' }
-               - { entity: 'CompetitionEnrolments', label: 'Inschrijvingen', icon: 'check' }
+               - { entity: 'CompetitionEnrolments', label: 'Inschrijvingen limieten', icon: 'check' }
                - { entity: 'CompetitionDocument', label: 'Bijlagen', icon: 'file' }
                - { entity: 'CompetitionDocumentCategory', label: 'Bijlage categorie', icon: 'folder-open' }
                - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'home' }
+           - label: 'Events'
+             icon: 'utensils'
+             children:
+               - { entity: 'Enrolments', label: 'Inschrijvingen', icon: 'check' }
+               - { entity: 'EnrolmentEvent', label: 'Event', icon: 'calendar' }
+               - { entity: 'EnrolmentTime', label: 'Tijdstippen', icon: 'clock' }
+               - { entity: 'EnrolmentInput', label: 'Input', icon: 'book' }
+               - { entity: 'EnrolmentInputCategory', label: 'Input categorie', icon: 'tag' }
            - label: "Varia"
            - { entity: 'ContactForm', label: 'Contact', icon: 'comment', permission: 'ROLE_SUPER_ADMIN' }
            - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle', permission: 'ROLE_SUPER_ADMIN' }
@@ -63,7 +71,7 @@ easy_admin:
              icon: 'thumbs-up'
              children:
                - { entity: 'Tryout', label: 'Testmomenten', icon: 'table' }
-               - { entity: 'TryoutEnrolment', label: 'Inschrijvingen', icon: 'list' }
+               - { entity: 'TryoutEnrolment', label: 'Inschrijvingen', icon: 'check' }
            - label: 'Sponsors'
              icon: 'life-ring'
              permission: 'ROLE_SUPER_ADMIN'

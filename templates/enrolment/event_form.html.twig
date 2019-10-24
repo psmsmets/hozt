@@ -1,0 +1,67 @@
+{% extends 'default.html.twig' %}
+
+{% set event = page.event %}
+
+{% block title %}Inschrijven - {{event.calendar.title}}{% endblock %}
+
+{% block main %}
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
+      <li class="breadcrumb-item"><a href="{{path('enrolment_list')}}">Inschrijven</a></li>
+      <li class="breadcrumb-item active">{{event.calendar.title}}</li>
+    </ol>
+  </nav>
+
+  <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
+
+    <h1 class="text-primary">{{event.calendar.title}}</h1>
+
+    <div class="d-flex justify-content-between font-weight-light">{{ event.calendar.startTime|localizeddate('full','none')|ucfirst }} om {% for time in event.times %}{%if loop.index > 1 %}{% if loop.last %} en {% else %}, {% endif %}{% endif%}{{ time.startTime|localizeddate('none','short') }}{% endfor %}
+      <span class="pl-1 text-right">
+        <small>inschrijven tot {{ event.enrolBefore|localizeddate('medium','short')}}</small>
+      </span>
+    </div>
+
+    <div class="mt-2 font-weight-light"><i class="fas fa-map-marked-alt mr-2"></i> {{event.calendar.location|ucwords}}</div>
+
+    <div class="mt-2 font-weight-light"><i class="fas fa-link mr-2"></i> deel deze inschrijving via <a href="{{ path('enrolment_event_slug', { 'slug': event.slug }) }}">{{ url('enrolment_event_slug', { 'slug': event.slug }) }}</a></div>
+
+    {% if event.calendar.body %}
+    <div class="mt-3 mt-md-4">{{ event.body|raw }}</div>
+    {% endif %}
+
+    {% if not app.user %}
+    <p class="mt-4">Lid van HoZT? <a href="{{path('security_login', {'route': path('enrolment_event_uuid', { 'uuid': event.calendar.uuid } )|e('url')} )}}">Log in</a> en schrijf sneller in.</p>
+    {% endif %}
+
+    {% if page.form %}
+
+    <div class="row mt-5">
+      <div class="col col-12 col-md-10 col-lg-8">
+
+      <h3>Inschrijven</h3>
+
+      {{ form_start(page.form, {attr: {class: 'needs-validation'} }) }}
+      {{ form_widget(page.form) }}
+      {{ form_end(page.form) }}
+
+      </div>
+    </div>
+
+    <p>Je ontvangt direct een bevestigingsmail van deze inschrijving.</p>
+
+    {% else %}
+
+    <p class="mt-4 mt-lg-5">Inschrijven is helaas niet meer mogelijk.</p>
+
+    {% endif %}
+
+  </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('form_extended') }}
+{{ encore_entry_script_tags('enrolment_form') }}
+{% endblock %}

@@ -6,6 +6,12 @@ twig:
         locale: '%locale%'
         timezone: '%timezone%'
         webmaster: '%app.mailer.from%'
+        org_abbr : '%app.about.abbr%'
+        org_name : '%app.about.name%'
+        org_full_name : '%app.about.org.name%'
+        org_number : '%app.about.org.number%'
+        org_bank: '%app.about.bank_account%'
+        org_address: '%app.about.address%'
     form_themes:
         - 'bootstrap_4_layout.html.twig'
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'

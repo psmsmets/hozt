@@ -16,6 +16,7 @@ parameters:
     app.about.org.name: '%app.about.name% vzw'
     app.about.org.number: 'BE0644916871'
     app.about.bank_account: 'BE88 0689 0449 7341'
+    app.about.address: 'Achtelsestraat 76A, 2320 Hoogstraten'
     app.memberGrouping.board: 1
     app.memberGrouping.coaches: 2
     app.memberGrouping.officials: 3

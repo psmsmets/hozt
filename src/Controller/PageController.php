@@ -38,6 +38,8 @@ use App\Entity\Tryout;
 use App\Entity\Member;
 use App\Entity\MemberAddress;
 use App\Entity\MemberGrouping;
+use App\Entity\Enrolment;
+use App\Entity\EnrolmentEvent;
 
 # repositories
 use App\Repository\TrainingScheduleRepository;
@@ -45,11 +47,14 @@ use App\Repository\TryoutEnrolmentRepository;
 use App\Repository\TryoutRepository;
 use App\Repository\MemberRepository;
 use App\Repository\MemberGroupingRepository;
+use App\Repository\EnrolmentRepository;
+use App\Repository\EnrolmentEventRepository;
 
 # forms
 use App\Form\ContactFormType;
 use App\Form\ClubfeestType;
 use App\Form\TryoutEnrolmentForm;
+use App\Form\EnrolmentForm;
 
 # managers
 use App\Service\CalendarManager;
@@ -66,8 +71,9 @@ class PageController extends AbstractController
     private $calendarManager;
     private $competitionManager;
     private $user;
+    private $mailer;
 
-    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator, CalendarManager $calendarManager, CompetitionManager $competitionManager)
+    public function __construct(RequestStack $requestStack, Security $security, EntityManagerInterface $em, TranslatorInterface $translator, CalendarManager $calendarManager, CompetitionManager $competitionManager, \Swift_Mailer $mailer)
     {
         $this->template_data = [];
         $this->requestStack = $requestStack;
@@ -78,6 +84,7 @@ class PageController extends AbstractController
         $this->competitionManager = $competitionManager;
         $this->now = new \DateTime('now');
         $this->user = $this->security->getUser();
+        $this->mailer = $mailer;
     }
 
     private function initTemplateData()
@@ -506,7 +513,7 @@ class PageController extends AbstractController
     /**
      * @Route("/kalender/{uuid}", name="calendar_event")
      */
-    public function calendar_event (string $uuid, Request $request)
+    public function calendar_event(string $uuid, Request $request)
     {
         $event = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
@@ -605,6 +612,7 @@ class PageController extends AbstractController
     /**
      * @Route("/clubfeest", name="enrol_clubfeest")
      */
+/*
     public function enrol_clubfeest(Request $request, \Swift_Mailer $mailer)
     {
         $closure = new \DateTime('2019/03/01 12:00');
@@ -657,10 +665,12 @@ class PageController extends AbstractController
 
         return $this->render('enrol/clubfeest.html.twig', $this->template_data );
     }
+*/
 
     /**
      * @Route("/clubfeest/ingeschreven", name="enrolled_clubfeest")
      */
+/*
     public function enrolled_clubfeest()
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
@@ -682,6 +692,7 @@ class PageController extends AbstractController
 
         return $this->render('enrol/enrolled.html.twig', $this->template_data );
     }
+*/
 
     /**
      * @Route("/testmoment/ingeschreven", name="enrolled_tryout")
@@ -958,53 +969,120 @@ class PageController extends AbstractController
     /**
      * @Route("/inschrijven", name="enrol_list")
      */
-/*
-    public function enrol_list()
+    public function enrolment_list(EnrolmentEventRepository $enrolmentEventRepo)
     {
         $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::enrol_list');
+        $this->addToTemplateData( 'events', $enrolmentEventRepo->findPeriodEvents(
+            $this->calendarManager->getPeriodStart(), $this->calendarManager->getPeriodEnd()
+        ));
 
-        return $this->render('enrol/list.html.twig', $this->template_data );
+        return $this->render('enrolment/list.html.twig', $this->template_data );
     }
-*/
 
     /**
-     * @Route("/inschrijven/{slug}", name="enrol_item")
+     * @Route("/inschrijven/event/{uuid}", name="enrolment_event_uuid")
      */
-/*
-    public function enrol_item()
+    public function enrolment_event_uuid(string $uuid=null, EnrolmentEventRepository $enrolmentEventRepo)
     {
-        $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::enrol_list');
-
-        return $this->render('enrol/list.html.twig', $this->template_data );
+        return $this->enrolment_event($enrolmentEventRepo->findByUuid($uuid));
     }
-*/
 
     /**
-     * @Route("/inschrijven/{slug}/details", name="enrol_details")
+     * @Route("/inschrijven/{slug}", name="enrolment_event_slug")
      */
-/*
-    public function enrol_details()
+    public function enrolment_event_slug(string $slug=null, EnrolmentEventRepository $enrolmentEventRepo)
     {
-        $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::enrol_list');
-
-        return $this->render('enrol/list.html.twig', $this->template_data );
+        return $this->enrolment_event($enrolmentEventRepo->findBySlug($slug));
     }
-*/
+
+    private function enrolment_event(EnrolmentEvent $event)
+    {
+        if ( !$event ) {
+            $this->addFlash('warning', "Inschrijving niet gevonden. Zoek je misschien een inschrijving uit deze lijst?");
+            return $this->redirectToRoute('enrolment_list', []);
+        }
+        if (!$event->hasGuestAccess()) $this->denyAccessUnlessGranted('ROLE_USER');
+
+        if ( $enrol = $this->now < $event->getEnrolBefore() ) {
+
+            $enrolment = new Enrolment($event, $this->user);
+            $form = $this->createForm(EnrolmentForm::class, $enrolment);
+            $form->handleRequest($this->requestStack->getCurrentRequest());
+
+            if ($form->isSubmitted() && $form->isValid())
+            {
+                $enrolment = $form->getData();
+                $enrolment->parseFormInputData($form);
+
+                $this->em->persist($enrolment);
+                $this->em->flush();
+
+                $this->addFlash(
+                    'success', 
+                    sprintf(
+                        'Ingeschreven! We verwachten je %s.', 
+                        trim( $this->renderView( 
+                            'easy_admin/localizeddate_full_short.html.twig', ['value'=>$enrolment->getTime()->getStartTime()]
+                        ))
+                    )
+                );
+
+                $message = (new \Swift_Message())
+                    ->setSubject('Inschrijving HoZT '.$event->getTitle())
+                    ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
+                    ->setTo($enrolment->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'emails/enrolment.html.twig', [ 'enrolment' => $enrolment ]
+                        ),
+                        'text/html'
+                    )
+                ;
+                $this->email_flash($this->mailer->send($message));
+
+                return $this->redirectToRoute('enrolment_details', array('uuid'=>$enrolment->getUuid()));
+            }
+
+        }
+
+        $this->initTemplateData();
+        $this->addToTemplateData( 'event', $event );
+        $this->addToTemplateData( 'form', $enrol ? $form->createView() : null );
+
+        return $this->render('enrolment/event_form.html.twig', $this->template_data );
+    }
 
     /**
-     * @Route("/inschrijven/{slug}/formulier", name="enrol_form")
+     * @Route("/inschrijving/{uuid}", name="enrolment_details")
      */
-/*
-    public function enrol_form()
+    public function enrolment_details(string $uuid, EnrolmentRepository $enrolmentRepo)
     {
+        if ( !($enrolment = $enrolmentRepo->findByUuid($uuid)) ) {
+            $this->addFlash('warning', "Inschrijving niet gevonden. Zoek je misschien een inschrijving uit deze lijst?");
+            return $this->redirectToRoute('enrolment_list', []);
+        }
         $this->initTemplateData();
-        $this->addToTemplateData( 'controller_name', 'PageController::enrol_list');
+        $this->addToTemplateData( 'enrolment', $enrolment->parseInputData() );
 
-        return $this->render('enrol/list.html.twig', $this->template_data );
+        return $this->render('enrolment/details.html.twig', $this->template_data );
     }
-*/
+
+    /**
+     * @Route("/ingeschrijvingen/{uuid}", name="enrolment_enrolled")
+     */
+    public function enrolment_enrolled(string $uuid, EnrolmentEventRepository $enrolmentEventRepo, EnrolmentRepository $enrolmentRepo )
+    {
+        $this->denyAccessUnlessGranted('ROLE_MANAGER');
+
+        if ( !( $event = $enrolmentEventRepo->findByUuid($uuid) ) ) {
+            $this->addFlash('warning', "Inschrijving niet gevonden. Zoek je misschien een inschrijving uit deze lijst?");
+            return $this->redirectToRoute('enrolment_list', []);
+        }
+
+        $this->initTemplateData();
+        $this->addToTemplateData( 'event', $event );
+
+        return $this->render('enrolment/enrolled.html.twig', $this->template_data );
+    }
 
 }

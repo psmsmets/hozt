@@ -31,6 +31,7 @@ Encore
     .addEntry('hozt', './assets/js/hozt.js')
     .addEntry('calendar', './assets/js/calendar.js')
     .addEntry('carousel', './assets/js/carousel.js')
+    .addEntry('enrolment_form', './assets/js/enrolment_form.js')
     .addEntry('tryout_enrolled', './assets/js/tryout_enrolled.js')
     .addEntry('form_default', './assets/js/form_default.js')
     .addEntry('form_extended', './assets/js/form_extended.js')
