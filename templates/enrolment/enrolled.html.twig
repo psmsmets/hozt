@@ -48,8 +48,9 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Naam</th>
             <th scope="col">Tijdstip</th>
+            <th scope="col">Naam</th>
+            <th scope="col">Bericht</th>
             <th scope="col">Personen</th>
             <th scope="col">Bedrag</th>
             <th scope="col">Betaald</th>
@@ -61,14 +62,15 @@
         <tbody>
         {% for e in event.enrolments %}
           <tr>
-            <th scope="col">{{e.id}}</th>
-            <td>{{e.name}}</td>
+            <th scope="col">{{loop.index}}</th>
             <td>{{e.enrolledAt|localizeddate('short','short')}}</td>
+            <td>{{e.name}}</td>
+            <td>{% if e.message %}<i class="fas fa-comment-alt" data-container="body" data-toggle="popover" data-placement="bottom" data-content="{{e.message}}"></i>{%endif%}</td>
             <td>{{e.numberofpersons}}</td>
             <td>{{e.totalPrice|number_format(2, ',', '.')}}</td>
             <td>{%if e.paid%}<i class="fas fa-check text-success"></i>{%else%}<i class="fas fa-times text-danger"></i>{%endif%}</td>
             {% for i in e.parseinputdata().event.inputs %}
-            <td>{{loop.index}}</td>
+            <td>{{i.number}}</td>
             {% endfor %}
           </tr>
         {% endfor %}

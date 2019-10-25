@@ -427,4 +427,10 @@ class BlogPost
         return $this;
     }
 
+    public function hasCompetition(): ?bool
+    {
+        if (is_null($this->event)) return false;
+        return !is_null($this->event->getCompetition());
+    }
+
 }

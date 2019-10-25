@@ -45,6 +45,7 @@ easy_admin:
                     - { property: 'totalPrice', label: 'Bedrag', template: 'easy_admin/currency.html.twig' }
                     - { property: 'enrolments', label: 'Inschrijvingen' }
                     - { property: 'freeOfCharge', label: 'Kosteloos', type: 'boolean' }
+                    - { property: 'tas', label: 'OGM', type: 'boolean' }
                     - { property: 'guestAccess', label: 'Publiek', type: 'boolean' }
                 sort: ['calendar.startTime', 'ASC']
                 batch_actions: ['enable']
@@ -59,6 +60,7 @@ easy_admin:
                     - { property: 'enrolBeforeDays', label: 'Inschrijven tot ... dagen vooraf' }
                     - { property: 'inputs', label: 'Invoervelden', type_options: { disabled: true } }
                     - { property: 'freeOfCharge', label: 'Kosteloos' }
+                    - { property: 'tas', label: 'Overschrijving met Gestructureerde Mededeling (OGM)', help: 'Format +++123/12345/12312+++ : eventId(3) / inschrijvingsId(5) / userId(3) controle(2)' }
                     - { property: 'guestAccess', label: 'Publiek toegankelijk' }
                     - { property: 'enabled', label: 'Actief' }
             new:
