@@ -68,7 +68,7 @@
             <td>{{e.totalPrice|number_format(2, ',', '.')}}</td>
             <td>{%if e.paid%}<i class="fas fa-check text-success"></i>{%else%}<i class="fas fa-times text-danger"></i>{%endif%}</td>
             {% for i in e.parseinputdata().event.inputs %}
-            <td>{{i.number}}</td>
+            <td>{{loop.index}}</td>
             {% endfor %}
           </tr>
         {% endfor %}
