@@ -68,6 +68,7 @@
     <p class="text-success"><i class="fas fa-thumbs-up"></i> Je betaling is voldaan.</p>
   {% elseif not enrolment.event.freeOfCharge and not enrolment.paid %}
     <p><span class="text-danger">Je hebt nog niet betaald, of je betaling is nog niet verwerkt.</span><br>Heb je nog niet betaald? Gelieve dan <strong>€ {{enrolment.totalPrice|number_format(2, ',', '.')}}</strong> over te schrijven op rekeningnummer {{org_bank}} met {% if enrolment.event.tas %}gestructureerde mededeling <strong>"{{enrolment.tsa}}"</strong>{% else %}mededeling <strong>"{{enrolment.event.title}} - {{enrolment.name}}"</strong>{% endif %}.<p>
+
   {% endif %}
 
   {% if enrolment.message %}

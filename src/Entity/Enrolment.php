@@ -303,15 +303,16 @@ class Enrolment
     public function getTransferStructeredAnnouncement(): ?string
     {
         // +++090/9337/55493+++
+        // https://www.rox-e.net/blog-gestructureerde-mededeling/
         if (is_null($this->id)) return '___DRAFT_ENROLMENT___';
 
         $eventId = $this->event->getId() > 999 ? $this->event->getId() - 999 : $this->event->getId();
-        $enrolId = $this->getId() > 99999 ? $this->getId() - 99999 : $this->getId();
+        $enrolId = $this->getId() > 9999 ? $this->getId() - 9999 : $this->getId();
         $userId = $this->user ? ($this->user->getId() > 999 ? $this->user->getId() - 999 : $this->user->getId()) : 0;
 
-        $mod = ($eventId * 10^9 + $enrolId * 10^3 + $userId) % 97;
+        $mod = ($eventId * 10^7 + $enrolId * 10^3 + $userId) % 97;
 
-        return sprintf('+++%03d/%05d/%03d%02d+++', $eventId, $enrolId, $userId, $mod == 0 ? 97 : $mod);
+        return sprintf('+++%03d/%04d/%03d%02d+++', $eventId, $enrolId, $userId, $mod == 0 ? 97 : $mod);
     }
 
     public function getTSA(): ?string
