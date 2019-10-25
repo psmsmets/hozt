@@ -42,13 +42,13 @@
 
     <h3>Inschrijvingen</h3>
     <div class="table-responsive">
-      <table class="table">
+      <table class="table text-center">
         <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">Naam</th>
             <th scope="col">Tijdstip</th>
-            <th scope="col">Ingeschreven</th>
+            <th scope="col">Personen</th>
             <th scope="col">Bedrag</th>
             <th scope="col">Betaald</th>
             {% for input in event.inputs %}
@@ -57,6 +57,19 @@
           </tr>
         </thead>
         <tbody>
+        {% for e in event.enrolments %}
+          <tr>
+            <th scope="col">{{e.id}}</th>
+            <td>{{e.name}}</td>
+            <td>{{e.enrolledAt|localizeddate('short','short')}}</td>
+            <td>{{e.numberofpersons}}</td>
+            <td>{{e.totalPrice|number_format(2, ',', '.')}}</td>
+            <td>{%if e.paid%}<i class="fas fa-check text-success"></i>{%else%}<i class="fas fa-times text-danger"></i>{%endif%}</td>
+            {% for i in e.parseinputdata().event.inputs %}
+            <td>{{i.number}}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
         </tbody>
       </table>
     </div>
