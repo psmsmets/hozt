@@ -23,7 +23,7 @@ easy_admin:
                     - { property: 'uuid', label: 'Id', permission: 'ROLE_SUPER_ADMIN' }
                 sort: ['id', 'ASC']
                 actions: ['-new','-edit','-remove']
-                batch_actions: ['completePayment','cancelPayment','cancelEnrolment']
+                batch_actions: ['completePayment','cancelPayment','deleteEnrolment']
             search:
                 fields: ['name','event.calendar.title']
             form:

@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
+use Symfony\Component\Security\Core\Security;
 
 # form
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -58,14 +59,19 @@ use App\Service\UserManager;
 
 class AdminController extends EasyAdminController
 {
+    private $calendarManager;
     private $competitionManager;
+    private $memberManager;
+    private $userManager;
+    private $security;
 
-    public function __construct(CalendarManager $calendarManager, CompetitionManager $competitionManager, MemberManager $memberManager, UserManager $userManager)
+    public function __construct(CalendarManager $calendarManager, CompetitionManager $competitionManager, MemberManager $memberManager, UserManager $userManager, Security $security)
     {
         $this->calendarManager = $calendarManager;
         $this->competitionManager = $competitionManager;
         $this->memberManager = $memberManager;
         $this->userManager = $userManager;
+        $this->security = $security;
     }
 
     protected function createCalendarEventListQueryBuilder($entityClass, $sortDirection, $sortField = null, $dqlFilter = null)
@@ -916,20 +922,31 @@ class AdminController extends EasyAdminController
         $this->em->flush();
     }
 
-    public function cancelEnrolmentBatchAction(array $ids)
+    public function deleteEnrolmentBatchAction(array $ids)
     {
         $class = $this->entity['class'];
         if ($class !== 'App\Entity\Enrolment') return;
 
+        if (!$this->security->isGranted('ROLE_SUPER_ADMIN')) {
+            $this->addFlash('danger', 'Je hebt niet de juiste rechten om inschrijvingn te verwijderen.');
+            return;
+        }
+
+        if (count($ids)>1) {
+            $this->addFlash('danger', 'Je kan inschrijvingen enkel 1 per 1 verwijderen.');
+            return;
+        }
+        
         $em = $this->getDoctrine()->getManagerForClass($class);
 
         foreach ($ids as $id) {
             $enrolment = $em->find($class,$id);
             $enrolment->clearInputData();
+            $this->em->remove($enrolment);
         }
 
-        $this->em->remove($enrolment);
         $this->em->flush();
+        $this->addFlash('info', 'Inschrijvingen verwijderd.');
     }
 
 /*
