@@ -3,15 +3,15 @@
 
 {% set event = page.event %}
 
-{% block title %}Ingeschreven - {{event.title|ucfirst}}{% endblock %}
+{% block title %}Ingeschrijvingen - {{event.title|ucfirst}}{% endblock %}
 
 {% block main %}
-
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb border-none rounded-0 mb-0 smaller">
       <li class="breadcrumb-item"><a href="{{path('enrolment_list')}}">Inschrijven</a></li>
-      <li class="breadcrumb-item active">{{event.title}}</li>
+      <li class="breadcrumb-item"><a href="{{path('enrolment_event_uuid', { uuid: event.uuid })}}">{{event.calendar.title}}</a></li>
+      <li class="breadcrumb-item active">Inschrijvingen</li>
     </ol>
   </nav>
 
@@ -22,11 +22,12 @@
     <p class="mt-2">Inschrijven kan tot {{ event.enrolBefore|localizeddate('long','short') }}.</p>
 
     <h3>Overzicht</h3>
+    <div class="col-12 col-lg-8">
     <dl class="row mx-md-3 mx-lg-4">
     <h6 class="col-12 mb-1">Totaal</h6>
-      <dt class="col-sm-3 text-md-right">Personen</dt>
-      <dt class="col-4 text-right">{{event.totalNumberOfPersons}}</dt>
-      <dt class="col-5 text-right">€ {{event.totalPrice|number_format(2, ',', '.')}}</dt>
+      <dt class="col-sm-6 text-md-right">Personen</dt>
+      <dt class="col-6 col-sm-3 text-right">{{event.totalNumberOfPersons}}</dt>
+      <dt class="col-6 col-sm-3 text-right">€ {{event.totalPrice|number_format(2, ',', '.')}}</dt>
     {% set cat = event.inputs.first.category %}
     <h6 class="col-12 mb-1 mt-3">{{cat.name}}</h6>
     {% for input in event.inputs %}
@@ -34,11 +35,12 @@
         {% set cat = input.category %}
         <h6 class="col-12 mb-1 mt-3">{{cat.name}}</h6>
       {% endif %}
-      <dt class="col-sm-3 text-md-right">{{input.name}}</dt>
-      <dd class="col-4 text-right">{{input.totalNumber}}</dd>
-      <dd class="col-5 text-right">{% if input.hasUnitPrice %}€ {{input.totalPrice|number_format(2, ',', '.')}}{% endif %}</dd>
+      <dt class="col-sm-6 text-md-right">{{input.name}}</dt>
+      <dd class="col-6 col-sm-3 text-right">{{input.totalNumber}}</dd>
+      <dd class="col-6 col-sm-3 text-right">{% if input.hasUnitPrice %}€ {{input.totalPrice|number_format(2, ',', '.')}}{% endif %}</dd>
     {% endfor %}
     </dl>
+    </div>
 
     <h3>Inschrijvingen</h3>
     <div class="table-responsive">
