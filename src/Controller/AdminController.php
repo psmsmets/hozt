@@ -31,7 +31,6 @@ use App\Entity\Competition;
 use App\Entity\CompetitionPool;
 use App\Entity\Sponsor;
 use App\Entity\SponsorCategory;
-use App\Entity\Clubfeest;
 use App\Entity\TryoutEnrolment;
 use App\Entity\Tryout;
 use App\Entity\User;

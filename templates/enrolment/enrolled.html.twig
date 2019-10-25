@@ -65,7 +65,7 @@
             <th scope="col">{{loop.index}}</th>
             <td>{{e.enrolledAt|localizeddate('short','short')}}</td>
             <td>{{e.name}}</td>
-            <td>{% if e.message %}<i class="fas fa-comment-alt" data-container="body" data-toggle="popover" data-placement="bottom" data-content="{{e.message}}"></i>{%endif%}</td>
+            <td>{% if e.message %}<a class="text-dark" tabindex="0" role="button" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content="{{e.message}}"><i class="fas fa-comment-alt"></i></a>{%endif%}</td>
             <td>{{e.numberofpersons}}</td>
             <td>{{e.totalPrice|number_format(2, ',', '.')}}</td>
             <td>{%if e.paid%}<i class="fas fa-check text-success"></i>{%else%}<i class="fas fa-times text-danger"></i>{%endif%}</td>

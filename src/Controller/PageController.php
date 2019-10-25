@@ -32,7 +32,6 @@ use App\Entity\Competition;
 use App\Entity\CompetitionState;
 use App\Entity\Sponsor;
 use App\Entity\SponsorCategory;
-use App\Entity\Clubfeest;
 use App\Entity\TryoutEnrolment;
 use App\Entity\Tryout;
 use App\Entity\Member;
@@ -608,91 +607,6 @@ class PageController extends AbstractController
 
         return $this->render('contact/form.html.twig', $this->template_data );
     }
-
-    /**
-     * @Route("/clubfeest", name="enrol_clubfeest")
-     */
-/*
-    public function enrol_clubfeest(Request $request, \Swift_Mailer $mailer)
-    {
-        $closure = new \DateTime('2019/03/01 12:00');
-        $now = new \DateTime('now');
-        $event = $this->getDoctrine()
-            ->getRepository(CalendarEvent::class)
-            ->findCalendarEvent('2f4827db819cc670')
-            ;
-
-        $form = $this->createForm(ClubfeestType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid() && $now <= $closure) {
-
-            $enrol = $form->getData();
-
-            if ( $enrol->getAdults() == 0 and $enrol->getChildren() == 0 ) {
-                $this->addFlash('warning', 'Bijna gelukt, maar je moet toch minstens iemand inschrijven.');
-                return $this->redirectToRoute('enrol_clubfeest');
-            }
-
-            $message = (new \Swift_Message())
-                ->setSubject('Inschrijving HoZT '.$event->getTitle().' '.ucfirst($event->getFormattedPeriod()))
-                ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
-                ->setTo($enrol->getEmail())
-                ->setBody(
-                    $this->renderView(
-                        'emails/clubfeest.html.twig', [ 'enrol' => $enrol, 'event' => $event ]
-                    ),
-                    'text/html'
-                )
-            ;
-            $sent = $mailer->send($message);
-            $enrol->setEmailSent($sent);
-
-            $this->em->persist($enrol);
-            $this->em->flush();
-
-            $this->addFlash('success', 'Ingeschreven! We verwachten je '.$event->getFormattedPeriod().'.');
-
-            $this->email_flash($sent);
-
-            return $this->redirectToRoute('enrol_clubfeest');
-        }
-
-        $this->initTemplateData();
-        $this->addToTemplateData( 'form', $form->createView() );
-        $this->addToTemplateData( 'form_closure', $closure );
-        $this->addToTemplateData( 'calendar_event', $event );
-
-        return $this->render('enrol/clubfeest.html.twig', $this->template_data );
-    }
-*/
-
-    /**
-     * @Route("/clubfeest/ingeschreven", name="enrolled_clubfeest")
-     */
-/*
-    public function enrolled_clubfeest()
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Je hebt geen toegang om deze pagina te bekijken!');
-
-        $closure = new \DateTime('2019/03/01 12:00');
-        $event = $this->getDoctrine()
-            ->getRepository(CalendarEvent::class)
-            ->findCalendarEvent('2f4827db819cc670')
-            ;
-
-        $this->initTemplateData();
-        $this->addToTemplateData( 'enrolled',
-            $this->getDoctrine()
-                ->getRepository(Clubfeest::class)
-                ->findAll()
-        );
-        $this->addToTemplateData( 'form_closure', $closure );
-        $this->addToTemplateData( 'calendar_event', $event );
-
-        return $this->render('enrol/enrolled.html.twig', $this->template_data );
-    }
-*/
 
     /**
      * @Route("/testmoment/ingeschreven", name="enrolled_tryout")
