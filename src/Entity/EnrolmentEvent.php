@@ -74,6 +74,11 @@ class EnrolmentEvent
     private $freeOfCharge;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $tas;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Enrolment", mappedBy="event")
      */
     private $enrolments;
@@ -83,6 +88,7 @@ class EnrolmentEvent
         $this->enabled = false;
         $this->freeOfCharge = false;
         $this->guestAccess = true;
+        $this->tas = true;
         $this->enrolBeforeDays = 7;
         $this->totalNumberOfPersons = 0;
         $this->totalPrice = 0.;
@@ -347,6 +353,20 @@ class EnrolmentEvent
     public function isFreeOfCharge(): ?bool
     {
         return $this->freeOfCharge;
+    }
+
+    public function getTAS(): ?bool
+    {
+        return $this->tas;
+    }
+
+    public function setTAS(bool $tas): self
+    {
+        if ($this->enabled) return $this;
+
+        $this->tas = $tas;
+
+        return $this;
     }
 
     /**

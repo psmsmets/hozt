@@ -13,16 +13,16 @@
 
     {{ item.body|raw }}
 
-    {% if item.document is not empty or item.event is not empty %}
+    {% if item.document or item.hascompetition %}
       <p class="text-center text-md-left">
 
         {% if item.document is not empty %}
           <a href="{{ vich_uploader_asset(item, 'documentFile') }}" class="btn btn-sm btn-outline-primary ml-1 mr-1 mb-2" target="_Blank"><i class="fas fa-file-pdf"></i> bijlage</a>
         {% endif %}
 
-        {% if item.event.competition %}
+        {% if item.competition %}
 
-          {% set comp = item.event.competition %}
+          {% set comp = item.competition %}
 
           {% if item.publishAt < item.event.startTime|date_modify('midnight') %}
 

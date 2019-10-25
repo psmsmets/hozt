@@ -295,4 +295,28 @@ class Enrolment
         return $this;
     }
 
+    public function getComment(): ?string
+    {
+        return $this->message;
+    }
+
+    public function getTransferStructeredAnnouncement(): ?string
+    {
+        // +++090/9337/55493+++
+        if (is_null($this->id)) return '___DRAFT_ENROLMENT___';
+
+        $eventId = $this->event->getId() > 999 ? $this->event->getId() - 999 : $this->event->getId();
+        $enrolId = $this->getId() > 99999 ? $this->getId() - 99999 : $this->getId();
+        $userId = $this->user ? ($this->user->getId() > 999 ? $this->user->getId() - 999 : $this->user->getId()) : 0;
+
+        $mod = ($eventId * 10^9 + $enrolId * 10^3 + $userId) % 97;
+
+        return sprintf('+++%03d/%05d/%03d%02d+++', $eventId, $enrolId, $userId, $mod == 0 ? 97 : $mod);
+    }
+
+    public function getTSA(): ?string
+    {
+        return $this->getTransferStructeredAnnouncement();
+    }
+
 }

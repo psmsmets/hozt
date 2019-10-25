@@ -91,7 +91,7 @@ class EnrolmentForm extends AbstractType
                     'required' => true,
                     'mapped' => false,
                     'attr' => [
-                        'placeholder' => $input->getName(),
+                        'placeholder' => $input->getName().'?',
                         'data-category-type' => $category->getTypeName(), 
                         'data-value' => $input->getUnitPrice(),
                         'min' =>  $category->isDefault() ? 1 : 0,
