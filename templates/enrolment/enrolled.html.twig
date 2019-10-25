@@ -28,6 +28,14 @@
       <dt class="col-sm-6 text-md-right">Personen</dt>
       <dt class="col-6 col-sm-3 text-right">{{event.totalNumberOfPersons}}</dt>
       <dt class="col-6 col-sm-3 text-right">€ {{event.totalPrice|number_format(2, ',', '.')}}</dt>
+    {% if event.times|length > 1 %}
+    <h6 class="col-12 mb-1">Tijdstippen</h6>
+    {% for t in event.times %}
+      <dt class="col-sm-6 text-md-right">{{t.startTime|localizeddate('none','short')}} {%if t.strictendtime%}{{t.endTime|localizeddate('none','short')}}{%endif%}</dt>
+      <dt class="col-6 col-sm-3 text-right">{{t.totalNumberOfPersons}}</dt>
+      <dt class="col-6 col-sm-3 text-right">€ {{t.totalPrice|number_format(2, ',', '.')}}</dt>
+    {% endfor %}
+    {% endif %}
     {% set cat = event.inputs.first.category %}
     <h6 class="col-12 mb-1 mt-3">{{cat.name}}</h6>
     {% for input in event.inputs %}
@@ -65,7 +73,7 @@
             <th scope="col">{{loop.index}}</th>
             <td>{{e.enrolledAt|localizeddate('short','short')}}</td>
             <td>{{e.name}}</td>
-            <td>{% if e.message %}<i class="fas fa-comment-alt" data-container="body" data-toggle="popover" data-placement="bottom" data-content="{{e.message}}"></i>{%endif%}</td>
+            <td>{% if e.message %}<a class="text-dark" tabindex="0" role="button" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content="{{e.message}}"><i class="fas fa-comment-alt"></i></a>{%endif%}</td>
             <td>{{e.numberofpersons}}</td>
             <td>{{e.totalPrice|number_format(2, ',', '.')}}</td>
             <td>{%if e.paid%}<i class="fas fa-check text-success"></i>{%else%}<i class="fas fa-times text-danger"></i>{%endif%}</td>
