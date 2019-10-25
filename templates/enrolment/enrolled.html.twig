@@ -28,6 +28,14 @@
       <dt class="col-sm-6 text-md-right">Personen</dt>
       <dt class="col-6 col-sm-3 text-right">{{event.totalNumberOfPersons}}</dt>
       <dt class="col-6 col-sm-3 text-right">€ {{event.totalPrice|number_format(2, ',', '.')}}</dt>
+    {% if event.times|length > 1 %}
+    <h6 class="col-12 mb-1">Tijdstippen</h6>
+    {% for t in event.times %}
+      <dt class="col-sm-6 text-md-right">{{t.startTime|localizeddate('none','short')}} {%if t.strictendtime%}{{t.endTime|localizeddate('none','short')}}{%endif%}</dt>
+      <dt class="col-6 col-sm-3 text-right">{{t.totalNumberOfPersons}}</dt>
+      <dt class="col-6 col-sm-3 text-right">€ {{t.totalPrice|number_format(2, ',', '.')}}</dt>
+    {% endfor %}
+    {% endif %}
     {% set cat = event.inputs.first.category %}
     <h6 class="col-12 mb-1 mt-3">{{cat.name}}</h6>
     {% for input in event.inputs %}
