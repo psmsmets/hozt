@@ -302,7 +302,7 @@ class TrainingTeam
     {
         if (is_null($refdate)) $refdate = new \DateTime('today midnight');
         return $this->getExceptions()->filter(
-            function(TrainingException $ex) use ($refdate,$allDay) { 
+            function(TrainingException $ex) use ($refdate,$allDay) {
                 return $ex->isActive($refdate) && ( $allDay == (count($ex->getSchedule()) == 0) ); 
             }
         );
