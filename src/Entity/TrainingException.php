@@ -121,10 +121,10 @@ class TrainingException
         return $this;
     }
 
-    public function isActive(\DateTime $refdate = null): ?bool
+    public function isActive(\DateTimeInterface $refdate = null): ?bool
     {
         if (is_null($refdate)) $refdate = new \DateTime("today midnight");
-        return $this->calcEndDate() > $refdate;
+        return $this->endDate >= $refdate && $this->startDate <= $refdate;
     }
 
     /**
