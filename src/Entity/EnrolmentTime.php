@@ -173,6 +173,14 @@ class EnrolmentTime
         return $this->maxNumberOfPersons;
     }
 
+    public function getNumberOfPersonsStatus(): ?string
+    {
+        if (is_null($this->maxNumberOfPersons)) return 'enrolment.time.none';
+        if ($this->totalNumberOfPersons >= intval(0.8 * $this->maxNumberOfPersons)) return 'enrolment.time.busy';
+        if ($this->totalNumberOfPersons >= intval(0.3 * $this->maxNumberOfPersons)) return 'enrolment.time.cosy';
+        return 'enrolment.time.calm';
+    }
+
     public function setMaxNumberOfPersons(int $maxNumberOfPersons): self
     {
         $this->maxNumberOfPersons = $maxNumberOfPersons;

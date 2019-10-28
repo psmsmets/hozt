@@ -21,15 +21,18 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
 use Twig\Environment;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EnrolmentForm extends AbstractType
 {
 
     private $twig;
+    private $trans;
 
-    public function __construct( Environment $twig )
+    public function __construct( Environment $twig, TranslatorInterface $translator )
     {
         $this->twig = $twig;
+        $this->translator = $translator;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -73,8 +76,11 @@ class EnrolmentForm extends AbstractType
                             ->orderBy('time.startTime', 'ASC')
                             ;
                     },
-                    'choice_attr' => function($choice) {
-                        return ['disabled' => ( $choice->getStrictNumberOfPersonsLimit() and $choice->getRemainingNumberOfPersons() <= 0 )];
+                    'choice_attr' => function($time) {
+                        return ['disabled' => ( $time->getStrictNumberOfPersonsLimit() and $time->getRemainingNumberOfPersons() <= 0 )];
+                    },
+                    'choice_label' => function($time) {
+                        return $this->translator->trans($time->getNumberOfPersonsStatus(), ['time' => strval($time)]);
                     },
                     'label'    => 'Kies een tijdstip',
                     'attr' => ['class'=>'custom-select'],

@@ -49,6 +49,7 @@ class EnrolmentRepository extends ServiceEntityRepository
             ->addSelect('category')
             ->andWhere('enrolment.uuid = :uuid')
             ->setParameter('uuid', $uuid)
+            ->orderBy('inputs.category,inputs.id', 'ASC')
             ->getQuery()
             ->getOneOrNullResult()
         ;

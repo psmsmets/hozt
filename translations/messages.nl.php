@@ -55,4 +55,8 @@ return [
     'GROUPING_DAILY_OPERATIONS' => 'Dagelijkse werking',
     'GROUPING_COACHES' => 'Trainers',
     'GROUPING_OFFICIALS' => 'Officials',
+    'enrolment.time.none' => "time",
+    'enrolment.time.calm' => "time (rustig)",
+    'enrolment.time.cosy' => "time (gezellig)",
+    'enrolment.time.busy' => "time (druk)",
 ];

@@ -60,6 +60,7 @@ class EnrolmentEventRepository extends ServiceEntityRepository
             ->andWhere('event.enabled = :enabled')
             ->setParameter('uuid', $uuid)
             ->setParameter('enabled', true)
+            ->orderBy('times.startTime,cal.startTime,inputs.category,inputs.id', 'ASC')
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -85,7 +86,7 @@ class EnrolmentEventRepository extends ServiceEntityRepository
             ->setParameter('slug', $slug)
             ->setParameter('enabled', true)
             ->setParameter('reftime', $reftime)
-            ->orderBy('cal.startTime', 'DESC')
+            ->orderBy('times.startTime,cal.startTime,inputs.category,inputs.id', 'ASC')
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -106,7 +107,7 @@ class EnrolmentEventRepository extends ServiceEntityRepository
             ->setParameter('enabled', true)
             ->setParameter('start', $periodStart)
             ->setParameter('end', $periodEnd)
-            ->orderBy('times.startTime,cal.startTime', 'ASC')
+            ->orderBy('times.startTime,cal.startTime,inputs.category,inputs.id', 'ASC')
             ->getQuery()
             ->getResult()
         ;
