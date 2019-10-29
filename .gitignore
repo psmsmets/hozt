@@ -20,6 +20,7 @@
 ###< symfony/web-server-bundle ###
 
 ###> ignore specific filetypes ###
+*.npmrc
 *.key
 *.swp
 *.DS_Store
