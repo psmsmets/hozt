@@ -567,12 +567,10 @@ class CalendarEvent
         return $this;
     }
 
-/*
     public function hasCompetition(): ?bool
     {
         return !is_null($this->competition);
     }
-*/
 
     /**
      * @return Collection|BlogPost[]
