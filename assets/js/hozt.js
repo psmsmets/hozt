@@ -4,6 +4,9 @@ require('bootstrap');
 require('jquery.scrollTo');
 import { CountUp } from 'countup.js';
 
+require('@fortawesome/fontawesome-pro/css/all.min.css');
+require('@fortawesome/fontawesome-pro/js/all.js');
+
 var $ = require('jquery');
 window.$ = $;
 window.jQuery = $;
