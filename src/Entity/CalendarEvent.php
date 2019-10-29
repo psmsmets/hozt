@@ -49,7 +49,7 @@ class CalendarEvent
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isCompetition;
+    private $eventIsCompetition;
 
     /**
      * @ORM\Column(type="datetime")
@@ -155,7 +155,7 @@ class CalendarEvent
         $this->enabled = false;
         $this->archived = false;
         $this->cancelled = false;
-        $this->isCompetition = true;
+        $this->eventIsCompetition = true;
         $this->posts = new ArrayCollection();
     }
 
@@ -227,14 +227,14 @@ class CalendarEvent
         return $this;
     }
 
-    public function getIsCompetition(): ?bool
+    public function getEventIsCompetition(): ?bool
     {
-        return $this->isCompetition;
+        return $this->eventIsCompetition;
     }
 
-    public function setIsCompetition(bool $isCompetition): self
+    public function setEventIsCompetition(bool $eventIsCompetition): self
     {
-        $this->isCompetition = $isCompetition;
+        $this->eventIsCompetition = $eventIsCompetition;
 
         return $this;
     }
@@ -566,6 +566,7 @@ class CalendarEvent
 
         return $this;
     }
+
     public function hasCompetition(): ?bool
     {
         return !is_null($this->competition);

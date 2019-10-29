@@ -42,9 +42,9 @@ class EasyAdminRepository
         return $er->createQueryBuilder('e')
             ->leftJoin('e.competition', 'c')
             ->andwhere('e.enabled = :enabled')
-            ->andwhere('e.isCompetition = :enabled')
+            ->andwhere('e.eventIsCompetition = :eventIsCompetition')
             ->andwhere('c.id is null')
-            ->setParameter('enabled', true)
+            ->setParameter('eventIsCompetition', true)
         ;
     }
     public static function getUnlockedEnrolmentInputCategories(EntityRepository $er) {
