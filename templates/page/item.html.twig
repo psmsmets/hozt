@@ -13,14 +13,15 @@
 
     {{ item.body|raw }}
 
-    {% if item.document or item.hascompetition %}
+    {% if item.document or item.competition %}
       <p class="text-center text-md-left">
 
-        {% if item.document is not empty %}
+        {% if item.document %}
           <a href="{{ vich_uploader_asset(item, 'documentFile') }}" class="btn btn-sm btn-outline-primary ml-1 mr-1 mb-2" target="_Blank"><i class="fas fa-file-pdf"></i> bijlage</a>
         {% endif %}
 
-        {% if item.competition %}
+{{item.competition}}
+        {% if item.competition > 10  %}
 
           {% set comp = item.competition %}
 {{dump(comp)}}
