@@ -11,7 +11,7 @@
         {% for team in schedule.getTeams %}<span class="mr-2 mr-md-3"><span class="badge badge-secondary align-text-bottom">{{team.abbr}}</span> {% for member in team.getMembers%}{{member.firstname}}{%endfor%}</span><br class="d-inline d-md-none"/>{% endfor %}
         {% if schedule.comment %}<span class="badge badge-info ml-md-1"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
         {% if schedule.description %}
-          <span class="badge badge-light text-muted float-md-right mt-md-2"><i class="fas fa-comment"></i> {{schedule.description}}</span>
+          <a tabindex="0" class="badge badge-light text-muted float-md-right mt-md-2" data-toggle="popover" data-trigger="focus" data-content="{{schedule.description}}"><i class="fas fa-comment"></i></a>
         {% endif %}
     </dd>
     {% endfor %}
