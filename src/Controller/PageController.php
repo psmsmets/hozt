@@ -782,6 +782,8 @@ class PageController extends AbstractController
         $this_week = new \DateTimeImmutable('today last monday');
         $next_week = $this_week->modify('+1 week');
         $two_weeks = $next_week->modify('+1 week');
+        $three_weeks = $two_weeks->modify('+1 week');
+        $four_weeks = $three_weeks->modify('+1 week');
 
         $this->initTemplateData();
 
@@ -799,6 +801,16 @@ class PageController extends AbstractController
         $this->addToTemplateData( 'two_weeks_sun', $two_weeks->modify('next sunday') );
         $this->addToTemplateData( 
             'schedule_two_weeks', $scheduleRepo->findAllByUserForPeriod($this->user, $two_weeks)
+        );
+        $this->addToTemplateData( 'three_weeks_mon', $three_weeks );
+        $this->addToTemplateData( 'three_weeks_sun', $three_weeks->modify('next sunday') );
+        $this->addToTemplateData( 
+            'schedule_three_weeks', $scheduleRepo->findAllByUserForPeriod($this->user, $three_weeks)
+        );
+        $this->addToTemplateData( 'four_weeks_mon', $four_weeks );
+        $this->addToTemplateData( 'four_weeks_sun', $four_weeks->modify('next sunday') );
+        $this->addToTemplateData( 
+            'schedule_four_weeks', $scheduleRepo->findAllByUserForPeriod($this->user, $four_weeks)
         );
 
         return $this->render('membership/schedules.html.twig', $this->template_data );

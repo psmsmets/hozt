@@ -18,6 +18,24 @@ $(".form-control[data-parent-parent-class]").each(function(){
     $(formGroup).addClass($(this).data('parent-parent-class'));
 });
 
+$('.toClipboard').click(function(e){
+    e.preventDefault();
+
+    var textArea = document.createElement("textarea");
+    textArea.value = $(this).attr('href');
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("Copy");
+    textArea.remove();
+
+    $(this)
+        .addClass('rubberBand animated').one(
+            'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+             $(this).removeClass('rubberBand animated');
+        })
+    ;
+
+});
 
 function getTotals() {
 
