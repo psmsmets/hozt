@@ -893,7 +893,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/inschrijven", name="enrol_list")
+     * @Route("/inschrijven", name="enrolment_list")
      */
     public function enrolment_list(EnrolmentEventRepository $enrolmentEventRepo)
     {
@@ -906,24 +906,23 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/inschrijven/event/{uuid}", name="enrolment_event_uuid")
-     */
-    public function enrolment_event_uuid(string $uuid=null, EnrolmentEventRepository $enrolmentEventRepo)
-    {
-        return $this->enrolment_event($enrolmentEventRepo->findByUuid($uuid));
-    }
-
-    /**
      * @Route("/inschrijven/{slug}", name="enrolment_event_slug")
      */
     public function enrolment_event_slug(string $slug=null, EnrolmentEventRepository $enrolmentEventRepo)
     {
-        return $this->enrolment_event($enrolmentEventRepo->findBySlug($slug));
+        if ( !($event = $enrolmentEventRepo->findBySlug($slug) ) ) {
+            $this->addFlash('warning', "Inschrijving niet gevonden. Zoek je misschien een inschrijving uit deze lijst?");
+            return $this->redirectToRoute('enrolment_list', []);
+        }
+        return $this->redirectToRoute('enrolment_event_uuid', array('uuid'=>$event->getUuid()));
     }
 
-    private function enrolment_event(EnrolmentEvent $event)
+    /**
+     * @Route("/inschrijven/{uuid}", name="enrolment_event_uuid")
+     */
+    public function enrolment_event_uuid(string $uuid=null, EnrolmentEventRepository $enrolmentEventRepo)
     {
-        if ( !$event ) {
+        if ( !($event = $enrolmentEventRepo->findByUuid($uuid) ) ) {
             $this->addFlash('warning', "Inschrijving niet gevonden. Zoek je misschien een inschrijving uit deze lijst?");
             return $this->redirectToRoute('enrolment_list', []);
         }
