@@ -1,3 +1,5 @@
+var ClipboardJS = require('clipboard');
+
 $('input.form-control[data-category-title]').each(function(){
     var formGroup = $(this).parent();
     $( '<h4 class="pt-4">' + $(this).data('category-title') + '</h4>' ).insertBefore(formGroup);
@@ -18,23 +20,17 @@ $(".form-control[data-parent-parent-class]").each(function(){
     $(formGroup).addClass($(this).data('parent-parent-class'));
 });
 
-$('.toClipboard').click(function(e){
-    e.preventDefault();
+var clipboard = new ClipboardJS('.toClipboard');
 
-    var textArea = document.createElement("textarea");
-    textArea.value = $(this).attr('href');
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand("Copy");
-    textArea.remove();
-
-    $(this)
+clipboard.on('success', function(e) {
+    $(e.trigger)
         .addClass('rubberBand animated').one(
             'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
              $(this).removeClass('rubberBand animated');
         })
     ;
 
+    e.clearSelection();
 });
 
 function getTotals() {
