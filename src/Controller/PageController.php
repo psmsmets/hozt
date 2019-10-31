@@ -725,7 +725,7 @@ class PageController extends AbstractController
 
             $this->email_flash($sent);
 
-            return $this->redirectToRoute('enrol_tryout', array('inschrijving'=>$enrol->getUuid()));
+            return $this->redirectToRoute('enrol_tryout', ['inschrijving'=>$enrol->getUuid()]);
         }
 
         $this->addToTemplateData( 'form', $form->createView() );
@@ -920,7 +920,7 @@ class PageController extends AbstractController
     /**
      * @Route("/inschrijven/{uuid}", name="enrolment_event_uuid")
      */
-    public function enrolment_event_uuid(string $uuid=null, EnrolmentEventRepository $enrolmentEventRepo)
+    public function enrolment_event_uuid(string $uuid=null, EnrolmentEventRepository $enrolmentEventRepo, Request $request)
     {
         if ( !($event = $enrolmentEventRepo->findByUuid($uuid) ) ) {
             $this->addFlash('warning', "Inschrijving niet gevonden. Zoek je misschien een inschrijving uit deze lijst?");
@@ -932,7 +932,7 @@ class PageController extends AbstractController
 
             $enrolment = new Enrolment($event, $this->user);
             $form = $this->createForm(EnrolmentForm::class, $enrolment);
-            $form->handleRequest($this->requestStack->getCurrentRequest());
+            $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid())
             {
@@ -965,7 +965,7 @@ class PageController extends AbstractController
                 ;
                 if (!$this->mailer->send($message)) $this->email_flash(false); // only notify if error
 
-                return $this->redirectToRoute('enrolment_details', array('uuid'=>$enrolment->getUuid()));
+                return $this->redirectToRoute('enrolment_details', ['uuid' => $enrolment->getUuid()] );
             }
 
         }
