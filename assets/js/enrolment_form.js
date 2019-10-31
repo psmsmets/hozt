@@ -29,9 +29,22 @@ clipboard.on('success', function(e) {
              $(this).removeClass('rubberBand animated');
         })
     ;
-
-    e.clearSelection();
+    var title = $(e.trigger).attr('data-original-title');
+    $(e.trigger).tooltip('hide').delay(500).attr('data-original-title','Copied!').tooltip('show');
+    //$(e.trigger).on('hide.bs.tooltip', function () {
+    //    $(this).delay(500).attr('data-original-title',title);
+    //});
+    //e.clearSelection();
 });
+
+clipboard.on('error', function(e) {
+    console.log(e.action);
+});
+
+function showTooltip(elem, msg) {
+    elem.setAttribute('class', 'btn tooltipped tooltipped-s');
+    elem.setAttribute('aria-label', msg);
+}
 
 function getTotals() {
 
