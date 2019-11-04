@@ -18,15 +18,15 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class CompetitionManager 
 {
-    private $entityManager;
+    private $em;
     private $competitionRepository;
     private $competitionDocsRepository;
     private $exitMessage;
     private $documentsBase;
 
-    public function __construct($publicDir, $competitionDocumentsDir, EntityManagerInterface $entityManager, CompetitionRepository $competitionRepository, CompetitionDocumentRepository $competitionDocumentRepository, CompetitionEnrolmentRepository $competitionEnrolmentRepository )
+    public function __construct($publicDir, $competitionDocumentsDir, EntityManagerInterface $em, CompetitionRepository $competitionRepository, CompetitionDocumentRepository $competitionDocumentRepository, CompetitionEnrolmentRepository $competitionEnrolmentRepository )
     {
-        $this->entityManager = $entityManager;
+        $this->em = $em;
         $this->competitionRepository = $competitionRepository;
         $this->competitionDocumentRepository = $competitionDocumentRepository;
         $this->competitionEnrolmentRepository = $competitionEnrolmentRepository;
@@ -54,11 +54,11 @@ class CompetitionManager
                 $fullfile = sprintf('%s/%s', $this->dir, $file);
                 if ($filesystem->exists($fullfile)) {
                     $filesystem->remove($fullfile);
-                    $this->entityManager->remove($doc);
+                    $this->em->remove($doc);
                     $cnt_rem++;
                 }
             } else {
-                $this->entityManager->remove($doc);
+                $this->em->remove($doc);
                 $cnt_rem++;
             }
         }
@@ -67,12 +67,12 @@ class CompetitionManager
         $cnt_rem = 0;
         $enrolments = $this->competitionEnrolmentRepository->findPastIrrelevantCompetitionEnrolments();
         foreach( $enrolments as $enrolment ) {
-            $this->entityManager->remove($enrolment);
+            $this->em->remove($enrolment);
             $cnt_rem++;
         }
         $this->exitMessage[] = array( 'alert' => 'success', 'html' => sprintf('Removed %d irrelevant enrolments.', $cnt_rem) );
 
-        $this->entityManager->flush();
+        $this->em->flush();
 
         return true;
     }
@@ -90,12 +90,12 @@ class CompetitionManager
                 $all_parts++;
                 if (!$competition->competitionPartExists($day,$part)) {
                     $competitionPart = new CompetitionPart($competition,$day,$part);
-                    $this->entityManager->persist($competitionPart);
+                    $this->em->persist($competitionPart);
                     $add_parts++;
                 }
             }
         }
-        $this->entityManager->flush();
+        $this->em->flush();
         $this->exitMessage[] = array( 'alert' => 'success', 'html' => sprintf('Added %d/%d parts.', $add_parts, $all_parts) );
 
         return true;
@@ -117,12 +117,12 @@ class CompetitionManager
                     $this->memberCompliantWithCompetition($member,$competition),
                     $competition->getRestrictions()
                 );
-                $this->entityManager->persist($enrolment);
+                $this->em->persist($enrolment);
                 $add++;
             }
         }
 
-        if ($flush) $this->entityManager->flush();
+        if ($flush) $this->em->flush();
         $this->exitMessage[] = array( 'alert' => 'success', 'html' => sprintf('Added %d of %d enrolments.', $add, $all) );
 
         return true;
@@ -144,7 +144,7 @@ class CompetitionManager
                     $upd++;
                 } else {
                     if ($remove) {
-                        $this->entityManager->remove($enrolment);
+                        $this->em->remove($enrolment);
                         $rem++;
                     } else {
                         $enrolment->setFiltered(false);
@@ -154,7 +154,7 @@ class CompetitionManager
             }
         }
 
-        if ($flush) $this->entityManager->flush();
+        if ($flush) $this->em->flush();
         $this->exitMessage[] = array(
             'alert' => 'success', 
             'html' => sprintf('Verified %d erolments: %d updated %d removed.', $all, $upd, $rem)
@@ -173,7 +173,7 @@ class CompetitionManager
             $upd++;
         }
 
-        if ($flush) $this->entityManager->flush();
+        if ($flush) $this->em->flush();
         $this->exitMessage[] = array(
             'alert' => 'success',
              'html' => sprintf('Disabled %d enrolments for member %s.', $member->getName(), $upd)
@@ -209,13 +209,13 @@ class CompetitionManager
                     }
                 } else {
                     $enrolment = new CompetitionEnrolment($competitionPart, $member, $enrolled, $filtered, $competition->getRestrictions());
-                    $this->entityManager->persist($enrolment);
+                    $this->em->persist($enrolment);
                     $add++;
                 }
             }
         }
 
-        if ($flush) $this->entityManager->flush();
+        if ($flush) $this->em->flush();
         $this->exitMessage[] = array(
             'alert' => 'success', 
              'html' => sprintf('Verified enrolments for member %s: %d added %d updated.', $member->getName(), $add, $upd)

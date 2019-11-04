@@ -78,6 +78,11 @@ class UserManager
 
     }
 
+    public function findByEmail(string $email): ?User
+    {
+        return $this->userRepository->findOneBy(['email' => $email]);
+    }
+
     public function invite(User $user): bool
     {
         if (!is_null($user->getLastActiveAt())) return false;

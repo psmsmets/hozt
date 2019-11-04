@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TryoutManager 
 {
-    private $entityManager;
+    private $em;
     private $tryoutRepository;
 
     public function __construct(EntityManagerInterface $em, TryoutRepository $tr, TryoutEnrolmentRepository $ter, \Swift_Mailer $mailer)

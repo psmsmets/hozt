@@ -22,11 +22,11 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     private $slugger;
     private $em;
 
-    public function __construct(\Cocur\Slugify\SlugifyInterface $slugify, EntityManagerInterface $entityManager, 
+    public function __construct(\Cocur\Slugify\SlugifyInterface $slugify, EntityManagerInterface $em, 
         TryoutRepository $TryoutRep, TryoutEnrolmentRepository $TryoutEnrolRep )
     {
         $this->slugger = $slugify;
-        $this->em = $entityManager;
+        $this->em = $em;
         $this->tryoutRep = $TryoutRep;
         $this->tryoutEnrolRep = $TryoutEnrolRep;
     }
