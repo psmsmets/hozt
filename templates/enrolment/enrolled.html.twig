@@ -69,17 +69,17 @@
           </tr>
         </thead>
         <tbody>
-        {% for e in event.enrolments %}
+        {% for enrolment in event.enrolments %}
           <tr>
             <th scope="col">{{loop.index}}</th>
-            <td class="small">{{e.enrolledAt|localizeddate('short','short')}}</td>
-            <td class="text-left">{{e.name}}</td>
-            <td>{% if e.message %}<a class="text-dark" tabindex="0" role="button" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content="{{e.message}}"><i class="fas fa-comment-alt"></i></a>{%endif%}</td>
-            <td>{{e.time}}</td>
-            <td>{{e.numberofpersons}}</td>
-            <td>{{e.totalPrice|number_format(2, ',', '.')}}</td>
-            <td>{%if e.paid%}<i class="fas fa-check text-success"></i>{%else%}<i class="fas fa-times text-danger"></i>{%endif%}</td>
-            {% for i in e.parseinputdata().event.inputs %}
+            <td class="small">{{enrolment.enrolledAt|localizeddate('short','short')}}</td>
+            <td class="text-left">{{enrolment.name}}</td>
+            <td>{% if enrolment.message %}<a class="text-dark" tabindex="0" role="button" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content="{{enrolment.message|e}}<br><a href='mailto:{{enrolment.email}}?SUBJECT=Inschrijving {{event.calendar.title}}&BODY=Jouw vraag:%0D%0A{{enrolment.message|e}}'>beantwoord</a>" data-html="true"><i class="fas fa-comment-alt"></i></a>{%endif%}</td>
+            <td>{{enrolment.time}}</td>
+            <td>{{enrolment.numberofpersons}}</td>
+            <td>{{enrolment.totalPrice|number_format(2, ',', '.')}}</td>
+            <td>{%if enrolment.paid%}<i class="fas fa-check text-success"></i>{%else%}<i class="fas fa-times text-danger"></i>{%endif%}</td>
+            {% for i in enrolment.parseinputdata().event.inputs %}
             <td>{{i.number}}</td>
             {% endfor %}
           </tr>

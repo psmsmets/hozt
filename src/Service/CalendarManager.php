@@ -9,14 +9,14 @@ use Doctrine\ORM\EntityManagerInterface;
 class CalendarManager 
 {
     private $oneYear;
-    private $entityManager;
+    private $em;
     private $calendarRepository;
     private $exitMessage;
     private $periodStart;
 
-    public function __construct(EntityManagerInterface $entityManager, CalendarEventRepository $calendarRepository)
+    public function __construct(EntityManagerInterface $em, CalendarEventRepository $calendarRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->em = $em;
         $this->calendarRepository = $calendarRepository;
         $this->exitMessage = null;
         $this->oneYear = new \DateInterval('P1Y');

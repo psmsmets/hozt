@@ -34,6 +34,9 @@
     {% if not app.user %}
     <p class="mt-5">Lid van HoZT? <a href="{{path('security_login', {'route': path('enrolment_event_uuid', { 'uuid': event.calendar.uuid } )|e('url')} )}}">Log in</a> en schrijf sneller in.</p>
     {% endif %}
+    {% if is_granted('ROLE_MANAGER') %}
+    <p class="mt-5"><a class="btn btn-medium ml-2 mb-2" href="{{ path('enrolment_enrolled', { 'uuid': event.calendar.uuid }) }}"><i class="fas fa-list-ol"></i> Inschrijvingen</a></p>
+    {% endif %}
 
     {% if page.form %}
 

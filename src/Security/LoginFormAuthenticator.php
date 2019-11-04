@@ -27,16 +27,16 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     use TargetPathTrait;
 
     private $userManager;
-    private $entityManager;
+    private $em;
     private $router;
     private $csrfTokenManager;
     private $passwordEncoder;
 
-    public function __construct(UserManager $userManager, EntityManagerInterface $entityManager, RouterInterface $router, 
+    public function __construct(UserManager $userManager, EntityManagerInterface $em, RouterInterface $router, 
         CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->userManager = $userManager;
-        $this->entityManager = $entityManager;
+        $this->em = $em;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
@@ -71,7 +71,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        $user = $this->userManager->findByEmail($credentials['email']);
 
         if (!$user) {
             // fail authentication with a custom error
