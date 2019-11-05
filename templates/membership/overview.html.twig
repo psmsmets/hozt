@@ -14,9 +14,7 @@
 
     <h2 class="text-primary d-flex justify-content-between">Overzicht</h2>
 
-    <p>Hallo {{app.user.firstname}}.
-<!--[user message from flashbox]Er zijn momenteel geen meldingen.[/usesmessage]-->
-</p>
+    <p>Hallo {{app.user.firstname}}.</p>
 
     <div class="row">
 
@@ -24,7 +22,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title text-primary mb-2">Trainingsuren <span class="badge badge-primary align-text-bottom">vandaag</span></h5>
-            {% include 'memberShip/overview_schedule.html.twig' with {'data': page.schedule_today } %}
+            {% include 'membership/overview_schedule.html.twig' with {'data': page.schedule_today } %}
           </div>
         </div>
       </div>
@@ -33,7 +31,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title text-primary mb-2">Trainingsuren <span class="badge badge-medium align-text-bottom">morgen</span></h5> 
-            {% include 'memberShip/overview_schedule.html.twig' with {'data': page.schedule_tomorrow } %}
+            {% include 'membership/overview_schedule.html.twig' with {'data': page.schedule_tomorrow } %}
           </div>
         </div>
       </div>
@@ -41,7 +39,7 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            {% include 'memberShip/overview_competitions.html.twig' with {'data': page.upcoming_competitions, 'data_type': 'komende' } %}
+            {% include 'membership/overview_competitions.html.twig' with {'data': page.upcoming_competitions, 'data_type': 'komende' } %}
           </div>
         </div>
       </div>
@@ -49,7 +47,7 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            {% include 'memberShip/overview_competitions.html.twig' with {'data': page.new_competitions, 'data_type': 'nieuwe' } %}
+            {% include 'membership/overview_competitions.html.twig' with {'data': page.new_competitions, 'data_type': 'nieuwe' } %}
           </div>
         </div>
       </div>
