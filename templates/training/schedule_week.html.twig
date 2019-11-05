@@ -1,5 +1,3 @@
-{% set members = false %}
-
 {% apply spaceless %}
 
 <h5 class="mb-4">
@@ -32,13 +30,13 @@
         </td>
         <td>
         {% for schedule in daySchedule['schedule'] %}
-          {% for team in schedule.getTeams %}<span class="badge badge-medium align-text-bottom mr-2">{{team.abbr}}</span>{% endfor %}
+          {% for team in schedule.getTeams %}<span class="badge badge-medium align-text-bottom">{{team.abbr}}</span>{% endfor %}
           {% if loop.index > 0 %}<br>{% endif %}
         {% endfor %}
         <td>
         {% for schedule in daySchedule['schedule'] %}
-          {% if schedule.comment %}<span class="badge badge-info ml-md-1"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
-          {% if schedule.description %}<a tabindex="0" class="badge badge-light text-muted float-md-right mt-md-2" data-toggle="popover" data-trigger="focus" data-content="{{schedule.description}}"><i class="fas fa-comment"></i></a>{% endif %}
+          {% if schedule.comment %}<span class="badge badge-info align-text-bottom"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
+          {% if schedule.description %}<a tabindex="0" class="badge badge-light align-text-bottom text-muted" data-toggle="popover" data-trigger="focus" data-content="{{schedule.description}}"><i class="fas fa-comment"></i></a>{% endif %}
           {% if loop.index > 0 %}<br>{% endif %}
         {% endfor %}
         </td>
