@@ -753,6 +753,14 @@ class PageController extends AbstractController
     public function membership(ScheduleManager $scheduleManager)
     {
         $this->initTemplateData();
+
+        $this->addToTemplateData( 'schedule_today', $scheduleManager->daySchedule(
+            new \DateTimeImmutable('today midnight'), null, $this->user
+        ));
+        $this->addToTemplateData( 'schedule_tomorrow', $scheduleManager->daySchedule(
+            new \DateTimeImmutable('tomorrow midnight'), null, $this->user
+        ));
+
         $this->addToTemplateData( 'upcoming_competitions', $this->competitionManager->getUpcomingUserCompetitions($this->user));
         $this->addToTemplateData( 'new_competitions', $this->competitionManager->getNewUserCompetitions($this->user));
 

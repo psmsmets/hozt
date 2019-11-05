@@ -18,22 +18,13 @@
 <!--[user message from flashbox]Er zijn momenteel geen meldingen.[/usesmessage]-->
 </p>
 
-
     <div class="row">
 
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-primary">Komende wedstrijden<small><span class="badge badge-primary align-text-bottom ml-2">{{page.upcoming_competitions|length}}</span></small></h5> 
-            {% for competition in page.upcoming_competitions|slice(0, 5) %}
-              {% if loop.first %}<dl class="row">{% endif %}
-              <dd class="col-sm-4 text-sm-right align-baseline"><small class="text-muted">{{competition.calendar.startTime|localizeddate('medium','none')}}</small></dd>
-              <dd class="col-sm-8"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-bottom">{{competition.organization}}</small></a></dd>
-              {% if loop.last %}</dl>{% endif %}
-            {% else %}
-              <p>Geen komende wedstrijden gevonden.</p>
-            {% endfor%}
-            <a href="{{path('membership_competitions')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Alle wedstrijden</a>
+            <h5 class="card-title text-primary mb-2">Trainingsuren <span class="badge badge-primary align-text-bottom">vandaag</span></h5>
+            {% include 'memberShip/overview_schedule.html.twig' with {'data': page.schedule_today } %}
           </div>
         </div>
       </div>
@@ -41,16 +32,8 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-primary">Nieuwe wedstrijden<small><span class="badge badge-primary align-text-bottom ml-2">{{page.new_competitions|length}}</span></small></h5>
-            {% for competition in page.new_competitions|slice(0, 5) %}
-              {% if loop.first %}<dl class="row">{% endif %}
-              <dd class="col-sm-4 text-sm-right align-baseline"><small class="text-muted">{{competition.calendar.startTime|localizeddate('medium','none')}}</small></dd>
-              <dd class="col-sm-8"><a href="{{ path('calendar_event', {'uuid': competition.calendar.uuid}) }}" target="_Blank" class="text-dark">{{competition.calendar.title}} <small class="badge badge-medium align-text-bottom">{{competition.organization}}</small></a></dd>
-              {% if loop.last %}</dl>{% endif %}
-            {% else %}
-              <p>Geen nieuwe wedstrijden gevonden.</p>
-            {% endfor%}
-            <a href="{{path('membership_competitions')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Alle wedstrijden</a>
+            <h5 class="card-title text-primary mb-2">Trainingsuren <span class="badge badge-medium align-text-bottom">morgen</span></h5> 
+            {% include 'memberShip/overview_schedule.html.twig' with {'data': page.schedule_tomorrow } %}
           </div>
         </div>
       </div>
@@ -58,7 +41,23 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title text-primary d-flex">Leden <small><span class="badge badge-primary ml-2">{{app.user.getEnabledMembers()|length}}</span></small></h5>
+            {% include 'memberShip/overview_competitions.html.twig' with {'data': page.upcoming_competitions, 'data_type': 'komende' } %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            {% include 'memberShip/overview_competitions.html.twig' with {'data': page.new_competitions, 'data_type': 'nieuwe' } %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title text-primary">Leden <small><span class="badge badge-primary align-text-bottom ml-1">{{app.user.getEnabledMembers()|length}}</span></small></h5>
             {% for member in app.user.getEnabledMembers() %}
             <p class="card-text">{{member}}{%if member.team%} | {{member.team.name}}{%endif%} {%for tag in member.grouping%}<span class="badge badge-secondary small ml-1 align-text-bottom">{{tag.name}}</span>{%endfor%}<br><span class="text-muted small">Lidnr. {{member.memberId}} {%if member.registrationId%}| Licentienr. {{member.registrationId}}{%endif%}</span></p>
             {% else %}
