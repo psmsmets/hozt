@@ -58,6 +58,7 @@ use App\Form\EnrolmentForm;
 # managers
 use App\Service\CalendarManager;
 use App\Service\CompetitionManager;
+use App\Service\ScheduleManager;
 
 class PageController extends AbstractController
 {
@@ -777,41 +778,10 @@ class PageController extends AbstractController
     /**
      * @Route("/mijn-account/trainingsuren", name="membership_schedule")
      */
-    public function membership_schedule(TrainingScheduleRepository $scheduleRepo)
+    public function membership_schedule()
     {
-        $this_week = new \DateTimeImmutable('today last monday');
-        $next_week = $this_week->modify('+1 week');
-        $two_weeks = $next_week->modify('+1 week');
-        $three_weeks = $two_weeks->modify('+1 week');
-        $four_weeks = $three_weeks->modify('+1 week');
-
         $this->initTemplateData();
-
-        $this->addToTemplateData( 'this_week_mon', $this_week );
-        $this->addToTemplateData( 'this_week_sun', $this_week->modify('next sunday') );
-        $this->addToTemplateData( 
-            'schedule_this_week', $scheduleRepo->findAllByUserForPeriod($this->user, $this_week)
-        );
-        $this->addToTemplateData( 'next_week_mon', $next_week );
-        $this->addToTemplateData( 'next_week_sun', $next_week->modify('next sunday') );
-        $this->addToTemplateData( 
-            'schedule_next_week', $scheduleRepo->findAllByUserForPeriod($this->user, $next_week)
-        );
-        $this->addToTemplateData( 'two_weeks_mon', $two_weeks );
-        $this->addToTemplateData( 'two_weeks_sun', $two_weeks->modify('next sunday') );
-        $this->addToTemplateData( 
-            'schedule_two_weeks', $scheduleRepo->findAllByUserForPeriod($this->user, $two_weeks)
-        );
-        $this->addToTemplateData( 'three_weeks_mon', $three_weeks );
-        $this->addToTemplateData( 'three_weeks_sun', $three_weeks->modify('next sunday') );
-        $this->addToTemplateData( 
-            'schedule_three_weeks', $scheduleRepo->findAllByUserForPeriod($this->user, $three_weeks)
-        );
-        $this->addToTemplateData( 'four_weeks_mon', $four_weeks );
-        $this->addToTemplateData( 'four_weeks_sun', $four_weeks->modify('next sunday') );
-        $this->addToTemplateData( 
-            'schedule_four_weeks', $scheduleRepo->findAllByUserForPeriod($this->user, $four_weeks)
-        );
+        $this->addToTemplateData( 'startOfWeek', $this->calendarManager->startOfWeek() );
 
         return $this->render('membership/schedules.html.twig', $this->template_data );
     }

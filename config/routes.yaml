@@ -97,28 +97,28 @@ static_page:
 # api
 api_training_today:
     path: /api/training/vandaag
-    controller: App\Controller\ApiController::training_today
+    controller: App\Controller\ApiController::api_training_today
 
 api_training_tomorrow:
     path: /api/training/morgen
-    controller: App\Controller\ApiController::training_tomorrow
+    controller: App\Controller\ApiController::api_training_tomorrow
 
-api_training_team_today:
-    path: /api/traint-{team_abbr}-vandaag
-    controller: App\Controller\ApiController::training_team_today
+api_training_schedule:
+    path: /api/trainingsuren
+    controller: App\Controller\ApiController::api_training_schedule
 
 api_training_team:
     path: /api/training/{team_abbr}
-    controller: App\Controller\ApiController::training_team
+    controller: App\Controller\ApiController::api_training_team
 
 api_documents_competition_upcoming:
     path: /api/documenten/wedstrijden/aanstaande/{slug}/{limit<\d+>?3}
-    controller: App\Controller\ApiController::documents_competition_upcoming
+    controller: App\Controller\ApiController::api_documents_competition_upcoming
 
 api_documents_competition_latest:
     path: /api/documenten/wedstrijden/laatste/{slug}/{limit<\d+>?3}
-    controller: App\Controller\ApiController::documents_competition_latest
+    controller: App\Controller\ApiController::api_documents_competition_latest
 
 api_calendar_events:
     path: /api/kalender/aanstaande/{limit<\d+>?7}
-    controller: App\Controller\ApiController::calender_events
+    controller: App\Controller\ApiController::api_calender_events

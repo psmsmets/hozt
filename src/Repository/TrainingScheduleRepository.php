@@ -48,40 +48,11 @@ class TrainingScheduleRepository extends ServiceEntityRepository
     // /**
     //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
     //  */
-    public function findAllByUserForPeriod(User $user, \DateTimeInterface $reftime=null, int $days=7 )
-    {
-        return $this->createQueryBuilder('schedule')
-            ->innerJoin('schedule.teams', 'teams')
-            ->innerJoin('schedule.time', 'time')
-            ->leftJoin('teams.members', 'members')
-            ->leftJoin('members.user', 'user')
-            ->leftJoin('schedule.exceptions', 'exception')
-            ->leftJoin('exception.teams', 'ex_teams')
-            ->addSelect('time')
-            ->addSelect('teams')
-            ->addSelect('members')
-            ->addSelect('exception')
-            ->addSelect('ex_teams')
-            ->andWhere('(schedule.startDate <= :start and schedule.endDate is null) or schedule.startDate >= :start')
-            ->andWhere('(schedule.persistent = false and (schedule.endDate >= :end or schedule.endDate is null)) or schedule.endDate <= :end')
-            ->andWhere('user = :user')
-            ->setParameter('start', $reftime)
-            ->setParameter('end', (clone $reftime)->modify(sprintf('+%d days', $days)))
-            ->setParameter('user', $user)
-            ->orderBy('schedule.dayNumber, time.startTime, time.duration, teams.abbr', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;     
-    }
-
-    // /**
-    //  * @return TrainingSchedule[] Returns an array of TrainingSchedule objects
-    //  */
-    public function findAllOnDate(\DateTimeInterface $reftime=null)
+    public function findAllOnDate(\DateTimeInterface $reftime=null, array $filter_teams = null, User $user = null)
     {
         if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
-        return $this->createQueryBuilder('schedule')
+        $query = $this->createQueryBuilder('schedule')
             ->innerJoin('schedule.teams', 'teams')
             ->innerJoin('schedule.time', 'time')
             ->leftJoin('schedule.exceptions', 'exception')
@@ -96,9 +67,19 @@ class TrainingScheduleRepository extends ServiceEntityRepository
             ->setParameter('day', date('N', $reftime->getTimestamp()))
             ->setParameter('now', $reftime)
             ->orderBy('time.startTime, time.duration, teams.abbr', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;     
+        ;
+        if (!is_null($filter_teams) or !empty($filter_teams)) {
+            $query->andWhere($query->expr()->in('teams.abbr',$filter_teams));
+        }
+        if (!is_null($user)) {
+            $query
+                ->leftJoin('teams.members', 'members')
+                ->leftJoin('members.user', 'user')
+                ->andWhere('user = :user')
+                ->setParameter('user', $user)
+            ;
+        }
+        return $query->getQuery()->getResult();     
     }
 
     public function findAllByTeamJoinedToTeam(string $team_abbr, \DateTimeInterface $reftime=null)

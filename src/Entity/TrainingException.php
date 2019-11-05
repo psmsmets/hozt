@@ -123,7 +123,7 @@ class TrainingException
 
     public function isActive(\DateTimeInterface $refdate = null): ?bool
     {
-        if (is_null($refdate)) $refdate = new \DateTime("today midnight");
+        if (is_null($refdate)) $refdate = new \DateTimeImmutable("today midnight");
         return $this->endDate >= $refdate && $this->startDate <= $refdate;
     }
 

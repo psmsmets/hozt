@@ -298,9 +298,9 @@ class TrainingTeam
         return $this->exceptions;
     }
 
-    public function getActiveExceptions(\DateTime $refdate = null, bool $allDay = true): Collection
+    public function getActiveExceptions(\DateTimeInterface $refdate = null, bool $allDay = true): Collection
     {
-        if (is_null($refdate)) $refdate = new \DateTime('today midnight');
+        if (is_null($refdate)) $refdate = new \DateTimeImmutable('today midnight');
         return $this->getExceptions()->filter(
             function(TrainingException $ex) use ($refdate,$allDay) {
                 return $ex->isActive($refdate) && ( $allDay == (count($ex->getSchedule()) == 0) ); 
@@ -372,6 +372,13 @@ class TrainingTeam
         if (is_null($enabled)) return $this->members;
         return $this->members->filter(function(Member $member) use ($enabled) {
             return $member->isEnabled() === $enabled;
+        });
+    }
+
+    public function getUserMembers(User $user=null, bool $enabled=true): Collection
+    {
+        return $this->members->filter(function(Member $member) use ($user,$enabled) {
+            return is_null($user) ? false : $member->isEnabled() === $enabled and $member->getUser() === $user;
         });
     }
 

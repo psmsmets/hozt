@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\TrainingTeamCategory;
 use App\Entity\TrainingException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -83,19 +84,29 @@ class TrainingExceptionRepository extends ServiceEntityRepository
         ;     
     }
 
-    public function findAllOnDate(\DateTimeInterface $reftime=null )
+    public function findAllOnDate(\DateTimeInterface $reftime=null, array $filter_teams = null, User $user = null )
     {
         if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
 
-        return $this->createQueryBuilder('exception')
+        $query = $this->createQueryBuilder('exception')
             ->leftJoin('exception.teams', 'teams')
             ->leftJoin('exception.schedule', 'schedule')
             ->addSelect('teams')
             ->andWhere('exception.startDate <= :ref')
             ->andWhere('exception.endDate >= :ref')
             ->setParameter('ref', $reftime)
-            ->getQuery()
-            ->getResult()
-        ;     
+        ;
+        if (!is_null($filter_teams) or !empty($filter_teams)) {
+            $query->andWhere($query->expr()->in('teams.abbr',$filter_teams));
+        }
+        if (!is_null($user)) {
+            $query
+                ->leftJoin('teams.members', 'members')
+                ->leftJoin('members.user', 'user')
+                ->andWhere('user = :user')
+                ->setParameter('user', $user)
+            ;
+        }
+        return $query->getQuery()->getResult();     
     }
 }
