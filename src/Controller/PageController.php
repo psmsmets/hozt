@@ -750,7 +750,7 @@ class PageController extends AbstractController
     /**
      * @Route("/mijn-account", name="membership")
      */
-    public function membership()
+    public function membership(ScheduleManager $scheduleManager)
     {
         $this->initTemplateData();
         $this->addToTemplateData( 'upcoming_competitions', $this->competitionManager->getUpcomingUserCompetitions($this->user));
