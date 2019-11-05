@@ -22,7 +22,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title text-primary mb-2">Trainingsuren <span class="badge badge-primary align-text-bottom">vandaag</span></h5>
-            {% include 'membership/overview_schedule.html.twig' with {'data': page.schedule_today } %}
+            {% include 'membership/overview_schedule.html.twig' with {'data': page.schedule_today, 'data_type': 'vandaag' } %}
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title text-primary mb-2">Trainingsuren <span class="badge badge-medium align-text-bottom">morgen</span></h5> 
-            {% include 'membership/overview_schedule.html.twig' with {'data': page.schedule_tomorrow } %}
+            {% include 'membership/overview_schedule.html.twig' with {'data': page.schedule_tomorrow, 'data_type': 'morgen' } %}
           </div>
         </div>
       </div>

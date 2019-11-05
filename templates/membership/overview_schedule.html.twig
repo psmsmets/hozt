@@ -1,7 +1,7 @@
 <h6 class="mb-3 text-muted">{{data['date']|localizeddate('full','none')}}</h6>
 {% for schedule in data['schedule'] %}
   {% if loop.first %}<dl class="row">{% endif %}
-  <dd class="col-sm-4 text-sm-right align-baseline"><small class="text-muted">{{schedule.time}}</small></dd>
+  <dd class="col-sm-4 text-sm-right align-baseline pr-lg-0"><small class="text-muted">{{schedule.time}}</small></dd>
   <dd class="col-sm-8">
     {% for team in schedule.getTeams %}
       {% for member in team.getUserMembers(app.user)%}{{member.firstname}}&nbsp;{% endfor %}
@@ -15,6 +15,6 @@
     </dd>
     {% if loop.last %}</dl>{% endif %}
 {% else %}
-  <p>Er is vandaag geen training voor jouw groepen.</p>
+  <p class="font-weight-lighter smaller">Er zijn {{data_type}} geen trainingen voor jouw leden/groepen.</p>
 {% endfor%}
 <a href="{{path('membership_schedule')}}" class="card-link float-right small"><i class="fas fa-caret-right"></i> Alle trainingsuren</a>
