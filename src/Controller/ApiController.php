@@ -49,6 +49,7 @@ use App\Service\CalendarManager;
 use App\Service\CompetitionManager;
 use App\Service\UserManager;
 use App\Service\MemberManager;
+use App\Service\ScheduleManager;
 
 class ApiController extends AbstractController
 {
@@ -93,57 +94,33 @@ class ApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/traint-{team_abbr}-vandaag", name="api_training_team_today")
+     * @Route("/api/trainingsuren", name="api_training_schedule")
      */
-    public function training_team_today(string $team_abbr)
+    public function api_training_schedule(Request $request, ScheduleManager $scheduleManager, CalendarManager $calendarManager)
     {
-        $schedule = $this->getDoctrine()
-            ->getRepository(TrainingSchedule::class)
-            ->findAllByTeamJoinedToTeam($team_abbr)
-            ;
+        $year = (int) $request->query->get('year', null);
+        $week = (int) $request->query->get('week', null);
 
-        if (!$schedule) return $this->json(
-            array( 
-                'result' => false,
-                'error' => 'Zwemgroep '.strtoupper($team_abbr).' niet gevonden.' 
-            )
-        );
+        $startOfWeek = $calendarManager->startOfWeek($year, $week);
 
-        $day_id = date('N', strtotime(date("Y-m-d")));
+        $teams = $request->query->get('teams', null);
+        $teams = (is_null($teams) or trim($teams) === '') ? null : explode( ',', strtoupper($teams) );
 
-        $schedule = array_filter( $schedule, 
-            function($item) use($day_id)
-            {
-                return $item->getDay()->getId() == $day_id;
-            }
-        );
+        // init teams if user is logged in and has swimming members
 
-        $msg = strtoupper($team_abbr).' heeft vandaag ';
-
-        if ( count($schedule) > 0 )
-        {
-            $msg.='training van';
-            $cnt=0;
-            foreach ( $schedule as $training )
-            {
-                if ($cnt==0) { 
-                    $msg.=' '.$training->getTime();
-                } else {
-                    $msg.=' en van '.$training->getTime();
-                }
-                $cnt++;
-            }
-            return $this->json(array( 'result' => true, 'message' => $msg));
-        } else {
-            return $this->json(array( 'result' => false, 'message' => $msg.'geen training.'));
-        }
-
+        return $this->json([
+            'success' => true,
+            'html' => $this->render('training/schedule_week.html.twig', [
+                    'startOfWeek' => $startOfWeek,
+                    'weekSchedule' => $scheduleManager->weekSchedule($startOfWeek, $teams, $this->security->getUser()),
+                ])->getContent(),
+            ]);
     }
 
     /**
      * @Route("/api/training/vandaag", name="api_training_today")
      */
-    public function training_today()
+    public function api_training_today()
     {
         $refdate = (new \DateTime('today midnight'));
 
@@ -170,7 +147,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/training/morgen", name="api_training_tomorrow")
      */
-    public function training_tomorrow()
+    public function api_training_tomorrow()
     {
         $refdate = (new \DateTime('today midnight'))->modify('+1 day');
 
@@ -243,7 +220,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/training/{team_abbr}", name="api_training_team")
      */
-    public function training_team($team_abbr)
+    public function api_training_team($team_abbr)
     {
         $team = $this->getDoctrine()
             ->getRepository(TrainingTeam::class)
@@ -285,7 +262,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/kalender/aanstaande/{count}", name="api_calender_events")
      */
-    public function calender_events(int $limit=7)
+    public function api_calender_events(int $limit=7)
     {
         $events = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)
@@ -315,7 +292,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/documenten/wedstrijden/aanstaande/{slug}/{limit}", name="api_documents_competition_upcoming")
      */
-    public function documents_competition_upcoming(string $slug, int $limit=5)
+    public function api_documents_competition_upcoming(string $slug, int $limit=5)
     {
         $docs = $this->getDoctrine()
             ->getRepository(CompetitionDocument::class)
@@ -347,7 +324,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/documenten/wedstrijden/laatste/{slug}/{limit}", name="api_documents_competition_latest")
      */
-    public function documents_competition_latest(string $slug, int $limit=5)
+    public function api_documents_competition_latest(string $slug, int $limit=5)
     {
         $events = $this->getDoctrine()
             ->getRepository(CalendarEvent::class)

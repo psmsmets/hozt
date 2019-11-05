@@ -34,6 +34,15 @@ class CalendarManager
         return true;
     }
 
+    public function startOfWeek(int $year = null, int $week = 0): \DateTimeInterface
+    {
+        if ($week > 0 and $week < 53 and $year > 1900 and $year < 2100) {
+            return new \DateTimeImmutable( sprintf('%04dW%02d', $year, $week) );
+        } else  {
+            return new \DateTimeImmutable('this week monday');
+        }
+    }
+
     public function yearToPeriodStart(int $year): \DateTimeInterface
     {
         return new \DateTimeImmutable("$year-08-15");

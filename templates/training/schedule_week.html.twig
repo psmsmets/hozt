@@ -1,0 +1,58 @@
+{% set members = false %}
+
+{% apply spaceless %}
+
+<h5 class="mb-4">
+  <span class="text-muted mr-2 mr-md-3">{{startOfWeek|date('Y')}}W{{startOfWeek|date('W')}}</span>
+  {{startOfWeek|localizeddate('long','none')}} tot {{startOfWeek|date_modify('+6 days')|localizeddate('long','none')}}
+</h5>
+
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col" class="text-center"><i class="fas fa-clock"></i></th>
+        <th scope="col"><i class="fad fa-user-friends"></i></th>
+        <th scope="col"><i class="fas fa-info-circle"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for daySchedule in weekSchedule %}
+      {% if daySchedule['schedule'] %}
+      <tr>
+        <td>
+          <b>{{daySchedule['date']|localizeddate('full', 'none', app.request.locale, null, 'EEEE')|ucfirst}}</b><br><small>{{daySchedule['date']|localizeddate('medium', 'none')}}</small>
+        </td>
+        <td class="text-center">
+        {% for schedule in daySchedule['schedule'] %}
+          {{schedule.time}}
+          {% if loop.index > 0 %}<br>{% endif %}
+        {% endfor %}
+        </td>
+        <td>
+        {% for schedule in daySchedule['schedule'] %}
+          {% for team in schedule.getTeams %}<span class="badge badge-medium align-text-bottom mr-2">{{team.abbr}}</span>{% endfor %}
+          {% if loop.index > 0 %}<br>{% endif %}
+        {% endfor %}
+        <td>
+        {% for schedule in daySchedule['schedule'] %}
+          {% if schedule.comment %}<span class="badge badge-info ml-md-1"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
+          {% if schedule.description %}<a tabindex="0" class="badge badge-light text-muted float-md-right mt-md-2" data-toggle="popover" data-trigger="focus" data-content="{{schedule.description}}"><i class="fas fa-comment"></i></a>{% endif %}
+          {% if loop.index > 0 %}<br>{% endif %}
+        {% endfor %}
+        </td>
+        <td>
+        {% for schedule in daySchedule['schedule'] %}
+          {{schedule.description}}
+          {% if loop.index > 0 %}<br>{% endif %}
+        {% endfor %}
+        </td>
+      </tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endapply %}

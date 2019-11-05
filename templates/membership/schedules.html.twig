@@ -20,44 +20,24 @@
     <div class="row">
       <div class="col-12 col-lg-3">
         <div class="nav flex-column nav-pills bg-light" id="schedule-tab" role="tablist" aria-orientation="vertical">
-          <a class="nav-link active" id="schedule-this-week-tab" data-toggle="pill" href="#this-week" role="tab" aria-controls="schedule" aria-selected="false">Deze week</a>
-          <a class="nav-link" id="schedule-next-week-tab" data-toggle="pill" href="#next-week" role="tab" aria-controls="schedule" aria-selected="false">Volgende week</a>
-          <a class="nav-link" id="schedule-two-weeks-tab" data-toggle="pill" href="#two-weeks" role="tab" aria-controls="schedule" aria-selected="true">Over <span class="badge badge-primary align-text-bottom">2</span> weken</a>
-          <a class="nav-link" id="schedule-three-weeks-tab" data-toggle="pill" href="#three-weeks" role="tab" aria-controls="schedule" aria-selected="true">Over <span class="badge badge-primary align-text-bottom">3</span> weken</a>
-          <a class="nav-link" id="schedule-four-weeks-tab" data-toggle="pill" href="#four-weeks" role="tab" aria-controls="schedule" aria-selected="true">Over <span class="badge badge-primary align-text-bottom">4</span> weken</a>
+          {% set startOfWeek = page.startOfWeek %}
+          <a class="nav-link active" id="schedule-this-week-tab" data-toggle="pill" href="#this-week" role="tab" aria-controls="schedule" aria-selected="false" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Deze week</a>
+          {% set startOfWeek = page.startOfWeek|date_modify('+7 days') %}
+          <a class="nav-link" id="schedule-next-week-tab" data-toggle="pill" href="#next-week" role="tab" aria-controls="schedule" aria-selected="false" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Volgende week</a>
+          {% set startOfWeek = page.startOfWeek|date_modify('+14 days') %}
+          <a class="nav-link" id="schedule-two-weeks-tab" data-toggle="pill" href="#two-weeks" role="tab" aria-controls="schedule" aria-selected="true" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Over <span class="badge badge-primary">2</span> weken</a>
+          {% set startOfWeek = page.startOfWeek|date_modify('+21 days') %}
+          <a class="nav-link" id="schedule-three-weeks-tab" data-toggle="pill" href="#three-weeks" role="tab" aria-controls="schedule" aria-selected="true" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Over <span class="badge badge-primary">3</span> weken</a>
+          {% set startOfWeek = page.startOfWeek|date_modify('+28 days') %}
+          <a class="nav-link" id="schedule-four-weeks-tab" data-toggle="pill" href="#four-weeks" role="tab" aria-controls="schedule" aria-selected="true" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Over <span class="badge badge-primary">4</span> weken</a>
         </div>
       </div>
 
       <div class="col-12 col-lg-9 mt-3 mt-lg-0 mx-2 mx-lg-0">
         <div class="tab-content" id="schedule-tabContent">
-
-          <div class="tab-pane fade show active" id="this-week" role="tabpanel" aria-labelledby="schedule-this-week-tab">
-            <h5><span class="text-muted mr-2 mr-md-3">Week #{{page.this_week_mon|date('W')}}</span>{{page.this_week_mon|localizeddate('long','none')}} - {{page.this_week_sun|localizeddate('long','none')}}</h5>
-            {% include 'membership/schedule_week.html.twig' with {'week_schedule': page.schedule_this_week } %}
+          <div class="tab-pane fade show active" id="schedule" role="tabpanel" aria-labelledby="schedule-this-week-tab">
           </div>
-
-          <div class="tab-pane fade" id="next-week" role="tabpanel" aria-labelledby="schedule-next-week-tab">
-            <h5><span class="text-muted mr-2 mr-md-3">Week #{{page.next_week_mon|date('W')}}</span>{{page.next_week_mon|localizeddate('long','none')}} - {{page.next_week_sun|localizeddate('long','none')}}</h5>
-            {% include 'membership/schedule_week.html.twig' with {'week_schedule': page.schedule_next_week } %}
-          </div>
-
-          <div class="tab-pane fade" id="two-weeks" role="tabpanel" aria-labelledby="schedule-two-weeks-tab">
-            <h5><span class="text-muted mr-2 mr-md-3">Week #{{page.two_weeks_mon|date('W')}}</span>{{page.two_weeks_mon|localizeddate('long','none')}} - {{page.two_weeks_sun|localizeddate('long','none')}}</h5>
-            {% include 'membership/schedule_week.html.twig' with {'week_schedule': page.schedule_two_weeks } %}
-          </div>
-
-          <div class="tab-pane fade" id="three-weeks" role="tabpanel" aria-labelledby="schedule-three-weeks-tab">
-            <h5><span class="text-muted mr-2 mr-md-3">Week #{{page.three_weeks_mon|date('W')}}</span>{{page.three_weeks_mon|localizeddate('long','none')}} - {{page.three_weeks_sun|localizeddate('long','none')}}</h5>
-            {% include 'membership/schedule_week.html.twig' with {'week_schedule': page.schedule_three_weeks } %}
-          </div>
-
-          <div class="tab-pane fade" id="four-weeks" role="tabpanel" aria-labelledby="schedule-four-weeks-tab">
-            <h5><span class="text-muted mr-2 mr-md-3">Week #{{page.four_weeks_mon|date('W')}}</span>{{page.four_weeks_mon|localizeddate('long','none')}} - {{page.four_weeks_sun|localizeddate('long','none')}}</h5>
-            {% include 'membership/schedule_week.html.twig' with {'week_schedule': page.schedule_four_weeks } %}
-          </div>
-
         </div>
-
       </div>
 
     </div>
@@ -67,5 +47,5 @@
 
 {% block javascripts %}
 {{ parent() }}
-{# encore_entry_script_tags('membership_competitions') #}
+{{ encore_entry_script_tags('membership_schedule') }}
 {% endblock %}
