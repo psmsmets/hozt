@@ -6,7 +6,7 @@
 </h5>
 
 <div class="table-responsive">
-  <table class="table">
+  <table class="table nowrap">
     <thead>
       <tr>
         <th scope="col"></th>
@@ -35,14 +35,8 @@
         {% endfor %}
         <td>
         {% for schedule in daySchedule['schedule'] %}
-          {% if schedule.comment %}<span class="badge badge-info align-text-bottom"><i class="fas fa-info-circle"></i> {{schedule.comment}}</span>{% endif %}
-          {% if schedule.description %}<a tabindex="0" class="badge badge-light align-text-bottom text-muted" data-toggle="popover" data-trigger="focus" data-content="{{schedule.description}}"><i class="fas fa-comment"></i></a>{% endif %}
-          {% if loop.index > 0 %}<br>{% endif %}
-        {% endfor %}
-        </td>
-        <td>
-        {% for schedule in daySchedule['schedule'] %}
-          {{schedule.description}}
+          <span class="smaller">{{schedule.description}}</span>
+          {% if schedule.comment %}<span class="badge badge-info align-text-bottom">{{schedule.comment}}</span>{% endif %}
           {% if loop.index > 0 %}<br>{% endif %}
         {% endfor %}
         </td>
