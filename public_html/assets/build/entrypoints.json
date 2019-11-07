@@ -143,7 +143,7 @@
         "/assets/build/runtime.94abd45c.js"
       ],
       "css": [
-        "/assets/build/bootstrap.a58f194e.css"
+        "/assets/build/bootstrap.6dd0fa53.css"
       ]
     }
   },
@@ -170,6 +170,6 @@
     "/assets/build/easy_admin.4cf314d0.css": "sha384-1gQo4bGGOE8Ko2wLX5FbCcoc5xHCMDWofgakj3dimHH6Ejj3PbmkpCKMV69VJCmD",
     "/assets/build/security.2ef827ba.css": "sha384-d8QPoN5FT55BVJJeWNxsT4NqsR3f5MROTNiq6hvnAEp0fcmeMqWlIPUWwM4IwbtJ",
     "/assets/build/animate.493ce280.css": "sha384-HjZJZctD9FAtMXxQ96ZgjDMDKTzPsjobiiVXFo1JWlNmaD2jK860/cxLVrDaq0PP",
-    "/assets/build/bootstrap.a58f194e.css": "sha384-1VXfuXVU9pzXzVmLAiCfTHNBwLidknvGo0vHQWOMnlBHFdt67QgtENhx/Dcw6dZF"
+    "/assets/build/bootstrap.6dd0fa53.css": "sha384-LE4rlWD2xOOQemCNS3jRQTrmG8PiUdxch8Bii2wqPcroZevW5HaMWS9UpBOxB9oJ"
   }
 }

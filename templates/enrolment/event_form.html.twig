@@ -17,7 +17,8 @@
 
     <h1 class="text-primary">{{event.calendar.title}}</h1>
 
-    <div class="d-flex justify-content-between font-weight-light">{{ event.calendar.startTime|localizeddate('full','none')|ucfirst }} om {% for time in event.times %}{%if loop.index > 1 %}{% if loop.last %} en {% else %}, {% endif %}{% endif%}{{ time.startTime|localizeddate('none','short') }}{% endfor %}
+    <div class="d-flex justify-content-between font-weight-light"><div class="d-inline-block">{{ event.calendar.startTime|localizeddate('full','none')|ucfirst }} om {% for time in event.times %}{%if loop.index > 1 %}{% if loop.last %} en {% else %}, {% endif %}{% endif%}{{ time.startTime|localizeddate('none','short') }} <span class="align-text-bottom small text-muted">{{time.numberOfPersonsStatus(1)|raw}}</span>{% endfor %}
+      </div>
       <span class="pl-1 text-right">
         <small>inschrijven tot {{ event.enrolBefore|localizeddate('medium','short')}}</small>
       </span>
