@@ -191,9 +191,14 @@ class EnrolmentTime
         return $this;
     }
 
+    public function isFull(): ?bool
+    {
+        return $this->strictNumberOfPersonsLimit ? false : $this->getRemainingNumberOfPersons() <= 0;
+    }
+
     public function getRemainingNumberOfPersons(): ?int
     {
-        return $this->strictNumberOfPersonsLimite ? null : $this->maxNumberOfPersons - $this->totalNumberOfPersons;
+        return $this->strictNumberOfPersonsLimit ? null : $this->maxNumberOfPersons - $this->totalNumberOfPersons;
     }
 
     public function getStrictNumberOfPersonsLimit(): ?bool

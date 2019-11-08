@@ -17,11 +17,11 @@
 
     <h1 class="text-primary">{{event.calendar.title}}</h1>
 
-    <div class="d-flex justify-content-between font-weight-light"><div class="d-inline-block">{{ event.calendar.startTime|localizeddate('full','none')|ucfirst }} om {% for time in event.times %}{%if loop.index > 1 %}{% if loop.last %} en {% else %}, {% endif %}{% endif%}{{ time.startTime|localizeddate('none','short') }} <span class="align-text-bottom small text-muted">{{time.numberOfPersonsStatus(1)|raw}}</span>{% endfor %}
-      </div>
-      <span class="pl-1 text-right">
+    <div class="row font-weight-light">
+      <div class="col col-md-8"><i class="fas fa-calendar-star mr-2"></i> {{ event.calendar.startTime|localizeddate('full','none')|ucfirst }}</div>
+      <div class="col col-md-4 text-md-right">
         <small>inschrijven tot {{ event.enrolBefore|localizeddate('medium','short')}}</small>
-      </span>
+      </div>
     </div>
 
     <div class="mt-2 font-weight-light"><i class="fas fa-map-marked-alt mr-2"></i> {{event.calendar.location|ucwords}}</div>
@@ -30,6 +30,14 @@
 
     {% if event.calendar.body %}
     <div class="mt-3 mt-md-4">{{ event.body|raw }}</div>
+    {% endif %}
+
+    {% if event.times|length > 1 %}
+    <div class="mt-5">Je kan kiezen uit volgende tijdstippen</div>
+    <ul class="list-group list-group-horizontal">
+    {% for time in event.times %}
+      <li class="list-group-item border-0{% if time.full %} text-muted{% endif %}">{{ time.startTime|localizeddate('none','short') }} {% if time.strictEndTime %} tot {{ time.endTime|localizeddate('none','short') }}{% endif %} <span class="ml-1 align-text-bottom small text-muted">{{time.numberOfPersonsStatus(1)|raw}}</span> {% if time.full %}<b class="text-danger ml-1">volzet</b>{% endif %}</li>{% endfor %}
+    </ul>
     {% endif %}
 
     {% if not app.user %}
