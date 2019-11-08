@@ -36,7 +36,7 @@
     <div class="mt-5">Je kan kiezen uit volgende tijdstippen</div>
     <ul class="list-group list-group-horizontal">
     {% for time in event.times %}
-      <li class="list-group-item border-0{% if time.full %} text-muted{% endif %}">{{ time.startTime|localizeddate('none','short') }} {% if time.strictEndTime %} tot {{ time.endTime|localizeddate('none','short') }}{% endif %} <span class="ml-1 align-text-bottom small nowrap">{{time.numberOfPersonsStatus(1)|raw}}</span> {% if time.full %}<b class="text-danger ml-1">volzet</b>{% endif %}</li>{% endfor %}
+      <li class="list-group-item border-0{% if time.full %} text-muted{% endif %}">{{ time.startTime|localizeddate('none','short') }} {% if time.strictEndTime %} tot {{ time.endTime|localizeddate('none','short') }}{% endif %} <span class="ml-1 align-text-bottom small nowrap" data-toggle="tooltip" data-placement="bottom" title="{{time.numberOfPersonsStatus|trans}}">{{time.numberOfPersonsStatus(1)|raw}}</span> {% if time.full %}<b class="text-danger ml-1">volzet</b>{% endif %}</li>{% endfor %}
     </ul>
     {% endif %}
 

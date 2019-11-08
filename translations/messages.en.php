@@ -42,8 +42,7 @@ return [
     'GROUPING_COACHES' => 'Coaches',
     'GROUPING_OFFICIALS' => 'Officials',
     'GROUPING_OFFICIALS' => 'Officials',
-    'enrolment.time.none' => "time",
-    'enrolment.time.calm' => "time (calm)",
-    'enrolment.time.cosy' => "time (cosy)",
-    'enrolment.time.busy' => "time (busy)",
+    'enrolment.time.calm' => "calm",
+    'enrolment.time.cosy' => "cosy",
+    'enrolment.time.busy' => "busy",
 ];

@@ -80,7 +80,7 @@ class EnrolmentForm extends AbstractType
                         return ['disabled' => ( $time->getStrictNumberOfPersonsLimit() and $time->getRemainingNumberOfPersons() <= 0 )];
                     },
                     'choice_label' => function($time) {
-                        return $this->translator->trans($time->getNumberOfPersonsStatus(), ['time' => strval($time)]);
+                        return sprintf("%s (%s)", strval($time),$this->translator->trans($time->getNumberOfPersonsStatus()));
                     },
                     'label'    => 'Kies een tijdstip',
                     'attr' => ['class'=>'custom-select'],
