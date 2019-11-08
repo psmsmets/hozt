@@ -61,7 +61,7 @@ enrolment_details:
     controller: App\Controller\PageController::enrolment_details
 
 enrolment_enrolled:
-    path: /ingeschrijvingen/{uuid<^[a-zA-Z0-9]{16}$>}
+    path: /inschrijvingen/{uuid<^[a-zA-Z0-9]{16}$>}
     controller: App\Controller\PageController::enrolment_enrolled
 
 # contact
