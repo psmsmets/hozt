@@ -37,7 +37,7 @@
           {% if enrol %}
           <a class="btn btn-primary mb-2" href="{{ path('enrolment_event_uuid', { 'uuid': event.calendar.uuid }) }}"><i class="fas fa-check"></i> Inschrijven</a>
           {% else %}
-          <button class="btn btn-primary" disabled><i class="fas fa-check"></i> Inschrijven</button>
+          <button class="btn btn-primary mb-2" disabled><i class="fas fa-check"></i> Inschrijven</button>
           {% endif %}
           <a class="btn btn-medium ml-2 mb-2" href="{{ path('calendar_event', { 'uuid': event.calendar.uuid }) }}"><i class="fas fa-calendar-day"></i> Info</a>
           {% if is_granted('ROLE_MANAGER') %}
