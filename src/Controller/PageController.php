@@ -971,7 +971,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/ingeschrijvingen/{uuid}", name="enrolment_enrolled")
+     * @Route("/inschrijvingen/{uuid}", name="enrolment_enrolled")
      */
     public function enrolment_enrolled(string $uuid, EnrolmentEventRepository $enrolmentEventRepo, EnrolmentRepository $enrolmentRepo )
     {
