@@ -20,16 +20,16 @@
     <div class="row">
       <div class="col-12 col-lg-3">
         <div class="nav flex-column nav-pills bg-light" id="schedule-tab" role="tablist" aria-orientation="vertical">
-          {% set startOfWeek = page.startOfWeek %}
-          <a class="nav-link active" id="schedule-this-week-tab" data-toggle="pill" href="#this-week" role="tab" aria-controls="schedule" aria-selected="false" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Deze week</a>
-          {% set startOfWeek = page.startOfWeek|date_modify('+7 days') %}
-          <a class="nav-link" id="schedule-next-week-tab" data-toggle="pill" href="#next-week" role="tab" aria-controls="schedule" aria-selected="false" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Volgende week</a>
-          {% set startOfWeek = page.startOfWeek|date_modify('+14 days') %}
-          <a class="nav-link" id="schedule-two-weeks-tab" data-toggle="pill" href="#two-weeks" role="tab" aria-controls="schedule" aria-selected="true" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Over <span class="badge badge-primary">2</span> weken</a>
-          {% set startOfWeek = page.startOfWeek|date_modify('+21 days') %}
-          <a class="nav-link" id="schedule-three-weeks-tab" data-toggle="pill" href="#three-weeks" role="tab" aria-controls="schedule" aria-selected="true" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Over <span class="badge badge-primary">3</span> weken</a>
-          {% set startOfWeek = page.startOfWeek|date_modify('+28 days') %}
-          <a class="nav-link" id="schedule-four-weeks-tab" data-toggle="pill" href="#four-weeks" role="tab" aria-controls="schedule" aria-selected="true" data-year="{{startOfWeek|date('Y')}}" data-week="{{startOfWeek|date('W')}}">Over <span class="badge badge-primary">4</span> weken</a>
+          {% set endOfWeek = page.startOfWeek|date_modify('+6 days') %}
+          <a class="nav-link active" id="schedule-this-week-tab" data-toggle="pill" href="#this-week" role="tab" aria-controls="schedule" aria-selected="false" data-year="{{endOfWeek|date('Y')}}" data-week="{{endOfWeek|date('W')}}">Deze week</a>
+          {% set endOfWeek = page.startOfWeek|date_modify('+13 days') %}
+          <a class="nav-link" id="schedule-next-week-tab" data-toggle="pill" href="#next-week" role="tab" aria-controls="schedule" aria-selected="false" data-year="{{endOfWeek|date('Y')}}" data-week="{{endOfWeek|date('W')}}">Volgende week</a>
+          {% set endOfWeek = page.startOfWeek|date_modify('+20 days') %}
+          <a class="nav-link" id="schedule-two-weeks-tab" data-toggle="pill" href="#two-weeks" role="tab" aria-controls="schedule" aria-selected="true" data-year="{{endOfWeek|date('Y')}}" data-week="{{endOfWeek|date('W')}}">Over <span class="badge badge-primary">2</span> weken</a>
+          {% set endOfWeek = page.startOfWeek|date_modify('+27 days') %}
+          <a class="nav-link" id="schedule-three-weeks-tab" data-toggle="pill" href="#three-weeks" role="tab" aria-controls="schedule" aria-selected="true" data-year="{{endOfWeek|date('Y')}}" data-week="{{endOfWeek|date('W')}}">Over <span class="badge badge-primary">3</span> weken</a>
+          {% set endOfWeek = page.startOfWeek|date_modify('+34 days') %}
+          <a class="nav-link" id="schedule-four-weeks-tab" data-toggle="pill" href="#four-weeks" role="tab" aria-controls="schedule" aria-selected="true" data-year="{{endOfWeek|date('Y')}}" data-week="{{endOfWeek|date('W')}}">Over <span class="badge badge-primary">4</span> weken</a>
         </div>
       </div>
 

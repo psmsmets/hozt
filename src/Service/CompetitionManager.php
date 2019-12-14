@@ -250,6 +250,11 @@ class CompetitionManager
         return $this->competitionRepository->findNewCompetitionsByUser($user, $reftime);
     }
 
+    public function getUnnotifiedUserCompetitions(User $user, \DateTimeInterface $reftime=null ): array 
+    {
+        return $this->competitionRepository->findUnnotifiedCompetitionsByUser($user, $reftime);
+    }
+
     public function getPeriodUserCompetitions(User $user, \DateTimeInterface $periodStart, \DateTimeInterface $periodEnd ): array 
     {
         return $this->competitionRepository->findCompetitionsByUser($user, $periodStart, $periodEnd);
@@ -293,6 +298,24 @@ class CompetitionManager
         $this->competitionEnrolmentRepository->flush();
 
         return true;
+    }
+
+    public function getUserNotificationList(): array
+    {
+        $dow = date('N', (new \DateTime('today'))->getTimestamp()); // get day of week
+        
+    }
+
+    public function notifyUsers(): bool 
+    {
+        $users = $this->getUserNotificationList();
+        foreach ($users as $user) {
+            $competitions = $this->getUnnotifiedUserCompetitions();
+            // set notified to true
+            // flush
+            // render email
+            // send email (add to list)
+        }
     }
 
     public function getExitMessage(): ?array

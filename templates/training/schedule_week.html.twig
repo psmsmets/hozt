@@ -1,10 +1,24 @@
 {% apply spaceless %}
 
+{% set endOfWeek = startOfWeek|date_modify('+6 days') %}
+
 <h5 class="mb-4">
-  <span class="text-muted mr-2 mr-md-3">{{startOfWeek|date('Y')}}W{{startOfWeek|date('W')}}</span>
-  {{startOfWeek|localizeddate('long','none')}} tot {{startOfWeek|date_modify('+6 days')|localizeddate('long','none')}}
+  <span class="text-muted mr-2 mr-md-3">{{endOfWeek|date('Y')}}W{{endOfWeek|date('W')}}</span>
+  {{startOfWeek|localizeddate('long','none')}} tot {{endOfWeek|localizeddate('long','none')}}
 </h5>
 
+{# check if schedule is empty #}
+{% set noSchedule = true %}
+{% for daySchedule in weekSchedule %}
+  {% if daySchedule['schedule'] %}
+    {% set noSchedule = false %}
+  {% endif %}
+{% endfor %}
+
+
+{% if noSchedule %}
+<p>Er zijn deze week geen trainingen voor jouw leden/groepen.</p>
+{% else %}
 <div class="table-responsive">
   <table class="table nowrap">
     <thead>
@@ -46,5 +60,6 @@
     </tbody>
   </table>
 </div>
+{% endif %}
 
 {% endapply %}
