@@ -101,7 +101,7 @@ class CompetitionManager
         return true;
     }
 
-    public function addCompetitionPartEnrolments(CompetitionPart $competitionPart, bool $flush=true): ?bool
+    public function addCompetitionPartEnrolments(CompetitionPart $competitionPart, bool $flush=true, bool $message=true): ?int
     {
         $competition = $competitionPart->getCompetition();
         $all=0; $add=0;
@@ -123,14 +123,14 @@ class CompetitionManager
         }
 
         if ($flush) $this->em->flush();
-        $this->exitMessage[] = array( 'alert' => 'success', 'html' => sprintf('Added %d of %d enrolments.', $add, $all) );
+        if ($message) $this->exitMessage[] = array( 'alert' => 'success', 'html' => sprintf('Added %d of %d enrolments.', $add, $all) );
 
-        return true;
+        return $add;
     }
 
     public function filterCompetitionEnrolments(Competition $competition, bool $flush=true, bool $remove=false): ?bool
     {
-        $all=0; $upd=0; $rem=0;
+        $all=0; $upd=0; $rem=0; $add=0;
 
         foreach ($competition->getEnabledCompetitionParts() as $competitionPart) {
             foreach( $competitionPart->getEnrolments() as $enrolment ) {
@@ -152,12 +152,13 @@ class CompetitionManager
                     }
                 }
             }
+            $add += $this->addCompetitionPartEnrolments($competitionPart, false, false);
         }
 
         if ($flush) $this->em->flush();
         $this->exitMessage[] = array(
             'alert' => 'success', 
-            'html' => sprintf('Verified %d erolments: %d updated %d removed.', $all, $upd, $rem)
+            'html' => sprintf('Verified %d erolments: %d updated %d added %d removed.', $all, $upd, $add, $rem)
         );
 
         return true;
