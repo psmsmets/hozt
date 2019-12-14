@@ -130,7 +130,6 @@ easy_admin:
                     - { property: 'autoCleanup', label: 'Automatisch verwijderen' }
                     - { property: 'cleanupDelay', label: 'Verwijder timeout (dagen)' }
 
-
         CompetitionPartDraft:
             class: App\Entity\CompetitionPart
             label: 'Draft dagdelen'
@@ -161,7 +160,7 @@ easy_admin:
                 actions: ['-new','-edit','-delete']
                 #batch_actions: ['enable']
 
-        CompetitionEnrolments:
+        CompetitionEnrolmentsRestrictions:
             class: App\Entity\CompetitionEnrolment
             label: 'Inschrijvingen met limieten'
             list:
@@ -180,6 +179,31 @@ easy_admin:
                 dql_filter: 'entity.filtered = true AND entity.restrictions = true'
                 actions: ['-new','-edit','-delete']
                 batch_actions: ['qualified','unqualified']
+                max_results: 50
+            search:
+                fields: ['competitionPart.competition.calendar.title','competitionPart.daypart','competitionPart.competition.organization','competitionPart.competition.calendar.location','competitor.firstname','competitor.lastname']
+                #dql_filter: 'entity.filtered = true'
+                dql_filter: ''
+
+        CompetitionEnrolments:
+            class: App\Entity\CompetitionEnrolment
+            label: 'Alle inschrijvingen'
+            list:
+                fields:
+                    - { property: 'competitionPart.competition.name', label: 'Wedstrijd', type: 'text' }
+                    - { property: 'competitionPart.daypart', label: 'Datum', template: 'easy_admin/localizeddate_full.html.twig' }
+                    - { property: 'competitionPart.partname', label: 'Dagdeel', template: 'easy_admin/trans.html.twig' }
+                    - { property: 'competitor', label: 'Naam', type: 'text' }
+                    - { property: 'competitor.team', label: 'Groep', type: 'text' }
+                    - { property: 'enabled', label: 'Toeg.', type: 'boolean' }
+                    - { property: 'qualified', label: 'Limiet', type: 'boolean' }
+                    - { property: 'isEnrolled', label: 'Ingeschreven', type: 'boolean' }
+                    - { property: 'enrolledAt', label: 'Op' }
+                sort: ['competitionPart.daypart', 'ASC']
+                #dql_filter: 'entity.filtered = true'
+                #dql_filter: 'entity.filtered = true AND entity.restrictions = true'
+                actions: ['-new','-edit','-delete']
+                #batch_actions: ['qualified','unqualified']
                 max_results: 50
             search:
                 fields: ['competitionPart.competition.calendar.title','competitionPart.daypart','competitionPart.competition.organization','competitionPart.competition.calendar.location','competitor.firstname','competitor.lastname']

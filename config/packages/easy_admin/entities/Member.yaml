@@ -29,7 +29,7 @@ easy_admin:
                     - { property: 'firstname', label: 'Voornaam', type_options: { disabled: true } }
                     - { property: 'lastname', label: 'Achternaam', type_options: { disabled: true } }
                     - { property: 'gender', label: 'Geslacht', type: 'text', type_options: { disabled: true } }
-                    - { property: 'birthdate', label: 'Geboortedatum', type_options: { disabled: true } }
+                    - { property: 'birthdate', label: 'Geboortedatum' }
                     - { property: 'memberId', label: 'Lid nummer', help: 'Lid nummer van Assist Online (uniek!).', type_options: { disabled: true }}
                     - { property: 'memberSince', label: 'Lid sinds', type_options: { disabled: true } }
                     - { property: 'registrationId', label: 'Licentienummer', type_options: { disabled: true } }

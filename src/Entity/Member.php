@@ -63,7 +63,7 @@ class Member
     private $gender;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date_immutable")
      */
     private $birthdate;
 

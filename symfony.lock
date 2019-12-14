@@ -149,6 +149,9 @@
     "paragonie/sodium_compat": {
         "version": "v1.8.1"
     },
+    "php": {
+        "version": "7.2"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
