@@ -51,7 +51,8 @@ easy_admin:
                - { entity: 'Competition', label: 'Overzicht', icon: 'list', default: true }
                - { entity: 'CompetitionPartDraft', label: 'Draft dagdelen', icon: 'star-half' }
                - { entity: 'CompetitionPartActive', label: 'Actieve dagdelen', icon: 'star' }
-               - { entity: 'CompetitionEnrolments', label: 'Inschrijvingen limieten', icon: 'check' }
+               - { entity: 'CompetitionEnrolmentsRestrictions', label: 'Inschrijvingen limieten', icon: 'check' }
+               - { entity: 'CompetitionEnrolments', label: 'Alle inschrijvingen', icon: 'check-double' }
                - { entity: 'CompetitionDocument', label: 'Bijlagen', icon: 'file' }
                - { entity: 'CompetitionDocumentCategory', label: 'Bijlage categorie', icon: 'folder-open' }
                - { entity: 'CompetitionPool', label: 'Zwembad', icon: 'home' }
