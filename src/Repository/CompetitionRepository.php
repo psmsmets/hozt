@@ -189,6 +189,32 @@ class CompetitionRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findUnnotifiedCompetitionsByUser(User $user, \DateTimeInterface $reftime=null)
+    {
+        if (is_null($reftime)) $reftime = new \DateTime('today');
+
+        return $this->createQueryBuilder('competition')
+            ->innerJoin('competition.calendar','event')
+            ->innerJoin('competition.competitionParts','competitionParts')
+            ->innerJoin('competitionParts.enrolments','enrolments')
+            ->innerJoin('enrolments.competitor', 'competitor')
+            ->innerJoin('competitor.user', 'user')
+            ->addSelect('competition')
+            ->addSelect('event')
+            ->andWhere('event.cancelled = false')
+            ->andWhere('( event.endTime >= :reftime or (event.startTime >= :reftime and event.endTime is null) )')
+            ->andWhere('competition.enrolBefore > :reftime')
+            ->andWhere('user = :user')
+            ->andWhere('enrolments.notified = false')
+            ->andWhere('enrolments.filtered = true')
+            ->setParameter('reftime', $reftime)
+            ->setParameter('user', $user)
+            ->orderBy('event.startTime', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function findUpcomingCompetitionsByUser(User $user, \DateTimeInterface $reftime=null)
     {
         if (is_null($reftime)) $reftime = new \DateTime('today');
