@@ -41,6 +41,7 @@ use App\Entity\Enrolment;
 use App\Entity\EnrolmentEvent;
 
 # repositories
+use App\Repository\TrainingTeamRepository;
 use App\Repository\TrainingScheduleRepository;
 use App\Repository\TryoutEnrolmentRepository;
 use App\Repository\TryoutRepository;
@@ -357,44 +358,24 @@ class PageController extends AbstractController
     /**
      * @Route("/trainingsuren", name="training_schedule")
      */
-    public function training_schedule()
-    {
-        return $this->redirectToRoute('training_schedule_days');
-    }
-
-    /**
-     * @Route("/trainingsuren/per-groep", name="training_schedule_teams")
-     */
-    public function training_schedule_teams()
+    public function training_schedule(Request $request, TrainingTeamRepository $teamRep)
     {
         $this->initTemplateData();
-        $this->addToTemplateData( 'training_categories', $this->getDoctrine()
-                ->getRepository(TrainingTeamCategory::class)
-                ->findAllJoinedToTeamsCoachesSchedule($this->getParameter('app.defaults.scheduleNotice.days'))
-            );
-        $this->addToTemplateData( 'training_persistent', $this->getDoctrine()
-            ->getRepository(TrainingSchedule::class)
-            ->countPersistent($this->getParameter('app.defaults.scheduleNotice.days'))
-        );
-        return $this->render('training/scheduleTeams.html.twig', $this->template_data );
-    }
 
-    /**
-     * @Route("/trainingsuren/per-dag", name="training_schedule_days")
-     */
-    public function training_schedule_days()
-    {
-        $this->initTemplateData();
-        $this->addToTemplateData( 'training_schedule',  $this->getDoctrine()
-            ->getRepository(TrainingSchedule::class)
-            ->findAllJoinedToTeam($this->getParameter('app.defaults.scheduleNotice.days') )
-        );
-        $this->addToTemplateData( 'training_persistent', $this->getDoctrine()
-            ->getRepository(TrainingSchedule::class)
-            ->countPersistent($this->getParameter('app.defaults.scheduleNotice.days'))
-        );
+        $select_teams = $request->query->get('teams', null);
+        $select_teams = (is_null($select_teams) or trim($select_teams) === '') ? [] : explode( ',', strtoupper($select_teams) );
 
-        return $this->render('training/scheduleDays.html.twig', $this->template_data );
+        if (sizeof($select_teams) == 0 and $this->user) {
+            foreach( $teamRep->getByUser($this->user) as $team )
+            {
+                $select_teams[] = $team->getAbbr();
+            }
+        }
+        $this->addToTemplateData( 'select_teams', $select_teams );
+        $this->addToTemplateData( 'teams', $teamRep->getEnabled());
+        $this->addToTemplateData( 'startOfWeek', $this->calendarManager->startOfWeek() );
+
+        return $this->render('training/schedules.html.twig', $this->template_data );
     }
 
     /**
@@ -439,12 +420,18 @@ class PageController extends AbstractController
             ->findOneBySlug($slug)
             ;
         if (!$category) throw $this->createNotFoundException();
+        $teams = [];
+        foreach ($category->getTeams(true) as $team)
+        {
+            $teams[] = $team->getAbbr();
+        }
 
         $this->initTemplateData();
         $this->addToTemplateData( 'lastvisit',
             $this->pageReturnCookie('training_category', $request)
         );
         $this->addToTemplateData( 'training_category', $category );
+        $this->addToTemplateData( 'training_teams', $teams );
         $this->addToTemplateData( 'training_schedule',  $this->getDoctrine()
             ->getRepository(TrainingSchedule::class)
             ->findAllByTeamCategory($category, $this->getParameter('app.defaults.scheduleNotice.days') )

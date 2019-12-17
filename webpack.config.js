@@ -37,6 +37,7 @@ Encore
     .addEntry('form_extended', './assets/js/form_extended.js')
     .addEntry('eu_cookie', './assets/js/eu_cookie.js')
     .addEntry('training_category', './assets/js/training_category.js')
+    .addEntry('training_schedule', './assets/js/training_schedule.js')
     .addEntry('membership_competitions', './assets/js/membership_competitions.js')
     .addEntry('membership_schedule', './assets/js/membership_schedule.js')
     .addEntry('membership_preferences', './assets/js/membership_preferences.js')

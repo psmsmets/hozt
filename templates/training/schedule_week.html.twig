@@ -17,7 +17,7 @@
 
 
 {% if noSchedule %}
-<p>Er zijn deze week geen trainingen voor jouw leden/groepen.</p>
+<p><i class="fad fa-sheep"></i> Er zijn helaas <u>geen trainingen</u> voor de geselecteerde week en groep(en).</p>
 {% else %}
 <div class="table-responsive">
   <table class="table nowrap">
@@ -44,7 +44,7 @@
         </td>
         <td>
         {% for schedule in daySchedule['schedule'] %}
-          {% for team in schedule.getTeams %}<span class="badge badge-medium align-text-bottom">{{team.abbr}}</span>{% endfor %}
+          {% for team in schedule.getTeams %}<span class="badge badge-medium align-text-bottom mr-1">{{team.abbr}}</span>{% endfor %}
           {% if loop.index > 0 %}<br>{% endif %}
         {% endfor %}
         <td>
