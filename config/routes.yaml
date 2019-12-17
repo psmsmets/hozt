@@ -28,16 +28,8 @@ training_category:
     controller: App\Controller\PageController::training_category
 
 training_schedule:
-    path: /trainingsuren/
+    path: /trainingsuren
     controller: App\Controller\PageController::training_schedule
-
-training_schedule_teams:
-    path: /trainingsuren/per-groep
-    controller: App\Controller\PageController::training_schedule_teams
-
-training_schedule_days:
-    path: /trainingsuren/per-dag
-    controller: App\Controller\PageController::training_schedule_days
 
 training_coaches:
     path: /trainers

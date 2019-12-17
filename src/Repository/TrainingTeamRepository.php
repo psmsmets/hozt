@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\TrainingTeam;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -52,6 +53,20 @@ class TrainingTeamRepository extends ServiceEntityRepository
             ->andWhere('team.enabled = :enabled')
             ->setParameter('enabled', true)
             //->orderBy('team.abbr', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getByUser(User $user)
+    {
+        return $this->createQueryBuilder('team')
+            ->innerJoin('team.members', 'members')
+            ->innerJoin('members.user', 'user')
+            ->andWhere('team.enabled = :enabled')
+            ->andWhere('user = :user')
+            ->setParameter('enabled', true)
+            ->setParameter('user', $user)
             ->getQuery()
             ->getResult()
         ;

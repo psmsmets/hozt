@@ -106,13 +106,16 @@ class ApiController extends AbstractController
         $teams = $request->query->get('teams', null);
         $teams = (is_null($teams) or trim($teams) === '') ? null : explode( ',', strtoupper($teams) );
 
+        $anonymous = (bool) $request->query->get('anonymous', null);
+
         // init teams if user is logged in and has swimming members
 
         return $this->json([
             'success' => true,
+            'teams' => $teams,
             'html' => $this->render('training/schedule_week.html.twig', [
                     'startOfWeek' => $startOfWeek,
-                    'weekSchedule' => $scheduleManager->weekSchedule($startOfWeek, $teams, $this->security->getUser()),
+                    'weekSchedule' => $scheduleManager->weekSchedule($startOfWeek, $teams, $anonymous ? null : $this->security->getUser()),
                 ])->getContent(),
             ]);
     }
