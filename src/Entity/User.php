@@ -21,14 +21,14 @@ class User implements UserInterface
      */
     const PASSWORD_RESET = 'password_reset_token';
     const EMAIL_VERIFICATION = 'email_verification_token';
-    const PASSWORD_REGEX = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_!@#$%^&*(),.?":{}|<> ])\S{6,}$';
+    const PASSWORD_REGEX = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])\S{6,}$';
     const PASSWORD_REQUIREMENTS = array(
             'length' => 'Een wachtwoord bevat minstens 6 tekens waarvan',
             'details' => array(
                 '1 kleine letter (a-z)',
                 '1 hoofdletter (A-Z)',
                 '1 getal (0-9)',
-                '1 symbool (?=.*[_!@#$%^&*(),.?":{}|<> ])',
+                '1 symbool',
             ),
         );
 
