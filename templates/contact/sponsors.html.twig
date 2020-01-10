@@ -6,9 +6,7 @@
 
   <div class="p-3 mb-4 bg-white shadow-sm">
 
-    <h2 class="text-primary">Sponsors</h2>
-
-     <p><img src="{{ asset('assets/img/contact/sponsors.jpg') }}" class="img-fluid rounded fade-in"></p>
+    <h2 class="text-primary">HoZT dankt zijn sponsors</h2>
 
      {% for category in page.sponsor_categories %}
 
@@ -18,11 +16,11 @@
 
          <div class="row justify-content-around text-center pt-2 pt-md-3">
          {% for sponsor in category.sponsors %}
-           <div class="{{category.class}}" {% if sponsor.url is not empty %}style="cursor: pointer;" onclick="window.open('{{sponsor.url}}','_blank');"{% endif %}>
-            {% if sponsor.image is not empty %}
+           <div class="{{category.class}} py-2 py-lg-3" {% if sponsor.url %}style="cursor: pointer;" onclick="window.open('{{sponsor.url}}','_blank');"{% endif %}>
+            {% if sponsor.image %}
               <img src="{{ vich_uploader_asset(sponsor, 'imageFile') }}" class="mx-auto img-fluid" alt="{{sponsor.name}}" />
             {% endif %}
-            {{sponsor.caption}}
+            {% if sponsor.caption %}<br><h5 class="pt-2 pt-lg-3">{{sponsor.caption}}</h5>{% endif %}
            </div>
          {% endfor %}
          </div>
@@ -31,7 +29,7 @@
 
          <ul class="list-unstyled">
          {% for sponsor in category.sponsors %}
-           <li>{{sponsor.name}} {% if sponsor.url is not empty%}<a href="{{sponsor.url}}" class="text-default"><i class="fas fa-link"></i></a>{%endif%}</li>
+           <li>{{sponsor.name}} {% if sponsor.url %}<a href="{{sponsor.url}}" class="text-default"><i class="fas fa-link"></i></a>{%endif%}</li>
          {% endfor %}
          </ul>
 
@@ -41,7 +39,7 @@
 
     <h2 class="mt-5">Sponsoren?</h2>
 
-    <p>De sponsorscontracten liggen vast voor de periode van 1 januari 2017 tot en met 31 december 2019. Wil je HoZT tussentijds sponsoren op activiteiten of wedstrijden? Neem dan <a href="/contact">contact</a> op.</p>
+    <p>De sponsorscontracten liggen vast voor een periode van één tot drie jaar. Wil je HoZT tussentijds sponsoren op activiteiten of wedstrijden? Neem dan <a href="/contact">contact</a> op met onze <a href="/bestuur">penningmeester</a>.</p>
 
   </div>
 
