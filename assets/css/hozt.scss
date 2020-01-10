@@ -23,19 +23,16 @@ footer .sponsor img {
 
 .sponsor-gold img {
   max-height: 180px;
-  max-width: 450px;
   object-position: center; /* Center the image within the element */
 }
 
 .sponsor-silver img {
-  max-height: 120px;
-  max-width: 300px;
+  max-height: 130px;
   object-position: center; /* Center the image within the element */
 }
 
 .sponsor-bronze img {
-  max-height: 80px;
-  max-width: 200px;
+  max-height: 100px;
   object-position: center; /* Center the image within the element */
 }
 
@@ -315,6 +312,18 @@ $cals: (1: #ed1c24, 2: #d4af37, 3: #6c757d, 4: #343a40, 5: #ffc107);
 
   #navbarOffcanvas .nav-link i {
      padding-right: .5rem;
+  }
+
+  .sponsor-gold img {
+    max-height: 150px;
+  }
+
+  .sponsor-silver img {
+    max-height: 100px;
+   }
+
+  .sponsor-bronze img {
+    max-height: 80px;
   }
 
 }
