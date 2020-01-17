@@ -45,6 +45,8 @@ class EasyAdminRepository
             ->andwhere('e.eventIsCompetition = :eventIsCompetition')
             ->andwhere('c.id is null')
             ->setParameter('eventIsCompetition', true)
+            ->setParameter('enabled', true)
+            ->orderBy('e.startTime', 'ASC')
         ;
     }
     public static function getUnlockedEnrolmentInputCategories(EntityRepository $er) {

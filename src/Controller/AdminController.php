@@ -227,7 +227,6 @@ class AdminController extends EasyAdminController
         foreach ($teams as $team) {
             $new->addTeam($team);
         }
-
         return $new;
     }
 
