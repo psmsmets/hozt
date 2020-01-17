@@ -82,7 +82,7 @@ class CalendarEvent
     private $image;
 
     /**
-     * @Vich\UploadableField(mapping="carousel_images", fileNameProperty="image")
+     * @Vich\UploadableField(mapping="calendar_images", fileNameProperty="image")
      * @var File
      */
     private $imageFile;
@@ -93,7 +93,7 @@ class CalendarEvent
     private $document;
 
     /**
-     * @Vich\UploadableField(mapping="blogPost_documents", fileNameProperty="document")
+     * @Vich\UploadableField(mapping="calendar_documents", fileNameProperty="document")
      * @var File
      */
     private $documentFile;
