@@ -153,6 +153,14 @@
       "css": [
         "/assets/build/bootstrap.63f9fbc5.css"
       ]
+    },
+    "safari_select_fix": {
+      "js": [
+        "/assets/build/runtime.935e6c6c.js"
+      ],
+      "css": [
+        "/assets/build/safari_select_fix.6b7927d9.css"
+      ]
     }
   },
   "integrity": {
@@ -179,6 +187,7 @@
     "/assets/build/easy_admin.4cf314d0.css": "sha384-1gQo4bGGOE8Ko2wLX5FbCcoc5xHCMDWofgakj3dimHH6Ejj3PbmkpCKMV69VJCmD",
     "/assets/build/security.2ef827ba.css": "sha384-d8QPoN5FT55BVJJeWNxsT4NqsR3f5MROTNiq6hvnAEp0fcmeMqWlIPUWwM4IwbtJ",
     "/assets/build/animate.493ce280.css": "sha384-HjZJZctD9FAtMXxQ96ZgjDMDKTzPsjobiiVXFo1JWlNmaD2jK860/cxLVrDaq0PP",
-    "/assets/build/bootstrap.63f9fbc5.css": "sha384-L0Tm9cVLCb3YX/eaxE2Aav4keHrRwcMapG2ZNXG83VM2aKqQRqNa6FbURfztkfK4"
+    "/assets/build/bootstrap.63f9fbc5.css": "sha384-L0Tm9cVLCb3YX/eaxE2Aav4keHrRwcMapG2ZNXG83VM2aKqQRqNa6FbURfztkfK4",
+    "/assets/build/safari_select_fix.6b7927d9.css": "sha384-ItcFc7oAmgvz+g/DtFmVpB/7AyWQHzFRglCCbu8SNg6M3HybLDeSTaXirgKYGU0w"
   }
 }
