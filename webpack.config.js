@@ -27,6 +27,7 @@ Encore
     .addStyleEntry('security', './assets/css/security.scss')
     .addStyleEntry('animate', './assets/css/animate.css')
     .addStyleEntry('bootstrap', './assets/css/bootstrap.scss')
+    .addStyleEntry('safari_select_fix', './assets/css/safari_select_fix.scss')
     .addEntry('sortable', './assets/js/sortable.js')
     .addEntry('hozt', './assets/js/hozt.js')
     .addEntry('calendar', './assets/js/calendar.js')

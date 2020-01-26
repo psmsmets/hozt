@@ -16,6 +16,7 @@ easy_admin:
             css:
                 - 'assets/build/bootstrap.css'
                 - 'assets/build/easy_admin.css'
+                - 'assets/build/safari_select_fix.css'
         form_theme: # Both themes are for ckeditor integration
             - "@EasyAdmin/form/bootstrap_4.html.twig"
             - "@FOSCKEditor/Form/ckeditor_widget.html.twig"
