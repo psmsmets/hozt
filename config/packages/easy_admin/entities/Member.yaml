@@ -32,7 +32,7 @@ easy_admin:
                     #- { property: 'birthdate', label: 'Geboortedatum' }
                     - { property: 'memberId', label: 'Lid nummer', help: 'Lid nummer van Assist Online (uniek!).', type_options: { disabled: true }}
                     #- { property: 'memberSince', label: 'Lid sinds', type_options: { disabled: true } }
-                    - { property: 'registrationId', label: 'Licentienummer', type_options: { disabled: true } }
+                    - { property: 'registrationId', label: 'Licentienummer' }
                     - { property: 'address', label: 'Address', type_options: { disabled: true } }
                     - { property: 'team', label: 'Zwemt bij', type_options: { query_builder: ['App\Repository\EasyAdminRepository','getEnabled'] }, by_reference: false  }
                     - { property: 'grouping', label: 'Tags' }
