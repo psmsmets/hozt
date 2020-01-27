@@ -50,14 +50,12 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # require ROLE_ADMIN for /admin*
-         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-         - { path: ^/wachtwoord-vergeten, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-         - { path: ^/beheer, roles: ROLE_ADMIN, requires_channel: https } #should become admin, add super_admin restrictions in backend
-         - { path: ^/mijn-account, roles: ROLE_USER, requires_channel: https }
-         - { path: ^/api/private, roles: ROLE_USER, requires_channel: https }
-         - { path: ^/sportsecretariaat, roles: ROLE_MANAGER, requires_channel: https }
-         # catch all force https
-         - { path: '^/', roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/wachtwoord-vergeten, role: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/beheer, roles: ROLE_ADMIN } #should become admin, add super_admin restrictions in backend
+         - { path: ^/mijn-account, roles: ROLE_USER }
+         - { path: ^/api/private, roles: ROLE_USER }
+         - { path: ^/sportsecretariaat, roles: ROLE_MANAGER }
 
     role_hierarchy:
       ROLE_BOARD:        ROLE_USER
