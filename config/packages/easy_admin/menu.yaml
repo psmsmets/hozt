@@ -62,8 +62,8 @@ easy_admin:
                - { entity: 'Enrolments', label: 'Inschrijvingen', icon: 'check' }
                - { entity: 'EnrolmentEvent', label: 'Evenementen', icon: 'calendar-check' }
                - { entity: 'EnrolmentTime', label: 'Tijdstippen', icon: 'clock' }
-               - { entity: 'EnrolmentInput', label: 'Input', icon: 'book' }
                - { entity: 'EnrolmentInputCategory', label: 'Input categorie', icon: 'tag' }
+               - { entity: 'EnrolmentInput', label: 'Input', icon: 'book' }
            - label: "Varia"
            - { entity: 'ContactForm', label: 'Contact', icon: 'comment', permission: 'ROLE_SUPER_ADMIN' }
            - { entity: 'ContactFaq', label: 'FAQ', icon: 'question-circle', permission: 'ROLE_SUPER_ADMIN' }

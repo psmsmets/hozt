@@ -864,7 +864,7 @@ class PageController extends AbstractController
     {
         $this->initTemplateData();
         $this->addToTemplateData( 'events', $enrolmentEventRepo->findPeriodEvents(
-            $this->calendarManager->getPeriodStart(), $this->calendarManager->getPeriodEnd()
+            $this->calendarManager->getPeriodStart(), $this->calendarManager->getPeriodEnd(), $this->isGranted('ROLE_ADMIN')
         ));
 
         return $this->render('enrolment/list.html.twig', $this->template_data );
@@ -887,7 +887,7 @@ class PageController extends AbstractController
      */
     public function enrolment_event_uuid(string $uuid=null, EnrolmentEventRepository $enrolmentEventRepo, Request $request)
     {
-        if ( !($event = $enrolmentEventRepo->findByUuid($uuid) ) ) {
+        if ( !($event = $enrolmentEventRepo->findByUuid( $uuid, $this->isGranted('ROLE_ADMIN') ) ) ) {
             $this->addFlash('warning', "Inschrijving niet gevonden. Zoek je misschien een inschrijving uit deze lijst?");
             return $this->redirectToRoute('enrolment_list', []);
         }
@@ -899,38 +899,42 @@ class PageController extends AbstractController
             $form = $this->createForm(EnrolmentForm::class, $enrolment);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid())
+            if ($form->isSubmitted() && $form->isValid() )
             {
-                $enrolment = $form->getData();
-                $enrolment->parseFormInputData($form);
+                if ($event->isEnabled()) {
+                    $enrolment = $form->getData();
+                    $enrolment->parseFormInputData($form);
 
-                $this->em->persist($enrolment);
-                $this->em->flush();
+                    $this->em->persist($enrolment);
+                    $this->em->flush();
 
-                $this->addFlash(
-                    'success', 
-                    sprintf(
-                        'Ingeschreven! We verwachten je %s.', 
-                        trim( $this->renderView( 
-                            'easy_admin/localizeddate_full_short.html.twig', ['value'=>$enrolment->getTime()->getStartTime()]
-                        ))
-                    )
-                );
+                    $this->addFlash(
+                        'success', 
+                        sprintf(
+                            'Ingeschreven! We verwachten je %s.', 
+                            trim( $this->renderView( 
+                                'easy_admin/localizeddate_full_short.html.twig', ['value'=>$enrolment->getTime()->getStartTime()]
+                            ))
+                        )
+                    );
 
-                $message = (new \Swift_Message())
-                    ->setSubject('Inschrijving HoZT '.$event->getTitle())
-                    ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
-                    ->setTo($enrolment->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'emails/enrolment.html.twig', [ 'enrolment' => $enrolment ]
-                        ),
-                        'text/html'
-                    )
-                ;
-                if (!$this->mailer->send($message)) $this->email_flash(false); // only notify if error
+                    $message = (new \Swift_Message())
+                        ->setSubject('Inschrijving HoZT '.$event->getTitle())
+                        ->setFrom(array($this->getParameter('app.mailer.from')=>$this->getParameter('app.mailer.name')))
+                        ->setTo($enrolment->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'emails/enrolment.html.twig', [ 'enrolment' => $enrolment ]
+                            ),
+                            'text/html'
+                        )
+                    ;
+                    if (!$this->mailer->send($message)) $this->email_flash(false); // only notify if error
 
-                return $this->redirectToRoute('enrolment_details', ['uuid' => $enrolment->getUuid()] );
+                    return $this->redirectToRoute('enrolment_details', ['uuid' => $enrolment->getUuid()] );
+                } else {
+                    $this->addFlash('warning', 'De inschrijving is nog niet actief.');
+                }
             }
 
         }
@@ -964,7 +968,7 @@ class PageController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_MANAGER');
 
-        if ( !( $event = $enrolmentEventRepo->findByUuid($uuid) ) ) {
+        if ( !( $event = $enrolmentEventRepo->findByUuid( $uuid, $this->isGranted('ROLE_ADMIN') ) ) ) {
             $this->addFlash('warning', "Inschrijving niet gevonden. Zoek je misschien een inschrijving uit deze lijst?");
             return $this->redirectToRoute('enrolment_list', []);
         }

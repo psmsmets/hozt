@@ -95,6 +95,7 @@ class EnrolmentEvent
         $this->times = new ArrayCollection();
         $this->inputs = new ArrayCollection();
         $this->enrolments = new ArrayCollection();
+        $this->inputCategories = new ArrayCollection();
     }
 
     public function __toString(): ?string
