@@ -15,7 +15,7 @@
 
   <div class="p-2 pb-3 p-md-3 mb-4 bg-white shadow-sm">
 
-    <h1 class="text-primary">{{event.calendar.title}}</h1>
+    <h1 class="text-primary d-flex justify-content-between">{{event.calendar.title}}{% if not event.enabled %}<small><span class="badge badge-warning align-text-top">niet actief</span></small>{% endif %}</h1>
 
     <div class="row font-weight-light">
       <div class="col-12 col-lg-4 text-lg-right order-lg-2 mb-3 mb-lg-0">
@@ -29,7 +29,7 @@
     <div class="mt-2 font-weight-light"><i class="fas fa-link mr-2"></i> deel deze inschrijving via <a href="#" data-clipboard-text="{{ url('enrolment_event_slug', { 'slug': event.slug }) }}" class="toClipboard d-inline-block" data-toggle="tooltip" data-placement="bottom" data-original-title="Klik om de url te kopiëren">{{ url('enrolment_event_slug', { 'slug': event.slug }) }}</a></div>
 
     {% if event.calendar.body %}
-    <div class="mt-3 mt-md-4">{{ event.body|raw }}</div>
+    <div class="mt-3 mt-md-4">{{ event.calendar.body|raw }}</div>
     {% endif %}
 
     {% if event.times|length > 1 %}

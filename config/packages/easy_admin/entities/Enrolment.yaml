@@ -105,13 +105,13 @@ easy_admin:
             list:
                 fields:
                     - { property: 'locked', label: 'Locked', type: 'boolean' }
+                    - { property: 'event', label: 'Event' }
+                    - { property: 'category', label: 'Menugang' }
                     - { property: 'name', label: 'Naam' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'unitPrice', label: 'Eenh. prijs', template: 'easy_admin/currency.html.twig' }
                     - { property: 'totalNumber', label: 'Aantal' }
                     - { property: 'totalPrice', label: 'Bedrag', template: 'easy_admin/currency.html.twig' }
-                    - { property: 'category', label: 'Menugang' }
-                    - { property: 'event', label: 'Event' }
                 sort: ['id', 'ASC']
             form:
                 fields:
@@ -134,6 +134,7 @@ easy_admin:
             list:
                 fields:
                     - { property: 'locked', label: 'Locked', type: 'boolean' }
+#                    - { property: 'event', label: 'Event' }
                     - { property: 'name', label: 'Naam' }
                     - { property: 'description', label: 'Omschrijving' }
                     - { property: 'typeName', label: 'Type', template: 'easy_admin/trans.html.twig' }

@@ -22,6 +22,7 @@
           <small>
             {% if event.freeOfCharge %}<span class="badge badge-medium">gratis</span>{% endif %}
             {% if not event.guestAccess %}<span class="badge badge-secondary ml-2"><i class="fas fa-user-lock"></i></span>{% endif %}
+            {% if not event.enabled %}<span class="badge badge-warning ml-2">niet actief</span>{% endif %}
           </small>
         </h4>
         <h6 class="d-flex justify-content-between">{{ event.calendar.startTime|localizeddate('full','none') }} om {% for time in event.times %}{%if loop.index > 1 %}{% if loop.last %} en {% else %}, {% endif %}{% endif%}{{ time.startTime|localizeddate('none','short') }}{% endfor %}

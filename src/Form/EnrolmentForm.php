@@ -63,30 +63,32 @@ class EnrolmentForm extends AbstractType
                 $emailOptions['data'] = $user->getEmail();
             }
 
+            $timeOptions = [
+                'class' => EnrolmentTime::class,
+                'query_builder' => function (EntityRepository $er) {
+                    $now = new \DateTime('today');
+                    return $er->createQueryBuilder('time')
+                        ->andwhere(':now <= time.startTime')
+                        ->setParameter('now', $now)
+                        ->orderBy('time.startTime', 'ASC')
+                        ;
+                },
+                'choice_attr' => function($time) {
+                    return ['disabled' => ( $time->getStrictNumberOfPersonsLimit() and $time->getRemainingNumberOfPersons() <= 0 )];
+                },
+                'choice_label' => function($time) {
+                    return $time->hasMaxNumberOfPersons() ? sprintf("%s (%s)", strval($time),$this->translator->trans($time->getNumberOfPersonsStatus())) : strval($time);
+                },
+                'label'    => 'Kies een tijdstip',
+                'attr' => ['class'=>'custom-select'],
+                'required' => true,
+                'placeholder' => count($enrolment->getEvent()->getTimes()) > 1 ? '-- Maak een keuze --' : null,
+            ];
+
             $form
                 ->add('name', TextType::class, $nameOptions)
                 ->add('email', EmailType::class, $emailOptions)
-                ->add('time', EntityType::class, array(
-                    'class' => EnrolmentTime::class,
-                    'query_builder' => function (EntityRepository $er) {
-                        $now = new \DateTime('today');
-                        return $er->createQueryBuilder('time')
-                            ->andwhere(':now <= time.startTime')
-                            ->setParameter('now', $now)
-                            ->orderBy('time.startTime', 'ASC')
-                            ;
-                    },
-                    'choice_attr' => function($time) {
-                        return ['disabled' => ( $time->getStrictNumberOfPersonsLimit() and $time->getRemainingNumberOfPersons() <= 0 )];
-                    },
-                    'choice_label' => function($time) {
-                        return sprintf("%s (%s)", strval($time),$this->translator->trans($time->getNumberOfPersonsStatus()));
-                    },
-                    'label'    => 'Kies een tijdstip',
-                    'attr' => ['class'=>'custom-select'],
-                    'required' => true,
-                    'placeholder' => '-- Maak een keuze --',
-                    ))
+                ->add('time', EntityType::class, $timeOptions)
             ;
             $inputCategoryId = 0;
             foreach ( $enrolment->getEvent()->getInputs() as $input ) {

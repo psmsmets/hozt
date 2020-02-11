@@ -228,5 +228,4 @@ class EnrolmentInputCategory
     {
         return $this->hasLockedElements();
     }
-
 }

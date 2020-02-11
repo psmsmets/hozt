@@ -46,9 +46,9 @@ class EnrolmentEventRepository extends ServiceEntityRepository
     // /**
     //  * @return EnrolmentEvent Returns a EnrolmentEvent object
     //  */
-    public function findByUuid(string $uuid): ?EnrolmentEvent
+    public function findByUuid(string $uuid, bool $admin = false): ?EnrolmentEvent
     {
-        return $this->createQueryBuilder('event')
+        $query =  $this->createQueryBuilder('event')
             ->innerJoin('event.calendar','cal')
             ->leftJoin('event.times','times')
             ->leftJoin('event.inputs','inputs')
@@ -57,10 +57,16 @@ class EnrolmentEventRepository extends ServiceEntityRepository
             ->addSelect('inputs')
             ->addSelect('category')
             ->andWhere('cal.uuid = :uuid')
-            ->andWhere('event.enabled = :enabled')
             ->setParameter('uuid', $uuid)
-            ->setParameter('enabled', true)
             ->orderBy('times.startTime,cal.startTime,inputs.category,inputs.id', 'ASC')
+        ;
+
+        if (!$admin) $query
+            ->andWhere('event.enabled = :enabled')
+            ->setParameter('enabled', true)
+        ;
+
+        return $query
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -72,23 +78,26 @@ class EnrolmentEventRepository extends ServiceEntityRepository
     public function findBySlug(string $slug, \DateTimeInterface $reftime = null): ?EnrolmentEvent
     {
         if (is_null($reftime)) $reftime = new \DateTimeImmutable('today midnight');
+
         return $this->createQueryBuilder('event')
             ->innerJoin('event.calendar','cal')
             ->addSelect('cal')
             ->andWhere('event.slug = :slug')
             ->andWhere('event.enabled = :enabled')
             ->andWhere('cal.startTime >= :reftime')
+            ->andWhere('event.enabled = :enabled')
             ->setParameter('slug', $slug)
             ->setParameter('enabled', true)
             ->setParameter('reftime', $reftime)
+            ->setParameter('enabled', true)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
 
-    public function findPeriodEvents(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd)
+    public function findPeriodEvents(\DateTimeInterface $periodStart, \DateTimeInterface $periodEnd, bool $admin = false)
     {
-        return $this->createQueryBuilder('event')
+        $query = $this->createQueryBuilder('event')
             ->innerJoin('event.calendar','cal')
             ->leftJoin('event.times','times')
             ->leftJoin('event.inputs','inputs')
@@ -96,12 +105,17 @@ class EnrolmentEventRepository extends ServiceEntityRepository
             ->addSelect('times')
             ->addSelect('inputs')
             ->addSelect('category')
-            ->andWhere('event.enabled = :enabled')
             ->andWhere('( cal.startTime >= :start and cal.startTime < :end and (cal.endTime < :end or cal.endTime is null) )')
-            ->setParameter('enabled', true)
             ->setParameter('start', $periodStart)
             ->setParameter('end', $periodEnd)
             ->orderBy('times.startTime,cal.startTime,inputs.category,inputs.id', 'ASC')
+        ;
+        if (!$admin) $query
+            ->andWhere('event.enabled = :enabled')
+            ->setParameter('enabled', true)
+        ;
+
+        return $query
             ->getQuery()
             ->getResult()
         ;
