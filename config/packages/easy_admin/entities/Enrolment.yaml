@@ -21,10 +21,12 @@ easy_admin:
                     - { property: 'event', label: 'Event' }
                     - { property: 'user', label: 'Gebruiker' }
                     - { property: 'uuid', label: 'Id', permission: 'ROLE_SUPER_ADMIN' }
-                sort: ['id', 'ASC']
                 actions: ['-new','-edit','-remove']
                 batch_actions: ['completePayment','cancelPayment','deleteEnrolment']
+                dql_filter: 'calendar.cancelled = false AND (calendar.startTime > :reftime OR (entity.paid = false AND event.freeOfCharge = false) )'
+                sort: ['enrolledAt', 'DESC']
             search:
+                dql_filter: ''
                 fields: ['name','event.calendar.title']
             form:
                 fields:
