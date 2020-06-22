@@ -50,7 +50,7 @@ easy_admin:
                     - { property: 'allDay', label: 'Hele dag', type: 'boolean' }
                     - { property: 'category', label: 'Categorie' }
                     - { property: 'location', label: 'Locatie' }
-                    - { property: 'competition', label: 'Wedstrijd', type: 'boolean' }
+                    - { property: 'hasCompetition', label: 'Wedstrijd', type: 'boolean' }
                     - { property: 'cancelled', label: 'Annul.', type: 'boolean' }
                 sort: ['startTime', 'ASC']
                 dql_filter: 'entity.archived = false'
