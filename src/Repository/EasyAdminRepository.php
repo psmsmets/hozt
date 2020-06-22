@@ -64,7 +64,7 @@ class EasyAdminRepository
         ;
     }
     public static function getPotentialEnrolmentEvents(EntityRepository $er) {
-        $reftime = new \DateTime("today midnight +14 days");
+        $reftime = new \DateTime("today midnight +2 days");
         return $er->createQueryBuilder('event')
             ->leftJoin('event.enrolmentEvent', 'enrol')
             ->leftJoin('event.competition', 'comp')

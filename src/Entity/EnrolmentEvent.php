@@ -89,7 +89,7 @@ class EnrolmentEvent
         $this->freeOfCharge = false;
         $this->guestAccess = true;
         $this->tas = true;
-        $this->enrolBeforeDays = 7;
+        $this->enrolBeforeDays = 2;
         $this->totalNumberOfPersons = 0;
         $this->totalPrice = 0.;
         $this->times = new ArrayCollection();
